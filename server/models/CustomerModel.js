@@ -18,10 +18,13 @@ const customerSchema = new mongoose.Schema(
     },
     gander: { type: String },
     address: { type: String },
-    phone: { type: Number },
+    phone: { type: Number, unique: true },
     points: { type: Number, default: 0 },
     orderHistory: [{ type: Schema.Types.ObjectId, ref: 'Orders' }],
     serviceHistory: [{ type: Schema.Types.ObjectId, ref: 'Services' }],
+    customizedHistory: [
+      { type: Schema.Types.ObjectId, ref: 'CustomizedOrders' },
+    ],
     verified: { type: Boolean, default: false },
   },
   {
