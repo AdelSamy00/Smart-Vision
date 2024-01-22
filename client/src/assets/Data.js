@@ -4,7 +4,7 @@ export const customer = {
   email: 'customer@gmail.com',
   gander: 'Male',
   address: '3 street customer',
-  phone: '01211111111',
+  phone: 12097953342,
   points: 100,
   orderHistory: [],
   serviceHistory: [],
