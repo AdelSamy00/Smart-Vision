@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 const materialSchema = new mongoose.Schema(
   {
     name: {
