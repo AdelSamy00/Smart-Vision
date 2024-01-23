@@ -1,6 +1,7 @@
 import Customers from '../models/CustomerModel.js';
-import { hashString } from '../utils/index.js';
+import { compareString, createJWT, hashString } from '../utils/index.js';
 import { validateSignup } from '../Joi/Schema.js';
+import { sendVerificationEmail } from '../utils/sendEmail.js';
 
 export const register = async (req, res, next) => {
   console.log(req.body);
@@ -12,7 +13,7 @@ export const register = async (req, res, next) => {
     console.log(error);
     res.status(500).json(error.details);
     return;
-  } */
+  }  */
   if (!(userName && email && password && phone && gander)) {
     next('Provide Required Fields!');
     return;
@@ -31,8 +32,45 @@ export const register = async (req, res, next) => {
       phone,
       gander,
     });
-    res.status(200).json({ message: Customer });
+    // send email Verification to user and add them to emailVerification.
+    sendVerificationEmail(Customer, res);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
+};
+
+export const login = async (req, res, next) => {
+  const { email, password } = req.body;
+  // validation
+  if (!email || !password) {
+    next('please Provide User Credentials');
+    return;
+  }
+  // find user by email
+  const customer = await Customers.findOne({ email }).select('+password');
+
+  if (!customer) {
+    next('Invalid email or password');
+    return;
+  }
+  if (!customer?.verified) {
+    next(
+      'customer email is not verified. Check your email account and verify your email'
+    );
+    return;
+  }
+  //compare password
+  const isMatch = await compareString(password, customer?.password);
+  if (!isMatch) {
+    next('Invalid email or password');
+    return;
+  }
+  customer.password = undefined;
+  const token = createJWT(customer._id);
+  res.status(200).json({
+    success: true,
+    message: 'login successfully',
+    customer,
+    token,
+  });
 };
