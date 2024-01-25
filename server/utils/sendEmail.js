@@ -17,7 +17,7 @@ let transporter = nodemailer.createTransport({
 });
 
 export const sendVerificationEmail = async (customer, res) => {
-  const { _id, email, userName } = customer;
+  const { _id, email, username } = customer;
   const token = _id + uuidv4();
   const link = APP_URL + 'customers/verify/' + _id + '/' + token;
   const mailOptions = {
@@ -28,7 +28,7 @@ export const sendVerificationEmail = async (customer, res) => {
       style = 'font-family: Arial, sans-serif; font-size: 20px;background-color:white' >
         <h1> Please verify your email address</h1>
         <hr/>
-        <h4>Hi ${userName}</h4>
+        <h4>Hi ${username}</h4>
         <h4>Thanks to register to our website.</h4>
         <p>
           Please verify your email address so we can know that it's really you.

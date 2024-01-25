@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 const customerSchema = new mongoose.Schema(
   {
-    userName: {
+    username: {
       type: String,
       required: [true, 'userName is Required!'],
     },
@@ -16,7 +16,7 @@ const customerSchema = new mongoose.Schema(
       minlength: [6, 'Password length should be greater than 6 character'],
       select: true,
     },
-    gander: { type: String },
+    gender: { type: String },
     address: { type: String },
     phone: { type: Number, unique: true },
     points: { type: Number, default: 0 },

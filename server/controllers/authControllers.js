@@ -5,7 +5,7 @@ import { sendVerificationEmail } from '../utils/sendEmail.js';
 
 export const register = async (req, res, next) => {
   console.log(req.body);
-  const { userName, email, password, phone, gander } = req.body;
+  const { username, email, password, phone, gender } = req.body;
   //validate fileds
   //Joi Validation
   /* const { error, value } = validateSignup(req.body);
@@ -14,7 +14,8 @@ export const register = async (req, res, next) => {
     res.status(500).json(error.details);
     return;
   }  */
-  if (!(userName && email && password && phone && gander)) {
+  console.log(req);
+  if (!(username && email && password && phone && gender)) {
     next('Provide Required Fields!');
     return;
   }
@@ -24,13 +25,18 @@ export const register = async (req, res, next) => {
       next('Email Address already exists');
       return;
     }
+    const existCustomerByPhone = await Customers.findOne({ phone });
+    if (existCustomerByPhone) {
+      next('Phone already exists');
+      return;
+    }
     const hashedPassword = await hashString(password);
     const Customer = await Customers.create({
-      userName,
+      username,
       email,
       password: hashedPassword,
       phone,
-      gander,
+      gender,
     });
     // send email Verification to user and add them to emailVerification.
     sendVerificationEmail(Customer, res);
@@ -67,6 +73,12 @@ export const login = async (req, res, next) => {
   }
   customer.password = undefined;
   const token = createJWT(customer._id);
+  res.cookie('token', token, {
+    httpOnly: true,
+    //secure: true,
+    //maxAge: 86400,
+    signed: true,
+  });
   res.status(200).json({
     success: true,
     message: 'login successfully',
