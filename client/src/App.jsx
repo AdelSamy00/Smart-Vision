@@ -1,17 +1,43 @@
-import { Routes, Route } from 'react-router-dom';
-import { ContactUs, Landing, Login, Register, Profile, ProfileDetails } from './pages/';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  ContactUs,
+  Landing,
+  Login,
+  Register,
+  Profile,
+  ProfileDetails,
+  Home,
+} from './pages/';
 import axios from 'axios';
+import Footer from './components/Footer';
 function App() {
   axios.defaults.baseURL = 'http://localhost:3000';
+  const Layout = () => {
+    const { customer } = useSelector((state) => state.customer);
+    const location = useLocation();
+    return customer?.token ? (
+      <Outlet />
+    ) : (
+      <Navigate to="/login" state={{ from: location }} replace />
+    );
+  };
   return (
-    <Routes>
-      <Route path="/" Component={Landing} />
-      <Route path="/login" Component={Login} />
-      <Route path="/register" Component={Register} />
-      <Route path="/profile" Component={Profile} />
-      <Route path="/profile/profile-details" Component={ProfileDetails}/>
-      <Route path="/contact-us" Component={ContactUs}/>
-    </Routes>
+    <div className="">
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/profile" Component={Profile} />
+          <Route path="/profile/profile-details" Component={ProfileDetails} />
+        </Route>
+        <Route path="/" Component={Landing} />
+        <Route path="/index" Component={Home} />
+        <Route path="/login" Component={Login} />
+        <Route path="/register" Component={Register} />
+
+        <Route path="/contact-us" Component={ContactUs} />
+      </Routes>
+      <Footer />
+    </div>
   );
 }
 

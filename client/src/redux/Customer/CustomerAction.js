@@ -1,6 +1,6 @@
-export const login = () => {
+export const login = (customer) => {
   return {
     type: 'CUSTOMER_LOGIN',
-    data: {},
+    data: customer,
   };
 };

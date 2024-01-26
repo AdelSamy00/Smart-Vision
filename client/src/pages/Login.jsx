@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import './StyleSheets/Login.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Loading from '../components/Loading';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../redux/Customer/CustomerAction';
 function Login() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -17,7 +21,9 @@ function Login() {
         .post('/auth/login', { ...data })
         .then((res) => {
           console.log(res.data);
+          dispatch(login(res.data.customer));
           alert(res.data.message);
+          navigate('/index');
         })
         .catch((error) => {
           throw error.response.data;
