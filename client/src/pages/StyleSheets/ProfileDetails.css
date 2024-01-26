@@ -1,0 +1,23 @@
+.userInfo {
+  width: 50%;
+  padding: 1rem;
+  border: 3px solid black;
+  border-radius: 10px;
+}
+
+.userInfHeader {
+  display: flex;
+  justify-content: space-around;
+}
+
+.InfoContant h4 {
+  color: #6c6c6c;
+}
+.InfoContant p {
+  color: #6c6c6c;
+  line-height: 1rem;
+  margin-bottom: 1rem;
+}
+.userAdresses {
+  width: 50%;
+}
