@@ -1,6 +1,7 @@
 import Customers from '../models/CustomerModel.js';
 import Verifications from '../models/EmailVerification.js';
 import { compareString, createJWT, hashString } from '../utils/index.js';
+import JWT from 'jsonwebtoken';
 
 export const verifyEmail = async (req, res, next) => {
   const { customerId, token } = req.params;
@@ -72,4 +73,19 @@ export const verifyEmail = async (req, res, next) => {
     console.log(error);
     res.redirect(`/customers/verified?message=(5)`);
   }
+};
+
+export const getCustomer = async (req, res, next) => {
+  const { token } = req.params;
+  const { id } = req.params;
+  const { customerId } = JWT.verify(token, process.env.JWT_SECRET_KEY);
+  console.log(customerId);
+  const customer = await Customers.findById({ _id: customerId }).select(
+    '-password'
+  );
+  res.status(200).json({
+    success: true,
+    message: 'get data successfully',
+    customer,
+  });
 };

@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate, Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   ContactUs,
@@ -15,6 +15,7 @@ function App() {
   axios.defaults.baseURL = 'http://localhost:3000';
   const Layout = () => {
     const { customer } = useSelector((state) => state.customer);
+    console.log(customer);
     const location = useLocation();
     return customer?.token ? (
       <Outlet />
@@ -26,7 +27,7 @@ function App() {
     <div className="">
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/profile" Component={Profile} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/profile/profile-details" Component={ProfileDetails} />
         </Route>
         <Route path="/" Component={Landing} />

@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import Loading from '../components/Loading';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../redux/Customer/CustomerAction';
+import { SetCustomer } from '../redux/CustomerSlice';
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,8 +21,10 @@ function Login() {
         .post('/auth/login', { ...data })
         .then((res) => {
           console.log(res.data);
-          dispatch(login(res.data.customer));
           alert(res.data.message);
+          localStorage.setItem('token', res.data.token);
+          const newData = { token: res.data?.token, ...res.data?.customer };
+          dispatch(SetCustomer(newData));
           navigate('/index');
         })
         .catch((error) => {

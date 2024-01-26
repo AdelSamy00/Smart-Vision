@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../redux/Customer/CustomerAction';
+import { getCustomerInfo } from '../utils';
+import { SetCustomer } from '../redux/CustomerSlice';
 function Home() {
   const dispatch = useDispatch();
   const { customer } = useSelector((state) => state.customer);
   const getCustomer = async () => {
-    console.log(customer);
-    /* const res = await getCustomerInfo(customer?._id, customer?.token);
-    const newData = { token: user?.token, ...res };
-    dispatch(login(newData)); */
+    const res = await getCustomerInfo(customer?.token);
+    //console.log(res);
+    const newData = { token: customer?.token, ...res };
+    dispatch(SetCustomer(newData));
   };
 
   useEffect(() => {
