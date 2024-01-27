@@ -1,56 +1,50 @@
 import React from 'react';
 import './StyleSheets/Landing.css';
 import { Link, NavLink } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 function Landing() {
   return (
     <div className="landding flex text-center text-white bg-dark">
       <div className=" w-full flex w-100 h-100 p-3 mx-auto flex-col">
-        <header className="mb-auto">
+        <div className="mb-auto">
           <div className="">
-            <h3 className="md:float-left mb-0">Smart Vision</h3>
-            <nav className="nav nav-masthead justify-center md:float-right">
+            <h3 className="md:float-left text-3xl mb-0">Smart Vision</h3>
+            <nav className="nav gap-3 justify-center md:float-right">
               <NavLink
                 to={'/'}
-                className="nav-link active"
+                className="nav-links active"
                 aria-current="pages"
               >
                 Home
               </NavLink>
-              <NavLink to={'/login'} className="nav-link">
+              <NavLink to={'/login'} className="nav-links text-gray-400">
                 Login
               </NavLink>
-              <NavLink to={'/register'} className="nav-link">
+              <NavLink to={'/register'} className="nav-links text-gray-400">
                 Register
               </NavLink>
             </nav>
           </div>
-        </header>
-        <main className="px-3">
-          <h1>Smart Vision</h1>
+        </div>
+        <div className="px-3">
+          <h1 className="text-4xl">Smart Vision</h1>
           <p className="lead">
             Welcome to Smart Vision! <br /> Jump right in and explore our many
             products. <br />
             Feel free to share some of your own and comment on others!
           </p>
-          <a
-            href="/"
-            className="btn btn-lg btn-secondary font-bold  text-black"
+          <Link
+            to="/index"
+            className="btn btn-lg btn-secondary font-bold  text-white mt-4"
           >
             View Product
-          </a>
-        </main>
+          </Link>
+        </div>
 
-        <footer className="mt-auto text-white-50">
+        <div className="mt-auto text-white-50">
           <p>&copy; 2024 </p>
-        </footer>
+        </div>
       </div>
-
-      <link
-        rel="stylesheet"
-        href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
-        integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I"
-        crossOrigin="anonymous"
-      />
     </div>
   );
 }
