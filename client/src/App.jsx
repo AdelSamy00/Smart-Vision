@@ -8,6 +8,7 @@ import {
   Profile,
   ProfileDetails,
   Home,
+  AboutUs,
 } from './pages/';
 import axios from 'axios';
 import Footer from './components/Footer';
@@ -26,15 +27,14 @@ function App() {
   return (
     <div className="">
       <Routes>
-        <Route element={<Layout />}>
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/profile/profile-details" Component={ProfileDetails} />
-        </Route>
+        <Route element={<Layout />}></Route>
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/profile-details" Component={ProfileDetails} />
         <Route path="/" Component={Landing} />
         <Route path="/index" Component={Home} />
         <Route path="/login" Component={Login} />
         <Route path="/register" Component={Register} />
-
+        <Route path="/about" Component={AboutUs} />
         <Route path="/contact-us" Component={ContactUs} />
       </Routes>
       <Footer />

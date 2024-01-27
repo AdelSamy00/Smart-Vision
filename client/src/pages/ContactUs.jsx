@@ -1,7 +1,14 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
 import './StyleSheets/ContactUs.css';
+import { useForm } from 'react-hook-form';
 function ContactUs() {
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm();
   return (
     <section className="text-gray-600 body-font relative">
       <div id="google_translate_element" className="flex justify-end"></div>
@@ -61,6 +68,22 @@ function ContactUs() {
                   name="message"
                   className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
                 ></textarea>
+              </div>
+            </div>
+            <div className="p-2 w-full">
+              <div className="relative flex justify-items-center gap-2">
+                <label
+                  htmlFor="uploadFile"
+                  className="leading-7 text-sm text-gray-600 mt-1"
+                >
+                  uploadFile
+                </label>
+                <input
+                  type="file"
+                  id="uploadFile"
+                  name="uploadFile"
+                  className="uploadBtn file:hidden text-gray-700 bg-gray-300 w-1/4"
+                ></input>
               </div>
             </div>
             <div className="p-2 w-full">

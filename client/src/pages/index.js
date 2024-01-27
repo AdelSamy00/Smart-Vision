@@ -5,5 +5,15 @@ import ContactUs from './ContactUs';
 import Profile from './Profile';
 import ProfileDetails from './ProfileDetails';
 import Home from './Home';
+import AboutUs from './AboutUs';
 
-export { Landing, Login, Register, ContactUs, Profile, ProfileDetails, Home };
+export {
+  Landing,
+  Login,
+  Register,
+  ContactUs,
+  Profile,
+  ProfileDetails,
+  Home,
+  AboutUs,
+};
