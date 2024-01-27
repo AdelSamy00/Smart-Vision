@@ -1,16 +1,20 @@
 import React from 'react';
+import ImageSlider from '../components/ImageSlider';
 
 function AboutUs() {
   return (
     <section className="text-gray-600 body-font">
       <div className="container px-5 py-10 mx-auto flex flex-col ">
         <div className="lg:w-full mx-auto ">
-          <div className="rounded-lg h-96 overflow-hidden">
+          <div className="rounded-lg h-96 w-full overflow-hidden">
             <img
               alt="content"
-              className="object-cover object-center h-full w-full"
+              className="object-cover object-center h-full w-full flex lg:hidden"
               src="/background.jpg"
             />
+            <div className="hidden lg:inline sm:w-1/2">
+              <ImageSlider />
+            </div>
           </div>
 
           <div className="flex flex-col sm:flex-row mt-10">
