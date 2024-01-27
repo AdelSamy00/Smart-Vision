@@ -1,23 +1,44 @@
+.ProfileDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem;
+}
+
 .userInfo {
-  width: 50%;
-  padding: 1rem;
+  width: 100%;
+  padding: 1.5rem;
   border: 3px solid black;
   border-radius: 10px;
 }
 
-.userInfHeader {
+.sbProfileDetails {
+  margin: 0.5rem;
   display: flex;
-  justify-content: space-around;
+  flex-direction: row;
+}
+.sbProfileDetails h1 {
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.userInofHeader {
+  display: flex;
+  justify-content: space-between;
+}
+.userInofHeader h2 {
+  font-size: 32px;
+  font-weight: 600;
 }
 
 .InfoContant h4 {
   color: #6c6c6c;
+  font-size: 26px;
+  font-weight: 500;
 }
 .InfoContant p {
+  font-size: 20px;
   color: #6c6c6c;
   line-height: 1rem;
   margin-bottom: 1rem;
-}
-.userAdresses {
-  width: 50%;
 }

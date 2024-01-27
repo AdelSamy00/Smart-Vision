@@ -11,7 +11,7 @@ function Footer() {
       <div className=" p-4 flex flex-col">
         <div className="FooterLinks">
           <div className="sbFooterLinks">
-            <Image src="./smartVisionLogo.png" rounded />
+            <Image src="/smartVisionLogo.png" rounded />
           </div>
           <div className="sbFooterLinks">
             <h4>Resources</h4>
@@ -39,7 +39,8 @@ function Footer() {
             </div>
           </div>
         </div>
-        <hr className="border-4 border-sky-500" />
+        <div className="border-4 rounded-full border-sky-500 w-full">
+        </div>
         <div className="flex flex-row justify-between mt-1">
           <div className="ml-4 font-semibold text-white ">
             <p>All right reserved.</p>

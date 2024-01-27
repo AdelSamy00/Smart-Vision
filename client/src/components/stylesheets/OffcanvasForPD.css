@@ -1,0 +1,9 @@
+.offcanvas {
+  --bs-offcanvas-width: 600px;
+}
+
+@media screen and (max-width: 800px) {
+  .offcanvas {
+    --bs-offcanvas-width: 400px;
+  }
+}
