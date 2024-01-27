@@ -178,9 +178,8 @@ function Register() {
                   required: 'please select you gender',
                 })}
               >
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
               </select>
               {errors.gender && (
                 <div className="text-red-500 mb-3">{errors.gender.message}</div>
