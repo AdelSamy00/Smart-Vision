@@ -6,6 +6,7 @@ import Profile from './Profile';
 import ProfileDetails from './ProfileDetails';
 import Home from './Home';
 import AboutUs from './AboutUs';
+import Services from './Services';
 
 export {
   Landing,
@@ -16,4 +17,5 @@ export {
   ProfileDetails,
   Home,
   AboutUs,
+  Services,
 };

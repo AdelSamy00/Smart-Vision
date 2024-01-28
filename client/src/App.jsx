@@ -9,6 +9,7 @@ import {
   ProfileDetails,
   Home,
   AboutUs,
+  Services,
 } from './pages/';
 import axios from 'axios';
 import Footer from './components/Footer';
@@ -36,6 +37,7 @@ function App() {
         <Route path="/register" Component={Register} />
         <Route path="/about" Component={AboutUs} />
         <Route path="/contact-us" Component={ContactUs} />
+        <Route path="/customer-services" Component={Services} />
       </Routes>
       <Footer />
     </div>

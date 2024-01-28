@@ -5,8 +5,8 @@ function AboutUs() {
   return (
     <section className="text-gray-600 body-font">
       <div className="container px-5 py-10 mx-auto flex flex-col ">
-        <div className="lg:w-full mx-auto ">
-          <div className="rounded-lg h-96 w-full overflow-hidden">
+        <div className="w-full mx-auto ">
+          <div className="rounded-lg sm:h-60 md:h-full w-full overflow-hidden">
             <img
               alt="content"
               className="object-cover object-center h-full w-full flex lg:hidden"

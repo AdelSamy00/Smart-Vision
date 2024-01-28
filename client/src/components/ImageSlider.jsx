@@ -18,12 +18,12 @@ const images = [
 ];
 function ImageSlider() {
   return (
-    <div className="inline md:slide-container ">
+    <div className="inline md:slide-container">
       <Slide>
         {images.map((image, idx) => (
           <div key={idx}>
             <div
-              className="flex justify-center items-end  h-[400px] bg-center"
+              className="flex justify-center items-end w-full  h-[400px] bg-center"
               style={{ backgroundImage: `url(${image.url})` }}
             >
               <span className="text-2xl mb-4  text-white">{image.title}</span>
