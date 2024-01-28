@@ -13,6 +13,7 @@ import {
 } from './pages/';
 import axios from 'axios';
 import Footer from './components/Footer';
+import ChangePassword from './pages/ChangePassword';
 function App() {
   axios.defaults.baseURL = 'http://localhost:3000';
   const Layout = () => {
@@ -38,6 +39,7 @@ function App() {
         <Route path="/about" Component={AboutUs} />
         <Route path="/contact-us" Component={ContactUs} />
         <Route path="/customer-services" Component={Services} />
+        <Route path="/profile/change-password" Component={ChangePassword} />
       </Routes>
       <Footer />
     </div>
