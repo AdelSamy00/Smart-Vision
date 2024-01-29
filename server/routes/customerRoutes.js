@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import {
   getCustomer,
+  saveContactMesseage,
   verifyEmail,
 } from '../controllers/customerControllers.js';
 
@@ -14,4 +15,7 @@ router.get('/verified', (req, res) => {
 });
 // get customer data
 router.get('/get-customer/:token/:id?', getCustomer);
+
+// sent feedback or problem from ContactUs page
+router.post('/contactUs', saveContactMesseage);
 export default router;

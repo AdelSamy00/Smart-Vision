@@ -1,27 +1,50 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Loading from '../components/Loading';
+import axios from 'axios';
+import { handleFileUpload } from '../utils';
 function ContactUsForm() {
+  const [image, setImage] = useState(null);
   const {
     register,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting },
+    reset,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm();
   const handleSubmitForm = async (data) => {
     try {
       const { name, email, message } = data;
-      const file = data.file[0];
-      console.log(name, email, message, file);
+      const picture = image && (await handleFileUpload(image));
+      console.log(picture);
+      await axios
+        .post('/customers/contactUs', {
+          name,
+          email,
+          message,
+          picture,
+        })
+        .then((res) => {
+          alert(res.data.message);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (error) {
       setError('root', {
         message: `${error.message}`,
       });
     }
   };
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset();
+    }
+  }, [isSubmitSuccessful, reset]);
   return (
     <form
-      onSubmit={handleSubmit(handleSubmitForm)}
       className="flex flex-wrap flex-col -m-2 sm:flex-row"
+      onSubmit={handleSubmit(handleSubmitForm)}
     >
       <div className="p-2 sm:w-1/2 ">
         <div className="relative">
@@ -98,14 +121,23 @@ function ContactUsForm() {
             id="uploadFile"
             name="uploadFile"
             className="uploadBtn file:hidden text-gray-700 bg-gray-300 w-1/4"
-            {...register('file')}
+            onChange={(e) => {
+              setImage(e.target.files[0]);
+            }}
           />
         </div>
       </div>
       <div className="p-2 w-full">
-        <button className="flex mx-auto text-white bg-indigo-700 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-900 rounded text-lg">
-          Send
-        </button>
+        {isSubmitting ? (
+          <Loading />
+        ) : (
+          <button
+            disabled={isSubmitting}
+            className="flex mx-auto text-white bg-indigo-700 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-900 rounded text-lg"
+          >
+            Send
+          </button>
+        )}
       </div>
     </form>
   );

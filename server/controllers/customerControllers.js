@@ -1,3 +1,4 @@
+import ContactUs from '../models/ContactUs.js';
 import Customers from '../models/CustomerModel.js';
 import Verifications from '../models/EmailVerification.js';
 import { compareString, createJWT, hashString } from '../utils/index.js';
@@ -88,4 +89,15 @@ export const getCustomer = async (req, res, next) => {
     message: 'get data successfully',
     customer,
   });
+};
+
+export const saveContactMesseage = async (req, res, next) => {
+  try {
+    const data = req.body;
+    const contact = await ContactUs.create({ ...data });
+    res.status(200).json({
+      success: true,
+      message: 'send successfully',
+    });
+  } catch (error) {}
 };
