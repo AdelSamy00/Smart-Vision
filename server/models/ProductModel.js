@@ -18,6 +18,7 @@ const productSchema = new mongoose.Schema(
     likes: [{ type: String }],
     points: { type: Number, default: 200 },
     views: [{ type: String }],
+    reviews: [{ type: Schema.Types.ObjectId, ref: 'Reviews' }],
     show: { type: Boolean },
   },
   {
