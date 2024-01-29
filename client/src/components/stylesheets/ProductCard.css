@@ -1,0 +1,96 @@
+.productCard {
+  width: 450px;
+  background-color: rgba(239, 239, 239, 0.56);
+  border-radius: 1rem;
+}
+
+.sbProductCardData {
+  padding: 1rem;
+}
+
+.sbProductCardData h5 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.sbProductCardData h6 {
+  font-size: 20px;
+}
+
+.sbProductCardData p {
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0.5rem 0rem;
+}
+
+.sbProductCardFooter {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.sbProductCardFooterIcon {
+  width: 30px;
+  height: 30px;
+}
+
+.addToCartButton {
+  padding: 0.7rem;
+  border: 1px solid black;
+  border-radius: 100%;
+}
+
+.addToCartButton:hover {
+  background-color: rgb(163, 163, 163);
+}
+
+.sbProductCardDataRating {
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+.sbProductCardDataRating p {
+  margin: 0rem 0.5rem;
+  font-size: 20px;
+}
+
+.sbProductCardImg {
+  width: 100%;
+  height: 300px;
+  border-radius: 1rem 1rem 0rem 0rem;
+}
+
+.sbProductCardDivImg {
+  height: 300px;
+  width: 100%;
+}
+
+.sbProductCardDivFirstImg {
+  height: 100%;
+  width: 100%;
+  opacity: 1;
+}
+
+.sbProductCardDivImg:hover .sbProductCardDivFirstImg {
+  height: 0%;
+  width: 0%;
+  opacity: 0;
+}
+
+.sbProductCardDivsecondtImg {
+  height: 0%;
+  width: 0%;
+  opacity: 0;
+}
+
+.sbProductCardDivImg:hover .sbProductCardDivsecondtImg {
+  opacity: 1;
+  height: 100%;
+  width: 100%;
+}
+
+.productCardLink:hover .sbProductCardData h5 {
+  text-decoration: underline;
+}

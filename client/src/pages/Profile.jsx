@@ -3,9 +3,8 @@ import { SetCustomer } from '../redux/CustomerSlice';
 import { getCustomerInfo } from '../utils';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import PersonIcon from '@mui/icons-material/Person';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import './StyleSheets/Profile.css'
+
 function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();

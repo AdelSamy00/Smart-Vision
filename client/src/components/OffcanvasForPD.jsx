@@ -18,7 +18,7 @@ function OffcanvasForPD({ name, ...props }) {
             </Button>
             <Offcanvas show={show} onHide={handleClose} {...props}>
                 <Offcanvas.Header >
-                    <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+                    <Offcanvas.Title className='text-2xl'>Edit profile</Offcanvas.Title>
                     <button className="me-2" onClick={handleClose}>
                         <CloseIcon sx={{ fontSize: 30 }} />
                     </button>
