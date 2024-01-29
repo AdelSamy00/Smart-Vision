@@ -4,6 +4,7 @@ import './StyleSheets/Register.css';
 import { useForm } from 'react-hook-form';
 import Loading from '../components/Loading';
 import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 function Register() {
   const navigate = useNavigate();
   const {
@@ -19,7 +20,7 @@ function Register() {
         .post('/auth/register', { ...data })
         .then((res) => {
           console.log(res.data);
-          alert(res.data.message);
+          toast(res.data.message);
           navigate('/login');
         })
         .catch((error) => {
@@ -35,6 +36,20 @@ function Register() {
   };
   return (
     <div className="h-screen flex items-center justify-center mt-auto">
+      <Toaster
+        toastOptions={{
+          style: {
+            duration: 3000,
+            border: '1px solid #6A5ACD',
+            backgroundColor: '#6A5ACD',
+            padding: '16px',
+            color: 'white',
+            fontWeight: 'Bold',
+            marginTop: '65px',
+            textAlign: 'center',
+          },
+        }}
+      />
       <div className="relative py-3 sm:max-w-xl sm:mx-auto form_container">
         <form
           className="max-w-md mx-auto"

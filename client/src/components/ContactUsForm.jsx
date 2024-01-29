@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import Loading from '../components/Loading';
 import axios from 'axios';
 import { handleFileUpload } from '../utils';
+import toast, { Toaster } from 'react-hot-toast';
 function ContactUsForm() {
   const [image, setImage] = useState(null);
   const {
@@ -25,7 +26,9 @@ function ContactUsForm() {
           picture,
         })
         .then((res) => {
-          alert(res.data.message);
+          toast.dismiss();
+          toast(res.data.message);
+          //alert(res.data.message);
         })
         .catch((err) => {
           console.log(err);
@@ -46,6 +49,20 @@ function ContactUsForm() {
       className="flex flex-wrap flex-col -m-2 sm:flex-row"
       onSubmit={handleSubmit(handleSubmitForm)}
     >
+      <Toaster
+        toastOptions={{
+          style: {
+            duration: 3000,
+            border: '1px solid #6A5ACD',
+            backgroundColor: '#6A5ACD',
+            padding: '16px',
+            color: 'white',
+            fontWeight: 'Bold',
+            marginTop: '65px',
+            textAlign: 'center',
+          },
+        }}
+      />
       <div className="p-2 sm:w-1/2 ">
         <div className="relative">
           <label htmlFor="name" className="leading-7 text-sm text-gray-600">
