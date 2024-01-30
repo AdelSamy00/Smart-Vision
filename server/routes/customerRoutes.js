@@ -1,7 +1,12 @@
 import express from 'express';
 import path from 'path';
 import {
+  changePassword,
+  deleteAcount,
+  getAllCustomers,
   getCustomer,
+  getFavoriteList,
+  makeFavorite,
   saveContactMesseage,
   verifyEmail,
 } from '../controllers/customerControllers.js';
@@ -18,4 +23,18 @@ router.get('/get-customer/:token/:id?', getCustomer);
 
 // sent feedback or problem from ContactUs page
 router.post('/contactUs', saveContactMesseage);
+
+//delete his account
+//need middleware
+router.delete('/delete-acount/:id', deleteAcount);
+
+//get Customers
+router.get('/getCustomers', getAllCustomers);
+
+//Change password
+router.put('/changePassword', changePassword);
+
+//add or remove favorite product
+router.post('/favorite', makeFavorite);
+router.get('/favorite/:id', getFavoriteList);
 export default router;

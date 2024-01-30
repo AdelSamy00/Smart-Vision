@@ -20,6 +20,12 @@ const customerSchema = new mongoose.Schema(
     address: { type: String },
     phone: { type: Number, unique: true },
     points: { type: Number, default: 0 },
+    favoriteList: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Products',
+      },
+    ],
     orderHistory: [{ type: Schema.Types.ObjectId, ref: 'Orders' }],
     serviceHistory: [{ type: Schema.Types.ObjectId, ref: 'Services' }],
     customizedHistory: [
