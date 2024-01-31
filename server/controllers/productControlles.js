@@ -49,6 +49,15 @@ export const getProductById = async (req, res, next) => {
   }
 };
 
+// this funcation will help us to khow if the product exist or not
+export const existProduct = async (id) => {
+  try {
+    const product = await Products.findOne({ _id: id });
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
 export const updateProduct = async (req, res, next) => {
   try {
     const { id } = req.params;

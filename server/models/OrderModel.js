@@ -15,7 +15,7 @@ const orderSchema = new mongoose.Schema(
       },
     ],
     totalPrice: { type: Number },
-    state: { type: String },
+    state: { type: String, default: 'PENDING' },
   },
   {
     timestamps: true,

@@ -1,9 +1,11 @@
 import ContactUs from '../models/ContactUs.js';
 import Customers from '../models/CustomerModel.js';
 import Verifications from '../models/EmailVerification.js';
+import Orders from '../models/OrderModel.js';
 import Products from '../models/ProductModel.js';
 import { compareString, createJWT, hashString } from '../utils/index.js';
 import JWT from 'jsonwebtoken';
+import { existProduct } from './productControlles.js';
 
 export const verifyEmail = async (req, res, next) => {
   const { customerId, token } = req.params;
@@ -247,6 +249,41 @@ export const getFavoriteList = async (req, res, next) => {
     res.status(404).json({
       success: false,
       message: 'failed to get your favorite',
+    });
+  }
+};
+
+export const makeOrder = async (req, res, next) => {
+  try {
+    const { id, cart, totalPrice, totalPoints } = req.body;
+    if (!id || !cart.length || !totalPrice || !totalPoints) {
+      next('Provide Required Fields!');
+      return;
+    }
+    const customer = await Customers.findById({ _id: id });
+    //make order
+    const order = await Orders.create({
+      customer: id,
+      order: cart,
+      totalPrice,
+    });
+    //save order to customer history and update his point
+    customer.orderHistory.push(order._id);
+    customer.points += totalPoints;
+    const updatedCustomer = await Customers.findByIdAndUpdate(
+      { _id: id },
+      customer,
+      { new: true }
+    );
+    res.status(200).json({
+      success: true,
+      message: 'the order has been made successfully',
+      customer: updatedCustomer,
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: 'failed to place this order',
     });
   }
 };

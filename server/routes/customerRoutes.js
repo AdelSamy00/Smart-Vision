@@ -7,6 +7,7 @@ import {
   getCustomer,
   getFavoriteList,
   makeFavorite,
+  makeOrder,
   saveContactMesseage,
   verifyEmail,
 } from '../controllers/customerControllers.js';
@@ -37,4 +38,5 @@ router.put('/changePassword', changePassword);
 //add or remove favorite product
 router.post('/favorite', makeFavorite);
 router.get('/favorite/:id', getFavoriteList);
+router.post('/order', makeOrder);
 export default router;
