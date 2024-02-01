@@ -56,7 +56,7 @@ function Profile() {
                   </Link>
                 </li>
                 <li>
-                  <Link className="profileLinks">
+                  <Link className="profileLinks" to={'/profile/change-password'}>
                     <div className="sbProfileLink">
                       <svg viewBox="0 0 24 24" className="sbProfileLinkIcon">
                         <path d="M19,8V7A7,7,0,0,0,5,7V8H2V21a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V8ZM7,7A5,5,0,0,1,17,7V8H7ZM20,21a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V10H20Z" />
@@ -73,7 +73,7 @@ function Profile() {
                   </Link>
                 </li>
                 <li>
-                  <Link className="profileLinks">
+                  <Link className="profileLinks" to={'/profile/deleteAcount'}>
                     <div className="sbProfileLink">
                       <svg viewBox="0 0 24 24" className='sbProfileLinkIcon' >
                         <path d="M22,4H17V2a2,2,0,0,0-2-2H9A2,2,0,0,0,7,2V4H2V6H4V21a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V6h2ZM9,2h6V4H9Zm9,19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V6H18Z" />

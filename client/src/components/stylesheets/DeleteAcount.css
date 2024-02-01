@@ -1,0 +1,44 @@
+.delete-account-container {
+    max-width: 800px;
+    padding: 20px;
+    padding-left: 40px;
+    font-size: 17px;
+  }
+  
+  .delete-account-heading {
+    font-size: 30px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .delete-account-label {
+    display: block;
+    margin: 10px 0;
+  }
+  
+  .delete-account-input {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    margin-top: 4px;
+    border: 1px solid;
+  }
+  
+  .delete-account-button {
+    padding: 10px;
+    font-size: 16px;
+    background-color:gray;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .list{
+    margin-left: 30px;
+    list-style :disc;
+  }
+  
+  .paragraph{
+    margin: 20px 0;
+  }

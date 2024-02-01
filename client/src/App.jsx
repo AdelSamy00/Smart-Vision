@@ -14,6 +14,7 @@ import {
 import axios from 'axios';
 import Footer from './components/Footer';
 import ChangePassword from './pages/ChangePassword';
+import DeleteAccount from './pages/DeleteAccountPage';
 function App() {
   axios.defaults.baseURL = 'http://localhost:3000';
   const Layout = () => {
@@ -40,6 +41,7 @@ function App() {
         <Route path="/contact-us" Component={ContactUs} />
         <Route path="/customer-services" Component={Services} />
         <Route path="/profile/change-password" Component={ChangePassword} />
+        <Route path="/profile/deleteAcount" Component={DeleteAccount} />
       </Routes>
       <Footer />
     </div>
