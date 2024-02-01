@@ -5,7 +5,7 @@ import Orders from '../models/OrderModel.js';
 import Products from '../models/ProductModel.js';
 import { compareString, createJWT, hashString } from '../utils/index.js';
 import JWT from 'jsonwebtoken';
-import { existProduct } from './productControlles.js';
+import { decreseQuantity, existProduct } from './productControlles.js';
 
 export const verifyEmail = async (req, res, next) => {
   const { customerId, token } = req.params;
@@ -255,35 +255,95 @@ export const getFavoriteList = async (req, res, next) => {
 
 export const makeOrder = async (req, res, next) => {
   try {
+    let flag = true;
     const { id, cart, totalPrice, totalPoints } = req.body;
     if (!id || !cart.length || !totalPrice || !totalPoints) {
       next('Provide Required Fields!');
       return;
     }
     const customer = await Customers.findById({ _id: id });
-    //make order
-    const order = await Orders.create({
-      customer: id,
-      order: cart,
-      totalPrice,
-    });
-    //save order to customer history and update his point
-    customer.orderHistory.push(order._id);
-    customer.points += totalPoints;
-    const updatedCustomer = await Customers.findByIdAndUpdate(
-      { _id: id },
-      customer,
-      { new: true }
+    // to make sure that products in cart elready exist
+    await Promise.all(
+      cart.map(async (prod) => {
+        const exist = await existProduct(prod.productId);
+        if (!exist) {
+          flag = false;
+        }
+      })
     );
-    res.status(200).json({
-      success: true,
-      message: 'the order has been made successfully',
-      customer: updatedCustomer,
-    });
+    if (flag) {
+      cart.map(async (prod) => {
+        await decreseQuantity(prod.productId, prod.quantity);
+      });
+      //make order
+      const order = await Orders.create({
+        customer: id,
+        order: cart,
+        totalPrice,
+        totalPoints,
+        cancelOrderExpiresAt: new Date(
+          new Date().setDate(new Date().getDate() + 3)
+        ),
+      });
+      //save order to customer history and update his point
+      customer.orderHistory.push(order._id);
+      //customer will get points after his receive this order
+      //customer.points += totalPoints;
+      const updatedCustomer = await Customers.findByIdAndUpdate(
+        { _id: id },
+        customer,
+        { new: true }
+      ).select('-password');
+      res.status(200).json({
+        success: true,
+        message: 'the order has been made successfully',
+        customer: updatedCustomer,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'product is not found',
+      });
+    }
   } catch (error) {
     res.status(404).json({
       success: false,
       message: 'failed to place this order',
+    });
+  }
+};
+
+export const cancelOrder = async (req, res, next) => {
+  try {
+    const { id, orderId } = req.body;
+    if (!id || !orderId) {
+      next('Provide Required Fields!');
+      return;
+    }
+    const order = await Orders.findById({ _id: orderId });
+    if (order.cancelOrderExpiresAt.getDate() > new Date().getDate()) {
+      const updatedOrder = await Orders.findByIdAndUpdate(
+        { _id: orderId },
+        {
+          state: 'CANCELED',
+        },
+        { new: true }
+      );
+      res.status(200).json({
+        success: true,
+        message: 'the order has been canceled successfully',
+        order: updatedOrder,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'you cannot cancel order after 3 day',
+      });
+    }
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: 'failed to cancel this order',
     });
   }
 };

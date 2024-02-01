@@ -12,10 +12,13 @@ const orderSchema = new mongoose.Schema(
           ref: 'Products',
         },
         quantity: { type: Number },
+        color: { type: String },
       },
     ],
     totalPrice: { type: Number },
+    totalPoints: { type: Number },
     state: { type: String, default: 'PENDING' },
+    cancelOrderExpiresAt: { type: Date },
   },
   {
     timestamps: true,

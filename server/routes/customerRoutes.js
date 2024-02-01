@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import {
+  cancelOrder,
   changePassword,
   deleteAcount,
   getAllCustomers,
@@ -39,4 +40,5 @@ router.put('/changePassword', changePassword);
 router.post('/favorite', makeFavorite);
 router.get('/favorite/:id', getFavoriteList);
 router.post('/order', makeOrder);
+router.delete('/order', cancelOrder);
 export default router;

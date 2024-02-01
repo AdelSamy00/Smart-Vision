@@ -20,6 +20,7 @@ const productSchema = new mongoose.Schema(
     views: [{ type: String }],
     reviews: [{ type: Schema.Types.ObjectId, ref: 'Reviews' }],
     show: { type: Boolean },
+    colors: [{ type: String }],
   },
   {
     timestamps: true,

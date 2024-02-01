@@ -50,6 +50,7 @@ export const getProductById = async (req, res, next) => {
 };
 
 // this funcation will help us to khow if the product exist or not
+//to help us in funcation makeOrder in customerControllers
 export const existProduct = async (id) => {
   try {
     const product = await Products.findOne({ _id: id });
@@ -58,6 +59,22 @@ export const existProduct = async (id) => {
     return false;
   }
 };
+// this funcation will help us to decrese quantity
+//to help us in funcation makeOrder in customerControllers
+export const decreseQuantity = async (id, quantity) => {
+  try {
+    const product = await Products.findById({ _id: id });
+    product.quantity -= quantity;
+    const updatedpProduct = await Products.findByIdAndUpdate(
+      { _id: id },
+      product,
+      { new: true }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const updateProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
