@@ -5,7 +5,11 @@ import Orders from '../models/OrderModel.js';
 import Products from '../models/ProductModel.js';
 import { compareString, createJWT, hashString } from '../utils/index.js';
 import JWT from 'jsonwebtoken';
-import { decreseQuantity, existProduct } from './productControlles.js';
+import {
+  decreseQuantity,
+  existProduct,
+  increaseQuantity,
+} from './productControlles.js';
 
 export const verifyEmail = async (req, res, next) => {
   const { customerId, token } = req.params;
@@ -321,23 +325,35 @@ export const cancelOrder = async (req, res, next) => {
       return;
     }
     const order = await Orders.findById({ _id: orderId });
-    if (order.cancelOrderExpiresAt.getDate() > new Date().getDate()) {
-      const updatedOrder = await Orders.findByIdAndUpdate(
-        { _id: orderId },
-        {
-          state: 'CANCELED',
-        },
-        { new: true }
-      );
-      res.status(200).json({
-        success: true,
-        message: 'the order has been canceled successfully',
-        order: updatedOrder,
-      });
+    if (order.state !== 'CANCELED') {
+      if (order.cancelOrderExpiresAt.getDate() > new Date().getDate()) {
+        const updatedOrder = await Orders.findByIdAndUpdate(
+          { _id: orderId },
+          {
+            state: 'CANCELED',
+          },
+          { new: true }
+        );
+        await Promise.all(
+          order.order.map(async (prod) => {
+            await increaseQuantity(prod.productId.toString(), prod.quantity);
+          })
+        );
+        res.status(200).json({
+          success: true,
+          message: 'the order has been canceled successfully',
+          order: updatedOrder,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: 'you cannot cancel order after 3 day',
+        });
+      }
     } else {
       res.status(404).json({
         success: false,
-        message: 'you cannot cancel order after 3 day',
+        message: 'you cannot cancel order twice',
       });
     }
   } catch (error) {
