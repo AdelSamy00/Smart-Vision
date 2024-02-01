@@ -7,7 +7,11 @@ import ProfileDetails from './ProfileDetails';
 import Home from './Home';
 import AboutUs from './AboutUs';
 import Services from './Services';
-
+import ChangePassword from './ChangePassword';
+import Favourites from './Favourites';
+import ProductDetails from './ProductDetails';
+import DeleteAccountPage from './DeleteAccountPage';
+import Store from '../components/Store';
 export {
   Landing,
   Login,
@@ -18,4 +22,9 @@ export {
   Home,
   AboutUs,
   Services,
+  ChangePassword,
+  Favourites,
+  ProductDetails,
+  DeleteAccountPage,
+  Store,
 };

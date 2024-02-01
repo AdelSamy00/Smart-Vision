@@ -10,11 +10,15 @@ import {
   Home,
   AboutUs,
   Services,
+  ChangePassword,
+  Favourites,
+  ProductDetails,
+  DeleteAccountPage,
+  Store
 } from './pages/';
 import axios from 'axios';
 import Footer from './components/Footer';
-import ChangePassword from './pages/ChangePassword';
-import DeleteAccount from './pages/DeleteAccountPage';
+
 function App() {
   axios.defaults.baseURL = 'http://localhost:3000';
   const Layout = () => {
@@ -28,23 +32,26 @@ function App() {
     );
   };
   return (
-    <div className="">
+    <>
       <Routes>
         <Route element={<Layout />}></Route>
+        <Route path="/" element={<Landing />} />
+        <Route path="/index" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/customer-services" element={<Services />} />
+        <Route path="/store" element={<Store />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/profile/profile-details" Component={ProfileDetails} />
-        <Route path="/" Component={Landing} />
-        <Route path="/index" Component={Home} />
-        <Route path="/login" Component={Login} />
-        <Route path="/register" Component={Register} />
-        <Route path="/about" Component={AboutUs} />
-        <Route path="/contact-us" Component={ContactUs} />
-        <Route path="/customer-services" Component={Services} />
-        <Route path="/profile/change-password" Component={ChangePassword} />
-        <Route path="/profile/deleteAcount" Component={DeleteAccount} />
+        <Route path="/profile/profile-details" element={<ProfileDetails />} />
+        <Route path="/profile/change-password" element={<ChangePassword />} />
+        <Route path="/profile/delete-account" element={<DeleteAccountPage />} />
+        <Route path="/favourites" element={<Favourites />} />
       </Routes>
       <Footer />
-    </div>
+    </>
   );
 }
 
