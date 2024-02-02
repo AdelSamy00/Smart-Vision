@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { products } from "../assets/Data";
+import axios from "axios";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "./StyleSheets/Store.css";
 import ProductCard from "../components/Card";
 
 const Store = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedColor, setSelectedColor] = useState(""); 
+  const [selectedColor, setSelectedColor] = useState("");
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
   const [sortByPriceOption, setSortByPriceOption] = useState("ascending");
@@ -17,12 +17,13 @@ const Store = () => {
   const sortDropdownRef = useRef(null);
   const priceDropdownRef = useRef(null);
   const colorDropdownRef = useRef(null);
+  const [products, setProducts] = useState([]);
   const [selectedPriceRanges, setSelectedPriceRanges] = useState([]);
   const colors = ["Red", "Blue", "Green", "Yellow", "White", "Black"];
-  const categories = ["bedrooms", "kitchen", "Lighting", "Storage"];
+  const categories = ["sofa", "chair", "bed", "Storage"];
   const prices = [
-    { min: 5000, max: 6000 },
-    { min: 7000, max: 8000 },
+    { min: 4000, max: 6000 },
+    { min: 13000, max: 30000 },
   ];
 
   const handleCategoryChange = (category) => {
@@ -109,6 +110,19 @@ const Store = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('/products/');
+        // console.log("API response:", response.data.products);
+        setProducts(response.data.products); 
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
   return (
     <div className="store-container">
       <div className="filters-container">
@@ -175,7 +189,7 @@ const Store = () => {
                     cursor: "pointer",
                     display: "flex",
                     justifyContent: "space-between",
-                    textAlign:"center"
+                    textAlign: "center",
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -185,12 +199,12 @@ const Store = () => {
                   <span>
                     EGP {price.min} - {price.max}
                   </span>
-                  <input    
-                  style={{
-                    cursor:"pointer",
-                    width:"17px",
-                    height:"17px"
-                  }}          
+                  <input
+                    style={{
+                      cursor: "pointer",
+                      width: "17px",
+                      height: "17px",
+                    }}
                     type="checkbox"
                     checked={selectedPriceRanges.some(
                       (selectedRange) =>

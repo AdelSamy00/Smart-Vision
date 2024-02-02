@@ -7,6 +7,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import axios from "axios";
 const defaultTheme = createTheme();
 
 export default function ChangePassword() {
@@ -41,7 +42,7 @@ export default function ChangePassword() {
     }
   };
 
-  const submitChange = (e) => {
+  const submitChange = async (e) => {
     e.preventDefault();
 
     if (
@@ -50,24 +51,29 @@ export default function ChangePassword() {
       !accountInfo.confirmPassword.trim()
     ) {
       setErrorMessage("All fields are required");
-      return;
     } else if (!isPasswordValid) {
       setErrorMessage("The password is not valid");
-      return;
     } else if (accountInfo.newPassword !== accountInfo.confirmPassword) {
       setErrorMessage("The passwords do not match");
-      return;
     } else {
-      setErrorMessage("Password Has Changed Successfully");
-      // Call  API
+      try {
+        await axios.put("/customers/changePassword", {
+          ...accountInfo,
+        });
+        setErrorMessage("Password Has Changed Successfully");
+        setAccountInfo({
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        });
+      } catch (error) {
+        console.error("Error changing password:", error);
+      }
     }
   };
 
   useEffect(() => {
     const validatePassword = () => {
-      // Password must contain no more than 2 identical characters in a row,
-      // a lowercase letter, an uppercase letter, 8-20 characters, and a number
-      //   const regex = /^(?!.*(\w)\1{2,})(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,20}$/;
       const regex =
         /^(?!.*(\w)\1{2,})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?]).{8,20}$/;
 
