@@ -87,7 +87,7 @@ export default function ChangePassword() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "flex-start",
-            height: "100vh",
+            minHeight: "100vh",
           }}
           onSubmit={submitChange}
         >

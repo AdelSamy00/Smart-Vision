@@ -37,6 +37,7 @@ export const products = [
     createdAt: '2023-08-21T06:04:18.297Z',
     updatedAt: '2023-08-21T06:04:18.297Z',
     __v: 0,
+    color:'red'
   },
   {
     _id: '64e2fe620d7868ecff1a6a55',
@@ -55,6 +56,7 @@ export const products = [
     createdAt: '2023-08-21T06:04:18.297Z',
     updatedAt: '2023-08-21T06:04:18.297Z',
     __v: 0,
+    color:'black'
   },
   {
     _id: '64e2fe620d7868ecff1a6a66',
@@ -73,6 +75,7 @@ export const products = [
     createdAt: '2023-08-21T06:04:18.297Z',
     updatedAt: '2023-08-21T06:04:18.297Z',
     __v: 0,
+    color:'red'
   },
   {
     _id: '64e2fe620d7868ecff1a6a77',
@@ -91,6 +94,7 @@ export const products = [
     createdAt: '2023-08-21T06:04:18.297Z',
     updatedAt: '2023-08-21T06:04:18.297Z',
     __v: 0,
+    color:'Red'
   },
 ];
 

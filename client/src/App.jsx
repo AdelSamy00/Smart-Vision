@@ -18,6 +18,7 @@ import {
 } from './pages/';
 import axios from 'axios';
 import Footer from './components/Footer';
+import Header from './components/Header/Header';
 
 function App() {
   axios.defaults.baseURL = 'http://localhost:3000';
@@ -33,6 +34,7 @@ function App() {
   };
   return (
     <>
+    <Header/>
       <Routes>
         <Route element={<Layout />}></Route>
         <Route path="/" element={<Landing />} />

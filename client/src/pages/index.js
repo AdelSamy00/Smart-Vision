@@ -11,7 +11,7 @@ import ChangePassword from './ChangePassword';
 import Favourites from './Favourites';
 import ProductDetails from './ProductDetails';
 import DeleteAccountPage from './DeleteAccountPage';
-import Store from '../components/Store';
+import Store from './Store';
 export {
   Landing,
   Login,
