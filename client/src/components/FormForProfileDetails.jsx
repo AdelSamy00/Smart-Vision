@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './stylesheets/FormForProfileDetails.css'
@@ -41,10 +40,9 @@ function FormForProfileDetails() {
             </Form.Group>
             <div className="flex justify-center">
                 <button type="submit" className="text-2xl bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-3xl w-full m-4 h-16">
-                Save
+                    Save
                 </button>
             </div>
-            
         </Form>
     );
 }

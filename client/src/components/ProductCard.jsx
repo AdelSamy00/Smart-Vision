@@ -9,27 +9,25 @@ const getinitItems = () => {
     return data;
 };
 
-function ProductCard({ product }) {
+function ProductCard({ product, favoriteList, handelFavorit }) {
     const [favorite, setFavorite] = useState(false);
+    const [favoritProducts, setFavoritProducts] = useState(favoriteList);
     const [inCart, setInCart] = useState(false);
     const [cart, setCart] = useState(getinitItems);
-
+    const isFavorit = (product) => {
+        const fav = favoritProducts.filter((favId) => {
+            favId === product._id
+        })
+        if (fav) {
+            setFavorite(true)
+        }
+    }
+    useEffect(() => {
+        isFavorit(product)
+    }, []);
     useEffect(() => {
         localStorage.setItem("cart", JSON.stringify(cart));
     }, [cart]);
-
-    const handelFavorit = (favorite) => {
-        if (favorite) {
-            setTimeout(() => {
-                setFavorite(false)
-            }, 1000);
-        }
-        else {
-            setTimeout(() => {
-                setFavorite(true)
-            }, 1000);
-        }
-    }
     const handelsetInCart = (inCart, id) => {
         if (inCart) {
             setCart((prevCart) => {
@@ -51,7 +49,7 @@ function ProductCard({ product }) {
 
 
     return (
-        <div className="productCard m-52" key={product._id}>
+        <div className="productCard m-52" >
             <Link className='productCardLink' to={'/'}>
                 {product.images.length === 1 ?
                     (<div className="sbProductCardDivImg">
@@ -95,7 +93,7 @@ function ProductCard({ product }) {
                         </svg>
                     }
                 </button>
-                <button onClick={() => handelFavorit(favorite)} >
+                <button onClick={() => handelFavorit(product._id)} >
                     {!favorite ?
                         <svg className='sbProductCardFooterIcon' viewBox="0 0 24 24">
                             <path d="M17.5.917a6.4,6.4,0,0,0-5.5,3.3A6.4,6.4,0,0,0,6.5.917,6.8,6.8,0,0,0,0,
