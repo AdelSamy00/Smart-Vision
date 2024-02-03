@@ -63,6 +63,8 @@ const Bag = () => {
           fontWeight: "bold",
           fontSize: "40px",
           margin: "35px 0px",
+          textAlign:"center",
+          color:"#333"
         }}
       >
         Your Bag
@@ -86,7 +88,7 @@ const Bag = () => {
           Your bag is empty.
         </p>
       ) : (
-        <ul>
+        <ul className="BagList">
           {cart.map((item) => (
             <li key={item._id}>
               {item.images && item.images.length > 0 && (
@@ -100,11 +102,7 @@ const Bag = () => {
                   }}
                 />
               )}
-              <div
-                style={{
-                  display: "block",
-                }}
-              >
+              <div>
                 <p>{item.name}</p>
                 <p>Price: {item.price} LE</p>
                 <div
@@ -132,7 +130,7 @@ const Bag = () => {
               <button
                 onClick={() => handleRemoveFromCart(item._id)}
                 style={{
-                  marginLeft: "30px",
+                  marginLeft: "25px",
                   fontWeight: "bold",
                   padding: "10px 15px",
                   borderRadius: "30px",
