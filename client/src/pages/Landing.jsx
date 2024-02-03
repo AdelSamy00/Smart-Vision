@@ -11,7 +11,7 @@ function Landing() {
             <h3 className="md:float-left text-3xl mb-0">Smart Vision</h3>
             <nav className="nav gap-3 justify-center md:float-right">
               <NavLink
-                to={'/'}
+                to={'/store'}
                 className="nav-links active"
                 aria-current="pages"
               >
@@ -34,7 +34,7 @@ function Landing() {
             Feel free to share some of your own and comment on others!
           </p>
           <Link
-            to="/index"
+            to="/store"
             className="btn btn-lg btn-secondary font-bold  text-white mt-4"
           >
             View Product

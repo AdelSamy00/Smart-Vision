@@ -25,7 +25,7 @@ function Login() {
           localStorage.setItem('token', res.data.token);
           const newData = { token: res.data?.token, ...res.data?.customer };
           dispatch(SetCustomer(newData));
-          navigate('/index');
+          navigate('/store');
         })
         .catch((error) => {
           throw error.response.data;
