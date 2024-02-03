@@ -9,47 +9,53 @@ const getinitItems = () => {
     return data;
 };
 
-function ProductCard({ product, favoriteList, handelFavorit }) {
-    const [favorite, setFavorite] = useState(false);
-    const [favoritProducts, setFavoritProducts] = useState(favoriteList);
-    const [inCart, setInCart] = useState(false);
+function ProductCard({ product, favoriteList = [], handelFavorit, handelCart }) {
     const [cart, setCart] = useState(getinitItems);
+    const isInCart = () => {
+        const res = cart.find((prod) => {
+            return prod._id === product._id
+        })
+        if (res) {
+            return (true)
+        }
+        return false
+    }
+
+    const [favorite, setFavorite] = useState(false);
+    const [inCart, setInCart] = useState(isInCart);
+
+
     const isFavorit = (product) => {
-        const fav = favoritProducts.filter((favId) => {
-            favId === product._id
+        const fav = favoriteList.find((favId) => {
+            return favId === product._id
         })
         if (fav) {
             setFavorite(true)
         }
     }
+
+
     useEffect(() => {
         isFavorit(product)
     }, []);
-    useEffect(() => {
-        localStorage.setItem("cart", JSON.stringify(cart));
-    }, [cart]);
-    const handelsetInCart = (inCart, id) => {
+
+
+    const handelsetInCart = (id) => {
+        handelCart(id)
         if (inCart) {
-            setCart((prevCart) => {
-                return prevCart.filter((t) => t._id !== id);
-            });
             setTimeout(() => {
                 setInCart(false)
             }, 1000);
         }
         else {
-            setCart((prevCart) => {
-                return [...prevCart, { _id: id }];
-            });
             setTimeout(() => {
                 setInCart(true)
             }, 1000);
         }
     }
 
-
     return (
-        <div className="productCard m-52" >
+        <div className="productCard mb-12" key={product._id} >
             <Link className='productCardLink' to={'/'}>
                 {product.images.length === 1 ?
                     (<div className="sbProductCardDivImg">
@@ -76,7 +82,7 @@ function ProductCard({ product, favoriteList, handelFavorit }) {
                 </div >
             </Link>
             <div className="sbProductCardFooter ">
-                <button onClick={() => handelsetInCart(inCart, product._id)} className='addToCartButton'>
+                <button onClick={() => handelsetInCart(product._id)} className='addToCartButton'>
                     {!inCart ?
                         <svg className='sbProductCardFooterIcon' viewBox="0 0 24 24">
                             <path d="M18,12a5.993,5.993,0,0,1-5.191-9H4.242L4.2,2.648A3,3,0,0,0,1.222,0H1A1,1,0,
@@ -112,7 +118,6 @@ function ProductCard({ product, favoriteList, handelFavorit }) {
                 </button>
             </div>
         </div>
-
     )
 }
 
