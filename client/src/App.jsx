@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation, Navigate, Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
 
 import {
   ContactUs,
@@ -24,6 +25,7 @@ import Header from './components/Header/Header';
 
 function App() {
   axios.defaults.baseURL = 'http://localhost:3000';
+  
   const Layout = () => {
     const { customer } = useSelector((state) => state.customer);
     console.log(customer);
@@ -34,9 +36,12 @@ function App() {
       <Navigate to="/login" state={{ from: location }} replace />
     );
   };
+  const routesWithoutHeader = ['/login', '/register','/'];
+  const shouldRenderHeader = !routesWithoutHeader.includes(window.location.pathname);
+
   return (
     <>
-    <Header/>
+    {shouldRenderHeader && <Header/>}
       <Routes>
         <Route element={<Layout />}></Route>
         <Route path="/" element={<Landing />} />

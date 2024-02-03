@@ -53,7 +53,7 @@ const Header = () => {
               ></FavoriteBorderIcon>
             </button>
 
-              <Link to={"./bag"}>
+              <Link to={"./bag"} >
               <IconButton aria-label="cart" style={{ padding: "0px 20px" ,marginTop:"16px" }}className="badge"> 
               <Badge
                 badgeContent={

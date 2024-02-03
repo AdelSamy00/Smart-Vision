@@ -80,7 +80,8 @@ const Menu = () => {
                     style={{
                       width: "100px",
                       height: "60px",
-                      marginLeft:"2.3rem"
+                      marginLeft:"2.3rem",
+                      border:"none"
                     }}
                   />
                 </div>
@@ -93,22 +94,22 @@ const Menu = () => {
                     marginLeft:"2.3rem"
                   }}
                 >
-                  <li style={{ marginTop: "1rem" }}>
+                  <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
                     <Link to="/">Products</Link>
                   </li>
-                  <li style={{ marginTop: "1rem" }}>
+                  <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
                     <Link to="/">Harmony At Home</Link>
                   </li>
-                  <li style={{ marginTop: "1rem" }}>
+                  <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
                     <Link to="/">Rooms</Link>
                   </li>
-                  <li style={{ marginTop: "1rem" }}>
+                  <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
                     <Link to="/">Sale Up To 70%</Link>
                   </li>
-                  <li style={{ marginTop: "1rem" }}>
+                  <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
                     <Link to="/">About Us</Link>
                   </li>
-                  <li style={{ marginTop: "1rem" }}>
+                  <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
                     <Link to="/">Contact Us</Link>
                   </li>
                 </ul>
