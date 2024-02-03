@@ -107,6 +107,7 @@ const Header = () => {
               </IconButton>
             </InputAdornment>
             <input
+            className="searchInput"
               type="search"
               placeholder="What Are You Looking For ?"
               style={{

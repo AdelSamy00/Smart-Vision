@@ -94,7 +94,6 @@
   margin-bottom: 10px;
   flex-direction: column;
   text-align: center;
-  /* background-color: aqua; */
   margin-right: 0.5rem;
 }
 .circleContainer {
@@ -181,19 +180,21 @@
     max-height: 12rem;
   }
 }
-@media only screen and (min-width: 715px) {
+@media only screen and (min-width: 720px) {
   .dropDown {
     top: 4rem;
     left: 0rem;
   }
 }
-@media only screen and (min-width: 1280px) {
-  .arrow {
-    display: inline;
-  }
+@media only screen and (min-width: 1020px) {
   .products-container {
     justify-content: space-between;
   }
+}
+@media only screen and (min-width: 1280px) {
+  .arrow {
+    display: inline;
+  } 
   .dropDown {
     top: 4rem;
     left: 0rem;

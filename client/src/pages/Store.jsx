@@ -3,8 +3,8 @@ import axios from "axios";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "./StyleSheets/Store.css";
 import ProductCard from "../components/ProductCard";
-import { useDispatch, useSelector } from 'react-redux';
-import { SetCustomer } from '../redux/CustomerSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { SetCustomer } from "../redux/CustomerSlice";
 import { useNavigate } from "react-router-dom";
 
 const getinitItems = () => {
@@ -14,7 +14,7 @@ const getinitItems = () => {
 };
 
 const Store = () => {
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
@@ -30,6 +30,7 @@ const Store = () => {
   const [selectedPriceRanges, setSelectedPriceRanges] = useState([]);
   const colors = ["Red", "Blue", "Green", "Yellow", "White", "Black"];
   const categories = ["sofa", "chair", "bed", "Storage"];
+  const [selectedCategories, setSelectedCategories] = useState(["All"]);
   const prices = [
     { min: 4000, max: 6000 },
     { min: 13000, max: 30000 },
@@ -43,53 +44,52 @@ const Store = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handelCart = (id, name, price, images) => {
-    console.log(id, name, price, images)
+    console.log(id, name, price, images);
     const res = cart.find((prod) => {
-      return prod._id === id
-    })
+      return prod._id === id;
+    });
     if (res) {
-      console.log('remove')
+      console.log("remove");
       setCart((prevCart) => {
         return prevCart.filter((t) => t._id !== id);
       });
-      setInCart(false)
-    }
-    else {
-      console.log('add')
+      setInCart(false);
+    } else {
+      console.log("add");
       setCart([...cart, { _id: id, name, price, images }]);
-      localStorage.setItem("cart", JSON.stringify([...cart, { _id: id, name, price, images }]));
-      setInCart(true)
+      localStorage.setItem(
+        "cart",
+        JSON.stringify([...cart, { _id: id, name, price, images }])
+      );
+      setInCart(true);
     }
-  }
+  };
 
   const handelFavorit = (id) => {
     if (customer._id) {
-      console.log('fired2')
-      favorites(customer._id, id)
+      console.log("fired2");
+      favorites(customer._id, id);
     } else {
-      navigate("/login")
+      navigate("/login");
     }
-  }
+  };
   async function favorites(id, productId) {
-    console.log(id, productId)
-    await axios.post('/customers/favorite', { id, productId })
+    console.log(id, productId);
+    await axios
+      .post("/customers/favorite", { id, productId })
       .then((res) => {
         const newData = { ...res.data?.newCustomerData };
         dispatch(SetCustomer(newData));
-        setFavoriteList(customer.favoriteList)
-      }
-      ).catch((e) => {
-        console.log(e)
+        setFavoriteList(customer.favoriteList);
       })
+      .catch((e) => {
+        console.log(e);
+      });
   }
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
-    setShowCategoryDropdown(false);
-  };
 
   const handlePriceRangeChange = (range) => {
     const index = selectedPriceRanges.findIndex(
@@ -139,6 +139,27 @@ const Store = () => {
     setShowColorDropdown(!showColorDropdown);
   };
 
+  const handleCategoryChange = (category) => {
+    setSelectedCategories((prevCategories) => {
+      if (!prevCategories || prevCategories.length === 0) {
+        return ["All"];
+      } else {
+        const index = prevCategories.indexOf(category);
+
+        if (index === -1) {
+          const updatedCategories = prevCategories.includes("All")
+            ? prevCategories.filter((cat) => cat !== "All")
+            : prevCategories;
+
+          return [...updatedCategories, category];
+        } else {
+          return prevCategories.filter((cat) => cat !== category);
+        }
+      }
+    });
+  };
+
+
   const sortProducts = (a, b) => {
     if (sortByOption === "price") {
       const priceA = Number(a.price);
@@ -169,13 +190,28 @@ const Store = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  useEffect(() => {
+    const handleCategoryClickOutside = (event) => {
+      if (
+        categoryDropdownRef.current &&
+        !categoryDropdownRef.current.contains(event.target)
+      ) {
+        setShowCategoryDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleCategoryClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleCategoryClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('/products/');
+        const response = await axios.get("/products/");
         // console.log("API response:", response.data.products);
-        setProducts(response.data.products); 
+        setProducts(response.data.products);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -189,7 +225,6 @@ const Store = () => {
         {/* Category filter */}
         <div
           onClick={toggleCategoryDropdown}
-          onBlur={() => setShowCategoryDropdown(false)}
           className="Filter"
           tabIndex="0"
           ref={categoryDropdownRef}
@@ -207,19 +242,29 @@ const Store = () => {
                 <div
                   key={index}
                   className="categoryOption"
-                  onClick={() => handleCategoryChange(category)}
+                  style={{
+                    padding: "10px",
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    textAlign: "center",
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCategoryChange(category);
+                  }}
                 >
                   <span>{category}</span>
-                  <div className="circleContainer">
-                    <div className="emptyCircle"></div>
-                    <span
-                      className={
-                        selectedCategory === category
-                          ? "filledCircle black"
-                          : "filledCircle gray"
-                      }
-                    ></span>
-                  </div>
+                  <input
+                    style={{
+                      cursor: "pointer",
+                      width: "17px",
+                      height: "17px",
+                    }}
+                    type="checkbox"
+                    checked={selectedCategories.includes(category)}
+                    readOnly
+                  />{" "}
                 </div>
               ))}
             </div>
@@ -377,6 +422,7 @@ const Store = () => {
             </div>
           )}
         </div>
+       
       </div>
 
       {/* Product display */}
@@ -384,8 +430,9 @@ const Store = () => {
         {products
           .filter(
             (product) =>
-              (selectedCategory === "All" ||
-                product.category === selectedCategory) &&
+              (selectedCategories.length === 0 ||
+                selectedCategories.includes("All") ||
+                selectedCategories.includes(product.category)) &&
               (selectedPriceRanges.length === 0 ||
                 selectedPriceRanges.some(
                   (selectedRange) =>
