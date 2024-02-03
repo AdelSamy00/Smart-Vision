@@ -1,7 +1,10 @@
 .productCard {
   width: 450px;
+  height: 600px;
   background-color: rgba(239, 239, 239, 0.56);
   border-radius: 1rem;
+  text-align: center;
+  position: relative;
 }
 
 .sbProductCardData {
@@ -26,8 +29,11 @@
 
 .sbProductCardFooter {
   display: flex;
+  width: 100%;
   justify-content: space-between;
   padding: 1rem;
+  position: absolute;
+  bottom: 0;
 }
 
 .sbProductCardFooterIcon {

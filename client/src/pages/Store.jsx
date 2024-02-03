@@ -2,7 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "./StyleSheets/Store.css";
-import ProductCard from "../components/Card";
+import ProductCard from "../components/ProductCard";
+import { useDispatch, useSelector } from 'react-redux';
+import { SetCustomer } from '../redux/CustomerSlice';
+import { useNavigate } from "react-router-dom";
+
+const getinitItems = () => {
+  const data = JSON.parse(localStorage.getItem("cart"));
+  if (!data) return [];
+  return data;
+};
 
 const Store = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -25,6 +34,57 @@ const Store = () => {
     { min: 4000, max: 6000 },
     { min: 13000, max: 30000 },
   ];
+
+  //add by youssef
+  const { customer } = useSelector((state) => state.customer);
+  const [favoriteList, setFavoriteList] = useState(customer.favoriteList);
+  const [cart, setCart] = useState(getinitItems);
+  const [inCart, setInCart] = useState(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handelCart = (id, name, price, images) => {
+    console.log(id, name, price, images)
+    const res = cart.find((prod) => {
+      return prod._id === id
+    })
+    if (res) {
+      console.log('remove')
+      setCart((prevCart) => {
+        return prevCart.filter((t) => t._id !== id);
+      });
+      setInCart(false)
+    }
+    else {
+      console.log('add')
+      setCart([...cart, { _id: id, name, price, images }]);
+      localStorage.setItem("cart", JSON.stringify([...cart, { _id: id, name, price, images }]));
+      setInCart(true)
+    }
+  }
+
+  const handelFavorit = (id) => {
+    if (customer._id) {
+      console.log('fired2')
+      favorites(customer._id, id)
+    } else {
+      navigate("/login")
+    }
+  }
+  async function favorites(id, productId) {
+    console.log(id, productId)
+    await axios.post('/customers/favorite', { id, productId })
+      .then((res) => {
+        const newData = { ...res.data?.newCustomerData };
+        dispatch(SetCustomer(newData));
+        setFavoriteList(customer.favoriteList)
+      }
+      ).catch((e) => {
+        console.log(e)
+      })
+  }
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
@@ -338,7 +398,13 @@ const Store = () => {
           )
           .sort(sortProducts)
           .map((product, index) => (
-            <ProductCard key={index} product={product} />
+            <ProductCard
+              key={index}
+              product={product}
+              favoriteList={favoriteList}
+              handelFavorit={handelFavorit}
+              handelCart={handelCart}
+            />
           ))}
       </div>
     </div>
