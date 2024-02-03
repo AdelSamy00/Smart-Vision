@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import Rating from '@mui/material/Rating';
 import './stylesheets/ProductCard.css'
 import { Link } from 'react-router-dom';
-
 const getinitItems = () => {
     const data = JSON.parse(localStorage.getItem("cart"));
     if (!data) return [];
@@ -13,7 +12,6 @@ function ProductCard({ product }) {
     const [favorite, setFavorite] = useState(false);
     const [inCart, setInCart] = useState(false);
     const [cart, setCart] = useState(getinitItems);
-
     useEffect(() => {
         localStorage.setItem("cart", JSON.stringify(cart));
     }, [cart]);
@@ -30,7 +28,7 @@ function ProductCard({ product }) {
             }, 1000);
         }
     }
-    const handelsetInCart = (inCart, id) => {
+    const handelsetInCart = (inCart, id ,name ,price ,images) => {
         if (inCart) {
             setCart((prevCart) => {
                 return prevCart.filter((t) => t._id !== id);
@@ -41,7 +39,7 @@ function ProductCard({ product }) {
         }
         else {
             setCart((prevCart) => {
-                return [...prevCart, { _id: id }];
+                return [...prevCart, { _id: id ,name ,price ,images}];
             });
             setTimeout(() => {
                 setInCart(true)
@@ -78,7 +76,7 @@ function ProductCard({ product }) {
                 </div >
             </Link>
             <div className="sbProductCardFooter ">
-                <button onClick={() => handelsetInCart(inCart, product._id)} className='addToCartButton'>
+                <button onClick={() => handelsetInCart(inCart, product._id ,product.name ,product.price ,product.images)} className='addToCartButton'>
                     {!inCart ?
                         <svg className='sbProductCardFooterIcon' viewBox="0 0 24 24">
                             <path d="M18,12a5.993,5.993,0,0,1-5.191-9H4.242L4.2,2.648A3,3,0,0,0,1.222,0H1A1,1,0,

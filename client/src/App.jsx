@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation, Navigate, Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+
 import {
   ContactUs,
   Landing,
@@ -14,7 +15,8 @@ import {
   Favourites,
   ProductDetails,
   DeleteAccountPage,
-  Store
+  Store,
+  Bag
 } from './pages/';
 import axios from 'axios';
 import Footer from './components/Footer';
@@ -51,6 +53,7 @@ function App() {
         <Route path="/profile/change-password" element={<ChangePassword />} />
         <Route path="/profile/delete-account" element={<DeleteAccountPage />} />
         <Route path="/favourites" element={<Favourites />} />
+        <Route path="/bag" element={<Bag />} />
       </Routes>
       <Footer />
     </>

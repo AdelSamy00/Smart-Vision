@@ -53,8 +53,8 @@ const Header = () => {
               ></FavoriteBorderIcon>
             </button>
 
-
-            <IconButton aria-label="cart" style={{ padding: "0px 20px" }}className="badge"> 
+              <Link to={"./bag"}>
+              <IconButton aria-label="cart" style={{ padding: "0px 20px" ,marginTop:"16px" }}className="badge"> 
               <Badge
                 badgeContent={
                   <span
@@ -81,6 +81,11 @@ const Header = () => {
                 />
               </Badge>
             </IconButton>
+              </Link>
+
+
+
+            
           </div>
         </Toolbar>
         <Toolbar className="searchinput" style={{ position: "absolute" }}>

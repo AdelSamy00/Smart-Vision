@@ -12,6 +12,7 @@ import Favourites from './Favourites';
 import ProductDetails from './ProductDetails';
 import DeleteAccountPage from './DeleteAccountPage';
 import Store from './Store';
+import Bag from './BagPage';
 export {
   Landing,
   Login,
@@ -27,4 +28,5 @@ export {
   ProductDetails,
   DeleteAccountPage,
   Store,
+  Bag
 };
