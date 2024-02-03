@@ -58,7 +58,7 @@ function App() {
         <Route path="/favourites" element={<Favourites />} />
         <Route path="/bag" element={<Bag />} />
       </Routes>
-      <Footer />
+      {shouldRenderHeader && <Footer />}
     </>
   );
 }
