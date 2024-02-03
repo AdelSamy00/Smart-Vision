@@ -1,7 +1,5 @@
 import { Routes, Route, useLocation, Navigate, Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import React, { useEffect } from 'react';
-
 import {
   ContactUs,
   Landing,

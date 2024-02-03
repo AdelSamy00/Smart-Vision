@@ -305,7 +305,7 @@ const Store = () => {
                 <div
                   key={index}
                   className="colorOption"
-                  onClick={() => handleColorChange(color)}
+                  onClick={() => handleColorChange(color.toLowerCase())}
                 >
                   <div
                     className="colorCircle"
@@ -334,7 +334,7 @@ const Store = () => {
                     (selectedRange.max === "" ||
                       Number(product.price) <= selectedRange.max)
                 )) &&
-              (selectedColor === "" || product.color === selectedColor)
+              (selectedColor === "" || product.colors.includes(selectedColor))
           )
           .sort(sortProducts)
           .map((product, index) => (
