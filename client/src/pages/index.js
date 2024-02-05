@@ -13,6 +13,7 @@ import ProductDetails from './ProductDetails';
 import DeleteAccountPage from './DeleteAccountPage';
 import Store from './Store';
 import Bag from './BagPage';
+import Checkout from './Checkout'
 export {
   Landing,
   Login,
@@ -28,5 +29,6 @@ export {
   ProductDetails,
   DeleteAccountPage,
   Store,
-  Bag
+  Bag,
+  Checkout
 };

@@ -15,7 +15,8 @@ import {
   ProductDetails,
   DeleteAccountPage,
   Store,
-  Bag
+  Bag,
+  Checkout
 } from './pages/';
 import axios from 'axios';
 import Footer from './components/Footer';
@@ -57,6 +58,7 @@ function App() {
         <Route path="/profile/delete-account" element={<DeleteAccountPage />} />
         <Route path="/favourites" element={<Favourites />} />
         <Route path="/bag" element={<Bag />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
       {shouldRenderHeader && <Footer />}
     </>
