@@ -52,7 +52,7 @@ export default function Review() {
               style={{ width: 100, height: 70, marginRight: 10 }}
             />
             <Typography variant="body2" style={{ fontSize: "15px" }}>
-              <span style={{ fontSize: "18px" }}>{product.quantity}</span> x{" "}
+              <span style={{ fontSize: "18px" }}>{product.quantity?product.quantity:1}</span> x{" "}
               {(product.name)}
               <br />
               {/* <span style={{ fontSize: "11px" }}>{product.description}</span> */}
