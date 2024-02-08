@@ -1,5 +1,5 @@
 .productCard {
-  width: 450px;
+  width: 375px;
   height: 600px;
   background-color: rgba(239, 239, 239, 0.56);
   border-radius: 1rem;
@@ -54,7 +54,6 @@
 .sbProductCardDataRating {
   display: flex;
   flex-wrap: wrap;
-
 }
 
 .sbProductCardDataRating p {
@@ -100,3 +99,10 @@
 .productCardLink:hover .sbProductCardData h5 {
   text-decoration: underline;
 }
+
+@media screen and (max-width: 850px) {
+  .productCard {
+    width: 320px;
+  }
+}
+
