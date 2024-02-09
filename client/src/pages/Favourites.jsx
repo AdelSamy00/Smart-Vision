@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SetCustomer } from '../redux/CustomerSlice';
 import toast, { Toaster } from 'react-hot-toast';
 import './StyleSheets/Favorites.css'
+import Loading from '../components/Loading.jsx';
 
 function Favourites() {
   const { customer } = useSelector((state) => state.customer);
@@ -68,7 +69,7 @@ function Favourites() {
         <h1>Favorites</h1>
         {isLoading ?
           (
-            <p className='text-5xl'>isLoading..............</p>
+            <Loading/>
           )
           :
           (

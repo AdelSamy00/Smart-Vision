@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation, Navigate, Outlet } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   ContactUs,
   Landing,
@@ -21,46 +21,57 @@ import {
 import axios from 'axios';
 import Footer from './components/Footer';
 import Header from './components/Header/Header';
+import { useEffect, useState } from 'react';
 
 function App() {
+  const location = useLocation();
+  const [shwoHeaderAndFooter, setShowHeaderAndFooter] = useState(null)
   axios.defaults.baseURL = 'http://localhost:3000';
-  
   const Layout = () => {
     const { customer } = useSelector((state) => state.customer);
     console.log(customer);
-    const location = useLocation();
-    return customer?.token ? (
-      <Outlet />
-    ) : (
-      <Navigate to="/login" state={{ from: location }} replace />
-    );
+    return customer?.token ?
+      (
+        <Outlet />
+      )
+      :
+      (
+        <Navigate to="/login" state={{ from: location }} />
+      );
   };
-  const routesWithoutHeader = ['/login', '/register','/'];
-  const shouldRenderHeader = !routesWithoutHeader.includes(window.location.pathname);
+  const shouldRenderHeaderAndFooter = () => {
+    const routesWithoutHeader = ['/login', '/register', '/'];
+    return !routesWithoutHeader.includes(location.pathname);
+  };
+  useEffect(() => {
+    const res = shouldRenderHeaderAndFooter()
+    setShowHeaderAndFooter(res)
+  }, [location]);
 
   return (
     <>
-    {shouldRenderHeader && <Header/>}
+      {shwoHeaderAndFooter && <Header />}
       <Routes>
-        <Route element={<Layout />}></Route>
         <Route path="/" element={<Landing />} />
-        <Route path="/index" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/customer-services" element={<Services />} />
+        <Route path="/services" element={<Services />} />
         <Route path="/store" element={<Store />} />
         <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/profile/profile-details" element={<ProfileDetails />} />
-        <Route path="/profile/change-password" element={<ChangePassword />} />
-        <Route path="/profile/delete-account" element={<DeleteAccountPage />} />
-        <Route path="/favourites" element={<Favourites />} />
-        <Route path="/bag" element={<Bag />} />
-        <Route path="/checkout" element={<Checkout />} />
+        <Route element={<Layout />}>
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/profile-details" element={<ProfileDetails />} />
+          <Route path="/profile/change-password" element={<ChangePassword />} />
+          <Route path="/profile/delete-account" element={<DeleteAccountPage />} />
+          <Route path="/favourites" element={<Favourites />} />
+          <Route path="/bag" element={<Bag />} />
+          <Route path="/checkout" element={<Checkout />} />
+        </Route>
       </Routes>
-      {shouldRenderHeader && <Footer />}
+      {shwoHeaderAndFooter && <Footer />}
     </>
   );
 }
