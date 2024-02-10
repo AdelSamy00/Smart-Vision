@@ -1,4 +1,4 @@
-.Home .slider-container {
+.home-slider-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -8,7 +8,7 @@
   margin-bottom: 5rem;
 }
 .Home {
-  width: 100%;
+  width: 90%;
   margin: auto;
 }
 .Home h2 {
@@ -74,11 +74,11 @@
 .overlay .arrow:hover {
   background-color: rgba(0, 0, 0, 0.5);
 }
-.Home .slider-container .arrow {
+ .home-slider-container .arrow {
   visibility: hidden;
 }
 
-.Home .slider-container:hover .arrow {
+.home-slider-container:hover .arrow {
   visibility: visible;
 }
 .line-container {

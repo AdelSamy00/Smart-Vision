@@ -4,7 +4,7 @@ const CategoryCard = ({ name, imageUrl, onClick }) => {
   return (
     <div
       className={`category-card active `}
-      style={{ width: "300px", height: "400px", position: "relative" }}
+      style={{ width: "250px", height: "350px", position: "relative" }}
       onClick={onClick}
     >
       <img
@@ -12,12 +12,13 @@ const CategoryCard = ({ name, imageUrl, onClick }) => {
         alt={name}
         style={{ width: "100%", height: "100%" }}
       />
+      <div style={{position:"absolute",
+          top: "85%",width:"100%",textAlign:"center"}}>
       <button
         style={{
-          position:"absolute",
-          top: "90%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
+          
+          // left: "50%",
+          // transform: "translate(-50%, -50%)",
           backgroundColor: "white",
           color: "black",
           padding: "10px 15px",
@@ -31,6 +32,8 @@ const CategoryCard = ({ name, imageUrl, onClick }) => {
       >
         {name}
       </button>
+      </div>
+   
     </div>
   );
 };
