@@ -13,8 +13,7 @@ const getinitItems = () => {
   return data;
 };
 
-const Store = () => {
-  const [selectedCategory, setSelectedCategory] = useState("");
+const Store = ({ selectedCategory }) => {
   const [selectedColor, setSelectedColor] = useState("");
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
@@ -30,7 +29,9 @@ const Store = () => {
   const [selectedPriceRanges, setSelectedPriceRanges] = useState([]);
   const colors = ["Red", "Blue", "Green", "Yellow", "White", "Black"];
   const categories = ["sofa", "chair", "bed", "Storage"];
-  const [selectedCategories, setSelectedCategories] = useState(["All"]);
+  const [selectedCategories, setSelectedCategories] = useState([
+    selectedCategory ? selectedCategory : "All",
+  ]);
   const prices = [
     { min: 4000, max: 6000 },
     { min: 13000, max: 30000 },
@@ -89,7 +90,6 @@ const Store = () => {
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
-
 
   const handlePriceRangeChange = (range) => {
     const index = selectedPriceRanges.findIndex(
@@ -159,7 +159,6 @@ const Store = () => {
     });
   };
 
-
   const sortProducts = (a, b) => {
     if (sortByOption === "price") {
       const priceA = Number(a.price);
@@ -219,15 +218,35 @@ const Store = () => {
 
     fetchProducts();
   }, []);
+  const filterProducts = () => {
+    return products
+      .filter(
+        (product) =>
+          (selectedCategories.length === 0 ||
+            selectedCategories.includes("All") ||
+            selectedCategories.includes(product.category)) &&
+          (selectedPriceRanges.length === 0 ||
+            selectedPriceRanges.some(
+              (selectedRange) =>
+                (selectedRange.min === "" ||
+                  Number(product.price) >= selectedRange.min) &&
+                (selectedRange.max === "" ||
+                  Number(product.price) <= selectedRange.max)
+            )) &&
+          (selectedColor === "" || product.colors.includes(selectedColor))
+      )
+      .sort(sortProducts);
+  };
   return (
     <div className="store-container">
-      <div className="filters-container">
+      <div className="filters-container" style={{paddingTop:selectedCategory?"3rem":"0rem"}}>
         {/* Category filter */}
         <div
           onClick={toggleCategoryDropdown}
           className="Filter"
           tabIndex="0"
           ref={categoryDropdownRef}
+          style={{ marginLeft: selectedCategory ? "-1.7rem" : "0rem" }}
         >
           <h2>
             {"Category "}
@@ -276,6 +295,7 @@ const Store = () => {
           className="Filter"
           tabIndex="0"
           ref={priceDropdownRef}
+          style={{ marginLeft: selectedCategory ? "-1.7rem" : "0rem" }}
         >
           <h2>
             {"Price"}
@@ -329,6 +349,7 @@ const Store = () => {
           className="Filter"
           tabIndex="0"
           ref={sortDropdownRef}
+          style={{ marginLeft: selectedCategory ? "-1.7rem" : "0rem" }}
         >
           <h2>
             {"Sort "}
@@ -397,6 +418,7 @@ const Store = () => {
           className="Filter"
           tabIndex="0"
           ref={colorDropdownRef}
+          style={{ marginLeft: selectedCategory ? "-1.7rem" : "0rem" }}
         >
           <h2>
             {"Color "}
@@ -422,37 +444,19 @@ const Store = () => {
             </div>
           )}
         </div>
-       
       </div>
 
       {/* Product display */}
       <div className="products-container">
-        {products
-          .filter(
-            (product) =>
-              (selectedCategories.length === 0 ||
-                selectedCategories.includes("All") ||
-                selectedCategories.includes(product.category)) &&
-              (selectedPriceRanges.length === 0 ||
-                selectedPriceRanges.some(
-                  (selectedRange) =>
-                    (selectedRange.min === "" ||
-                      Number(product.price) >= selectedRange.min) &&
-                    (selectedRange.max === "" ||
-                      Number(product.price) <= selectedRange.max)
-                )) &&
-              (selectedColor === "" || product.colors.includes(selectedColor))
-          )
-          .sort(sortProducts)
-          .map((product, index) => (
-            <ProductCard
-              key={index}
-              product={product}
-              favoriteList={favoriteList}
-              handelFavorit={handelFavorit}
-              handelCart={handelCart}
-            />
-          ))}
+        {filterProducts().map((product, index) => (
+          <ProductCard
+            key={index}
+            product={product}
+            favoriteList={favoriteList}
+            handelFavorit={handelFavorit}
+            handelCart={handelCart}
+          />
+        ))}
       </div>
     </div>
   );

@@ -22,6 +22,7 @@ import axios from 'axios';
 import Footer from './components/Footer';
 import Header from './components/Header/Header';
 import { useEffect, useState } from 'react';
+import OrderComponent from './components/OrderComponent';
 
 function App() {
   const location = useLocation();
@@ -61,6 +62,7 @@ function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/store" element={<Store />} />
         <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/order" element={<OrderComponent />} />
         <Route element={<Layout />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/profile-details" element={<ProfileDetails />} />
