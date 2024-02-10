@@ -7,6 +7,7 @@ import {
   getAllCustomers,
   getCustomer,
   getFavoriteList,
+  getOrderHistory,
   makeFavorite,
   makeOrder,
   saveContactMesseage,
@@ -39,6 +40,9 @@ router.put('/changePassword', changePassword);
 //add or remove favorite product
 router.post('/favorite', makeFavorite);
 router.get('/favorite/:id', getFavoriteList);
+
+//order
 router.post('/order', makeOrder);
 router.delete('/order', cancelOrder);
+router.get('/order/:id', getOrderHistory);
 export default router;

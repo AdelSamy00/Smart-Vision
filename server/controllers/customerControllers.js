@@ -282,7 +282,7 @@ export const makeOrder = async (req, res, next) => {
       //make order
       const order = await Orders.create({
         customer: id,
-        order: cart,
+        products: cart,
         totalPrice,
         totalPoints,
         cancelOrderExpiresAt: new Date(
@@ -360,6 +360,36 @@ export const cancelOrder = async (req, res, next) => {
     res.status(404).json({
       success: false,
       message: 'failed to cancel this order',
+    });
+  }
+};
+
+export const getOrderHistory = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const customer = await Customers.findById({ _id: id })
+      .populate({
+        path: 'orderHistory',
+        populate: {
+          path: 'products',
+          populate: {
+            path: 'product',
+            select: 'name images description price category',
+          },
+        },
+      })
+      .exec();
+
+    res.status(200).json({
+      success: true,
+      message: 'get order history successfully',
+      history: customer.orderHistory,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({
+      success: false,
+      message: 'failed to get your order history',
     });
   }
 };
