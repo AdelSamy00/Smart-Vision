@@ -62,7 +62,7 @@
 .search {
   width: 85vw;
   height: 60px;
-  margin-left: -18%;
+  margin-left: -13%;
 }
 .searchInput::placeholder {
   font-size: 17px;
@@ -73,8 +73,7 @@
 .menu {
   text-align: center;
   font-size: 20px;
-  margin-left: 2rem;
-
+  /* margin-left: 2rem; */
 }
 
 .searchinput {
@@ -102,6 +101,9 @@ header {
   }
   .searchInput::placeholder {
     font-size: 19px;
+  }
+  .menu {
+    margin-left: 1rem;
   }
   .search {
     width: 75vw;
