@@ -34,8 +34,8 @@
 .lang {
   margin-left: 70%;
 
-  margin-top: 2%;
-  font-family: 'Times New Roman', Times, serif;
+  /* margin-top: 0%; */
+  font-family: "Times New Roman", Times, serif;
 }
 .menu p,
 .userAccount p {
@@ -60,23 +60,24 @@
   border-radius: 30px;
 }
 .search {
-  width: 90vw;
+  width: 85vw;
   height: 60px;
-  margin-left: -18%;
+  margin-left: -13%;
 }
 .searchInput::placeholder {
   font-size: 17px;
 }
 .row3 {
-  margin-top: 5rem;
+  margin-top: 4.5rem;
 }
 .menu {
   text-align: center;
   font-size: 20px;
-  margin-left: 0.5rem;
+  /* margin-left: 2rem; */
 }
+
 .searchinput {
-  top: 5rem;
+  top: 4rem;
 }
 .head {
   order: 1;
@@ -87,8 +88,9 @@
 header {
   background-color: white;
   color: black;
-  margin-top: 20px;
   width: 100%;
+  margin: auto;
+  margin-top: 20px;
   margin-bottom: 3rem;
 }
 
@@ -119,8 +121,11 @@ header {
   .searchInput::placeholder {
     font-size: 19px;
   }
+  .menu {
+    margin-left: 1rem;
+  }
   .search {
-    width: 77vw;
+    width: 75vw;
     height: 60px;
     margin-left: 0%;
   }
@@ -135,7 +140,7 @@ header {
     margin-right: -0.4rem;
   }
   .search {
-    width: 82vw;
+    width: 78vw;
     height: 60px;
     margin-left: 0%;
   }
@@ -148,11 +153,22 @@ header {
   }
   .search {
     margin-top: 1.5%;
-    width: 50vw;
+    width: 48vw;
     margin-left: 2%;
   }
   .row3 {
-    margin-top: 2rem;
+    margin-top: 1rem;
+  }
+  .lang {
+    margin-left: 13%;
+    margin-top: -0.6rem;
+  }
+  .links {
+    display: flex;
+    justify-content: space-between;
+  }
+  .headerUl {
+    margin-left: 0ch;
   }
   .lang {
     margin-left: 13%;
@@ -168,10 +184,10 @@ header {
 }
 @media (min-width: 992px) {
   .row3 {
-    margin-top: 2rem;
+    margin-top: 1rem;
   }
   .search {
-    width: 54vw;
+    width: 52vw;
   }
   .header-logo {
     margin-left: 2rem;
@@ -187,7 +203,6 @@ header {
 @media (min-width: 1150px) {
   .lang {
     margin-left: 20%;
-    margin-top: -0.6rem;
   }
   .headerUl {
     margin-left: 10ch;
@@ -195,8 +210,11 @@ header {
 }
 @media (min-width: 1280px) {
   .search {
-    width: 49vw;
+    width: 44vw;
     margin-left: -3%;
+  }
+  .header-logo {
+    margin-top: 1rem;
   }
   .userAccount p {
     display: block;
@@ -212,8 +230,7 @@ header {
     background-color: #f8f9fa;
   }
   .lang {
-    margin-left: 27%;
-    margin-top: -0.6rem;
+    margin-left: 25%;
   }
   .menu p {
     display: block;
@@ -244,6 +261,6 @@ header {
   }
   .head {
     order: 2;
-    margin-left: 2rem;
+    margin-left: 0rem;
   }
 }

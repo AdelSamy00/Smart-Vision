@@ -91,7 +91,7 @@ export default function ChangePassword() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
+            // justifyContent: "center",
             alignItems: "flex-start",
             minHeight: "100vh",
           }}

@@ -12,11 +12,9 @@
 }
 .Filter {
   position: relative;
-  /* padding: 10px; */
   cursor: pointer;
   display: flex;
   margin-right: 0.2rem;
-  /* margin-left: 2rem; */
 }
 .dropDown {
   position: absolute;
@@ -58,8 +56,8 @@
   display: flex;
   width: 90%;
   margin: auto;
-
   align-items: center;
+  
   /* justify-content: space-between; */
   background-color: white;
   z-index: 1;
@@ -151,7 +149,7 @@
   visibility: visible;
 }
 
-.arrow {
+.store-container .arrow {
   display: none;
 }
 @media only screen and (min-width: 580px) {
@@ -192,7 +190,7 @@
   }
 }
 @media only screen and (min-width: 1280px) {
-  .arrow {
+  .store-container .arrow {
     display: inline;
   } 
   .dropDown {

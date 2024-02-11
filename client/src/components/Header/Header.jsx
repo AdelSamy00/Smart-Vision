@@ -31,19 +31,17 @@ const Header = () => {
                 className="userAccount btnHover"
                 style={{ display: "flex", padding: "10px 20px 10px 8px" }}
               >
-                <Avatar
-                  sx={{ width: 35, height: 35 }}
-                  className="avatar"
-                />
+                <Avatar sx={{ width: 35, height: 35 }} className="avatar" />
                 <p
                   style={{
                     fontSize: "20px",
                     paddingTop: "0.2rem",
-                    marginLeft: "0.3rem",
+                    width:"210px",
+                    marginLeft:"-0.7rem"
                   }}
                   className=""
                 >
-                  Hey! Username {localStorage.getItem("userName")}
+                  Hey! userName
                 </p>
               </button>
             </Link>
@@ -82,6 +80,7 @@ const Header = () => {
                 </Badge>
               </IconButton>
             </Link>
+
 
 
 
