@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import Badge from "@mui/material/Badge";
 const Header = () => {
   return (
-    <header style={{ display: "flex"}}>
+    <header style={{ display: "flex" }}>
       <div className="menu">
         <Menu></Menu>
         <p>Menu</p>
@@ -29,7 +29,7 @@ const Header = () => {
             <Link to={"/profile"}>
               <button
                 className="userAccount btnHover"
-                style={{ display: "flex", padding: "10px 20px 10px 8px"}}
+                style={{ display: "flex", padding: "10px 20px 10px 8px" }}
               >
                 <Avatar
                   sx={{ width: 35, height: 35 }}
@@ -53,42 +53,42 @@ const Header = () => {
               ></FavoriteBorderIcon>
             </button>
 
-              <Link to={"./bag"} >
-              <IconButton aria-label="cart" style={{ padding: "0px 20px" ,marginTop:"16px" }}className="badge"> 
-              <Badge
-                badgeContent={
-                  <span
-                    style={{
-                      fontSize: "18px",
-                      backgroundColor: "#f8f9fa",
-                      borderRadius: "50%",
-                      width: "25px",
-                      height: "25px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    0
-                  </span>
-                }
-                color="black"
-              >
-                {" "}
-                <ShoppingBasketIcon
-                  style={{ color: "black", fontSize: "30px" }}
-                />
-              </Badge>
-            </IconButton>
-              </Link>
+            <Link to={"./bag"} >
+              <IconButton aria-label="cart" style={{ padding: "0px 20px", marginTop: "16px" }} className="badge">
+                <Badge
+                  badgeContent={
+                    <span
+                      style={{
+                        fontSize: "18px",
+                        backgroundColor: "#f8f9fa",
+                        borderRadius: "50%",
+                        width: "25px",
+                        height: "25px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      0
+                    </span>
+                  }
+                  color="black"
+                >
+                  {" "}
+                  <ShoppingBasketIcon
+                    style={{ color: "black", fontSize: "30px" }}
+                  />
+                </Badge>
+              </IconButton>
+            </Link>
 
 
 
-            
+
           </div>
         </Toolbar>
-        <Toolbar className="searchinput" style={{ position: "absolute" }}>
+        <Toolbar className="searchinput" style={{ position: "absolute", padding: '0px' }}>
           <div
             style={{
               borderRadius: "30px",
@@ -107,7 +107,7 @@ const Header = () => {
               </IconButton>
             </InputAdornment>
             <input
-            className="searchInput"
+              className="searchInput"
               type="search"
               placeholder="What Are You Looking For ?"
               style={{
@@ -123,16 +123,19 @@ const Header = () => {
         <Toolbar className="row3">
           <ul className="headerUl links">
             <li>
-              <Link>Products</Link>
+              <Link to="/home">Home</Link>
             </li>
             <li>
-              <Link>Harmony At Hom</Link>
+              <Link to="/store">Products</Link>
             </li>
             <li>
-              <Link>Rooms</Link>
+              <Link to="/services">Services</Link>
             </li>
             <li>
-              <Link>Sale Up To 70%</Link>
+              <Link to="/about">About Us</Link>
+            </li>
+            <li>
+              <Link to="/contact-us">Contact Us</Link>
             </li>
           </ul>
           <button
