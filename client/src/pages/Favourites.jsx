@@ -25,7 +25,7 @@ function Favourites() {
   };
 
   useEffect(() => {
-    getFavorits(customer._id);
+    getFavorits(customer?._id);
   }, []);
 
   async function favorites(id, productId) {
@@ -43,7 +43,7 @@ function Favourites() {
   }
 
   const handelFavorit = (id) => {
-    favorites(customer._id, id)
+    favorites(customer?._id, id)
     setFavoritProducts((prevfavlist) => {
       return prevfavlist.filter((t) => t._id !== id);
     });
@@ -79,7 +79,7 @@ function Favourites() {
                   favoritProducts.map((product) => {
                     return (
                       <div key={product._id} className='favoriteProducteDiv'>
-                        <ProductCard product={product} favoriteList={customer.favoriteList} handelFavorit={handelFavorit} />
+                        <ProductCard product={product} favoriteList={customer?.favoriteList} handelFavorit={handelFavorit} />
                       </div>
                     )
                   })

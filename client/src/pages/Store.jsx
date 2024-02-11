@@ -39,7 +39,7 @@ const Store = ({ selectedCategory }) => {
 
   //add by youssef
   const { customer } = useSelector((state) => state.customer);
-  const [favoriteList, setFavoriteList] = useState(customer.favoriteList);
+  const [favoriteList, setFavoriteList] = useState(customer?.favoriteList);
   const [cart, setCart] = useState(getinitItems);
   const [inCart, setInCart] = useState(null);
   const navigate = useNavigate();
@@ -67,9 +67,9 @@ const Store = ({ selectedCategory }) => {
   };
 
   const handelFavorit = (id) => {
-    if (customer._id) {
+    if (customer?._id) {
       console.log("fired2");
-      favorites(customer._id, id);
+      favorites(customer?._id, id);
     } else {
       navigate("/login");
     }
@@ -81,7 +81,7 @@ const Store = ({ selectedCategory }) => {
       .then((res) => {
         const newData = { ...res.data?.newCustomerData };
         dispatch(SetCustomer(newData));
-        setFavoriteList(customer.favoriteList);
+        setFavoriteList(customer?.favoriteList);
       })
       .catch((e) => {
         console.log(e);

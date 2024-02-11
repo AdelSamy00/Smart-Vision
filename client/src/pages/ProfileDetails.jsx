@@ -1,9 +1,11 @@
 import React from 'react'
 import "./StyleSheets/ProfileDetails.css"
 import OffcanvasForPD from '../components/OffcanvasForPD';
+import { useSelector } from 'react-redux';
 
 
 function ProfileDetails() {
+    const { customer } = useSelector((state) => state.customer);
     return (
         <section className='ProfileDetails'>
             <div className='sbProfileDetails'>
@@ -13,28 +15,28 @@ function ProfileDetails() {
                 <div className='userInfo'>
                     <div className='userInofHeader'>
                         <h2>Personal info</h2>
-                        <OffcanvasForPD placement={'end'} name={'Edit'} />
+                        <OffcanvasForPD placement={'end'} />
                     </div>
                     <div className='Info'>
                         <div className='InfoContant'>
                             <h4>Name</h4>
-                            <p>User Name</p>
+                            <p>{customer?.username}</p>
                         </div>
                         <div className='InfoContant'>
                             <h4>Gender</h4>
-                            <p>user gender</p>
+                            <p>{customer?.gender }</p>
                         </div>
                         <div className='InfoContant'>
                             <h4>Email</h4>
-                            <p>UserEmail@gmail.com</p>
+                            <p>{customer?.email}</p>
                         </div>
                         <div className='InfoContant'>
                             <h4>Phone</h4>
-                            <p>01212121212</p>
+                            <p>{customer?.phone}</p>
                         </div>
                         <div className='InfoContant'>
                             <h4>Address</h4>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            <p>{customer?.addres ? (customer?.addres):("No address added")}</p>
                         </div>
                     </div>
                 </div>

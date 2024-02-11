@@ -1,5 +1,5 @@
 import Toolbar from "@mui/material/Toolbar";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import "../stylesheets/Header.css";
 import Menu from "./Menu";
@@ -9,7 +9,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import IconButton from "@mui/material/IconButton";
 import { Link } from "react-router-dom";
 import Badge from "@mui/material/Badge";
+import { useSelector } from "react-redux";
+
 const Header = () => {
+  const { customer } = useSelector((state) => state.customer);
   return (
     <header style={{ display: "flex" }}>
       <div className="menu">
@@ -22,9 +25,10 @@ const Header = () => {
           className="header-row"
         >
           <div className="header-logo">
-            <img src="../smartVisionLogo.png" />
+            <Link to={"/home"}>
+              <img src="../smartVisionLogo.png" />
+            </Link>
           </div>
-
           <div className="icons">
             <Link to={"/profile"}>
               <button
@@ -41,18 +45,18 @@ const Header = () => {
                   }}
                   className=""
                 >
-                  Hey! userName
+                  {customer?.username ? (customer?.username):("Log in or sign up")}
                 </p>
               </button>
             </Link>
             <button className="btnHover favorite" style={{ outline: "none" }}>
-              <FavoriteBorderIcon
+              <Link to={"/favourites"}>
+              <FavoriteIcon
                 style={{ fontSize: "25px", marginTop: "0.3rem" }}
-              ></FavoriteBorderIcon>
+              ></FavoriteIcon></Link>
             </button>
-
             <Link to={"./bag"} >
-              <IconButton aria-label="cart" style={{ padding: "0px 20px", marginTop: "16px" }} className="badge">
+              <IconButton aria-label="cart" style={{ padding: "15px", marginLeft:'2px' }} className="badge">
                 <Badge
                   badgeContent={
                     <span
@@ -80,11 +84,6 @@ const Header = () => {
                 </Badge>
               </IconButton>
             </Link>
-
-
-
-
-
           </div>
         </Toolbar>
         <Toolbar className="searchinput" style={{ position: "absolute", padding: '0px' }}>
@@ -115,6 +114,7 @@ const Header = () => {
                 outline: "none",
                 backgroundColor: "#f8f9fa",
                 fontSize: "20px",
+                width:"100%"
               }}
             />
           </div>

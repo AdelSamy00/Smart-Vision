@@ -90,8 +90,8 @@ header {
   color: black;
   width: 100%;
   margin: auto;
-  margin-top: 20px;
-  margin-bottom: 3rem;
+  margin-top: 1rem;
+  margin-bottom: .5rem;
 }
 
 @media (max-width: 400px) {

@@ -32,7 +32,7 @@ function Footer() {
           <div className="sbFooterLinks">
             <h4>Social Media</h4>
             <div>
-              <Link to={''}>
+              <Link to={'https://www.facebook.com/smartvision77'} target='_blank'>
                 <FacebookIcon sx={{ fontSize: 40 }} />
               </Link>
               <Link to={''}>

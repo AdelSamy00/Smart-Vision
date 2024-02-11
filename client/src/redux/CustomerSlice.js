@@ -15,6 +15,7 @@ const customerSlice = createSlice({
     logout(state) {
       state.customer = null;
       localStorage?.removeItem('token');
+      localStorage?.removeItem('customer');
     },
   },
 });

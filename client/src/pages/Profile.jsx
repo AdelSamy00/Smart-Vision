@@ -1,31 +1,27 @@
-import React, { useEffect } from 'react';
-import { SetCustomer } from '../redux/CustomerSlice';
-import { getCustomerInfo } from '../utils';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './StyleSheets/Profile.css'
-
+import { useDispatch, useSelector } from "react-redux";
+import { Logout } from '../redux/CustomerSlice';
 function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const getCustomer = async () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const res = await getCustomerInfo(token);
-      //console.log(res);
-      const newData = { token, ...res };
-      dispatch(SetCustomer(newData));
-    }
-  };
-  useEffect(() => {
-    //getCustomer();
-  }, []);
+  const { customer } = useSelector((state) => state.customer);
+
   return (
     <>
       <section className='Profile'>
         <div className='sbProfileHeader'>
-          <h1>He! userName</h1>
-          <p>Need to change account? <button className='font-bold'>Log out</button></p>
+          <h1>He! {customer.username}</h1>
+          <p>Need to change account?
+            <button
+              onClick={() => {
+                dispatch(Logout())
+                navigate('/')
+              }}
+              className='font-bold'>Log out
+            </button>
+          </p>
         </div>
         <div className='sbProfile'>
           <div className="sbProfileDiv">
