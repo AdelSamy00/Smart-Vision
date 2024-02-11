@@ -15,17 +15,19 @@ function Footer() {
           </div>
           <div className="sbFooterLinks">
             <h4>Resources</h4>
-            <Link to={'#'}>Login</Link>
-            <Link to={'#'}>Login</Link>
+            <Link to={'/home'}>Home</Link>
+            <Link to={'/favourites'}>favorites</Link>
           </div>
           <div className="sbFooterLinks">
             <h4>Resources</h4>
-            <Link to={'#'}>Login</Link>
+            <Link to={'/about'}>About Us</Link>
+            <Link to={'/store'}>Products</Link>
+            <Link to={'/profile'}>Profile</Link>
           </div>
           <div className="sbFooterLinks">
             <h4>Resources</h4>
-            <Link to={'#'}>Login</Link>
-            <Link to={'#'}>Login</Link>
+            <Link to={'/contact-us'}>Contact Us</Link>
+            <Link to={'/services'}>Services</Link>
           </div>
           <div className="sbFooterLinks">
             <h4>Social Media</h4>

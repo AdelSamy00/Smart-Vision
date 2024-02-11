@@ -35,7 +35,7 @@
   margin-left: 70%;
 
   margin-top: 2%;
-  font-family: "Times New Roman", Times, serif;
+  font-family: 'Times New Roman', Times, serif;
 }
 .menu p,
 .userAccount p {
@@ -91,6 +91,26 @@ header {
   width: 100%;
   margin-bottom: 3rem;
 }
+
+@media (max-width: 400px) {
+  .search {
+    width: 77vw;
+    height: 60px;
+    margin-left: 0%;
+  }
+  .searchInput::placeholder {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 579px) {
+  .search {
+    width: 77vw;
+    height: 60px;
+    margin-left: 0%;
+  }
+}
+
 @media (min-width: 580px) {
   .header-logo img {
     width: 70px;
@@ -108,6 +128,7 @@ header {
     margin-left: 80%;
   }
 }
+
 @media (min-width: 650px) {
   .userAccount,
   .favorite {
@@ -133,6 +154,17 @@ header {
   .row3 {
     margin-top: 2rem;
   }
+  .lang {
+    margin-left: 13%;
+    margin-top: -0.6rem;
+  }
+  .links {
+    display: flex;
+    justify-content: space-between;
+  }
+  .headerUl {
+    margin-left: 0ch;
+  }
 }
 @media (min-width: 992px) {
   .row3 {
@@ -151,17 +183,6 @@ header {
     width: 90px;
     height: 59px;
   }
-  .lang {
-    margin-left: 13%;
-    margin-top: -0.6rem;
-  }
-  .links {
-    display: flex;
-    justify-content: space-between;
-  }
-  .headerUl {
-    margin-left: 0ch;
-  }
 }
 @media (min-width: 1150px) {
   .lang {
@@ -177,7 +198,6 @@ header {
     width: 49vw;
     margin-left: -3%;
   }
-
   .userAccount p {
     display: block;
   }
@@ -191,10 +211,6 @@ header {
   .btnHover:hover {
     background-color: #f8f9fa;
   }
-  .links {
-    display: flex;
-    justify-content: space-between;
-  }
   .lang {
     margin-left: 27%;
     margin-top: -0.6rem;
@@ -205,29 +221,19 @@ header {
   .menu {
     margin-left: 2rem;
   }
-  .headerUl {
-    margin-left: 10ch;
-  }
 }
 
 @media (min-width: 1500px) {
   .search {
     width: 52vw;
   }
-
-  .links {
-    display: flex;
-    justify-content: space-between;
-  }
   .lang {
     margin-left: 35%;
   }
-
   .header-logo {
     order: 2;
     margin-top: 1rem;
   }
-
   .icons {
     order: 3;
     margin-right: 0rem;

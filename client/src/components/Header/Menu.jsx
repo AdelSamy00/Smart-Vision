@@ -95,22 +95,28 @@ const Menu = () => {
                   }}
                 >
                   <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
-                    <Link to="/">Products</Link>
+                    <Link to="/home">Home</Link>
                   </li>
                   <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
-                    <Link to="/">Harmony At Home</Link>
+                    <Link to="/store">Products</Link>
                   </li>
                   <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
-                    <Link to="/">Rooms</Link>
+                    <Link to="/services">Services</Link>
                   </li>
                   <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
-                    <Link to="/">Sale Up To 70%</Link>
+                    <Link to="/Profile">Profile</Link>
                   </li>
                   <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
-                    <Link to="/">About Us</Link>
+                    <Link to="/favourites">Favorites</Link>
                   </li>
                   <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
-                    <Link to="/">Contact Us</Link>
+                    <Link to="/bag">Cart</Link>
+                  </li>
+                  <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
+                    <Link to="/about">About Us</Link>
+                  </li>
+                  <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
+                    <Link to="/contact-us">Contact Us</Link>
                   </li>
                 </ul>
               </div>
