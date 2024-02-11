@@ -33,8 +33,8 @@ function ProductCard({ product, favoriteList = [], handelFavorit, handelCart }) 
     const [favorite, setFavorite] = useState(isFavorit);
     const [inCart, setInCart] = useState(isInCart);
 
-    const handelsetInCart = (id ,name, price, images ) => {
-        handelCart(id, name, price, images )
+    const handelsetInCart = (id ,name, price, images ,points) => {
+        handelCart(id, name, price, images,points )
         if (inCart) {
             setTimeout(() => {
                 setInCart(false)
@@ -89,7 +89,7 @@ function ProductCard({ product, favoriteList = [], handelFavorit, handelCart }) 
                 </div >
             </Link>
             <div className="sbProductCardFooter ">
-                <button onClick={() => handelsetInCart(product._id, product.name, product.price, product.images)} className='addToCartButton'>
+                <button onClick={() => handelsetInCart(product._id, product.name, product.price, product.images,product.points)} className='addToCartButton'>
                     {!inCart ?
                         <svg className='sbProductCardFooterIcon' viewBox="0 0 24 24">
                             <path d="M18,12a5.993,5.993,0,0,1-5.191-9H4.242L4.2,2.648A3,3,0,0,0,1.222,0H1A1,1,0,

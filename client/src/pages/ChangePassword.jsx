@@ -8,11 +8,15 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
+import { useSelector } from "react-redux";
+
 const defaultTheme = createTheme();
 
 export default function ChangePassword() {
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState(false);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [isNewPasswordChanged, setIsNewPasswordChanged] = useState(false);
   const confirmNewPasswordRef = useRef(null);
   const newPasswordRef = useRef(null);
@@ -21,30 +25,31 @@ export default function ChangePassword() {
     newPassword: "",
     confirmPassword: "",
   });
-
+  const { customer } = useSelector((state) => state.customer);
   const confirmNewPasswordHandle = (event) => {
     setAccountInfo({ ...accountInfo, confirmPassword: event.target.value });
     if (!event.target.value.trim()) {
       setErrorMessage("The confirm new password field cannot be left empty");
     } else {
+      setIsFormSubmitted(false);
       setErrorMessage("");
     }
   };
 
   const newPasswordHandle = (event) => {
     setAccountInfo({ ...accountInfo, newPassword: event.target.value });
-
-    if (event.target.value.trim() !== "") {
-      setIsNewPasswordChanged(true);
-      setErrorMessage("");
-    } else {
+    if (!event.target.value.trim()) {
       setErrorMessage("The new password field cannot be left empty");
+    } else {
+      setIsNewPasswordChanged(true);
+      setIsFormSubmitted(false);
+      setErrorMessage("");
     }
   };
 
   const submitChange = async (e) => {
     e.preventDefault();
-
+    setIsFormSubmitted(true)
     if (
       !accountInfo.currentPassword.trim() ||
       !accountInfo.newPassword.trim() ||
@@ -57,32 +62,39 @@ export default function ChangePassword() {
       setErrorMessage("The passwords do not match");
     } else {
       try {
-        await axios.put("/customers/changePassword", {
-          ...accountInfo,
+        const response = await axios.put("/customers/changePassword", {
+          oldPassword: accountInfo.currentPassword,
+          newPassword: accountInfo.newPassword,
+          id: customer._id,
         });
-        setErrorMessage("Password Has Changed Successfully");
+        console.log("API Response:", response.data.message);
+        // Clear text fields after successful submission
         setAccountInfo({
+          ...accountInfo,
           currentPassword: "",
           newPassword: "",
           confirmPassword: "",
         });
+        // Clear error message
+        setErrorMessage("");
+        setIsPasswordValid(true);
+        setSubmitMessage(response.data.message)
       } catch (error) {
-        console.error("Error changing password:", error);
+        // console.error("Error changing password:", error);
+        setSubmitMessage(error.response.data.message);
       }
     }
   };
-
   useEffect(() => {
     const validatePassword = () => {
-      const regex =
-        /^(?!.*(\w)\1{2,})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?]).{8,20}$/;
-
+      // const regex =
+      //   /^(?!.*(\w)\1{2,})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?]).{8,20}$/;
+      const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
       return regex.test(accountInfo.newPassword);
     };
 
     setIsPasswordValid(validatePassword());
   }, [accountInfo.newPassword]);
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="md">
@@ -106,7 +118,7 @@ export default function ChangePassword() {
           >
             Change Password
           </h1>
-          <p style={{ width: "100%", marginBottom: "50px", fontSize: "19px" }}>
+          <p style={{ width: "100%", marginBottom: "50px", fontSize: "19px", }}>
             It&apos;s a good idea to update your password regularly and to make
             sure it&apos;s unique from other passwords you use.
           </p>
@@ -120,6 +132,7 @@ export default function ChangePassword() {
               name="Current Password"
               type="password"
               autoComplete="password"
+              value={accountInfo.currentPassword}
               onChange={(event) => {
                 setAccountInfo({
                   ...accountInfo,
@@ -131,6 +144,7 @@ export default function ChangePassword() {
                     "The current password field cannot be left empty"
                   );
                 } else {
+                  setIsFormSubmitted(false);
                   setErrorMessage("");
                 }
               }}
@@ -168,17 +182,18 @@ export default function ChangePassword() {
               name="New Password"
               type="password"
               id="NewPassword"
+              value={accountInfo.newPassword}
               onChange={newPasswordHandle}
               inputRef={newPasswordRef}
               autoComplete="New Password"
               error={
-                (isNewPasswordChanged && !isPasswordValid) ||
+                (isNewPasswordChanged && !isPasswordValid&&!isFormSubmitted) ||
                 (!accountInfo.currentPassword.trim() &&
                   errorMessage ===
                     "The new password field cannot be left empty")
               }
               helperText={
-                isNewPasswordChanged && (
+                (isNewPasswordChanged && !isFormSubmitted) &&(
                   <ul
                     style={{
                       color: "black",
@@ -211,22 +226,22 @@ export default function ChangePassword() {
                       )}{" "}
                       A number
                     </li>
-                    <li>
+                    {/* <li>
                       {/[^a-zA-Z\d]/.test(accountInfo.newPassword) ? (
                         <CheckIcon style={{ color: "green" }} />
                       ) : (
                         <CloseIcon style={{ color: "red" }} />
                       )}{" "}
                       A special character
-                    </li>
-                    <li>
-                      {/^(?!.*(\w)\1{2,}).*$/.test(accountInfo.newPassword) ? (
+                    </li> */}
+                    {/* <li>
+                      {/^(?!.*(\w)\1{2,}).*$/.test(naccountInfo.ewPassword) ? (
                         <CheckIcon style={{ color: "green" }} />
                       ) : (
                         <CloseIcon style={{ color: "red" }} />
                       )}{" "}
                       No more than 2 identical characters in a row
-                    </li>
+                    </li> */}
                     <li>
                       {accountInfo.newPassword.length >= 8 &&
                       accountInfo.newPassword.length <= 20 ? (
@@ -292,6 +307,7 @@ export default function ChangePassword() {
                   "The confirm new password field cannot be left empty"
               }
               inputRef={confirmNewPasswordRef}
+              value={accountInfo.confirmPassword}
               onChange={confirmNewPasswordHandle}
               sx={{
                 marginTop: "0px",
@@ -303,6 +319,11 @@ export default function ChangePassword() {
             {errorMessage && (
               <p style={{ color: "red", marginBottom: "10px" }}>
                 {errorMessage}
+              </p>
+            )}
+            {(submitMessage&&isFormSubmitted) && (
+              <p style={{ color: "black", marginBottom: "10px" }}>
+                {submitMessage}
               </p>
             )}
             <Button

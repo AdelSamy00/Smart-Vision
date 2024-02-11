@@ -89,31 +89,31 @@ const Menu = () => {
                 <ul
                   style={{
                     fontSize: "30px", // Adjusted font size
-                    fontWeight: "bolder",
+                    fontWeight: "",
                     marginTop: "1.5rem", // Adjusted margin for the list
                     marginLeft:"2.3rem"
                   }}
                 >
-                  <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
-                    <Link to="/home">Home</Link>
+                  <li style={{ marginTop: "0.5rem" ,boxShadow: "none",fontWeight: "bold",}}>
+                    <Link to="/home" onClick={handleClose}>Home</Link>
                   </li>
                   <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
-                    <Link to="/store">Products</Link>
+                    <Link to="/store" onClick={handleClose}>Products</Link>
                   </li>
-                  <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
-                    <Link to="/services">Services</Link>
+                  <li style={{ marginTop: "0.5rem" ,boxShadow: "none",}}>
+                    <Link to="/services" onClick={handleClose}>Services</Link>
                   </li>
-                  <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
-                    <Link to="/Profile">Profile</Link>
+                  <li style={{ marginTop: "0.5rem" ,boxShadow: "none",}}>
+                    <Link to="/Profile" onClick={handleClose}>Profile</Link>
                   </li>
-                  <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
-                    <Link to="/favourites">Favorites</Link>
+                  <li style={{ marginTop: "0.5rem" ,boxShadow: "none",}}>
+                    <Link to="/favourites" onClick={handleClose}>Favorites</Link>
                   </li>
-                  <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
-                    <Link to="/bag">Cart</Link>
+                  <li style={{ marginTop: "0.5rem" ,boxShadow: "none",}}>
+                    <Link to="/bag" onClick={handleClose}>Cart</Link>
                   </li>
-                  <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
-                    <Link to="/about">About Us</Link>
+                  <li style={{ marginTop: "0.5rem" ,boxShadow: "none",}}>
+                    <Link to="/about" onClick={handleClose}>About Us</Link>
                   </li>
                   <li style={{ marginTop: "1rem" ,boxShadow: "none",}}>
                     <Link to="/contact-us">Contact Us</Link>

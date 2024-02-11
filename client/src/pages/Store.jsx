@@ -44,8 +44,8 @@ const Store = ({ selectedCategory }) => {
   const [inCart, setInCart] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handelCart = (id, name, price, images) => {
-    console.log(id, name, price, images);
+  const handelCart = (id, name, price, images,points) => {
+    console.log(id, name, price, images,points);
     const res = cart.find((prod) => {
       return prod._id === id;
     });
@@ -57,10 +57,10 @@ const Store = ({ selectedCategory }) => {
       setInCart(false);
     } else {
       console.log("add");
-      setCart([...cart, { _id: id, name, price, images }]);
+      setCart([...cart, { _id: id, name, price, images ,points}]);
       localStorage.setItem(
         "cart",
-        JSON.stringify([...cart, { _id: id, name, price, images }])
+        JSON.stringify([...cart, { _id: id, name, price, images ,points}])
       );
       setInCart(true);
     }

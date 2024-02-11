@@ -12,10 +12,21 @@ function Slider({ categories, selectedCategory, setSelectedCategory }) {
     // const container = categoryCardsRef.current;
     const updateItemsToScroll = () => {
       // Check if the screen width is less than or equal to a certain value (e.g., 600px)
-      const smallScreenWidth = 700; 
-      const isSmallScreen = window.innerWidth <= smallScreenWidth;
-      setItemsToScroll(isSmallScreen ? 1.07 : 4.25); 
+      const screenWidth = window.innerWidth;
+      console.log(screenWidth); // Log the screenWidth
+  
+      if (screenWidth < 720) {
+        setItemsToScroll(1.07);
+      } else if (screenWidth <= 1035) {
+        setItemsToScroll(2.1);
+      }
+      else if (screenWidth <= 1410) {
+        setItemsToScroll(3.2);
+      }  else {
+        setItemsToScroll(4.25); 
+      }
     };
+    
     updateItemsToScroll();
     window.addEventListener("resize", updateItemsToScroll);
     return () => window.removeEventListener("resize", updateItemsToScroll);

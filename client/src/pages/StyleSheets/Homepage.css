@@ -37,7 +37,7 @@
   border-radius: 10px;
   cursor: -webkit-grab; cursor: grab;
 }
-.category-cards::-webkit-scrollbar-thumb:hover{
+.category-cards::-webkit-scrollbar:hover{
   cursor: -webkit-grab; cursor: grab;
 }
 
