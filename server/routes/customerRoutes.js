@@ -4,7 +4,6 @@ import {
   cancelOrder,
   changePassword,
   deleteAcount,
-  getAllCustomers,
   getCustomer,
   getFavoriteList,
   getOrderHistory,
@@ -30,9 +29,6 @@ router.post('/contactUs', saveContactMesseage);
 //delete his account
 //need middleware
 router.delete('/delete-acount/:id', deleteAcount);
-
-//get Customers
-router.get('/getCustomers', getAllCustomers);
 
 //Change password
 router.put('/changePassword', changePassword);

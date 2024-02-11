@@ -141,15 +141,6 @@ export const deleteAcount = async (req, res, next) => {
   }
 };
 
-export const getAllCustomers = async (req, res, next) => {
-  const customers = await Customers.find({}).select('-password');
-  res.status(200).json({
-    success: true,
-    message: 'get data successfully',
-    customers,
-  });
-};
-
 export const changePassword = async (req, res, next) => {
   try {
     const { id, oldPassword, newPassword } = req.body;
