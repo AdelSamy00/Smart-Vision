@@ -1,15 +1,19 @@
 import express from 'express';
 import path from 'path';
 import {
+  addreview,
   cancelOrder,
   changePassword,
   deleteAcount,
+  deleteReview,
   getCustomer,
   getFavoriteList,
   getOrderHistory,
+  getReview,
   makeFavorite,
   makeOrder,
   saveContactMesseage,
+  updateReview,
   verifyEmail,
 } from '../controllers/customerControllers.js';
 
@@ -41,4 +45,11 @@ router.get('/favorite/:id', getFavoriteList);
 router.post('/order', makeOrder);
 router.delete('/order', cancelOrder);
 router.get('/order/:id', getOrderHistory);
+//review
+router.post('/addreview',addreview)
+router.get('/getreview/:customerId/:productId', getReview);
+router.delete('/deletereview/:customerId/:productId', deleteReview);
+router.patch('/updatereview/:customerId/:productId', updateReview);
+
+
 export default router;

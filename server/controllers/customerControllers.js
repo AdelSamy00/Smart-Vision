@@ -10,6 +10,7 @@ import {
   existProduct,
   increaseQuantity,
 } from './productControlles.js';
+import Reviews from '../models/Review.js';
 
 export const verifyEmail = async (req, res, next) => {
   const { customerId, token } = req.params;
@@ -384,3 +385,102 @@ export const getOrderHistory = async (req, res, next) => {
     });
   }
 };
+
+export const addreview = async (req, res, next) => {
+  try {
+    const { customerId, productId, comment, rating } = req.body;
+
+    // Check if rating is within the allowed range
+    if (rating < 1 || rating > 5) {
+      return res.status(400).json({ message: 'Rating should be between 1 and 5' });
+    }
+
+    // Find the customer and product documents
+    const customer = await Customers.findById(customerId);
+    const product = await Products.findById(productId);
+
+    if (!customer) {
+      return res.status(404).json({ message: 'Customer not found' });
+    }
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Create a new review
+    const review = new Reviews({
+      customer: customer._id,
+      product: product._id,
+      comment,
+      rating
+    });
+
+    // Save the review to the database
+    await review.save();
+
+    res.status(201).json({ message: 'Review added successfully', review });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+export const getReview = async (req, res, next) => {
+  try {
+    const { customerId, productId } = req.params;
+
+    // Find the review for the specific customer and product
+    const review = await Reviews.findOne({ customer: customerId, product: productId });
+
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    res.status(200).json(review);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+export const deleteReview = async (req, res, next) => {
+  try {
+    const { customerId, productId } = req.params;
+
+    // Find and delete the review for the specific customer and product
+    const review = await Reviews.findOneAndDelete({ customer: customerId, product: productId });
+
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    res.status(200).json({ message: 'Review deleted successfully', review });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+export const updateReview = async (req, res, next) => {
+  try {
+    const { customerId, productId, comment, rating } = req.body;
+
+    // Check if rating is within the allowed range
+    if (rating < 1 || rating > 5) {
+      return res.status(400).json({ message: 'Rating should be between 1 and 5' });
+    }
+
+    // Find the review for the specific customer and product
+    let review = await Reviews.findOne({ customer: customerId, product: productId });
+
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    // Update review fields
+    review.comment = comment;
+    review.rating = rating;
+
+    // Save the updated review to the database
+    review = await review.save();
+
+    res.status(200).json({ message: 'Review updated successfully', review });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
