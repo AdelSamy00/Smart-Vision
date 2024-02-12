@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import Badge from "@mui/material/Badge";
 import { useSelector } from "react-redux";
 
-const Header = () => {
+const Header = ({itemCount}) => {
   const { customer } = useSelector((state) => state.customer);
   return (
     <header style={{ display: "flex" }}>
@@ -72,7 +72,7 @@ const Header = () => {
                         fontWeight: "bold",
                       }}
                     >
-                      0
+                      {itemCount}
                     </span>
                   }
                   color="black"

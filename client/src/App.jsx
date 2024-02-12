@@ -49,9 +49,21 @@ function App() {
     setShowHeaderAndFooter(res)
   }, [location]);
 
+  const [itemCount, setItemCount] = useState(0);
+
+  useEffect(() => {
+    // Retrieve cart data from local storage
+    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const totalItems = storedCart.reduce(
+      (count, item) => count + (item.quantity || 1),
+      0
+    );
+    setItemCount(totalItems);
+  }, []);
+
   return (
     <>
-      {shwoHeaderAndFooter && <Header />}
+      {shwoHeaderAndFooter && <Header itemCount={itemCount}  />}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/home" element={<Home />} />
@@ -69,7 +81,7 @@ function App() {
           <Route path="/profile/change-password" element={<ChangePassword />} />
           <Route path="/profile/delete-account" element={<DeleteAccountPage />} />
           <Route path="/favourites" element={<Favourites />} />
-          <Route path="/bag" element={<Bag />} />
+          <Route path="/bag" element={<Bag  setItemCount={setItemCount}/>} />
           <Route path="/checkout" element={<Checkout />} />
         </Route>
       </Routes>

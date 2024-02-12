@@ -10,9 +10,10 @@ import ArrowForwardSharpIcon from "@mui/icons-material/ArrowForwardSharp";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
-const Bag = () => {
+const Bag = ({ setItemCount }) => {
   const [cart, setCart] = useState([]);
   const [open, setOpen] = useState(false);
+
 
   const handleOpen = () => {
     setOpen(true);
@@ -26,13 +27,21 @@ const Bag = () => {
     // Retrieve cart data from local storage
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(storedCart);
-  }, []);
+  
+    // Calculate the total items and update the count
+    const totalItems = storedCart.reduce((count, item) => count + (item.quantity || 1), 0);
+    setItemCount(totalItems);
+  }, [cart]); // Add 'cart' as a dependency
+  
   const handleRemoveFromCart = (id) => {
     const updatedCart = cart.filter((item) => item._id !== id);
     setCart(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
-  };
 
+    // Calculate the total items and update the count
+    const totalItems = updatedCart.reduce((count, item) => count + (item.quantity || 1), 0);
+    setItemCount(totalItems);
+  };
   const handleIncreaseQuantity = (id) => {
     const existingItem = cart.find((item) => item._id === id);
 
@@ -42,6 +51,8 @@ const Bag = () => {
       );
       setCart(updatedCart);
       localStorage.setItem("cart", JSON.stringify(updatedCart));
+      const totalItems = updatedCart.reduce((count, item) => count + (item.quantity || 1), 0);
+      setItemCount(totalItems);
     } else {
       const newItem = {
         _id: id,
@@ -50,6 +61,8 @@ const Bag = () => {
       const updatedCart = [...cart, newItem];
       setCart(updatedCart);
       localStorage.setItem("cart", JSON.stringify(updatedCart));
+      const totalItems = updatedCart.reduce((count, item) => count + (item.quantity || 1), 0);
+      setItemCount(totalItems);
     }
   };
 
@@ -60,9 +73,11 @@ const Bag = () => {
           ? { ...item, quantity: item.quantity - 1 }
           : item
       )
-      .filter((item) => item.quantity > 0); 
+      .filter((item) => item.quantity > 0);
     setCart(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
+    const totalItems = updatedCart.reduce((count, item) => count + (item.quantity || 1), 0);
+    setItemCount(totalItems);
   };
   function calculateTotalPrice(cart) {
     if (!cart || cart.length === 0) {
