@@ -16,7 +16,8 @@ import {
   DeleteAccountPage,
   Store,
   Bag,
-  Checkout
+  Checkout,
+  History
 } from './pages/';
 import axios from 'axios';
 import Footer from './components/Footer';
@@ -83,6 +84,7 @@ function App() {
           <Route path="/favourites" element={<Favourites />} />
           <Route path="/bag" element={<Bag  setItemCount={setItemCount}/>} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/history" element={<History />} />
         </Route>
       </Routes>
       {shwoHeaderAndFooter && <Footer />}

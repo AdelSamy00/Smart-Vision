@@ -21,7 +21,7 @@ function Homepage() {
 
   return (
     <div className="Home">
-      <h2 style={{ fontWeight: "bold", fontSize: "30px", marginLeft: "6.5%" }}>
+      <h2 style={{ fontWeight: "bold", fontSize: "27px", marginLeft: "6.7%" }}>
         Browse furniture sale
       </h2>
       <Slider

@@ -52,16 +52,15 @@ export default function Checkout() {
     if (!cart || cart.length === 0) {
       return 0;
     }
-    
+
     const totalPoints = cart.reduce((total, item) => {
-      // Ensure item.points is a valid number before adding it to total
-      const points = typeof item.points === 'number' ? item.points : 0;
+      const points = typeof item.points === "number" ? item.points : 0;
       return total + points;
     }, 0);
-  
+
     return totalPoints;
   }
-  const totalPoints =calculateTotalPoints(products);
+  const totalPoints = calculateTotalPoints(products);
   console.log(totalPoints);
 
   const handleNext = () => {
@@ -74,8 +73,8 @@ export default function Checkout() {
   const handlePlaceOrder = async () => {
     try {
       const productsWithDetails = products.map((product) => ({
-        product: product._id,
-        quantity: product.quantity || 1,
+        product: product?._id,
+        quantity: product?.quantity || 1,
       }));
       console.log(productsWithDetails.length);
       const response = await axios.post("/customers/order", {
@@ -86,6 +85,7 @@ export default function Checkout() {
       });
       console.log("Order placed successfully:", response.data);
       localStorage.removeItem("cart");
+      setActiveStep(activeStep + 1);
     } catch (error) {
       console.error("Error placing order:", error.response.data.message);
     }
@@ -114,7 +114,7 @@ export default function Checkout() {
                 Thank you for your order.
               </Typography>
               <Typography variant="subtitle1">
-                Your order number is #2001539. We have emailed your order
+                Your order number is #212345. We have emailed your order
                 confirmation, and will send you an update when your order has
                 shipped.
               </Typography>

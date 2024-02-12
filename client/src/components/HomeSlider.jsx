@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import CategoryCard from "../components/CategoryCard";
-import "../pages/StyleSheets/Homepage.css"
+import "../pages/StyleSheets/Homepage.css";
 function Slider({ categories, selectedCategory, setSelectedCategory }) {
   const categoryCardsRef = useRef(null);
   const leftArrowRef = useRef(null);
   const rightArrowRef = useRef(null);
   const sliderContainerRef = useRef(null);
-  const [itemsToScroll, setItemsToScroll] = useState(4.25); // Initial value
+  const [itemsToScroll, setItemsToScroll] = useState(5.75); // Initial value
 
   useEffect(() => {
     // const container = categoryCardsRef.current;
@@ -14,19 +14,21 @@ function Slider({ categories, selectedCategory, setSelectedCategory }) {
       // Check if the screen width is less than or equal to a certain value (e.g., 600px)
       const screenWidth = window.innerWidth;
       console.log(screenWidth); // Log the screenWidth
-  
-      if (screenWidth < 720) {
-        setItemsToScroll(1.07);
-      } else if (screenWidth <= 1035) {
-        setItemsToScroll(2.1);
+
+      if (screenWidth < 580) {
+        setItemsToScroll(1.08);
+      } else if (screenWidth < 890) {
+        setItemsToScroll(2.2);
       }
-      else if (screenWidth <= 1410) {
+      else if (screenWidth <= 1035) {
         setItemsToScroll(3.2);
-      }  else {
-        setItemsToScroll(4.25); 
+      } else if (screenWidth <= 1410) {
+        setItemsToScroll(4.3);
+      } else {
+        setItemsToScroll(5.3);
       }
     };
-    
+
     updateItemsToScroll();
     window.addEventListener("resize", updateItemsToScroll);
     return () => window.removeEventListener("resize", updateItemsToScroll);

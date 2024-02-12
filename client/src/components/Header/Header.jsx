@@ -38,10 +38,11 @@ const Header = ({itemCount}) => {
                 <Avatar sx={{ width: 35, height: 35 }} className="avatar" />
                 <p
                   style={{
-                    fontSize: "20px",
+                    fontSize: "19px",
                     paddingTop: "0.2rem",
-                    width:"210px",
-                    marginLeft:"-0.7rem"
+                    marginLeft:"0.5rem"
+                    // width:"210px",
+                    // marginLeft:"-0.7rem"
                   }}
                   className=""
                 >
@@ -49,23 +50,23 @@ const Header = ({itemCount}) => {
                 </p>
               </button>
             </Link>
-            <button className="btnHover favorite" style={{ outline: "none" }}>
+            <button className="btnHover favorite" style={{ outline: "none" ,padding:"4px 12px"}}>
               <Link to={"/favourites"}>
               <FavoriteIcon
-                style={{ fontSize: "25px", marginTop: "0.3rem" }}
+                style={{ fontSize: "22px", marginTop: "0.8rem", }} 
               ></FavoriteIcon></Link>
             </button>
             <Link to={"./bag"} >
-              <IconButton aria-label="cart" style={{ padding: "15px", marginLeft:'2px' }} className="badge">
+              <IconButton aria-label="cart" style={{ padding: "12px", marginLeft:'2px' }} className="badge">
                 <Badge
                   badgeContent={
                     <span
                       style={{
-                        fontSize: "18px",
+                        fontSize: "16px",
                         backgroundColor: "#f8f9fa",
                         borderRadius: "50%",
-                        width: "25px",
-                        height: "25px",
+                        width: "20px",
+                        height: "20px",
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
@@ -79,7 +80,7 @@ const Header = ({itemCount}) => {
                 >
                   {" "}
                   <ShoppingBasketIcon
-                    style={{ color: "black", fontSize: "30px" }}
+                    style={{ color: "black", fontSize: "25px" }}
                   />
                 </Badge>
               </IconButton>
@@ -113,7 +114,7 @@ const Header = ({itemCount}) => {
                 border: "none",
                 outline: "none",
                 backgroundColor: "#f8f9fa",
-                fontSize: "20px",
+                fontSize: "19px",
                 width:"100%"
               }}
             />
@@ -139,7 +140,7 @@ const Header = ({itemCount}) => {
           </ul>
           <button
             className="btnHover lang"
-            style={{ fontSize: "23px", outline: "none" }}
+            style={{ fontSize: "19px", outline: "none" }}
           >
             العربية
           </button>

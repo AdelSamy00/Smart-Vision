@@ -30,7 +30,7 @@ const Menu = () => {
       >
         <MenuIcon
           style={{
-            fontSize: "32px",
+            fontSize: "28px",
           }}
         ></MenuIcon>
       </button>

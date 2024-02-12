@@ -14,6 +14,7 @@ import DeleteAccountPage from './DeleteAccountPage';
 import Store from './Store';
 import Bag from './BagPage';
 import Checkout from './Checkout'
+import History from './History';
 export {
   Landing,
   Login,
@@ -30,5 +31,6 @@ export {
   DeleteAccountPage,
   Store,
   Bag,
-  Checkout
+  Checkout,
+  History
 };

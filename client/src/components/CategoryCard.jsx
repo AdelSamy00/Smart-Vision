@@ -4,7 +4,7 @@ const CategoryCard = ({ name, imageUrl, onClick }) => {
   return (
     <div
       className={`category-card active `}
-      style={{ width: "250px", height: "350px", position: "relative" }}
+      style={{ width: "220px", height: "300px", position: "relative" }}
       onClick={onClick}
     >
       <img
@@ -16,12 +16,9 @@ const CategoryCard = ({ name, imageUrl, onClick }) => {
           top: "85%",width:"100%",textAlign:"center"}}>
       <button
         style={{
-          
-          // left: "50%",
-          // transform: "translate(-50%, -50%)",
           backgroundColor: "white",
           color: "black",
-          padding: "10px 15px",
+          padding: "8px 15px",
           border: "none",
           borderRadius: "20px",
           cursor: "pointer",
