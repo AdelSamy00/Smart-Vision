@@ -31,7 +31,7 @@ function App() {
   const Layout = () => {
     const { customer } = useSelector((state) => state.customer);
     console.log(customer);
-    return customer?.token ?
+    return customer?._id ?
       (
         <Outlet />
       )
@@ -73,7 +73,7 @@ function App() {
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/services" element={<Services />} />
         <Route path="/store" element={<Store />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/product/:productId" element={<ProductDetails />} />
         <Route path="/order" element={<OrderComponent />} />
         <Route element={<Layout />}>
           <Route path="/profile" element={<Profile />} />
