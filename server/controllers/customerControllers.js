@@ -458,7 +458,7 @@ export const getReview = async (req, res, next) => {
 
 export const deleteReview = async (req, res, next) => {
   try {
-    const { customerId, productId } = req.params;
+    const { customerId, productId } = req.body;
 
     // Find and delete the review for the specific customer and product
     const review = await Reviews.findOneAndDelete({

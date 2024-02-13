@@ -50,10 +50,10 @@ router.delete('/order', cancelOrder);
 router.get('/order/:id', getOrderHistory);
 
 //review
-router.post('/addreview', addreview);
-router.get('/getreview/:customerId/:productId', getReview);
-router.delete('/deletereview/:customerId/:productId', deleteReview);
-router.patch('/updatereview/:customerId/:productId', updateReview);
+router.post('/review', addreview);
+router.get('/review/:customerId/:productId', getReview);
+router.delete('/review', deleteReview);
+router.put('/review', updateReview);
 
 //Services
 router.post('/service', makeService);
