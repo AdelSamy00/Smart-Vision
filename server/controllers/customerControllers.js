@@ -396,40 +396,43 @@ export const getOrderHistory = async (req, res, next) => {
 export const addreview = async (req, res, next) => {
   try {
     const { customerId, productId, comment, rating } = req.body;
-
     // Check if rating is within the allowed range
     if (rating < 1 || rating > 5) {
-      return res
-        .status(400)
-        .json({ message: 'Rating should be between 1 and 5' });
+      next('Rating should be between 1 and 5');
+      return;
     }
-
     // Find the customer and product documents
     const customer = await Customers.findById(customerId);
     const product = await Products.findById(productId);
-
-    if (!customer) {
-      return res.status(404).json({ message: 'Customer not found' });
-    }
-
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
-
+    console.log(product);
     // Create a new review
-    const review = new Reviews({
+    const review = await Reviews.create({
       customer: customer._id,
       product: product._id,
       comment,
       rating,
     });
-
-    // Save the review to the database
-    await review.save();
-
-    res.status(201).json({ message: 'Review added successfully', review });
+    // Calculate totalRating
+    product.reviews.push(review._id);
+    product.totalRating =
+      (rating + product.totalRating) / product.reviews.length;
+    const newProductData = await Products.findByIdAndUpdate(
+      { _id: productId },
+      product,
+      {
+        new: true,
+      }
+    );
+    res.status(201).json({
+      message: 'Review added successfully',
+      totalRating: newProductData.totalRating,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.log(error);
+    res.status(404).json({
+      success: false,
+      message: 'failed to add review',
+    });
   }
 };
 

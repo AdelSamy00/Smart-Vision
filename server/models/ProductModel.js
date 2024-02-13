@@ -21,6 +21,7 @@ const productSchema = new mongoose.Schema(
     reviews: [{ type: Schema.Types.ObjectId, ref: 'Reviews' }],
     show: { type: Boolean },
     colors: [{ type: String }],
+    totalRating: { type: Number, default: 0 },
   },
   {
     timestamps: true,

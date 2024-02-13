@@ -3,6 +3,7 @@ import Customers from '../models/CustomerModel.js';
 import Verifications from '../models/EmailVerification.js';
 import Orders from '../models/OrderModel.js';
 import Products from '../models/ProductModel.js';
+import ServicesOrders from '../models/ServiceOrder.js';
 
 export const getAllCustomers = async (req, res, next) => {
   const customers = await Customers.find({}).select('-password');
@@ -35,7 +36,34 @@ export const updateOrderState = async (req, res, next) => {
   } catch (error) {
     res.status(404).json({
       success: false,
-      message: 'failed to cancel this order',
+      message: 'failed to update this order',
+    });
+  }
+};
+
+export const updateServiceOrderState = async (req, res, next) => {
+  try {
+    const { serviceId, state } = req.body;
+    if (!state || !serviceId) {
+      next('Provide Required Fields!');
+      return;
+    }
+    const serviceOrder = await ServicesOrders.findByIdAndUpdate(
+      { _id: serviceId },
+      { state: state },
+      {
+        new: true,
+      }
+    );
+    res.status(200).json({
+      success: true,
+      message: 'update state order successfully',
+      serviceOrder: serviceOrder,
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: 'failed to update this order',
     });
   }
 };

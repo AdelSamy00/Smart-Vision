@@ -2,7 +2,13 @@ import Products from '../models/ProductModel.js';
 
 export const getProducts = async (req, res, next) => {
   try {
-    const products = await Products.find({});
+    const products = await Products.find({}).populate({
+      path: 'reviews',
+      populate: {
+        path: 'customer',
+        select: 'username email -password',
+      },
+    });
     res.status(200).json({
       success: true,
       message: 'get products successfully',
