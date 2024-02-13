@@ -4,7 +4,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
 import { useDispatch, useSelector } from 'react-redux';
 import { SetCustomer } from '../redux/CustomerSlice';
+import ProgressBar from 'react-bootstrap/ProgressBar';
+import StarIcon from '@mui/icons-material/Star';
+import Reviews from '../components/Reviews';
 import "./StyleSheets/ProductDetails.css"
+import AddReview from '../components/AddReview';
 function ProductDetails() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -12,6 +16,7 @@ function ProductDetails() {
   const { customer } = useSelector((state) => state.customer);
   const [product, setProduct] = useState(null);
   const [favorite, setFavorite] = useState(false);
+  const [mainImage, setMainImage] = useState();
   const handelFavorit = async (id, productId) => {
     if (customer._id) {
       await axios
@@ -31,9 +36,9 @@ function ProductDetails() {
   useEffect(() => {
     async function getProduct(productId) {
       await axios.get(`/products/${productId}`).then((res) => {
-        console.log(res?.data?.product);
         setProduct(res?.data?.product);
         const product = res?.data?.product;
+        setMainImage(product?.images[0])
         const flag = product?.likes.find((fav) => {
           return fav === customer._id;
         });
@@ -47,17 +52,32 @@ function ProductDetails() {
     getProduct(productId);
   }, []);
 
+
   return (
     <main className='productDetailMain'>
       <div className="productDetailDivForImgAndData ">
-        <img
-          className="productDetailImg"
-          src="https://dummyimage.com/400x400"
-        />
+        <div className="productDetailImages">
+
+          <img
+            className="productDetailMainImg"
+            src={mainImage}
+          />
+          <div className='productDetailSubImages'>
+            {product?.images.map((src, idx) => {
+              if (idx < 3) {
+                return <img
+                  key={idx}
+                  className="productDetailSubImag"
+                  src={src}
+                  onClick={() => setMainImage(src)}
+                />
+              }
+            })}
+          </div>
+        </div>
         <div className="productDetailData">
           <h1>
-            {/* {product?.name} */}
-            Contemporary reversible sofa chaise
+            {product?.name}
           </h1>
           <div className='productDetailCategory'>
             <h2>Category:</h2>
@@ -75,25 +95,18 @@ function ProductDetails() {
           </div>
           <h3>Description:</h3>
           <p className="productDetailDescription">
-            {/* {product?.description} */}
-            Contemporary in scale and silhouette,
-            this sofa chaise embodies curated comfort.
-            An impressive width provides ample room to spread out without
-            compromising on style. Kick back with family and friends
-            for the latest streaming hit or big game—with this sofa chaise,
-            fashion and function act in perfect harmony.
+            {product?.description}
           </p>
           <div className="productDetailColors">
             <p>Color: </p>
             {product?.colors.map((color, idx) => (
               <span key={idx} className="mr-3">
-                {/* {color} */}
+                {color}
               </span>
             ))}
           </div>
           <p className='productDetailsPrice'>
-            {/* {product?.price} EL */}
-            30000 EL
+            {product?.price} EL
           </p>
           <div className="productDetailsDataFooter">
             <button className=" productDetailsAddToCart ">
@@ -123,6 +136,76 @@ function ProductDetails() {
               )}
             </button>
           </div>
+        </div>
+      </div>
+      <div className="productDetailReviews">
+        <div className="productDetailReviewsDetails">
+          <h4>Customer Reviews</h4>
+          <div className="productDetailRatingForReviews">
+            <Rating
+              readOnly
+              name="half-rating"
+              defaultValue={2.5}
+              precision={0.5}
+              sx={{ fontSize: 25 }}
+            />
+            <p>2.5 Based on 1624 Reviews </p>
+          </div>
+          <div className="productDetailRatingAllBars">
+            <div className="productDetailRatingBar ">
+              <div className='flex'>
+                <p className='mr-1'>5</p>
+                <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
+              </div>
+              <ProgressBar
+                now={60}
+                className='productDetailProgressBar'
+                variant="warning" />
+              <p>60%</p>
+            </div>
+            <div className="productDetailRatingBar ">
+              <div className='flex'>
+                <p className='mr-1'>5</p>
+                <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
+              </div>
+              <ProgressBar now={50} className='productDetailProgressBar' variant="warning" />
+              <p>50%</p>
+            </div>
+            <div className="productDetailRatingBar ">
+              <div className='flex'>
+                <p className='mr-1'>5</p>
+                <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
+              </div>
+              <ProgressBar now={40} className='productDetailProgressBar' variant="warning" />
+              <p>40%</p>
+            </div>
+            <div className="productDetailRatingBar ">
+              <div className='flex'>
+                <p className='mr-1'>5</p>
+                <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
+              </div>
+              <ProgressBar now={30} className='productDetailProgressBar' variant="warning" />
+              <p>30%</p>
+            </div>
+            <div className="productDetailRatingBar ">
+              <div className='flex'>
+                <p className='mr-1'>5</p>
+                <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
+              </div>
+              <ProgressBar now={10} className='productDetailProgressBar' variant="warning" />
+              <p>10%</p>
+            </div>
+          </div>
+          <div className="productDetailReviewsFooter">
+            <h5>Share your thoughts</h5>
+            <p>If you’ve used this product, share your thoughts with other customers.</p>
+          </div>
+        </div>
+        <div className="productDetailReviewsData">
+          <Reviews />
+          <Reviews />
+          <Reviews />
+          <AddReview/>
         </div>
       </div>
     </main>

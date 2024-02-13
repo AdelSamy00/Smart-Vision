@@ -64,7 +64,7 @@ function App() {
 
   return (
     <>
-      {shwoHeaderAndFooter && <Header itemCount={itemCount}  />}
+      {shwoHeaderAndFooter && <Header itemCount={itemCount} />}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/home" element={<Home />} />
@@ -76,13 +76,13 @@ function App() {
         <Route path="/store" element={<Store />} />
         <Route path="/product/:productId" element={<ProductDetails />} />
         <Route path="/order" element={<OrderComponent />} />
+        <Route path="/bag" element={<Bag setItemCount={setItemCount} />} />
         <Route element={<Layout />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/profile-details" element={<ProfileDetails />} />
           <Route path="/profile/change-password" element={<ChangePassword />} />
           <Route path="/profile/delete-account" element={<DeleteAccountPage />} />
           <Route path="/favourites" element={<Favourites />} />
-          <Route path="/bag" element={<Bag  setItemCount={setItemCount}/>} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/history" element={<History />} />
         </Route>
