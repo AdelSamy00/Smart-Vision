@@ -3,6 +3,7 @@ import path from 'path';
 import {
   addreview,
   cancelOrder,
+  cencelService,
   changePassword,
   deleteAcount,
   deleteReview,
@@ -54,5 +55,6 @@ router.patch('/updatereview/:customerId/:productId', updateReview);
 
 //Services
 router.post('/service', makeService);
+router.delete('/service', cencelService);
 
 export default router;

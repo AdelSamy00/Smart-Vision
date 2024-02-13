@@ -120,8 +120,14 @@ export const saveContactMesseage = async (req, res, next) => {
 export const deleteAcount = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const { password } = req.body;
     const wantedCustomer = await Customers.findById({ _id: id });
     if (wantedCustomer) {
+      const isMatch = await compareString(password, wantedCustomer?.password);
+      if (!isMatch) {
+        next('Invalid password');
+        return;
+      }
       await Customers.findByIdAndDelete({ _id: id });
       res.status(200).json({
         success: true,
@@ -532,6 +538,51 @@ export const makeService = async (req, res, next) => {
     res.status(404).json({
       success: false,
       message: 'failed to place this service',
+    });
+  }
+};
+
+export const cencelService = async (req, res, next) => {
+  try {
+    const { id, serviceId } = req.body;
+    if (!id || !serviceId) {
+      next('Provide Required Fields!');
+      return;
+    }
+    const service = await ServicesOrders.findById({ _id: serviceId });
+    if (service.state !== 'CANCELED') {
+      if (
+        service.cancelServiceOrderExpiresAt.getDate() > new Date().getDate()
+      ) {
+        const updatedServiceOrder = await ServicesOrders.findByIdAndUpdate(
+          { _id: serviceId },
+          {
+            state: 'CANCELED',
+          },
+          { new: true }
+        );
+        res.status(200).json({
+          success: true,
+          message: 'the order has been canceled successfully',
+          serviceOrder: updatedServiceOrder,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: 'you cannot cancel service order after 3 day',
+        });
+      }
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'you cannot cancel order twice',
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({
+      success: false,
+      message: 'failed to cancel this service order',
     });
   }
 };
