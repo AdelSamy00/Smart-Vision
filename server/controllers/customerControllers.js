@@ -11,6 +11,7 @@ import {
   increaseQuantity,
 } from './productControlles.js';
 import Reviews from '../models/Review.js';
+import ServicesOrders from '../models/ServiceOrder.js';
 
 export const verifyEmail = async (req, res, next) => {
   const { customerId, token } = req.params;
@@ -130,14 +131,14 @@ export const deleteAcount = async (req, res, next) => {
     } else {
       res.status(404).json({
         success: false,
-        message: 'user is not found',
+        message: 'customer is not found',
       });
     }
   } catch (error) {
     console.log(error);
     res.status(404).json({
       success: false,
-      message: 'failed to update',
+      message: 'failed to delete',
     });
   }
 };
@@ -253,7 +254,7 @@ export const makeOrder = async (req, res, next) => {
   try {
     let flag = true;
     const { id, cart, totalPrice, totalPoints } = req.body;
-    if (!id || !cart.length || !totalPrice || !totalPoints) {
+    if (!id || !cart.length || !totalPrice) {
       next('Provide Required Fields!');
       return;
     }
@@ -392,7 +393,9 @@ export const addreview = async (req, res, next) => {
 
     // Check if rating is within the allowed range
     if (rating < 1 || rating > 5) {
-      return res.status(400).json({ message: 'Rating should be between 1 and 5' });
+      return res
+        .status(400)
+        .json({ message: 'Rating should be between 1 and 5' });
     }
 
     // Find the customer and product documents
@@ -412,7 +415,7 @@ export const addreview = async (req, res, next) => {
       customer: customer._id,
       product: product._id,
       comment,
-      rating
+      rating,
     });
 
     // Save the review to the database
@@ -423,12 +426,16 @@ export const addreview = async (req, res, next) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 export const getReview = async (req, res, next) => {
   try {
     const { customerId, productId } = req.params;
 
     // Find the review for the specific customer and product
-    const review = await Reviews.findOne({ customer: customerId, product: productId });
+    const review = await Reviews.findOne({
+      customer: customerId,
+      product: productId,
+    });
 
     if (!review) {
       return res.status(404).json({ message: 'Review not found' });
@@ -439,12 +446,16 @@ export const getReview = async (req, res, next) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 export const deleteReview = async (req, res, next) => {
   try {
     const { customerId, productId } = req.params;
 
     // Find and delete the review for the specific customer and product
-    const review = await Reviews.findOneAndDelete({ customer: customerId, product: productId });
+    const review = await Reviews.findOneAndDelete({
+      customer: customerId,
+      product: productId,
+    });
 
     if (!review) {
       return res.status(404).json({ message: 'Review not found' });
@@ -455,17 +466,23 @@ export const deleteReview = async (req, res, next) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 export const updateReview = async (req, res, next) => {
   try {
     const { customerId, productId, comment, rating } = req.body;
 
     // Check if rating is within the allowed range
     if (rating < 1 || rating > 5) {
-      return res.status(400).json({ message: 'Rating should be between 1 and 5' });
+      return res
+        .status(400)
+        .json({ message: 'Rating should be between 1 and 5' });
     }
 
     // Find the review for the specific customer and product
-    let review = await Reviews.findOne({ customer: customerId, product: productId });
+    let review = await Reviews.findOne({
+      customer: customerId,
+      product: productId,
+    });
 
     if (!review) {
       return res.status(404).json({ message: 'Review not found' });
@@ -484,3 +501,37 @@ export const updateReview = async (req, res, next) => {
   }
 };
 
+export const makeService = async (req, res, next) => {
+  try {
+    const serviceData = req.body;
+    if (!serviceData.id || !serviceData.service || !serviceData.description) {
+      next('Provide Required Fields!');
+      return;
+    }
+    const customer = await Customers.findById({ _id: serviceData.id });
+    //make service order
+    const serviceOrder = await ServicesOrders.create({
+      ...serviceData,
+      cancelServiceOrderExpiresAt: new Date(
+        new Date().setDate(new Date().getDate() + 3)
+      ),
+    });
+    //save service order to customer history
+    customer.serviceHistory.push(serviceOrder._id);
+    const updatedCustomer = await Customers.findByIdAndUpdate(
+      { _id: serviceData.id },
+      customer,
+      { new: true }
+    ).select('-password');
+    res.status(200).json({
+      success: true,
+      message: 'the order has been made successfully',
+      customer: updatedCustomer,
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: 'failed to place this service',
+    });
+  }
+};
