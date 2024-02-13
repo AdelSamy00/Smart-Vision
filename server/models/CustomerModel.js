@@ -27,7 +27,7 @@ const customerSchema = new mongoose.Schema(
       },
     ],
     orderHistory: [{ type: Schema.Types.ObjectId, ref: 'Orders' }],
-    serviceHistory: [{ type: Schema.Types.ObjectId, ref: 'Services' }],
+    serviceHistory: [{ type: Schema.Types.ObjectId, ref: 'ServicesOrders' }],
     customizedHistory: [
       { type: Schema.Types.ObjectId, ref: 'CustomizedOrders' },
     ],

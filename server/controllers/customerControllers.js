@@ -518,6 +518,7 @@ export const makeService = async (req, res, next) => {
     //make service order
     const serviceOrder = await ServicesOrders.create({
       ...serviceData,
+      customer: serviceData.id,
       cancelServiceOrderExpiresAt: new Date(
         new Date().setDate(new Date().getDate() + 3)
       ),
@@ -542,7 +543,7 @@ export const makeService = async (req, res, next) => {
   }
 };
 
-export const cencelService = async (req, res, next) => {
+export const cancelService = async (req, res, next) => {
   try {
     const { id, serviceId } = req.body;
     if (!id || !serviceId) {
@@ -583,6 +584,29 @@ export const cencelService = async (req, res, next) => {
     res.status(404).json({
       success: false,
       message: 'failed to cancel this service order',
+    });
+  }
+};
+
+export const getServiceHistory = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const customer = await Customers.findById({ _id: id })
+      .populate({
+        path: 'serviceHistory',
+      })
+      .exec();
+
+    res.status(200).json({
+      success: true,
+      message: 'get order history successfully',
+      history: customer.serviceHistory,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({
+      success: false,
+      message: 'failed to get your service history',
     });
   }
 };
