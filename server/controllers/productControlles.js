@@ -41,7 +41,13 @@ export const addProduct = async (req, res, next) => {
 export const getProductById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const product = await Products.findOne({ _id: id });
+    const product = await Products.findOne({ _id: id }).populate({
+      path: 'reviews',
+      populate: {
+        path: 'customer',
+        select: 'username email -password',
+      },
+    });
     res.status(200).json({
       success: true,
       message: 'get products successfully',
