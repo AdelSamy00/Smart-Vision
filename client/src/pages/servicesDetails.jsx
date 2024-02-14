@@ -1,16 +1,20 @@
-// ServicesDetails.jsx
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
 import "./StyleSheets/servicesdetails.css";
+
 function ServicesDetails() {
   const { state } = useLocation();
   const service = state ? state.service : null;
+  const { customer } = useSelector((state) => state.customer);
 
   const [formData, setFormData] = useState({
-    userName: "",
+    ServiceName: "",
     phoneNumber: "",
     address: "",
+    description: "",
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -22,11 +26,23 @@ function ServicesDetails() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormSubmitted(true);
+    try {
+      const response = await axios.post("/customers/service", {
+        id: customer._id,
+        service: formData.ServiceName,
+        description: formData.description,
+      });
+      if (response.data.success) {
+        setFormSubmitted(true);
+      } else {
+        console.error(response.data.message);
+      }
+    } catch (error) {
+      console.error("Failed to submit the form:", error.response.data.message);
+    }
   };
-
   if (!service) {
     return <div>Loading...</div>;
   }
@@ -55,9 +71,11 @@ function ServicesDetails() {
         </h2>
         {/* Display form or success message based on formSubmitted state */}
         {formSubmitted ? (
-          <p className="text-green-500 mt-3">
-            Thank you! We will get in touch with you in a few days.
-          </p>
+          <div>
+            <p className="text-green-500 mt-3">
+              Thank you! We will get in touch with you in a few days.
+            </p>
+          </div>
         ) : (
           <form onSubmit={handleSubmit} className="form">
             <label htmlFor="ServiceName" className="userNameLabel">
@@ -65,9 +83,9 @@ function ServicesDetails() {
             </label>
             <input
               type="text"
-              id="userName"
-              name="userName"
-              value={formData.userName}
+              id="ServiceName"
+              name="ServiceName"
+              value={formData.ServiceName}
               onChange={handleInputChange}
               required
               className="userNameInput"
@@ -95,13 +113,13 @@ function ServicesDetails() {
               required
               className="adressInput"
             ></textarea>
-            <label htmlFor="address" className="adressLabel">
+            <label htmlFor="description" className="adressLabel">
               Description
             </label>
             <textarea
-              id="Description"
-              name="Description"
-              value={formData.Description}
+              id="description"
+              name="description"
+              value={formData.description}
               onChange={handleInputChange}
               required
               className="adressInput"
