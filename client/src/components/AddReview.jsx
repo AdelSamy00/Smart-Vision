@@ -1,48 +1,56 @@
 import React, { useState } from 'react'
 import Form from 'react-bootstrap/Form';
 import Rating from '@mui/material/Rating';
+import { useSelector } from 'react-redux';
+import './stylesheets/Reviews.css'
+import { useNavigate } from 'react-router-dom';
 
-function AddReview() {
+function AddReview({ addReview }) {
+    const navigate = useNavigate();
+    const { customer } = useSelector((state) => state.customer);
     const [review, setReview] = useState("");
-    const [rating, setRating] = useState("0");
+    const [rating, setRating] = useState(5);
     const [validated, setValidated] = useState(false);
     const handleSubmit = async (event) => {
         const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-            setValidated(true);
-            console.log('f1')
+        event.preventDefault();
+        if (customer?._id) {
+            if (form.checkValidity() === false) {
+                event.stopPropagation();
+                setValidated(true);
+            } else {
+                addReview(customer._id , rating, review)
+                setRating(5)
+                setReview("")
+            }
         } else {
-            event.preventDefault();
-            console.log(rating, review)
+            navigate("/login");
         }
+
     };
     return (
         <>
             <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <Form.Group className='InputGroup'>
-                    <h6>Add Review</h6>
+                    <h6 className='addReviewHeader'>Add Review</h6>
                     <Rating
-                        defaultValue={0}
+                        value={rating}
                         sx={{ fontSize: 25 }}
-                        onChange={(e) => {
-                            setRating(e.target.value)
-                            console.log(e.target.value)
-                        }}
+                        onChange={(e) => setRating(Number(e.target.value))}
                     />
                     <Form.Control
                         className='InputField h-auto'
                         required
                         as="textarea"
                         rows={3}
-                        placeholder='Add your Review her......'
+                        value={review}
+                        placeholder='Add your Review here......'
                         onChange={(e) => setReview(e.target.value)}
                     />
                 </Form.Group>
                 <div className="flex justify-center">
-                    <button type="submit" className="text-2xl bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-3xl w-full m-4 h-16">
-                        Save
+                    <button type="submit" className="text-xl bg-slate-700 hover:bg-slate-800 text-white font-bold rounded-3xl w-1/4 m-2 h-14">
+                        Add Review
                     </button>
                 </div>
             </Form>

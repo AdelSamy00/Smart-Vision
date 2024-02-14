@@ -412,6 +412,7 @@ export const addreview = async (req, res, next) => {
       comment,
       rating,
     });
+    review.populate({ path: 'customer', select: 'username email -password' });
     // Calculate totalRating
     product.reviews.push(review._id);
     product.totalRating =
@@ -427,6 +428,7 @@ export const addreview = async (req, res, next) => {
       success: true,
       message: 'Review added successfully',
       totalRating: newProductData.totalRating,
+      review: review,
     });
   } catch (error) {
     console.log(error);
@@ -460,6 +462,7 @@ export const getReview = async (req, res, next) => {
 export const deleteReview = async (req, res, next) => {
   try {
     const { customerId, reviewId, productId } = req.body;
+    console.log(customerId, reviewId, productId);
     const review = await Reviews.findById({ _id: reviewId });
     const product = await Products.findById({ _id: productId }).populate(
       'reviews'

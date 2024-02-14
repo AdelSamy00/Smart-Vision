@@ -9,6 +9,7 @@ import StarIcon from '@mui/icons-material/Star';
 import Reviews from '../components/Reviews';
 import "./StyleSheets/ProductDetails.css"
 import AddReview from '../components/AddReview';
+
 function ProductDetails() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -17,6 +18,8 @@ function ProductDetails() {
   const [product, setProduct] = useState(null);
   const [favorite, setFavorite] = useState(false);
   const [mainImage, setMainImage] = useState();
+  const [reviews, setReviews] = useState(null);
+  const [totalRating, setTotalRating] = useState(null);
   const handelFavorit = async (id, productId) => {
     if (customer._id) {
       await axios
@@ -39,6 +42,8 @@ function ProductDetails() {
         setProduct(res?.data?.product);
         const product = res?.data?.product;
         setMainImage(product?.images[0])
+        setReviews(product?.reviews)
+        setTotalRating(product?.totalRating)
         const flag = product?.likes.find((fav) => {
           return fav === customer._id;
         });
@@ -52,12 +57,31 @@ function ProductDetails() {
     getProduct(productId);
   }, []);
 
+  async function addReview(customerId, rating, comment) {
+    await axios.post('/customers/review', { customerId, productId, comment, rating })
+      .then((res) => {
+        setReviews((prevReviews) => {
+          return [...prevReviews, res.data.review];
+        });
+        setTotalRating(res.data.totalRating)
+      }).catch((e) => { console.log(e) })
+  };
+// Delete review from product
+  async function deleteReview(customerId, reviewId) {
+    await axios.delete('/customers/review', { data: { customerId, reviewId, productId } })
+      .then((res) => {
+        setReviews((prevReviews) => {
+          return prevReviews.filter((review) => review._id !== reviewId);
+        });
+        setTotalRating(res.data.totalRating)
+      })
+      .catch((e) => { console.log(e) })
+  };
 
   return (
     <main className='productDetailMain'>
       <div className="productDetailDivForImgAndData ">
         <div className="productDetailImages">
-
           <img
             className="productDetailMainImg"
             src={mainImage}
@@ -87,11 +111,11 @@ function ProductDetails() {
             <Rating
               readOnly
               name="half-rating"
-              defaultValue={2.5}
+              value={totalRating}
               precision={0.5}
               sx={{ fontSize: 30 }}
             />
-            <p>2.5 Reviews </p>
+            <p>{totalRating} Based on {reviews?.length} Reviews. </p>
           </div>
           <h3>Description:</h3>
           <p className="productDetailDescription">
@@ -145,11 +169,11 @@ function ProductDetails() {
             <Rating
               readOnly
               name="half-rating"
-              defaultValue={2.5}
+              value={totalRating}
               precision={0.5}
               sx={{ fontSize: 25 }}
             />
-            <p>2.5 Based on 1624 Reviews </p>
+            <p>{totalRating} Based on {reviews?.length} Reviews </p>
           </div>
           <div className="productDetailRatingAllBars">
             <div className="productDetailRatingBar ">
@@ -165,7 +189,7 @@ function ProductDetails() {
             </div>
             <div className="productDetailRatingBar ">
               <div className='flex'>
-                <p className='mr-1'>5</p>
+                <p className='mr-1'>4</p>
                 <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
               </div>
               <ProgressBar now={50} className='productDetailProgressBar' variant="warning" />
@@ -173,7 +197,7 @@ function ProductDetails() {
             </div>
             <div className="productDetailRatingBar ">
               <div className='flex'>
-                <p className='mr-1'>5</p>
+                <p className='mr-1'>3</p>
                 <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
               </div>
               <ProgressBar now={40} className='productDetailProgressBar' variant="warning" />
@@ -181,7 +205,7 @@ function ProductDetails() {
             </div>
             <div className="productDetailRatingBar ">
               <div className='flex'>
-                <p className='mr-1'>5</p>
+                <p className='mr-1'>2</p>
                 <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
               </div>
               <ProgressBar now={30} className='productDetailProgressBar' variant="warning" />
@@ -189,7 +213,7 @@ function ProductDetails() {
             </div>
             <div className="productDetailRatingBar ">
               <div className='flex'>
-                <p className='mr-1'>5</p>
+                <p className='mr-1'>1</p>
                 <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
               </div>
               <ProgressBar now={10} className='productDetailProgressBar' variant="warning" />
@@ -198,14 +222,24 @@ function ProductDetails() {
           </div>
           <div className="productDetailReviewsFooter">
             <h5>Share your thoughts</h5>
-            <p>If you’ve used this product, share your thoughts with other customers.</p>
+            <p>If you have used this product, share your thoughts with other customers.</p>
           </div>
         </div>
         <div className="productDetailReviewsData">
-          <Reviews />
-          <Reviews />
-          <Reviews />
-          <AddReview/>
+          {reviews ? (reviews.map((review) => {
+            return (
+              <Reviews
+                key={review._id}
+                reviewId={review._id}
+                userId={review?.customer?._id}
+                userName={review?.customer?.username}
+                rating={review?.rating}
+                review={review?.comment}
+                deleteReview={deleteReview}
+              />
+            )
+          })) : (<></>)}
+          <AddReview addReview={addReview} />
         </div>
       </div>
     </main>
