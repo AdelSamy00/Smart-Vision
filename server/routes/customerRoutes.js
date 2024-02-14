@@ -51,7 +51,7 @@ router.get('/order/:id', getOrderHistory);
 
 //review
 router.post('/review', addreview);
-router.get('/review/:customerId/:productId', getReview);
+//router.get('/review/:customerId/:productId', getReview);
 router.delete('/review', deleteReview);
 router.put('/review', updateReview);
 

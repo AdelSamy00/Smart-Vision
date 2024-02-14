@@ -123,3 +123,14 @@ export const updateProduct = async (req, res, next) => {
     });
   }
 };
+
+// this funcation will help us to calculate total Rating
+//to help us in funcation deleteReview in customerControllers
+export const calculateTotalRating = async (productReviews) => {
+  let total = 0;
+  productReviews.map((review) => {
+    total = total + review.rating;
+  });
+
+  return total / productReviews.length;
+};

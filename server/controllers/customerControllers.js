@@ -6,6 +6,7 @@ import Products from '../models/ProductModel.js';
 import { compareString, createJWT, hashString } from '../utils/index.js';
 import JWT from 'jsonwebtoken';
 import {
+  calculateTotalRating,
   decreseQuantity,
   existProduct,
   increaseQuantity,
@@ -403,8 +404,7 @@ export const addreview = async (req, res, next) => {
     }
     // Find the customer and product documents
     const customer = await Customers.findById(customerId);
-    const product = await Products.findById(productId);
-    console.log(product);
+    const product = await Products.findById(productId).populate('reviews');
     // Create a new review
     const review = await Reviews.create({
       customer: customer._id,
@@ -424,6 +424,7 @@ export const addreview = async (req, res, next) => {
       }
     );
     res.status(201).json({
+      success: true,
       message: 'Review added successfully',
       totalRating: newProductData.totalRating,
     });
@@ -458,21 +459,42 @@ export const getReview = async (req, res, next) => {
 
 export const deleteReview = async (req, res, next) => {
   try {
-    const { customerId, productId } = req.body;
-
-    // Find and delete the review for the specific customer and product
-    const review = await Reviews.findOneAndDelete({
-      customer: customerId,
-      product: productId,
-    });
-
-    if (!review) {
-      return res.status(404).json({ message: 'Review not found' });
+    const { customerId, reviewId, productId } = req.body;
+    const review = await Reviews.findById({ _id: reviewId });
+    const product = await Products.findById({ _id: productId }).populate(
+      'reviews'
+    );
+    if (String(review.customer) === customerId) {
+      //delete review from product
+      product.reviews = product.reviews.filter(
+        (pid) => String(pid._id) !== String(review._id)
+      );
+      //Calculate totalRating
+      product.totalRating = await calculateTotalRating(product.reviews);
+      const newProductData = await Products.findByIdAndUpdate(
+        { _id: productId },
+        product,
+        {
+          new: true,
+        }
+      );
+      const deletedReview = await Reviews.findOneAndDelete({ _id: reviewId });
+      res.status(200).json({
+        success: true,
+        message: 'Review deleted successfully',
+        deletedReview,
+        newProductData: newProductData,
+        totalRating: product.totalRating,
+      });
+    } else {
+      next('you are unauthorized to remove this review');
+      return;
     }
-
-    res.status(200).json({ message: 'Review deleted successfully', review });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(404).json({
+      success: false,
+      message: 'failed to delete review',
+    });
   }
 };
 
