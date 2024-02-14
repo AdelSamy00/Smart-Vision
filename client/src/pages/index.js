@@ -15,6 +15,7 @@ import Store from './Store';
 import Bag from './BagPage';
 import Checkout from './Checkout'
 import History from './History';
+import ServicesDetails from './servicesDetails';
 export {
   Landing,
   Login,
@@ -32,5 +33,6 @@ export {
   Store,
   Bag,
   Checkout,
-  History
+  History,
+  ServicesDetails
 };

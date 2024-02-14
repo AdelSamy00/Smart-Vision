@@ -17,7 +17,8 @@ import {
   Store,
   Bag,
   Checkout,
-  History
+  History,
+  ServicesDetails
 } from './pages/';
 import axios from 'axios';
 import Footer from './components/Footer';
@@ -73,6 +74,7 @@ function App() {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/services" element={<Services />} />
+        <Route path="/services/:serviceName" element={<ServicesDetails />} />
         <Route path="/store" element={<Store />} />
         <Route path="/product/:productId" element={<ProductDetails />} />
         <Route path="/order" element={<OrderComponent />} />
