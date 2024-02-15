@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Grid, Typography, Button } from "@mui/material";
 import axios from "axios";
 import { useSelector } from "react-redux";
+
 function ServiceHistory() {
   const [showOrder, setShowOrder] = useState(false);
   const [orderServiceHistory, setOrderServiceHistory] = useState([]);
@@ -69,21 +70,19 @@ function ServiceHistory() {
             <Typography variant="body1">Total Services</Typography>
             <Typography variant="body2">{orderServiceHistory.length}</Typography>
           </Grid>
-          {/* </Grid> */}
           <Grid
             item
             xs={6}
             md={4}
             lg={3}
             sx={{
-              textAlign: { xs:"end", md: "center" },
+              textAlign: { xs: "end", md: "center" },
               marginBottom: { xs: "1.5rem", md: "0rem" },
               marginTop: { xs: "-1.5rem", md: "0rem" },
-              // backgroundColor:"red"
             }}
           >
             <Typography variant="body1">Order Number</Typography>
-            <Typography variant="body2" sx={{textAlign:"center"}}>New</Typography>
+            <Typography variant="body2" sx={{ textAlign: "center" }}>New</Typography>
           </Grid>
           <Grid
             item
@@ -135,20 +134,19 @@ function ServiceHistory() {
                 }}
               >
                 <Grid container spacing={2}>
-                <Grid item xs={12} md={8} >
+                  <Grid item xs={12} md={8}>
                     <Typography
                       variant="body2"
-                      style={{ marginTop: "1rem", fontSize:"20px"}}
+                      style={{ marginTop: "1rem", fontSize: "20px" }}
                     >
                       <span style={{ fontWeight: "bold" }}>Service Name :</span>{" "}
                       {historyEntry.service}
                     </Typography>
                   </Grid>
                   <Grid item xs={12} md={8}>
-
                     <Typography
                       variant="body2"
-                      style={{ marginTop: "1rem" ,fontSize:"20px"}}
+                      style={{ marginTop: "1rem", fontSize: "20px" }}
                     >
                       <span style={{ fontWeight: "bold" }}>Description:</span>{" "}
                       {historyEntry.description}
@@ -157,7 +155,7 @@ function ServiceHistory() {
                   <Grid item xs={12} md={8}>
                     <Typography
                       variant="body2"
-                      style={{ marginTop: "1rem",fontSize:"20px"}}
+                      style={{ marginTop: "1rem", fontSize: "20px" }}
                     >
                       <span style={{ fontWeight: "bold" }}>state:</span>{" "}
                       {historyEntry.state}
@@ -166,21 +164,30 @@ function ServiceHistory() {
                   <Grid item xs={12} md={8}>
                     <Typography
                       variant="body2"
-                      style={{ marginTop: "1rem" ,fontSize:"20px"}}
+                      style={{ marginTop: "1rem", fontSize: "20px" }}
                     >
                       <span style={{ fontWeight: "bold" }}>Date Placed:</span>{" "}
                       {historyEntry.createdAt}
                     </Typography>
                   </Grid>
                   <Grid item xs={12} md={4}>
-                    <Button
-                      onClick={() => cancelService(historyEntry._id)}
-                      variant="contained"
-                      color="error"
-                      sx={{ borderRadius: "5px" }}
-                    >
-                      Cancel
-                    </Button>
+                    {historyEntry.state !== 'CANCELED' && (
+                      <Button
+                        onClick={() => cancelService(historyEntry._id)}
+                        variant="contained"
+                        color="error"
+                        sx={{
+                          backgroundColor: "#009688",
+                          color: "white",
+                          borderRadius: "5px",
+                          ":hover": {
+                            backgroundColor:"#009688",
+                          },
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    )}
                   </Grid>
                 </Grid>
               </Grid>

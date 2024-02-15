@@ -4,7 +4,6 @@ import { useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import "./StyleSheets/servicesdetails.css";
-
 function ServicesDetails() {
   const { state } = useLocation();
   const service = state ? state.service : null;
@@ -69,7 +68,6 @@ function ServicesDetails() {
         <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>
           If You Need To Book This Service Fill This Form .
         </h2>
-        {/* Display form or success message based on formSubmitted state */}
         {formSubmitted ? (
           <div>
             <p className="text-green-500 mt-3">
@@ -85,10 +83,10 @@ function ServicesDetails() {
               type="text"
               id="ServiceName"
               name="ServiceName"
-              value={formData.ServiceName}
+              className="userNameInput"
+              value={service.title}
               onChange={handleInputChange}
               required
-              className="userNameInput"
             />
             <label htmlFor="phoneNumber" className="phoneLabel">
               Phone Number:
@@ -124,7 +122,19 @@ function ServicesDetails() {
               required
               className="adressInput"
             ></textarea>
-            <button type="submit">Submit</button>
+            <button
+              type="submit"
+              style={{
+                backgroundColor: "#009688",
+                color: "white",
+                padding: "10px 20px",
+                border: "none", 
+                borderRadius: "5px",
+                cursor:"pointer", 
+              }}
+            >
+              Submit
+            </button>
           </form>
         )}
       </div>
