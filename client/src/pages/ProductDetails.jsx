@@ -36,6 +36,7 @@ function ProductDetails() {
       navigate('/login');
     }
   };
+
   useEffect(() => {
     async function getProduct(productId) {
       await axios.get(`/products/${productId}`).then((res) => {
@@ -66,7 +67,7 @@ function ProductDetails() {
         setTotalRating(res.data.totalRating)
       }).catch((e) => { console.log(e) })
   };
-// Delete review from product
+  // Delete review from product
   async function deleteReview(customerId, reviewId) {
     await axios.delete('/customers/review', { data: { customerId, reviewId, productId } })
       .then((res) => {
@@ -77,6 +78,26 @@ function ProductDetails() {
       })
       .catch((e) => { console.log(e) })
   };
+
+  async function editReview(customerId, productId, reviewId, comment, rating) {
+    // await axios.put('/customers/review', { data: { customerId, productId, reviewId, comment, rating } })
+    //   .then((res) => {
+    setReviews((prevReviews) => {
+      return prevReviews.map((review) => {
+        if (review?._id === reviewId) {
+          return (
+            { ...review, comment: comment, rating: rating }
+          );
+        } else {
+          return review;
+        }
+      });
+    });
+    //setTotalRating(res.data.totalRating)
+    // })
+    // .catch((e) => { console.log(e) })
+  };
+
 
   return (
     <main className='productDetailMain'>
@@ -230,12 +251,9 @@ function ProductDetails() {
             return (
               <Reviews
                 key={review._id}
-                reviewId={review._id}
-                userId={review?.customer?._id}
-                userName={review?.customer?.username}
-                rating={review?.rating}
-                review={review?.comment}
+                review={review}
                 deleteReview={deleteReview}
+                editReview={editReview}
               />
             )
           })) : (<></>)}
