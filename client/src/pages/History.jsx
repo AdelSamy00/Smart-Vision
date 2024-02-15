@@ -1,8 +1,8 @@
 import axios from "axios";
-import { useEffect ,useState} from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import OrderComponent from "../components/OrderComponent";
-
+import ServiceHistory from "../components/serviceHistory";
 const History = () => {
   const [orderHistory, setOrderHistory] = useState([]);
   const { customer } = useSelector((state) => state.customer);
@@ -20,16 +20,23 @@ const History = () => {
         );
       }
     }
-  
+
     fetchOrderHistory();
   }, []);
   return (
     <div>
-      <h1>Order History</h1>
+      {/* <h1>Order History</h1> */}
       <ul>
-        {orderHistory.map((order,index) => (
-          <OrderComponent key={index} order={order} />
-        ))}
+        <li>
+          <h1 style={{fontWeight:"bold",fontSize:"20px",marginLeft:"20px"}}>Order History</h1>
+          {orderHistory.map((order, index) => (
+            <OrderComponent key={index} order={order} />
+          ))}
+        </li>
+        <li>
+          <h1 style={{fontWeight:"bold",fontSize:"20px",marginLeft:"20px"}}>Service History</h1>
+          <ServiceHistory />
+        </li>
       </ul>
     </div>
   );
