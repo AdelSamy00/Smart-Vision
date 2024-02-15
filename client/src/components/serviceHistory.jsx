@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Grid, Typography, Button } from "@mui/material";
 import axios from "axios";
 import { useSelector } from "react-redux";
-
 function ServiceHistory() {
   const [showOrder, setShowOrder] = useState(false);
   const [orderServiceHistory, setOrderServiceHistory] = useState([]);
@@ -27,6 +26,16 @@ function ServiceHistory() {
 
   const toggleOrder = () => {
     setShowOrder(!showOrder);
+  };
+
+  const cancelService = async (serviceId) => {
+    try {
+      const response = await axios.delete(`/customers/service`, {data:{id: customer._id, serviceId } });
+      console.log(response.data);
+      setOrderServiceHistory();
+    } catch (error) {
+      console.error("Error cancelling service:", error.response.data.message);
+    }
   };
 
   return (
@@ -129,7 +138,7 @@ function ServiceHistory() {
                 <Grid item xs={12} md={8} >
                     <Typography
                       variant="body2"
-                      style={{ marginTop: "1rem", fontSize: { xs: "10px" }, fontSize:"20px"}}
+                      style={{ marginTop: "1rem", fontSize:"20px"}}
                     >
                       <span style={{ fontWeight: "bold" }}>Service Name :</span>{" "}
                       {historyEntry.service}
@@ -139,7 +148,7 @@ function ServiceHistory() {
 
                     <Typography
                       variant="body2"
-                      style={{ marginTop: "1rem", fontSize: { xs: "10px" } ,fontSize:"20px"}}
+                      style={{ marginTop: "1rem" ,fontSize:"20px"}}
                     >
                       <span style={{ fontWeight: "bold" }}>Description:</span>{" "}
                       {historyEntry.description}
@@ -148,7 +157,7 @@ function ServiceHistory() {
                   <Grid item xs={12} md={8}>
                     <Typography
                       variant="body2"
-                      style={{ marginTop: "1rem", fontSize: { xs: "10px" } ,fontSize:"20px"}}
+                      style={{ marginTop: "1rem",fontSize:"20px"}}
                     >
                       <span style={{ fontWeight: "bold" }}>state:</span>{" "}
                       {historyEntry.state}
@@ -157,11 +166,21 @@ function ServiceHistory() {
                   <Grid item xs={12} md={8}>
                     <Typography
                       variant="body2"
-                      style={{ marginTop: "1rem", fontSize: { xs: "10px" } ,fontSize:"20px"}}
+                      style={{ marginTop: "1rem" ,fontSize:"20px"}}
                     >
                       <span style={{ fontWeight: "bold" }}>Date Placed:</span>{" "}
                       {historyEntry.createdAt}
                     </Typography>
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <Button
+                      onClick={() => cancelService(historyEntry._id)}
+                      variant="contained"
+                      color="error"
+                      sx={{ borderRadius: "5px" }}
+                    >
+                      Cancel
+                    </Button>
                   </Grid>
                 </Grid>
               </Grid>
