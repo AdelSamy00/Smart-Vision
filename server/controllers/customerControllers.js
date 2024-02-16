@@ -320,6 +320,7 @@ export const makeOrder = async (req, res, next) => {
 export const cancelOrder = async (req, res, next) => {
   try {
     const { id, orderId } = req.body;
+    console.log(id,orderId)
     if (!id || !orderId) {
       next('Provide Required Fields!');
       return;
@@ -335,8 +336,8 @@ export const cancelOrder = async (req, res, next) => {
           { new: true }
         );
         await Promise.all(
-          order.order.map(async (prod) => {
-            await increaseQuantity(prod.productId.toString(), prod.quantity);
+          order.products.map(async (prod) => {
+            await increaseQuantity(prod.product.toString(), prod.quantity);
           })
         );
         res.status(200).json({

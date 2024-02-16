@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { Grid, Button, Typography } from "@mui/material";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 function OrderComponent({ order }) {
   const [showOrder, setShowOrder] = useState(false);
+  const [canselOrder, setCanselOrder] = useState(false);
+  const [updatedOrder, setUpdatedOrder] = useState(order);
+  const [deleteMessage, setDeletemessage] = useState(null);
+  const { customer } = useSelector((state) => state.customer);
 
   const toggleOrder = () => {
     setShowOrder(!showOrder);
@@ -10,15 +16,30 @@ function OrderComponent({ order }) {
   const calculateTotalItems = () => {
     let totalItems = 0;
     order?.products.map((product) => {
-      totalItems += product?.product?.quantity || 1; // Default to 1 if quantity is not provided
+      totalItems += product?.product?.quantity || 1;
     });
     return totalItems;
+  };
+  const cancelOrder = async (orderId) => {
+    try {
+      const response = await axios.delete(`/customers/order`, {
+        data: { id: customer?._id, orderId: orderId },
+      });
+      if (response.status === 200) {
+        setUpdatedOrder(response.data.order);
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.error("Error cancelling order:", error.response.data.message);
+      setDeletemessage(error.response.data.message);
+    }
   };
   return (
     <Grid container className="order-container" sx={{ marginBottom: "2rem" }}>
       <Grid
         item
         xs={11}
+        sm={8}
         md={7}
         sx={{ margin: "auto", border: "1px solid #ddd", borderRadius: "10px" }}
       >
@@ -48,14 +69,16 @@ function OrderComponent({ order }) {
             md={4}
             lg={3}
             sx={{
-              textAlign: { xs:"end", md: "center" },
+              textAlign: { xs: "end", md: "center" },
               marginBottom: { xs: "1.5rem", md: "0rem" },
               marginTop: { xs: "-1.5rem", md: "0rem" },
               // backgroundColor:"red"
             }}
           >
             <Typography variant="body1">Order Number</Typography>
-            <Typography variant="body2" sx={{textAlign:"center"}}>New</Typography>
+            <Typography variant="body2" sx={{ textAlign: "center" }}>
+              New
+            </Typography>
           </Grid>
           <Grid
             item
@@ -90,6 +113,9 @@ function OrderComponent({ order }) {
                 backgroundColor: "#009688",
                 color: "white",
                 borderRadius: "5px",
+                ":hover": {
+                  backgroundColor: "#009688",
+                },
               }}
             >
               {showOrder ? "Hide Order" : "Show Order"}
@@ -105,6 +131,7 @@ function OrderComponent({ order }) {
               padding: "20px",
             }}
           >
+            {/* {console.log(order)} */}
             {order?.products.map((product, index) => (
               <Grid
                 key={index}
@@ -118,18 +145,18 @@ function OrderComponent({ order }) {
                 }}
               >
                 <Grid container spacing={2}>
-                  <Grid item xs={12} lg={4}>
+                  <Grid item xs={12} md={4}>
                     <img
                       src={product?.product?.images[0]}
                       alt={product?.product?.name}
                       style={{
                         width: "100%",
-                        height: "130px",
+                        height:"150px",
                         borderRadius: "5px",
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12} lg={8}>
+                  <Grid item xs={12} md={8}>
                     <Typography
                       variant="body1"
                       sx={{
@@ -150,15 +177,52 @@ function OrderComponent({ order }) {
                       {product?.product?.description}
                     </Typography>
                   </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="body1">
-                      <span style={{ fontWeight: "bold" }}>State: </span>{" "}
-                      {order?.state}
-                    </Typography>
-                  </Grid>
                 </Grid>
               </Grid>
             ))}
+
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="body1" xs={6}>
+                <span style={{ fontWeight: "bold" }}>State: </span>{" "}
+                {updatedOrder?.state}
+              </Typography>
+              <Typography variant="body1" xs={6}>
+                {updatedOrder.state !== "CANCELED" && (
+                  <Button
+                    onClick={() => {
+                      // console.log(order?._id);
+                      cancelOrder(order?._id);
+                    }}
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "#009688",
+                      color: "white",
+                      borderRadius: "5px",
+                      ":hover": {
+                        backgroundColor: "#009688",
+                      },
+                    }}
+                  >
+                    Delete Order
+                  </Button>
+                )}
+              </Typography>
+            </Grid>
+            <Grid
+              xs={12}
+              sx={{ display: "flex", justifyContent: "flex-end", color: "red" }}
+            >
+              {" "}
+              <Typography xs={12}>{deleteMessage}</Typography>
+            </Grid>
           </Grid>
         )}
       </Grid>

@@ -137,6 +137,7 @@ function Slider({ categories, selectedCategory, setSelectedCategory }) {
             key={index}
             name={category.name}
             imageUrl={category.imageUrl}
+            isLast={index === categories.length - 1}
             onClick={() => {
               setSelectedCategory(category.name);
             }}
@@ -156,13 +157,16 @@ function Slider({ categories, selectedCategory, setSelectedCategory }) {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
+          pointerEvents: "none",
         }}
       >
         <button
           className="arrow left-arrow"
           onClick={scrollLeft}
           ref={leftArrowRef}
-          style={{ visibility: "hidden" }}
+          style={{
+          visibility: "hidden",
+          pointerEvents: "auto",}}
         >
           &#10094;
         </button>
@@ -170,7 +174,8 @@ function Slider({ categories, selectedCategory, setSelectedCategory }) {
           className="arrow right-arrow"
           onClick={scrollRight}
           ref={rightArrowRef}
-          style={{ visibility: "hidden" }}
+          style={{ 
+          visibility: "hidden",pointerEvents: "auto",}}
         >
           &#10095;
         </button>
