@@ -33,7 +33,11 @@ function ServiceHistory() {
     try {
       const response = await axios.delete(`/customers/service`, {data:{id: customer._id, serviceId } });
       console.log(response.data);
-      setOrderServiceHistory();
+      setOrderServiceHistory(prevOrderServiceHistory =>
+        prevOrderServiceHistory.map(entry =>
+          entry._id === serviceId ? {...entry, state: 'CANCELED'} : entry
+        )
+      );
     } catch (error) {
       console.error("Error cancelling service:", error.response.data.message);
     }

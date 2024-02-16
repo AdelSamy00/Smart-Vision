@@ -30,7 +30,7 @@ function ServicesDetails() {
     try {
       const response = await axios.post("/customers/service", {
         id: customer._id,
-        service: formData.ServiceName,
+        service: service.title,
         description: formData.description,
       });
       if (response.data.success) {
@@ -47,7 +47,7 @@ function ServicesDetails() {
   }
 
   return (
-    <div className="ServicesDetails">
+    <div className="ServicesDetails" style={{margin:"30px"}}>
       <div className="ServicesDetailsContent">
         <h2 className="text-3xl font-bold mt-5 mb-3">{service.title}</h2>
         <img
