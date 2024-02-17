@@ -20,6 +20,55 @@ function ProductDetails() {
   const [mainImage, setMainImage] = useState();
   const [reviews, setReviews] = useState(null);
   const [totalRating, setTotalRating] = useState(null);
+  const [progressBar, setProgressBar] = useState(null);
+
+  //set valuse to prograss bar
+  function setUpPrograssBar(reviews) {
+    const totalRatings = [
+      { number: 5, numOfRating: 0, progres: 0 },
+      { number: 4, numOfRating: 0, progres: 0 },
+      { number: 3, numOfRating: 0, progres: 0 },
+      { number: 2, numOfRating: 0, progres: 0 },
+      { number: 1, numOfRating: 0, progres: 0 },
+    ]
+    reviews.map((review) => {
+      totalRatings.map((rating) => {
+        if (review?.rating === rating.number) {
+          rating.numOfRating++
+          rating.progres = Math.floor((rating.numOfRating / reviews.length) * 100)
+        }
+      })
+    })
+    return totalRatings
+  }
+  //Update prograss bar after any changes in reviews
+  function updatePrograssBar(review, progressBar, method, oldReview) {
+    let totalReviews = 0;
+    progressBar.map((rating) => {
+      totalReviews = totalReviews + rating.numOfRating
+    })
+    if (method === "add") {
+      progressBar.map((rating) => {
+        if (review?.rating === rating.number) {
+          rating.numOfRating++
+          totalReviews++
+        }
+      })
+    } else if (method === "delete") {
+      progressBar.map((rating) => {
+        if (review?.rating === rating.number) {
+          rating.numOfRating--;
+          totalReviews--;
+        }
+      })
+    } else { }
+    progressBar.map((rating) => {
+      rating.progres = Math.floor((rating.numOfRating / totalReviews) * 100)
+    })
+    return progressBar
+  }
+
+  //handel add and remove from favorite list
   const handelFavorit = async (id, productId) => {
     if (customer._id) {
       await axios
@@ -45,6 +94,7 @@ function ProductDetails() {
         setMainImage(product?.images[0])
         setReviews(product?.reviews)
         setTotalRating(product?.totalRating)
+        setProgressBar(setUpPrograssBar(product?.reviews))
         const flag = product?.likes.find((fav) => {
           return fav === customer._id;
         });
@@ -57,16 +107,19 @@ function ProductDetails() {
     }
     getProduct(productId);
   }, []);
-
+  //Add review to product
   async function addReview(customerId, rating, comment) {
     await axios.post('/customers/review', { customerId, productId, comment, rating })
       .then((res) => {
+        console.log(res.data.review)
         setReviews((prevReviews) => {
           return [...prevReviews, res.data.review];
         });
         setTotalRating(res.data.totalRating)
+        setProgressBar(updatePrograssBar(res.data.review, progressBar, "add"))
       }).catch((e) => { console.log(e) })
   };
+
   // Delete review from product
   async function deleteReview(customerId, reviewId) {
     await axios.delete('/customers/review', { data: { customerId, reviewId, productId } })
@@ -75,10 +128,12 @@ function ProductDetails() {
           return prevReviews.filter((review) => review._id !== reviewId);
         });
         setTotalRating(res.data.totalRating)
+        setProgressBar(updatePrograssBar(res.data.deletedReview, progressBar, "delete"))
       })
       .catch((e) => { console.log(e) })
   };
 
+  // Update review in product
   async function editReview(customerId, productId, reviewId, comment, rating) {
     // await axios.put('/customers/review', { data: { customerId, productId, reviewId, comment, rating } })
     //   .then((res) => {
@@ -97,7 +152,6 @@ function ProductDetails() {
     // })
     // .catch((e) => { console.log(e) })
   };
-
 
   return (
     <main className='productDetailMain'>
@@ -197,49 +251,23 @@ function ProductDetails() {
             <p>{totalRating} Based on {reviews?.length} Reviews </p>
           </div>
           <div className="productDetailRatingAllBars">
-            <div className="productDetailRatingBar ">
-              <div className='flex'>
-                <p className='mr-1'>5</p>
-                <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
-              </div>
-              <ProgressBar
-                now={60}
-                className='productDetailProgressBar'
-                variant="warning" />
-              <p>60%</p>
-            </div>
-            <div className="productDetailRatingBar ">
-              <div className='flex'>
-                <p className='mr-1'>4</p>
-                <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
-              </div>
-              <ProgressBar now={50} className='productDetailProgressBar' variant="warning" />
-              <p>50%</p>
-            </div>
-            <div className="productDetailRatingBar ">
-              <div className='flex'>
-                <p className='mr-1'>3</p>
-                <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
-              </div>
-              <ProgressBar now={40} className='productDetailProgressBar' variant="warning" />
-              <p>40%</p>
-            </div>
-            <div className="productDetailRatingBar ">
-              <div className='flex'>
-                <p className='mr-1'>2</p>
-                <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
-              </div>
-              <ProgressBar now={30} className='productDetailProgressBar' variant="warning" />
-              <p>30%</p>
-            </div>
-            <div className="productDetailRatingBar ">
-              <div className='flex'>
-                <p className='mr-1'>1</p>
-                <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
-              </div>
-              <ProgressBar now={10} className='productDetailProgressBar' variant="warning" />
-              <p>10%</p>
-            </div>
+            {progressBar ?
+              (
+                progressBar.map((bar, idx) => {
+                  return (
+                    <div className="productDetailRatingBar" key={idx}>
+                      <div className='flex'>
+                        <p className='mr-1'>{bar.number}</p>
+                        <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
+                      </div>
+                      <ProgressBar
+                        now={bar.progres}
+                        className='productDetailProgressBar'
+                        variant="warning" />
+                      <p>{bar.progres}%</p>
+                    </div>)
+                })
+              ) : (<></>)}
           </div>
           <div className="productDetailReviewsFooter">
             <h5>Share your thoughts</h5>
