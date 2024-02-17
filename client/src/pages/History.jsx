@@ -36,7 +36,7 @@ const History = () => {
       {/* <h1>Order History</h1> */}
       <FormControlLabel
         labelPlacement="start"
-        label={showOrderHistory ? "Order History" : "Service History"}
+        label="Order History"
         control={
           <Switch
             checked={showOrderHistory}
@@ -44,7 +44,7 @@ const History = () => {
             color="primary"
           />
         }
-        sx={{ marginBottom: "1rem",marginLeft:"5%" }}
+        sx={{ marginBottom: "1rem", marginLeft: "5%" }}
       />
       {isLoading ? (
         <Loading />
@@ -52,18 +52,24 @@ const History = () => {
         <ul>
           {showOrderHistory ? (
             <li>
-              {/* <h1 style={{fontWeight:"bold",fontSize:"20px",marginLeft:"20px"}}>Order History</h1> */}
               {orderHistory.length > 0 ? (
                 orderHistory.map((order, index) => (
                   <OrderComponent key={index} order={order} />
                 ))
               ) : (
-                <p>You haven't ordered yet.</p>
+                <p
+                  style={{
+                    textAlign: "center",
+                    fontWeight: "bold",
+                    fontSize: "18px",
+                  }}
+                >
+                  Your order history is empty.
+                </p>
               )}
             </li>
           ) : (
             <li>
-              {/* <h1 style={{fontWeight:"bold",fontSize:"20px",marginLeft:"20px"}}>Service History</h1> */}
               <ServiceHistory />
             </li>
           )}

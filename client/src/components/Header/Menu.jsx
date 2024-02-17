@@ -110,6 +110,9 @@ const Menu = () => {
                     <Link to="/favourites" onClick={handleClose}>Favorites</Link>
                   </li>
                   <li style={{ marginTop: "0.5rem" ,boxShadow: "none",}}>
+                    <Link to="/history" onClick={handleClose}>History</Link>
+                  </li>
+                  <li style={{ marginTop: "0.5rem" ,boxShadow: "none",}}>
                     <Link to="/bag" onClick={handleClose}>Cart</Link>
                   </li>
                   <li style={{ marginTop: "0.5rem" ,boxShadow: "none",}}>

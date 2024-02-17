@@ -24,7 +24,7 @@ const CategoryCard = ({ name, imageUrl, onClick, isLast }) => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              backgroundColor: "red",
+              backgroundColor: "#f2e9e4",
               borderRadius: "10px",
             }}
           >

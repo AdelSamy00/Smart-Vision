@@ -21,9 +21,9 @@ const ImageCarousel = () => {
         setTimeout(() => {
           setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
           setMoveLeft(false);
-        }, 500); // Delay time for the image to move (in milliseconds)
+        }, 500); 
       }
-    }, 500); // Interval time for image change (in milliseconds)
+    }, 500); 
 
     return () => clearInterval(intervalId);
   }, [hoveredIndex, images.length]);

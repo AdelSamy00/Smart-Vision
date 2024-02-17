@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useRef, useState } from "react";
 import CategoryCard from "../components/CategoryCard";
 import "../pages/StyleSheets/Homepage.css";
-function Slider({ categories, selectedCategory, setSelectedCategory }) {
+function Slider({ items, option, setSelectedOption }) {
   const categoryCardsRef = useRef(null);
   const leftArrowRef = useRef(null);
   const rightArrowRef = useRef(null);
@@ -132,14 +132,14 @@ function Slider({ categories, selectedCategory, setSelectedCategory }) {
       ref={sliderContainerRef}
     >
       <div className="category-cards" ref={categoryCardsRef}>
-        {categories.map((category, index) => (
+        {items.map((category, index) => (
           <CategoryCard
             key={index}
             name={category.name}
             imageUrl={category.imageUrl}
-            isLast={index === categories.length - 1}
+            isLast={index === items.length - 1}
             onClick={() => {
-              setSelectedCategory(category.name);
+              setSelectedOption(option==="category"?category.name:category.low);
             }}
           />
         ))}

@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 
 function OrderComponent({ order }) {
   const [showOrder, setShowOrder] = useState(false);
-  const [canselOrder, setCanselOrder] = useState(false);
   const [updatedOrder, setUpdatedOrder] = useState(order);
   const [deleteMessage, setDeletemessage] = useState(null);
   const { customer } = useSelector((state) => state.customer);
@@ -16,7 +15,8 @@ function OrderComponent({ order }) {
   const calculateTotalItems = () => {
     let totalItems = 0;
     order?.products.map((product) => {
-      totalItems += product?.product?.quantity || 1;
+      console.log(product.quantity);
+      totalItems += product?.quantity || 1;
     });
     return totalItems;
   };
@@ -41,16 +41,17 @@ function OrderComponent({ order }) {
         xs={11}
         sm={8}
         md={7}
-        sx={{ margin: "auto", border: "1px solid #ddd", borderRadius: "10px" }}
+        sx={{ margin: "auto", border: "2px solid #ddd", borderRadius: "10px" }}
       >
         <Grid
           container
           sx={{
-            borderBottom: "2px solid #ddd",
+            borderBottom: showOrder ? "2px solid #ddd" : "none",
+            borderStartEndRadius: "10px",
+            borderStartStartRadius: "10px",
             padding: "20px",
             backgroundColor: "#f2f2f2",
             alignItems: "center",
-            // textAlign:"center"
           }}
         >
           <Grid
@@ -76,7 +77,7 @@ function OrderComponent({ order }) {
             }}
           >
             <Typography variant="body1">Order Number</Typography>
-            <Typography variant="body2" sx={{ textAlign: "center" }}>
+            <Typography variant="body2" sx={{ textAlign: {xs:"end",md:"center" }}}>
               New
             </Typography>
           </Grid>
@@ -118,15 +119,15 @@ function OrderComponent({ order }) {
                 },
               }}
             >
-              {showOrder ? "Hide Order" : "Show Order"}
+              {showOrder ? "close" : "Order Details"}
             </Button>
           </Grid>
         </Grid>
         {showOrder && (
           <Grid
             container
+            item
             sx={{
-              border: "2px solid #ddd",
               borderTop: "none",
               padding: "20px",
             }}
@@ -151,30 +152,62 @@ function OrderComponent({ order }) {
                       alt={product?.product?.name}
                       style={{
                         width: "100%",
-                        height:"150px",
+                        height: "150px",
                         borderRadius: "5px",
                       }}
                     />
                   </Grid>
                   <Grid item xs={12} md={8}>
-                    <Typography
-                      variant="body1"
+                    <Grid
+                      item
+                      container
                       sx={{
-                        display: "flex",
-                        fontSize: { xs: "18px", fontWeight: "bold" },
+                        fontSize: "18px",
+                        fontWeight: "bold",
+                        color: "gray",
+                        alignItems: "flex-start",
                       }}
                     >
-                      <span>{product?.product?.name}</span>
-                      <span style={{ marginLeft: "auto" }}>
-                        {product?.product?.price}EGP
-                      </span>
+                      <Grid item xs={12} md={8} variant="body1">
+                        <span style={{ color: "" }}>
+                          {product?.product?.name}
+                        </span>
+                      </Grid>
+                      <Grid
+                        item
+                        variant="body1"
+                        xs={12}
+                        md={4}
+                        sx={{
+                          marginTop: {xs:"1rem",md:"0rem"},
+                          display: "flex",
+                          alignItems: "end",
+
+                          justifyContent: {md:"end"},
+                        }}
+                      >
+                        <span>{product?.product?.price} EGP</span>
+                      </Grid>
+                    </Grid>
+                    <Typography
+                      variant="body2"
+                      style={{ marginTop: "1rem", fontSize: { xs: "10px" } }}
+                    >
+                      <span style={{ fontWeight: "bold", fontSize: "17px" }}>
+                        Description:
+                      </span>{" "}
+                      {product?.product?.description}
                     </Typography>
                     <Typography
                       variant="body2"
                       style={{ marginTop: "1rem", fontSize: { xs: "10px" } }}
                     >
-                      <span style={{ fontWeight: "bold" }}>Description:</span>{" "}
-                      {product?.product?.description}
+                      <span style={{ fontWeight: "bold", fontSize: "17px" }}>
+                        Quantity:
+                      </span>{" "}
+                      <span style={{ fontSize: "18px" }}>
+                        {product?.quantity}
+                      </span>
                     </Typography>
                   </Grid>
                 </Grid>
@@ -211,13 +244,14 @@ function OrderComponent({ order }) {
                       },
                     }}
                   >
-                    Delete Order
+                    Cancel Order
                   </Button>
                 )}
               </Typography>
             </Grid>
             <Grid
               xs={12}
+              item
               sx={{ display: "flex", justifyContent: "flex-end", color: "red" }}
             >
               {" "}

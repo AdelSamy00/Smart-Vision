@@ -13,7 +13,7 @@ const getinitItems = () => {
   return data;
 };
 
-const Store = ({ selectedCategory }) => {
+const Store = ({ selectedCategory, selectedPrice }) => {
   const [selectedColor, setSelectedColor] = useState("");
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
@@ -26,7 +26,9 @@ const Store = ({ selectedCategory }) => {
   const priceDropdownRef = useRef(null);
   const colorDropdownRef = useRef(null);
   const [products, setProducts] = useState([]);
-  const [selectedPriceRanges, setSelectedPriceRanges] = useState([]);
+  const [selectedPriceRanges, setSelectedPriceRanges] = useState(
+    selectedPrice ? [{ min: "", max: selectedPrice }] : []
+  );
   const colors = ["Red", "Blue", "Green", "Yellow", "White", "Black"];
   const categories = ["sofa", "chair", "bed", "Storage"];
   const [selectedCategories, setSelectedCategories] = useState([
@@ -44,8 +46,8 @@ const Store = ({ selectedCategory }) => {
   const [inCart, setInCart] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handelCart = (id, name, price, images,points) => {
-    console.log(id, name, price, images,points);
+  const handelCart = (id, name, price, images, points) => {
+    console.log(id, name, price, images, points);
     const res = cart.find((prod) => {
       return prod._id === id;
     });
@@ -57,10 +59,10 @@ const Store = ({ selectedCategory }) => {
       setInCart(false);
     } else {
       console.log("add");
-      setCart([...cart, { _id: id, name, price, images ,points}]);
+      setCart([...cart, { _id: id, name, price, images, points }]);
       localStorage.setItem(
         "cart",
-        JSON.stringify([...cart, { _id: id, name, price, images ,points}])
+        JSON.stringify([...cart, { _id: id, name, price, images, points }])
       );
       setInCart(true);
     }
@@ -204,6 +206,25 @@ const Store = ({ selectedCategory }) => {
       document.removeEventListener("mousedown", handleCategoryClickOutside);
     };
   }, []);
+  useEffect(() => {
+    if (selectedPrice) {
+      setSelectedPriceRanges([{ min: "", max: selectedPrice }]);
+      if (selectedCategory) {
+        setSelectedCategories(["All"]);
+      }
+    } else {
+      setSelectedPriceRanges([]);
+    }
+  }, [selectedPrice]);
+  
+  useEffect(() => {
+    if (selectedCategory) {
+      setSelectedCategories([selectedCategory]);
+      setSelectedPriceRanges([]);
+    } else {
+      setSelectedCategories(["All"]);
+    }
+  }, [selectedCategory]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -239,14 +260,21 @@ const Store = ({ selectedCategory }) => {
   };
   return (
     <div className="store-container">
-      <div className="filters-container" style={{paddingTop:selectedCategory?"3rem":"0rem"}}>
+      <div
+        className="filters-container"
+        style={{
+          paddingTop: selectedCategory || selectedPrice ? "3rem" : "0rem",
+        }}
+      >
         {/* Category filter */}
         <div
           onClick={toggleCategoryDropdown}
           className="Filter"
           tabIndex="0"
           ref={categoryDropdownRef}
-          style={{ marginLeft: selectedCategory ? "-1.7rem" : "0rem" }}
+          style={{
+            marginLeft: selectedCategory || selectedPrice ? "-1.7rem" : "0rem",
+          }}
         >
           <h2>
             {"Category "}
@@ -295,7 +323,9 @@ const Store = ({ selectedCategory }) => {
           className="Filter"
           tabIndex="0"
           ref={priceDropdownRef}
-          style={{ marginLeft: selectedCategory ? "-1.7rem" : "0rem" }}
+          style={{
+            marginLeft: selectedCategory || selectedPrice ? "-1.7rem" : "0rem",
+          }}
         >
           <h2>
             {"Price"}
@@ -349,7 +379,9 @@ const Store = ({ selectedCategory }) => {
           className="Filter"
           tabIndex="0"
           ref={sortDropdownRef}
-          style={{ marginLeft: selectedCategory ? "-1.7rem" : "0rem" }}
+          style={{
+            marginLeft: selectedCategory || selectedPrice ? "-1.7rem" : "0rem",
+          }}
         >
           <h2>
             {"Sort "}
@@ -418,7 +450,9 @@ const Store = ({ selectedCategory }) => {
           className="Filter"
           tabIndex="0"
           ref={colorDropdownRef}
-          style={{ marginLeft: selectedCategory ? "-1.7rem" : "0rem" }}
+          style={{
+            marginLeft: selectedCategory || selectedPrice ? "-1.7rem" : "0rem",
+          }}
         >
           <h2>
             {"Color "}
