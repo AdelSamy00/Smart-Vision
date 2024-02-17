@@ -16,7 +16,7 @@
   margin-bottom: 4px;
   font-weight: 700;
 }
-.editButtonForReview {
+.buttonForReview {
   width: 10rem;
   height: 3rem;
   font-size: 20px;
@@ -24,4 +24,11 @@
   color: #ffffff;
   border-radius: 100px;
   margin: 1rem;
+}
+
+.reviewMenuButton {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

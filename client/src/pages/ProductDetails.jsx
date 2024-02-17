@@ -175,6 +175,7 @@ function ProductDetails() {
           </div>
         </div>
         <div className="productDetailData">
+          <div>
           <h1>
             {product?.name}
           </h1>
@@ -206,7 +207,8 @@ function ProductDetails() {
           </div>
           <p className='productDetailsPrice'>
             {product?.price} EL
-          </p>
+            </p>
+          </div>
           <div className="productDetailsDataFooter">
             <button className=" productDetailsAddToCart ">
               Add To Cart
@@ -264,7 +266,7 @@ function ProductDetails() {
                         now={bar.progres}
                         className='productDetailProgressBar'
                         variant="warning" />
-                      <p>{bar.progres}%</p>
+                      <p className='w-10'>{bar.progres}%</p>
                     </div>)
                 })
               ) : (<></>)}

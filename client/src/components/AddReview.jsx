@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Rating from '@mui/material/Rating';
 import { useSelector } from 'react-redux';
-import './stylesheets/Reviews.css';
 import { useNavigate } from 'react-router-dom';
+import './stylesheets/Reviews.css';
 
 function AddReview({ addReview }) {
     const navigate = useNavigate();
@@ -52,7 +52,7 @@ function AddReview({ addReview }) {
                 <div className="flex justify-center">
                     <button
                         type="submit"
-                        className="text-xl bg-slate-700 hover:bg-slate-800 text-white font-bold rounded-3xl w-1/4 m-2 h-14"
+                        className="buttonForReview  bg-slate-700 hover:bg-slate-800"
                     >
                         Add Review
                     </button>

@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import Avatar from '@mui/material/Avatar';
 import Rating from '@mui/material/Rating';
 import EditIcon from '@mui/icons-material/Edit';
-import './stylesheets/Reviews.css'
 import { useSelector } from 'react-redux';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import IconButton from '@mui/material/IconButton';
@@ -10,6 +9,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Form from 'react-bootstrap/Form';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import './stylesheets/Reviews.css'
 
 function Reviews({ review, deleteReview, editReview }) {
     const { customer } = useSelector((state) => state.customer);
@@ -20,27 +20,42 @@ function Reviews({ review, deleteReview, editReview }) {
     const [isUserReview, SetIsUserReview] = useState(customer?._id === reviewCustomer?._id)
     const [inEditMode, setInEditMode] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+
     //make avatar to comment
     function stringAvatar(name) {
         return {
             children: `${name.split(' ')[0][0]}`,
         };
     }
-    const handleClick = (event) => {
+
+    //handel open menu in review
+    const handleMenuClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
-    const handleClose = () => {
+
+    //handel close menu in review
+    const handleMenuClose = () => {
         setAnchorEl(null);
     };
-    const handleEdit = () => {
-        handleClose();
-        setInEditMode(true)
+
+    //handel Edit Review by the user
+    const handleEditReview = () => {
+        handleMenuClose();
+        if (inEditMode) {
+            setRating(review?.rating)
+            setComment(review?.comment)
+        }
+        setInEditMode(!inEditMode)
     };
-    const handleDelete = () => {
-        handleClose();
+
+    //handel Delete Review by the user
+    const handleDeleteReview = () => {
+        handleMenuClose();
         deleteReview(reviewCustomer?._id, review?._id);
     };
-    const handleSubmit = async (event) => {
+
+    //handel Add Review by the user
+    const handleAddReview = async (event) => {
         const form = event.currentTarget;
         event.preventDefault();
         if (form.checkValidity() === false) {
@@ -64,7 +79,7 @@ function Reviews({ review, deleteReview, editReview }) {
                             <h6>{reviewCustomer?.username}</h6>
                         </div>
                     </div>
-                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                    <Form noValidate validated={validated} onSubmit={handleAddReview}>
                         <Form.Group className="">
                             <Rating
                                 name="rating"
@@ -86,9 +101,15 @@ function Reviews({ review, deleteReview, editReview }) {
                         <div className="flex justify-center">
                             <button
                                 type="submit"
-                                className="editButtonForReview bg-slate-700 hover:bg-slate-800"
+                                className="buttonForReview bg-slate-700 hover:bg-slate-800"
                             >
                                 submit Edites
+                            </button>
+                            <button
+                                onClick={handleEditReview}
+                                className="buttonForReview bg-red-600 hover:bg-red-700"
+                            >
+                                Cancel
                             </button>
                         </div>
                     </Form>
@@ -111,25 +132,26 @@ function Reviews({ review, deleteReview, editReview }) {
                                 sx={{ fontSize: 20 }}
                             />
                         </div>
+                        {/* for disblay menu item for user review */}
                         {isUserReview ?
                             (
                                 <div className='ml-auto'>
-                                    <IconButton onClick={handleClick}>
+                                    <IconButton onClick={handleMenuClick}>
                                         <MoreVertIcon />
                                     </IconButton>
                                     <Menu
                                         anchorEl={anchorEl}
                                         open={Boolean(anchorEl)}
-                                        onClose={handleClose}
+                                        onClose={handleMenuClose}
                                     >
-                                        <MenuItem onClick={handleEdit}>
-                                            <button className='flex items-center'>
+                                        <MenuItem onClick={handleEditReview}>
+                                            <button className='reviewMenuButton'>
                                                 <p className='text-xl'>Edit</p>
                                                 <EditIcon className='ml-2' />
                                             </button>
                                         </MenuItem>
-                                        <MenuItem onClick={handleDelete}>
-                                            <button className='flex items-center'>
+                                        <MenuItem onClick={handleDeleteReview}>
+                                            <button className='reviewMenuButton'>
                                                 <p className='text-xl'>Delete</p>
                                                 <DeleteForeverIcon className='ml-2' />
                                             </button>
