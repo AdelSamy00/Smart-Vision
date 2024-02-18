@@ -1,13 +1,37 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState} from "react";
 import DeleteAccount from "../components/DeleteAcount";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
+import { Logout } from '../redux/CustomerSlice';
+import { useNavigate } from "react-router-dom";
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+
+//to Tranition the message from the end of the page
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const DeleteAccountPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [error, setError] = useState("");
-  const [isAccountDeleted, setIsAccountDeleted] = useState(false);
   const { customer } = useSelector((state) => state.customer);
+  const [showMessage, setShowMessage] = useState(false);
+  
+//to delete the customer from the redux and navigate the user to landing page
+  const handleCancelMessage = () => {
+    setShowMessage(false);
+    dispatch(Logout())
+    navigate('/')
+  };
+
   const handleDelete = async (password) => {
     try {
       const response = await axios.delete(
@@ -19,14 +43,14 @@ const DeleteAccountPage = () => {
           data: { password },
         }
       );
-
       if (response.status === 200) {
-        setIsAccountDeleted(true);
-        localStorage.removeItem("customer");
-      } else if (password !== customer.password) {
+        setShowMessage(true);
+      }
+      else if (password !== customer.password) {
         setError("Incorrect password. Please try again.");
       }
-    } catch (error) {
+    }
+    catch (error) {
       toast.dismiss();
       toast(error.response.data.message);
     }
@@ -48,18 +72,28 @@ const DeleteAccountPage = () => {
           },
         }}
       />
-      {!isAccountDeleted ? (
-        <DeleteAccount onDelete={handleDelete} error={error} />
-      ) : (
-        <div className="account-deleted-message" style={{ fontSize: "20px", marginLeft:"20px",marginBottom:"20px"}}>
-          <h2 style={{ fontWeight: "bold", fontSize:"25px"}}>Your account is deleted</h2>
-          <p>Your Smart Vision account has now been deleted.</p>
-          <p>
-            We are sad to see you leave, and hope you will come back in the
-            future.
-          </p>
-        </div>
-      )}
+      <DeleteAccount onDelete={handleDelete} error={error} />
+      <div className="account-deleted-message" style={{ fontSize: "20px", marginLeft: "20px", marginBottom: "20px" }}>
+        <Dialog
+          open={showMessage}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleCancelMessage}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle sx={{ fontSize: "25px", fontWeight: "bold" }}>Your account is deleted</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              Your Smart Vision account has now been deleted.
+              <br />
+              We are sad to see you leave, and hope you will come back in the future.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancelMessage}>Cancel</Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </div>
   );
 };
