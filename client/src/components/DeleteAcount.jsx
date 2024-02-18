@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import "./stylesheets/DeleteAcount.css";
-// import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
-// import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityIcon from '@mui/icons-material/Visibility';
-// import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const DeleteAccount = ({ onDelete }) => {
@@ -17,12 +14,9 @@ const DeleteAccount = ({ onDelete }) => {
   const [error, setError] = useState("");
 
   const handleDelete = () => {
-    // Check if the user entered the correct password
     if (password) {
-      // Pass the password to the parent component for handling deletion
       onDelete(password);
     } else {
-      // Display an error message if the password is empty
       setError("Please enter a valid password.");
     }
   };
@@ -51,7 +45,7 @@ const DeleteAccount = ({ onDelete }) => {
         value={password}
         onChange={(e) => {
           setPassword(e.target.value);
-          setError(""); // Clear the error message when the user starts typing
+          setError(""); 
         }}
         className="delete-account-input"
         label="Password"

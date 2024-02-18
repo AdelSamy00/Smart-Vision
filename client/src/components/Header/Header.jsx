@@ -1,5 +1,7 @@
+import React from "react";
+import { useSelector } from "react-redux";
 import Toolbar from "@mui/material/Toolbar";
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import "../stylesheets/Header.css";
 import Menu from "./Menu";
@@ -9,10 +11,17 @@ import SearchIcon from "@mui/icons-material/Search";
 import IconButton from "@mui/material/IconButton";
 import { Link } from "react-router-dom";
 import Badge from "@mui/material/Badge";
-import { useSelector } from "react-redux";
 
 const Header = ({itemCount}) => {
   const { customer } = useSelector((state) => state.customer);
+
+  const renderUserName = () => {
+    if (!customer || !customer.username) {
+      return "Log in or sign up";
+    }
+    return customer.username;
+  };
+
   return (
     <header style={{ display: "flex" }}>
       <div className="menu">
@@ -46,7 +55,7 @@ const Header = ({itemCount}) => {
                   }}
                   className=""
                 >
-                  {customer?.username ? (customer?.username):("Log in or sign up")}
+                  {renderUserName()}
                 </p>
               </button>
             </Link>

@@ -8,7 +8,7 @@ function Services() {
       image_url: '/assemblyService.png',
       title: 'Assembly service',
       link: '/',
-      description:"Our products are specifically designed to be simple to assemble, so that our customers can easily do it themselves. However, if you need an extra hand, we can provide a service for the assembly of your IKEA furniture in your home. Our professionals will carefully follow the instructions and will make sure that all the safety aspects of the building process are rigorously respected. When we’re finished, we take all the packaging with us and we make sure that everything is recycled properly."
+      description:"Our products are specifically designed to be simple to assemble, so that our customers can easily do it themselves. However, if you need an extra hand, we can provide a service for the assembly of your smart vision furniture in your home."
     },
     {
       image_url: '/deliveryServices.png',
@@ -21,13 +21,13 @@ function Services() {
       image_url: '/kitchenServices.png',
       title: 'Desgins services',
       link: '/',
-      description:"Our kitchen planning specialists will help you plan your dream kitchen. They can do this in the store or by visiting your home to measure and plan, then pick, deliver and install your new kitchen. We specialise in making the best use of space so you get a kitchen that suits the way you live or work. In a style that suits you. If you prefer doing your own planning, you can use our kitchen planning tools online at our website."
+      description:"Our kitchen planning specialists will help you plan your dream kitchen. They can do this in the store or by visiting your home to measure and plan, then pick, deliver and install your new kitchen."
     },
     {
       image_url: '/installationService.png',
       title: 'Customization Service',
       link: '/',
-      description:"Terms and conditions Includes installation within Egypt only Goods can be delivered for an added fee No alterations can be made to IKEA lighting fixtures IKEA blinds  rods Patching and painting are not included in the service.  Once installed the goods will not be accepted for exchange or refund All integrated lights will be fixed/attached to IKEA products only All extra cables extension wires required for integrated light fitting needs to be purchased by the customer and will not be provided by the installation team. Wiring supply cable will be visible due to the fixture design. An electrical outlet should be readily available before the installation takes place. Ceiling height should not exceed 3 meters. Trunking materials will be provided by smart vision the trunking will be visible. All arrangements should be made to ensure the clearance of the team into the premises. Service area limitation: smart vision reserves the right to refuse this service."
+      description:"Terms and conditions Includes installation within Egypt only Goods can be delivered for an added fee No alterations can be made to smart vision lighting fixtures smart vision blinds  rods Patching and painting are not included in the service. "
     },
     {
       image_url: '/measuringService.png',

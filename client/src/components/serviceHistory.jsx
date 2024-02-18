@@ -11,14 +11,6 @@ function ServiceHistory() {
   const { customer } = useSelector((state) => state.customer);
   const [isLoading, setIsLoading] = useState(true);
   const [displayedOrders, setDisplayedOrders] = useState(1);
-  const images = [
-    "sofa.jpeg",
-    "kitchen.jpg",
-    "beds.avif",
-    "kitchen.jpg",
-    "sofa.jpeg",
-    "sofa.jpeg",
-  ];
   useEffect(() => {
     async function fetchOrderServiceHistory() {
       try {
@@ -173,17 +165,25 @@ function ServiceHistory() {
                   >
                     <Grid container spacing={4}>
                       <Grid item xs={12} md={4}>
-                        <Slider {...settings}>
-                          {images.map((image, index) => (
-                            <div key={index}>
-                              <img
-                                src={image}
-                                alt={`Image ${index}`}
-                                style={{ width: "100%", height: "150px" }}
-                              />
-                            </div>
-                          ))}
-                        </Slider>
+                        {historyEntry.images.length === 1 ? (
+                          <img
+                            src={historyEntry.images[0]}
+                            alt={`Image 1`}
+                            style={{ width: "100%", height: "150px" }}
+                          />
+                        ) : (
+                          <Slider {...settings}>
+                            {historyEntry.images.map((image, index) => (
+                              <div key={index}>
+                                <img
+                                  src={image}
+                                  alt={`Image ${index + 1}`}
+                                  style={{ width: "100%", height: "150px" }}
+                                />
+                              </div>
+                            ))}
+                          </Slider>
+                        )}
                       </Grid>
                       <Grid item xs={12} md={7}>
                         <Typography
