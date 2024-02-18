@@ -10,9 +10,16 @@ import ArrowForwardSharpIcon from "@mui/icons-material/ArrowForwardSharp";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useDispatch,useSelector } from "react-redux";
+import { SetCustomer } from '../redux/CustomerSlice';
+
+import axios from "axios";
 const Bag = ({ setItemCount }) => {
   const [cart, setCart] = useState([]);
   const [open, setOpen] = useState(false);
+  const { customer } = useSelector((state) => state.customer);
+  const [favorite, setFavorite] = useState(false);
+  const dispatch = useDispatch();
 
 
   const handleOpen = () => {
@@ -24,21 +31,33 @@ const Bag = ({ setItemCount }) => {
   };
 
   useEffect(() => {
-    // Retrieve cart data from local storage
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(storedCart);
   
-    // Calculate the total items and update the count
     const totalItems = storedCart.reduce((count, item) => count + (item.quantity || 1), 0);
     setItemCount(totalItems);
-  }, [cart]); // Add 'cart' as a dependency
-  
+  }, []);
+  const handelFavorit = async (id, productId) => {
+    if (customer._id) {
+      await axios
+        .post('/customers/favorite', { id, productId })
+        .then((res) => {
+          const newData = { ...res.data?.newCustomerData };
+          dispatch(SetCustomer(newData));
+          setFavorite(!favorite);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      navigate('/login');
+    }
+  };
   const handleRemoveFromCart = (id) => {
     const updatedCart = cart.filter((item) => item._id !== id);
     setCart(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
 
-    // Calculate the total items and update the count
     const totalItems = updatedCart.reduce((count, item) => count + (item.quantity || 1), 0);
     setItemCount(totalItems);
   };
@@ -67,18 +86,15 @@ const Bag = ({ setItemCount }) => {
   };
 
   const handleDecreaseQuantity = (id) => {
-    const updatedCart = cart
-      .map((item) =>
-        item._id === id && item.quantity > 0
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
-      .filter((item) => item.quantity > 0);
+    const updatedCart = cart.map((item) =>
+      item._id === id ? { ...item, quantity: Math.max(0, (item.quantity || 1) - 1) } : item
+    );
     setCart(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
     const totalItems = updatedCart.reduce((count, item) => count + (item.quantity || 1), 0);
     setItemCount(totalItems);
   };
+  
   function calculateTotalPrice(cart) {
     if (!cart || cart.length === 0) {
       return 0;
@@ -193,7 +209,7 @@ const Bag = ({ setItemCount }) => {
                       Remove
                     </button>
                     <button
-                      // onClick={() => Favourites(item._id)}
+                      onClick={() => {handelFavorit(customer?._id, item?._id)}}
                       style={{
                         fontWeight: "bold",
                         padding: "10px",
@@ -276,7 +292,7 @@ const Bag = ({ setItemCount }) => {
                                     }}
                                   ></ArrowForwardSharpIcon>
                                   <button
-                                    // onClick={() => Favourites(item._id)}
+                                    onClick={() => {handelFavorit(customer?._id, item?._id)}}
                                     style={{
                                       fontWeight: "bold",
                                       padding: "10px",
