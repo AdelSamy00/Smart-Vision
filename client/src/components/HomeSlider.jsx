@@ -1,13 +1,77 @@
-import  { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CategoryCard from "../components/CategoryCard";
 import "../pages/StyleSheets/Homepage.css";
-function Slider({ items, option, setSelectedOption }) {
+import ProductCard from "./ProductCard";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { SetCustomer } from "../redux/CustomerSlice";
+import { useNavigate } from "react-router-dom";
+
+const getinitItems = () => {
+  const data = JSON.parse(localStorage.getItem("cart"));
+  if (!data) return [];
+  return data;
+};
+
+function HomeSlider({ items, option, setSelectedOption }) {
   const categoryCardsRef = useRef(null);
   const leftArrowRef = useRef(null);
   const rightArrowRef = useRef(null);
   const sliderContainerRef = useRef(null);
   const [itemsToScroll, setItemsToScroll] = useState(5.75); // Initial value
+  const { customer } = useSelector((state) => state.customer);
+  const [favoriteList, setFavoriteList] = useState(customer?.favoriteList);
+  const [cart, setCart] = useState(getinitItems);
+  const [inCart, setInCart] = useState(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const handelCart = (id, name, price, images, points) => {
+    console.log(id, name, price, images, points);
+    const res = cart.find((prod) => {
+      return prod._id === id;
+    });
+    if (res) {
+      console.log("remove");
+      setCart((prevCart) => {
+        return prevCart.filter((t) => t._id !== id);
+      });
+      setInCart(false);
+    } else {
+      console.log("add");
+      setCart([...cart, { _id: id, name, price, images, points }]);
+      localStorage.setItem(
+        "cart",
+        JSON.stringify([...cart, { _id: id, name, price, images, points }])
+      );
+      setInCart(true);
+    }
+  };
+
+  const handelFavorit = (id) => {
+    if (customer?._id) {
+      console.log("fired2");
+      favorites(customer?._id, id);
+    } else {
+      navigate("/login");
+    }
+  };
+  async function favorites(id, productId) {
+    console.log(id, productId);
+    await axios
+      .post("/customers/favorite", { id, productId })
+      .then((res) => {
+        const newData = { ...res.data?.newCustomerData };
+        dispatch(SetCustomer(newData));
+        setFavoriteList(customer?.favoriteList);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
   useEffect(() => {
     // const container = categoryCardsRef.current;
     const updateItemsToScroll = () => {
@@ -15,16 +79,17 @@ function Slider({ items, option, setSelectedOption }) {
       const screenWidth = window.innerWidth;
       console.log(screenWidth); // Log the screenWidth
 
-      if (screenWidth < 580) {
+      if (screenWidth < 580 && option !== "product") {
         setItemsToScroll(1.08);
-      } else if (screenWidth < 890) {
-        setItemsToScroll(2.2);
-      }
-      else if (screenWidth <= 1035) {
+      } else if (screenWidth < 890 && option !== "product") {
+        setItemsToScroll(2);
+      } else if (screenWidth <= 1035 && option !== "product") {
         setItemsToScroll(3.2);
-      } else if (screenWidth <= 1410) {
+      } else if (screenWidth <= 1410 && option !== "product") {
         setItemsToScroll(4.3);
-      } else {
+      } else if(option === 'product'&&screenWidth<780){
+        setItemsToScroll(1);
+      }else {
         setItemsToScroll(5.3);
       }
     };
@@ -132,17 +197,28 @@ function Slider({ items, option, setSelectedOption }) {
       ref={sliderContainerRef}
     >
       <div className="category-cards" ref={categoryCardsRef}>
-        {items.map((category, index) => (
-          <CategoryCard
-            key={index}
-            name={category.name}
-            imageUrl={category.imageUrl}
-            isLast={index === items.length - 1}
-            onClick={() => {
-              setSelectedOption(option==="category"?category.name:category.low);
-            }}
-          />
-        ))}
+        {items.map((item, index) =>
+          option === "category" || option === "price" ? (
+            <CategoryCard
+              key={index}
+              name={item.name}
+              imageUrl={item.imageUrl}
+              isLast={index === items.length - 1}
+              onClick={() =>
+                setSelectedOption(option === "category" ? item.name : item.low)
+              }
+            />
+          ) : (
+            <ProductCard
+              key={index}
+              product={item}
+              favoriteList={favoriteList}
+              handelFavorit={handelFavorit}
+              handelCart={handelCart}
+              name="home"
+            />
+          )
+        )}
       </div>
 
       <div
@@ -165,8 +241,9 @@ function Slider({ items, option, setSelectedOption }) {
           onClick={scrollLeft}
           ref={leftArrowRef}
           style={{
-          visibility: "hidden",
-          pointerEvents: "auto",}}
+            visibility: "hidden",
+            pointerEvents: "auto",
+          }}
         >
           &#10094;
         </button>
@@ -174,8 +251,10 @@ function Slider({ items, option, setSelectedOption }) {
           className="arrow right-arrow"
           onClick={scrollRight}
           ref={rightArrowRef}
-          style={{ 
-          visibility: "hidden",pointerEvents: "auto",}}
+          style={{
+            visibility: "hidden",
+            pointerEvents: "auto",
+          }}
         >
           &#10095;
         </button>
@@ -184,4 +263,4 @@ function Slider({ items, option, setSelectedOption }) {
   );
 }
 
-export default Slider;
+export default HomeSlider;

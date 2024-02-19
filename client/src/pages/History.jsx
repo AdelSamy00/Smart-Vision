@@ -62,6 +62,11 @@ const History = () => {
                     textAlign: "center",
                     fontWeight: "bold",
                     fontSize: "18px",
+                    width:"65%",
+                    border:"2px solid",
+                    margin:"auto",
+                    padding: "20px",
+                    marginBottom:"5rem"
                   }}
                 >
                   Your order history is empty.

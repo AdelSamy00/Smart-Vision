@@ -185,7 +185,7 @@
     left: 0rem;
   }
 }
-@media only screen and (min-width: 1020px) {
+@media only screen and (min-width: 725px) {
   .products-container {
     justify-content: space-between;
   }

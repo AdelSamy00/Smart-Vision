@@ -86,8 +86,8 @@ function ServiceHistory() {
               container
               sx={{
                 borderBottom: "2px solid #ddd",
-                borderStartEndRadius:"10px",
-                borderStartStartRadius:"10px",
+                borderStartEndRadius: "10px",
+                borderStartStartRadius: "10px",
                 padding: "10px",
                 backgroundColor: "#f2f2f2",
                 alignItems: "center",
@@ -122,7 +122,7 @@ function ServiceHistory() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  marginLeft: { md: "auto" }
+                  marginLeft: { md: "auto" },
                 }}
               >
                 <Typography
@@ -165,7 +165,19 @@ function ServiceHistory() {
                   >
                     <Grid container spacing={4}>
                       <Grid item xs={12} md={4}>
-                        {historyEntry.images.length === 1 ? (
+                        {historyEntry.images.length === 0 ? (
+                          <p
+                            style={{
+                              height: "150px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              border: "1px solid",
+                            }}
+                          >
+                            No images uploaded
+                          </p>
+                        ) : historyEntry.images.length === 1 ? (
                           <img
                             src={historyEntry.images[0]}
                             alt={`Image 1`}
@@ -260,15 +272,19 @@ function ServiceHistory() {
                   </Grid>
                 ))}
               {orderServiceHistory.length > displayedOrders && (
-                 <Grid container justifyContent="end">
-                 <Typography
-                   variant="body2"
-                   style={{ cursor: "pointer" ,fontSize:"19px",textDecoration:"underline"}}
-                   onClick={handleShowMore}
-                 >
-                   Show All
-                 </Typography>
-               </Grid>
+                <Grid container justifyContent="end">
+                  <Typography
+                    variant="body2"
+                    style={{
+                      cursor: "pointer",
+                      fontSize: "19px",
+                      textDecoration: "underline",
+                    }}
+                    onClick={handleShowMore}
+                  >
+                    Show All
+                  </Typography>
+                </Grid>
               )}
             </Grid>
 
@@ -280,7 +296,12 @@ function ServiceHistory() {
           style={{
             textAlign: "center",
             fontWeight: "bold",
-            fontSize: "18px",
+            fontSize: "20px",
+            width: "65%",
+            border: "2px solid",
+            margin: "auto",
+            padding: "20px",
+            marginBottom: "5rem",
           }}
         >
           Your service history is empty.

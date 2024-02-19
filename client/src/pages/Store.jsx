@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "./StyleSheets/Store.css";
@@ -6,7 +6,8 @@ import ProductCard from "../components/ProductCard";
 import { useDispatch, useSelector } from "react-redux";
 import { SetCustomer } from "../redux/CustomerSlice";
 import { useNavigate } from "react-router-dom";
-
+import Loading from "../components/Loading";
+import PropTypes from "prop-types";
 const getinitItems = () => {
   const data = JSON.parse(localStorage.getItem("cart"));
   if (!data) return [];
@@ -26,6 +27,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
   const priceDropdownRef = useRef(null);
   const colorDropdownRef = useRef(null);
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedPriceRanges, setSelectedPriceRanges] = useState(
     selectedPrice ? [{ min: "", max: selectedPrice }] : []
   );
@@ -216,7 +218,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
       setSelectedPriceRanges([]);
     }
   }, [selectedPrice]);
-  
+
   useEffect(() => {
     if (selectedCategory) {
       setSelectedCategories([selectedCategory]);
@@ -232,6 +234,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
         const response = await axios.get("/products/");
         // console.log("API response:", response.data.products);
         setProducts(response.data.products);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -260,10 +263,14 @@ const Store = ({ selectedCategory, selectedPrice }) => {
   };
   return (
     <div className="store-container">
+      {(isLoading&&!selectedCategory &&!selectedPrice) ? (
+        <Loading />
+      ) : (
       <div
         className="filters-container"
         style={{
           paddingTop: selectedCategory || selectedPrice ? "3rem" : "0rem",
+          width: selectedCategory || selectedPrice ?"100%":"90%"
         }}
       >
         {/* Category filter */}
@@ -479,9 +486,9 @@ const Store = ({ selectedCategory, selectedPrice }) => {
           )}
         </div>
       </div>
-
+      )}
       {/* Product display */}
-      <div className="products-container">
+      <div className="products-container" style={{width: selectedCategory || selectedPrice ?"100%":"89%"}}> 
         {filterProducts().map((product, index) => (
           <ProductCard
             key={index}
@@ -495,5 +502,8 @@ const Store = ({ selectedCategory, selectedPrice }) => {
     </div>
   );
 };
-
+Store.propTypes = {
+  selectedCategory: PropTypes.string, 
+  selectedPrice: PropTypes.number, 
+};
 export default Store;
