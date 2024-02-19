@@ -320,7 +320,7 @@ export const makeOrder = async (req, res, next) => {
 export const cancelOrder = async (req, res, next) => {
   try {
     const { id, orderId } = req.body;
-    console.log(id,orderId)
+    console.log(id, orderId);
     if (!id || !orderId) {
       next('Provide Required Fields!');
       return;
@@ -403,9 +403,13 @@ export const addreview = async (req, res, next) => {
       next('Rating should be between 1 and 5');
       return;
     }
+    if (!comment) {
+      next('Comment should not be empty');
+      return;
+    }
     // Find the customer and product documents
     const customer = await Customers.findById(customerId);
-    const product = await Products.findById(productId).populate('reviews');
+    const product = await Products.findById(productId);
     // Create a new review
     const review = await Reviews.create({
       customer: customer._id,
@@ -413,11 +417,11 @@ export const addreview = async (req, res, next) => {
       comment,
       rating,
     });
-    review.populate({ path: 'customer', select: 'username email -password' });
-    // Calculate totalRating
+    // Push review in product reviews array
     product.reviews.push(review._id);
-    product.totalRating =
-      (rating + product.totalRating) / product.reviews.length;
+    // get product details
+    const reviews = (await product.populate('reviews')).reviews;
+    product.totalRating = await calculateTotalRating(reviews);
     const newProductData = await Products.findByIdAndUpdate(
       { _id: productId },
       product,
@@ -504,35 +508,48 @@ export const deleteReview = async (req, res, next) => {
 
 export const updateReview = async (req, res, next) => {
   try {
-    const { customerId, productId, comment, rating } = req.body;
-
+    const { reviewId, productId, comment, rating } = req.body;
     // Check if rating is within the allowed range
     if (rating < 1 || rating > 5) {
-      return res
-        .status(400)
-        .json({ message: 'Rating should be between 1 and 5' });
+      next('Rating should be between 1 and 5');
+      return;
     }
-
+    if (!comment) {
+      next('Comment should not be empty');
+      return;
+    }
     // Find the review for the specific customer and product
-    let review = await Reviews.findOne({
-      customer: customerId,
-      product: productId,
+    const oldReview = await Reviews.findById({ _id: reviewId });
+    const newReview = await Reviews.findByIdAndUpdate(
+      { _id: reviewId },
+      { comment: comment, rating: rating },
+      {
+        new: true,
+      }
+    );
+    const product = await Products.findById(productId);
+    const productReviews = (await product.populate('reviews')).reviews;
+    product.totalRating = await calculateTotalRating(productReviews);
+    const newProductData = await Products.findByIdAndUpdate(
+      { _id: productId },
+      product,
+      {
+        new: true,
+      }
+    );
+    res.status(200).json({
+      success: true,
+      message: 'Review updated successfully',
+      totalRating: newProductData.totalRating,
+      oldReview: oldReview,
+      newReview: newReview,
     });
-
-    if (!review) {
-      return res.status(404).json({ message: 'Review not found' });
-    }
-
-    // Update review fields
-    review.comment = comment;
-    review.rating = rating;
-
-    // Save the updated review to the database
-    review = await review.save();
-
-    res.status(200).json({ message: 'Review updated successfully', review });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.log(error);
+    res.status(404).json({
+      success: false,
+      message: 'failed to update review',
+    });
   }
 };
 
