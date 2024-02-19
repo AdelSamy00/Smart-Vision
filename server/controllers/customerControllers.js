@@ -101,6 +101,33 @@ export const getCustomer = async (req, res, next) => {
   });
 };
 
+export const updateCustomer = async (req, res, next) => {
+  try {
+    const { customerId, username, gender, address } = req.body;
+    if (!customerId || !username || !gender) {
+      next('Provide Required Fields!');
+      return;
+    }
+    const customer = await Customers.findByIdAndUpdate(
+      { _id: customerId },
+      { username: username, gender: gender, address: address },
+      {
+        new: true,
+      }
+    );
+    res.status(200).json({
+      success: true,
+      message: 'update customer data successfully',
+      customer,
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: 'failed to update',
+    });
+  }
+};
+
 export const saveContactMesseage = async (req, res, next) => {
   try {
     const data = req.body;
