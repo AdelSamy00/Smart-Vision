@@ -12,7 +12,7 @@ const getinitItems = () => {
 function ProductCard({ product, favoriteList = [], handelFavorit, handelCart }) {
     const isFavorit = () => {
         const fav = favoriteList.find((favId) => {
-            return favId === product._id
+            return favId === product?._id
         })
         if (fav) {
             return true
@@ -21,7 +21,7 @@ function ProductCard({ product, favoriteList = [], handelFavorit, handelCart }) 
     }
     const isInCart = () => {
         const res = cart.find((prod) => {
-            return prod._id === product._id
+            return prod?._id === product?._id
         })
         if (res) {
             return (true)
@@ -33,8 +33,8 @@ function ProductCard({ product, favoriteList = [], handelFavorit, handelCart }) 
     const [favorite, setFavorite] = useState(isFavorit);
     const [inCart, setInCart] = useState(isInCart);
 
-    const handelsetInCart = (id ,name, price, images ,points) => {
-        handelCart(id, name, price, images,points )
+    const handelsetInCart = (id, name, price, images, points) => {
+        handelCart(id, name, price, images, points)
         if (inCart) {
             setTimeout(() => {
                 setInCart(false)
@@ -47,7 +47,7 @@ function ProductCard({ product, favoriteList = [], handelFavorit, handelCart }) 
         }
     }
 
-    const handelsetfavorite = (id ) => {
+    const handelsetfavorite = (id) => {
         handelFavorit(id)
         if (favorite) {
             setTimeout(() => {
@@ -63,33 +63,41 @@ function ProductCard({ product, favoriteList = [], handelFavorit, handelCart }) 
 
     return (
         <div className="productCard mb-12">
-            <Link className='productCardLink' to={`/product/${product._id}`}>
+            <Link className='productCardLink' to={`/product/${product?._id}`}>
                 {product.images.length === 1 ?
                     (<div className="sbProductCardDivImg">
-                        <img className="sbProductCardImg" src={product.images[0]} />
+                        <img className="sbProductCardImg" src={product?.images[0]} />
                     </div>)
                     :
                     (<div className="sbProductCardDivImg">
                         <div className="sbProductCardDivFirstImg">
-                            <img className="sbProductCardImg" src={product.images[0]} />
+                            <img className="sbProductCardImg" src={product?.images[0]} />
                         </div>
                         <div className="sbProductCardDivsecondtImg">
-                            <img className="sbProductCardImg" src={product.images[1]} />
+                            <img className="sbProductCardImg" src={product?.images[1]} />
                         </div>
                     </div>)
                 }
                 <div className="sbProductCardData">
-                    <h5>{product.name}</h5>
-                    <h6>{product.category}</h6>
-                    <p>{product.price} EL</p>
+                    <div className='w-full'>
+                        <h5>{product?.name}</h5>
+                        <h6>{product?.category}</h6>
+                        <p>{product?.price} EL</p>
+                    </div>
                     <div className="sbProductCardDataRating">
-                        <Rating readOnly name="half-rating" defaultValue={2.5} precision={0.5} sx={{ fontSize: 30 }} />
-                        <p>2.5</p>
+                        <Rating
+                            readOnly
+                            name="half-rating"
+                            value={product?.totalRating}
+                            precision={0.5}
+                            sx={{ fontSize: 30 }}
+                        />
+                        <p>{product?.totalRating} ({product?.reviews?.length})</p>
                     </div>
                 </div >
             </Link>
             <div className="sbProductCardFooter ">
-                <button onClick={() => handelsetInCart(product._id, product.name, product.price, product.images,product.points)} className='addToCartButton'>
+                <button onClick={() => handelsetInCart(product._id, product.name, product.price, product.images, product.points)} className='addToCartButton'>
                     {!inCart ?
                         <svg className='sbProductCardFooterIcon' viewBox="0 0 24 24">
                             <path d="M18,12a5.993,5.993,0,0,1-5.191-9H4.242L4.2,2.648A3,3,0,0,0,1.222,0H1A1,1,0,

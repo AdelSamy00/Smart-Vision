@@ -36,7 +36,7 @@ function ProfileDetails() {
                         </div>
                         <div className='InfoContant'>
                             <h4>Address</h4>
-                            <p>{customer?.addres ? (customer?.addres):("No address added")}</p>
+                            <p>{customer?.address ? (customer?.address):("No address added")}</p>
                         </div>
                     </div>
                 </div>

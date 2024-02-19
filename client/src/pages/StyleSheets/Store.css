@@ -84,6 +84,7 @@
   width: 90%;
   text-align: center;
   margin: auto;
+  gap: 1rem;
 }
 .colorOption {
   display: flex;

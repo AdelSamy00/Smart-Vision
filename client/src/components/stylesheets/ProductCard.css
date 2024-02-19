@@ -1,14 +1,19 @@
 .productCard {
+  display: flex;
+  flex-wrap: wrap;
   width: 375px;
   height: 600px;
   background-color: rgba(239, 239, 239, 0.56);
   border-radius: 1rem;
   text-align: center;
-  position: relative;
 }
 
 .sbProductCardData {
+  display: flex;
+  flex-wrap: wrap;
   padding: 1rem;
+  padding-bottom: 0;
+  height: 225px;
 }
 
 .sbProductCardData h5 {
@@ -32,8 +37,7 @@
   width: 100%;
   justify-content: space-between;
   padding: 1rem;
-  position: absolute;
-  bottom: 0;
+
 }
 
 .sbProductCardFooterIcon {
@@ -54,6 +58,7 @@
 .sbProductCardDataRating {
   display: flex;
   flex-wrap: wrap;
+  margin-top: auto;
 }
 
 .sbProductCardDataRating p {

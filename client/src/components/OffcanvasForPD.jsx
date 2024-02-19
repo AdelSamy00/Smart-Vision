@@ -8,11 +8,9 @@ import './stylesheets/OffcanvasForPD.css'
 import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { SetCustomer } from '../redux/CustomerSlice';
 
 function OffcanvasForPD({ ...props }) {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const { customer } = useSelector((state) => state.customer);
     const [show, setShow] = useState(false);
@@ -24,20 +22,22 @@ function OffcanvasForPD({ ...props }) {
     const [validated, setValidated] = useState(false);
     const handleSubmit = async (event) => {
         const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        setValidated(true);
         event.preventDefault();
-        await axios.put('')
-            .then((res) => {
-                const newData = { ...res.data?.newCustomerData };
-                dispatch(SetCustomer(newData));
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        if (form.checkValidity() === false) {
+            event.stopPropagation();
+            setValidated(true);
+        }
+        else {
+            await axios.put('/customers/', { customerId: customer?._id, username, gender, address })
+                .then((res) => {
+                    const newData = { ...res.data?.customer };
+                    dispatch(SetCustomer(newData));
+                    handleClose()
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        }
     };
 
     return (
