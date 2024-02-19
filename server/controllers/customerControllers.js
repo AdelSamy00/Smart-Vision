@@ -417,6 +417,7 @@ export const addreview = async (req, res, next) => {
       comment,
       rating,
     });
+    review.populate({ path: 'customer', select: 'username email -password' });
     // Push review in product reviews array
     product.reviews.push(review._id);
     // get product details

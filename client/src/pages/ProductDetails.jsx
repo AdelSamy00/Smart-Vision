@@ -61,7 +61,18 @@ function ProductDetails() {
           totalReviews--;
         }
       })
-    } else { }
+    } else if (method === "edit") {
+      progressBar.map((rating) => {
+        if (review?.rating === rating.number) {
+          rating.numOfRating++;
+          totalReviews++;
+        }
+        if (oldReview?.rating === rating.number) {
+          rating.numOfRating--;
+          totalReviews--;
+        }
+      })
+    }
     progressBar.map((rating) => {
       rating.progres = Math.floor((rating.numOfRating / totalReviews) * 100)
     })
@@ -135,22 +146,24 @@ function ProductDetails() {
 
   // Update review in product
   async function editReview(customerId, productId, reviewId, comment, rating) {
-    // await axios.put('/customers/review', { data: { customerId, productId, reviewId, comment, rating } })
-    //   .then((res) => {
-    setReviews((prevReviews) => {
-      return prevReviews.map((review) => {
-        if (review?._id === reviewId) {
-          return (
-            { ...review, comment: comment, rating: rating }
-          );
-        } else {
-          return review;
-        }
-      });
-    });
-    //setTotalRating(res.data.totalRating)
-    // })
-    // .catch((e) => { console.log(e) })
+    await axios.put('/customers/review', { productId, reviewId, comment, rating })
+      .then((res) => {
+        console.log(res.data)
+        setReviews((prevReviews) => {
+          return prevReviews.map((review) => {
+            if (review?._id === reviewId) {
+              return (
+                { ...review, comment: comment, rating: rating }
+              );
+            } else {
+              return review;
+            }
+          });
+        });
+        setProgressBar(updatePrograssBar(res.data.newReview, progressBar, "edit", res.data.oldReview))
+        setTotalRating(res.data.totalRating)
+      })
+      .catch((e) => { console.log(e) })
   };
 
   return (
@@ -176,37 +189,37 @@ function ProductDetails() {
         </div>
         <div className="productDetailData">
           <div>
-          <h1>
-            {product?.name}
-          </h1>
-          <div className='productDetailCategory'>
-            <h2>Category:</h2>
-            <p>bed</p>
-          </div>
-          <div className="productDetailRating">
-            <Rating
-              readOnly
-              name="half-rating"
-              value={totalRating}
-              precision={0.5}
-              sx={{ fontSize: 30 }}
-            />
-            <p>{totalRating} Based on {reviews?.length} Reviews. </p>
-          </div>
-          <h3>Description:</h3>
-          <p className="productDetailDescription">
-            {product?.description}
-          </p>
-          <div className="productDetailColors">
-            <p>Color: </p>
-            {product?.colors.map((color, idx) => (
-              <span key={idx} className="mr-3">
-                {color}
-              </span>
-            ))}
-          </div>
-          <p className='productDetailsPrice'>
-            {product?.price} EL
+            <h1>
+              {product?.name}
+            </h1>
+            <div className='productDetailCategory'>
+              <h2>Category:</h2>
+              <p>bed</p>
+            </div>
+            <div className="productDetailRating">
+              <Rating
+                readOnly
+                name="half-rating"
+                value={totalRating}
+                precision={0.5}
+                sx={{ fontSize: 30 }}
+              />
+              <p>{totalRating} Based on {reviews?.length} Reviews. </p>
+            </div>
+            <h3>Description:</h3>
+            <p className="productDetailDescription">
+              {product?.description}
+            </p>
+            <div className="productDetailColors">
+              <p>Color: </p>
+              {product?.colors.map((color, idx) => (
+                <span key={idx} className="mr-3">
+                  {color}
+                </span>
+              ))}
+            </div>
+            <p className='productDetailsPrice'>
+              {product?.price} EL
             </p>
           </div>
           <div className="productDetailsDataFooter">

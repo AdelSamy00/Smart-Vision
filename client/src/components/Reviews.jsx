@@ -39,7 +39,7 @@ function Reviews({ review, deleteReview, editReview }) {
     };
 
     //handel Edit Review by the user
-    const handleEditReview = () => {
+    const handleEditReviewMode = () => {
         handleMenuClose();
         if (inEditMode) {
             setRating(review?.rating)
@@ -55,7 +55,7 @@ function Reviews({ review, deleteReview, editReview }) {
     };
 
     //handel Add Review by the user
-    const handleAddReview = async (event) => {
+    const handleEditReviewSubmit = async (event) => {
         const form = event.currentTarget;
         event.preventDefault();
         if (form.checkValidity() === false) {
@@ -79,7 +79,7 @@ function Reviews({ review, deleteReview, editReview }) {
                             <h6>{reviewCustomer?.username}</h6>
                         </div>
                     </div>
-                    <Form noValidate validated={validated} onSubmit={handleAddReview}>
+                    <Form noValidate validated={validated} onSubmit={handleEditReviewSubmit}>
                         <Form.Group className="">
                             <Rating
                                 name="rating"
@@ -106,7 +106,7 @@ function Reviews({ review, deleteReview, editReview }) {
                                 submit Edites
                             </button>
                             <button
-                                onClick={handleEditReview}
+                                onClick={handleEditReviewMode}
                                 className="buttonForReview bg-red-600 hover:bg-red-700"
                             >
                                 Cancel
@@ -127,7 +127,7 @@ function Reviews({ review, deleteReview, editReview }) {
                             <Rating
                                 readOnly
                                 name="half-rating"
-                                defaultValue={review?.rating}
+                                value={review?.rating}
                                 precision={0.5}
                                 sx={{ fontSize: 20 }}
                             />
@@ -144,7 +144,7 @@ function Reviews({ review, deleteReview, editReview }) {
                                         open={Boolean(anchorEl)}
                                         onClose={handleMenuClose}
                                     >
-                                        <MenuItem onClick={handleEditReview}>
+                                        <MenuItem onClick={handleEditReviewMode}>
                                             <button className='reviewMenuButton'>
                                                 <p className='text-xl'>Edit</p>
                                                 <EditIcon className='ml-2' />
