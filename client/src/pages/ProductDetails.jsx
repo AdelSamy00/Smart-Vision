@@ -9,19 +9,21 @@ import StarIcon from '@mui/icons-material/Star';
 import Reviews from '../components/Reviews';
 import "./StyleSheets/ProductDetails.css"
 import AddReview from '../components/AddReview';
+import { setCart } from '../redux/CartSlice';
 
 function ProductDetails() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { productId } = useParams();
   const { customer } = useSelector((state) => state.customer);
+  const { cart } = useSelector((state) => state.cart);
   const [product, setProduct] = useState(null);
   const [favorite, setFavorite] = useState(false);
   const [mainImage, setMainImage] = useState();
   const [reviews, setReviews] = useState(null);
   const [totalRating, setTotalRating] = useState(null);
   const [progressBar, setProgressBar] = useState(null);
-
+  const [inCart, setInCart] = useState(null);
   //set valuse to prograss bar
   function setUpPrograssBar(reviews) {
     const totalRatings = [
@@ -106,6 +108,7 @@ function ProductDetails() {
         setReviews(product?.reviews)
         setTotalRating(product?.totalRating)
         setProgressBar(setUpPrograssBar(product?.reviews))
+        setInCart(isProductInCart(cart, productId));
         const flag = product?.likes.find((fav) => {
           return fav === customer._id;
         });
@@ -165,6 +168,37 @@ function ProductDetails() {
       })
       .catch((e) => { console.log(e) })
   };
+  //check if the product in cart
+  function isProductInCart(cart, productId) {
+    const res = cart.find((product) => {
+      return product?._id === productId;
+    })
+    if (res) {
+      return true
+    }
+    return false
+  }
+  //remove product from cart
+  function deleteProductFromCart(prevCart, id) {
+    return prevCart.filter((t) => t._id !== id);
+  };
+
+  //handel add to cart button
+  const handelCart = (id, name, price, images, points) => {
+    const inCart = cart.find((prod) => {
+      return prod._id === id;
+    });
+    //item all ready in the cart
+    if (inCart) {
+      dispatch(setCart(deleteProductFromCart(cart, id)))
+    }
+    else {
+      dispatch(setCart([...cart, { _id: id, name, price, images, points, quantity: 1 }]))
+    }
+    setTimeout(() => {
+      setInCart(!inCart);
+    }, 1000);
+  };
 
   return (
     <main className='productDetailMain'>
@@ -223,8 +257,13 @@ function ProductDetails() {
             </p>
           </div>
           <div className="productDetailsDataFooter">
-            <button className=" productDetailsAddToCart ">
-              Add To Cart
+            <button
+              className={!inCart ? " productDetailsAddToCart " : "productDetailsAddToCart bg-red-700 hover:bg-red-900"}
+              onClick={() =>
+                handelCart(product?._id, product?.name, product?.price, product?.images, product?.price)
+              }
+            >
+              {!inCart ? " Add to cart " : "Remove From cart"}
             </button>
             <button
               onClick={() => handelFavorit(customer?._id, product?._id)}

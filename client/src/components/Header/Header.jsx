@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Toolbar from "@mui/material/Toolbar";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -12,8 +12,10 @@ import IconButton from "@mui/material/IconButton";
 import { Link } from "react-router-dom";
 import Badge from "@mui/material/Badge";
 
-const Header = ({itemCount}) => {
+const Header = () => {
   const { customer } = useSelector((state) => state.customer);
+  const { cart } = useSelector((state) => state.cart);
+  const [productsInCart, setproductsInCart] = useState(null)
 
   const renderUserName = () => {
     if (!customer || !customer.username) {
@@ -22,6 +24,17 @@ const Header = ({itemCount}) => {
     return customer.username;
   };
 
+  function numOfProductsInCart(cart) {
+    let numOfProducts = 0;
+    cart.map((product) => {
+      numOfProducts = numOfProducts + product?.quantity;
+    })
+    return numOfProducts;
+  }
+
+  useEffect(() => {
+    setproductsInCart(numOfProductsInCart(cart))
+  }, [cart])
   return (
     <header style={{ display: "flex" }}>
       <div className="menu">
@@ -49,7 +62,7 @@ const Header = ({itemCount}) => {
                   style={{
                     fontSize: "19px",
                     paddingTop: "0.2rem",
-                    marginLeft:"0.5rem"
+                    marginLeft: "0.5rem"
                     // width:"210px",
                     // marginLeft:"-0.7rem"
                   }}
@@ -59,14 +72,14 @@ const Header = ({itemCount}) => {
                 </p>
               </button>
             </Link>
-            <button className="btnHover favorite" style={{ outline: "none" ,padding:"4px 12px"}}>
+            <button className="btnHover favorite" style={{ outline: "none", padding: "4px 12px" }}>
               <Link to={"/favourites"}>
-              <FavoriteIcon
-                style={{ fontSize: "22px", marginTop: "0.8rem", }} 
-              ></FavoriteIcon></Link>
+                <FavoriteIcon
+                  style={{ fontSize: "22px", marginTop: "0.8rem", }}
+                ></FavoriteIcon></Link>
             </button>
             <Link to={"./bag"} >
-              <IconButton aria-label="cart" style={{ padding: "12px", marginLeft:'2px' }} className="badge">
+              <IconButton aria-label="cart" style={{ padding: "12px", marginLeft: '2px' }} className="badge">
                 <Badge
                   badgeContent={
                     <span
@@ -82,7 +95,7 @@ const Header = ({itemCount}) => {
                         fontWeight: "bold",
                       }}
                     >
-                      {itemCount}
+                      {productsInCart}
                     </span>
                   }
                   color="black"
@@ -124,7 +137,7 @@ const Header = ({itemCount}) => {
                 outline: "none",
                 backgroundColor: "#f8f9fa",
                 fontSize: "19px",
-                width:"100%"
+                width: "100%"
               }}
             />
           </div>

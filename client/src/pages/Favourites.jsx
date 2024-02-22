@@ -6,12 +6,16 @@ import { SetCustomer } from '../redux/CustomerSlice';
 import toast, { Toaster } from 'react-hot-toast';
 import './StyleSheets/Favorites.css'
 import Loading from '../components/Loading.jsx';
+import { setCart } from '../redux/CartSlice.js';
 
 function Favourites() {
   const { customer } = useSelector((state) => state.customer);
+  const { cart } = useSelector((state) => state.cart);
   const [favoritProducts, setFavoritProducts] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [inCart, setInCart] = useState(null);
   const dispatch = useDispatch();
+
   const getFavorits = async (id) => {
     await axios.get(`/customers/favorite/${id}`)
       .then((res) => {
@@ -49,6 +53,25 @@ function Favourites() {
     });
   }
 
+  //remove product from cart
+  function deleteProductFromCart(prevCart, id) {
+    return prevCart.filter((t) => t._id !== id);
+  };
+
+  const handelCart = (id, name, price, images, points) => {
+    const inCart = cart.find((prod) => {
+      return prod._id === id;
+    });
+    //item all ready in the cart
+    if (inCart) {
+      dispatch(setCart(deleteProductFromCart(cart, id)))
+      setInCart(false);
+    }
+    else {
+      dispatch(setCart([...cart, { _id: id, name, price, images, points, quantity: 1 }]))
+      setInCart(true);
+    }
+  };
   return (
     <>
       <main className='favoritesMain'>
@@ -79,7 +102,12 @@ function Favourites() {
                   favoritProducts.map((product) => {
                     return (
                       <div key={product._id} className='favoriteProducteDiv'>
-                        <ProductCard product={product} favoriteList={customer?.favoriteList} handelFavorit={handelFavorit} />
+                        <ProductCard
+                          product={product}
+                          favoriteList={customer?.favoriteList}
+                          handelFavorit={handelFavorit}
+                          handelCart={handelCart}
+                        />
                       </div>
                     )
                   })
