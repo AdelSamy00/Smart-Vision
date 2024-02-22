@@ -10,7 +10,6 @@ import {
   getCustomer,
   getFavoriteList,
   getOrderHistory,
-  getReview,
   getServiceHistory,
   makeFavorite,
   makeOrder,

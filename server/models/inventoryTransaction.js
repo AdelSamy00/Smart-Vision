@@ -5,8 +5,8 @@ const inventoryTransactionSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: 'Employees',
     },
-    transaction:{
-     type:String
+    transaction: {
+      type: String,
     },
     materials: [
       {
@@ -23,5 +23,8 @@ const inventoryTransactionSchema = new mongoose.Schema(
   }
 );
 
-const IventoryTransactions = mongoose.model('IventoryTransactions', inventoryTransactionSchema);
+const IventoryTransactions = mongoose.model(
+  'IventoryTransactions',
+  inventoryTransactionSchema
+);
 export default IventoryTransactions;

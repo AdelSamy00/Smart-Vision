@@ -1,6 +1,10 @@
 import mongoose, { Schema } from 'mongoose';
+import AutoIncrementFactory from 'mongoose-sequence';
+
+const AutoIncrement = AutoIncrementFactory(mongoose);
 const orderSchema = new mongoose.Schema(
   {
+    orderNumber: { type: Number },
     firstName: { type: String },
     lastName: { type: String },
     phoneNumber: { type: Number },
@@ -29,6 +33,9 @@ const orderSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
+orderSchema.plugin(AutoIncrement, {
+  id: 'orderNumbers',
+  inc_field: 'orderNumber',
+});
 const Orders = mongoose.model('Orders', orderSchema);
 export default Orders;

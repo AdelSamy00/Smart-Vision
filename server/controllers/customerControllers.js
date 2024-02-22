@@ -304,7 +304,7 @@ export const makeOrder = async (req, res, next) => {
     );
     if (flag) {
       cart.map(async (prod) => {
-        await decreseQuantity(prod.productId, prod.quantity);
+        await decreseQuantity(prod.product, prod.quantity);
       });
       //make order
       const order = await Orders.create({
@@ -329,6 +329,7 @@ export const makeOrder = async (req, res, next) => {
         success: true,
         message: 'the order has been made successfully',
         customer: updatedCustomer,
+        order: order,
       });
     } else {
       res.status(404).json({
@@ -469,26 +470,6 @@ export const addreview = async (req, res, next) => {
       success: false,
       message: 'failed to add review',
     });
-  }
-};
-
-export const getReview = async (req, res, next) => {
-  try {
-    const { customerId, productId } = req.params;
-
-    // Find the review for the specific customer and product
-    const review = await Reviews.findOne({
-      customer: customerId,
-      product: productId,
-    });
-
-    if (!review) {
-      return res.status(404).json({ message: 'Review not found' });
-    }
-
-    res.status(200).json(review);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
 };
 
