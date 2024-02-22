@@ -12,56 +12,52 @@ import AddressForm from "./AddressForm";
 import Review from "./Review";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { clearCart } from "../redux/CartSlice";
 
 export default function Checkout() {
-  const [products, setProducts] = useState([]);
   const [activeStep, setActiveStep] = useState(0);
   const steps = ["Shipping address", "Review your order"];
   const { customer } = useSelector((state) => state.customer);
+  const { cart } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
 
   function getStepContent(step) {
     switch (step) {
       case 0:
         return <AddressForm />;
       case 1:
-        return <Review products={products} />;
+        return <Review products={cart} />;
       default:
         throw new Error("Unknown step");
     }
   }
-  useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    console.log(storedCart);
-    setProducts(storedCart);
-  }, []);
+
   // console.log(products);
-  function calculateTotalPrice(cart) {
+  function calculateTotalPrice() {
     if (!cart || cart.length === 0) {
       return 0;
     }
     const totalPrice = cart.reduce((total, item) => {
-      return total + item.price * (item.quantity || 1);
+      return total + item.price * item.quantity;
     }, 0);
-
     return totalPrice;
   }
-  const totalPrice = calculateTotalPrice(products);
+
+  const totalPrice = calculateTotalPrice();
   // console.log(totalPrice);
-  function calculateTotalPoints(cart) {
+  function calculateTotalPoints() {
     if (!cart || cart.length === 0) {
       return 0;
     }
-
     const totalPoints = cart.reduce((total, item) => {
       const points = typeof item.points === "number" ? item.points : 0;
       return total + points;
     }, 0);
-
     return totalPoints;
   }
-  const totalPoints = calculateTotalPoints(products);
-  console.log(totalPoints);
+  const totalPoints = calculateTotalPoints();
+  //console.log(totalPoints);
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -70,13 +66,14 @@ export default function Checkout() {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
+
   const handlePlaceOrder = async () => {
     try {
-      const productsWithDetails = products.map((product) => ({
+      const productsWithDetails = cart.map((product) => ({
         product: product?._id,
-        quantity: product?.quantity || 1,
+        quantity: product?.quantity,
       }));
-      console.log(productsWithDetails.length);
+      //console.log(productsWithDetails.length);
       const response = await axios.post("/customers/order", {
         id: customer._id,
         cart: productsWithDetails,
@@ -84,12 +81,13 @@ export default function Checkout() {
         totalPoints: totalPoints,
       });
       console.log("Order placed successfully:", response.data);
-      localStorage.removeItem("cart");
+      dispatch(clearCart())
       setActiveStep(activeStep + 1);
     } catch (error) {
       console.error("Error placing order:", error.response.data.message);
     }
   };
+  
   return (
     <React.Fragment>
       <CssBaseline />

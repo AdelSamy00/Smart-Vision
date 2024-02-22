@@ -42,30 +42,20 @@ function App() {
         <Navigate to="/login" state={{ from: location }} />
       );
   };
+  
   const shouldRenderHeaderAndFooter = () => {
     const routesWithoutHeader = ['/login', '/register', '/'];
     return !routesWithoutHeader.includes(location.pathname);
   };
+
   useEffect(() => {
     const res = shouldRenderHeaderAndFooter()
     setShowHeaderAndFooter(res)
   }, [location]);
 
-  const [itemCount, setItemCount] = useState(0);
-
-  useEffect(() => {
-    // Retrieve cart data from local storage
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const totalItems = storedCart.reduce(
-      (count, item) => count + (item.quantity || 1),
-      0
-    );
-    setItemCount(totalItems);
-  }, []);
-
   return (
     <>
-      {shwoHeaderAndFooter && <Header itemCount={itemCount} />}
+      {shwoHeaderAndFooter && <Header />}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/home" element={<Home />} />
@@ -78,7 +68,7 @@ function App() {
         <Route path="/store" element={<Store />} />
         <Route path="/product/:productId" element={<ProductDetails />} />
         <Route path="/order" element={<OrderComponent />} />
-        <Route path="/bag" element={<Bag setItemCount={setItemCount} />} />
+        <Route path="/bag" element={<Bag />} />
         <Route element={<Layout />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/profile-details" element={<ProfileDetails />} />

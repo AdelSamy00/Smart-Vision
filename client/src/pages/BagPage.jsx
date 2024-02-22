@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./StyleSheets/BagPage.css";
-import Favourites from "./Favourites";
 import IconButton from "@mui/material/IconButton";
 import Slide from "@mui/material/Slide";
 import Modal from "@mui/material/Modal";
@@ -10,17 +9,18 @@ import ArrowForwardSharpIcon from "@mui/icons-material/ArrowForwardSharp";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SetCustomer } from '../redux/CustomerSlice';
 
 import axios from "axios";
-const Bag = ({ setItemCount }) => {
-  const [cart, setCart] = useState([]);
+import { setCart } from "../redux/CartSlice";
+const Bag = () => {
+  const [productsInCart, setproductsInCart] = useState(null)
   const [open, setOpen] = useState(false);
   const { customer } = useSelector((state) => state.customer);
+  const { cart } = useSelector((state) => state.cart);
   const [favorite, setFavorite] = useState(false);
   const dispatch = useDispatch();
-
 
   const handleOpen = () => {
     setOpen(true);
@@ -30,13 +30,6 @@ const Bag = ({ setItemCount }) => {
     setOpen(false);
   };
 
-  useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCart(storedCart);
-  
-    const totalItems = storedCart.reduce((count, item) => count + (item.quantity || 1), 0);
-    setItemCount(totalItems);
-  }, []);
   const handelFavorit = async (id, productId) => {
     if (customer._id) {
       await axios
@@ -53,64 +46,49 @@ const Bag = ({ setItemCount }) => {
       navigate('/login');
     }
   };
+
+  function numOfProductsInCart() {
+    let numOfProducts = 0;
+    cart.map((product) => {
+      numOfProducts = numOfProducts + product?.quantity;
+    })
+    return numOfProducts;
+  }
+
   const handleRemoveFromCart = (id) => {
     const updatedCart = cart.filter((item) => item._id !== id);
-    setCart(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-
-    const totalItems = updatedCart.reduce((count, item) => count + (item.quantity || 1), 0);
-    setItemCount(totalItems);
+    dispatch(setCart(updatedCart))
   };
-  const handleIncreaseQuantity = (id) => {
-    const existingItem = cart.find((item) => item._id === id);
 
-    if (existingItem) {
-      const updatedCart = cart.map((item) =>
-        item._id === id ? { ...item, quantity: (item.quantity || 1) + 1 } : item
-      );
-      setCart(updatedCart);
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
-      const totalItems = updatedCart.reduce((count, item) => count + (item.quantity || 1), 0);
-      setItemCount(totalItems);
-    } else {
-      const newItem = {
-        _id: id,
-        quantity: 1,
-      };
-      const updatedCart = [...cart, newItem];
-      setCart(updatedCart);
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
-      const totalItems = updatedCart.reduce((count, item) => count + (item.quantity || 1), 0);
-      setItemCount(totalItems);
-    }
+  const handleIncreaseQuantity = (id) => {
+    const updatedCart = cart.map((item) =>
+      item._id === id ? { ...item, quantity: item.quantity + 1 } : item
+    );
+    dispatch(setCart(updatedCart))
   };
 
   const handleDecreaseQuantity = (id) => {
     const updatedCart = cart.map((item) =>
-      item._id === id ? { ...item, quantity: Math.max(0, (item.quantity || 1) - 1) } : item
+      item._id === id ? { ...item, quantity: Math.max(1, item.quantity - 1) } : item
     );
-    setCart(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-    const totalItems = updatedCart.reduce((count, item) => count + (item.quantity || 1), 0);
-    setItemCount(totalItems);
+    dispatch(setCart(updatedCart))
   };
-  
-  function calculateTotalPrice(cart) {
+
+  function calculateTotalPrice() {
     if (!cart || cart.length === 0) {
       return 0;
     }
     const totalPrice = cart.reduce((total, item) => {
-      return total + item.price * (item.quantity || 1);
+      return total + item.price * item.quantity;
     }, 0);
-
     return totalPrice;
   }
 
-  const itemCount = cart.reduce(
-    (count, item) => count + (item.quantity || 1),
-    0
-  );
-  const totalPrice = calculateTotalPrice(cart);
+  const totalPrice = calculateTotalPrice();
+
+  useEffect(() => {
+    setproductsInCart(numOfProductsInCart())
+  }, [cart])
 
   return (
     <div className="BagContent">
@@ -131,7 +109,7 @@ const Bag = ({ setItemCount }) => {
           marginBottom: "20px",
         }}
       >
-        Total Items: {itemCount}
+        Total Items: {productsInCart}
       </p>
       <hr />
       {cart.length === 0 ? (
@@ -209,7 +187,7 @@ const Bag = ({ setItemCount }) => {
                       Remove
                     </button>
                     <button
-                      onClick={() => {handelFavorit(customer?._id, item?._id)}}
+                      onClick={() => { handelFavorit(customer?._id, item?._id) }}
                       style={{
                         fontWeight: "bold",
                         padding: "10px",
@@ -292,7 +270,7 @@ const Bag = ({ setItemCount }) => {
                                     }}
                                   ></ArrowForwardSharpIcon>
                                   <button
-                                    onClick={() => {handelFavorit(customer?._id, item?._id)}}
+                                    onClick={() => { handelFavorit(customer?._id, item?._id) }}
                                     style={{
                                       fontWeight: "bold",
                                       padding: "10px",
@@ -349,7 +327,7 @@ const Bag = ({ setItemCount }) => {
         style={{
           fontWeight: "bold",
           fontSize: "30px",
-          marginBottom:"30px"
+          marginBottom: "30px"
         }}
       >
         Total Price: {totalPrice} EL
