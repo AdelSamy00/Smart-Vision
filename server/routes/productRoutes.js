@@ -1,14 +1,20 @@
 import express from 'express';
 import {
   addProduct,
+  getNotShownProducts,
   getProductById,
-  getProducts,
+  getShowProducts,
   updateProduct,
 } from '../controllers/productControlles.js';
 const router = express.Router();
 
-router.get('/', getProducts);
+//to help operetor manager
+router.get('/not-shown', getNotShownProducts);
+
+// CRUD Product -- RESTFULL API
+router.get('/', getShowProducts);
 router.post('/', addProduct);
 router.get('/:id', getProductById);
 router.put('/:id', updateProduct);
+
 export default router;

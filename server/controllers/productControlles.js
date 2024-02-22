@@ -1,8 +1,8 @@
 import Products from '../models/ProductModel.js';
 
-export const getProducts = async (req, res, next) => {
+export const getShowProducts = async (req, res, next) => {
   try {
-    const products = await Products.find({}).populate({
+    const products = await Products.find({ show: true }).populate({
       path: 'reviews',
       populate: {
         path: 'customer',
@@ -139,4 +139,17 @@ export const calculateTotalRating = async (productReviews) => {
   });
 
   return total / productReviews.length;
+};
+
+export const getNotShownProducts = async (req, res, next) => {
+  try {
+    const products = await Products.find({ show: false });
+    res.status(200).json({
+      success: true,
+      message: 'get products successfully',
+      products,
+    });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };

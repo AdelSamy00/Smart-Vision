@@ -1,6 +1,12 @@
 import mongoose, { Schema } from 'mongoose';
 const orderSchema = new mongoose.Schema(
   {
+    firstName: { type: String },
+    lastName: { type: String },
+    phoneNumber: { type: Number },
+    city: { type: String },
+    country: { type: String },
+    address: { type: String },
     customer: {
       type: Schema.Types.ObjectId,
       ref: 'Customers',
