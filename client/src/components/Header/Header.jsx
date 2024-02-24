@@ -48,7 +48,7 @@ const Header = () => {
         >
           <div className="header-logo">
             <Link to={"/home"}>
-              <img src="../smartVisionLogo.png" />
+              <img src="/smartVisionLogo.png" />
             </Link>
           </div>
           <div className="icons">
