@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Rating from '@mui/material/Rating';
 import './stylesheets/ProductCard.css'
 import { Link } from 'react-router-dom';
-
-const getinitItems = () => {
-    const data = JSON.parse(localStorage.getItem("cart"));
-    if (!data) return [];
-    return data;
-};
+import { useSelector } from 'react-redux';
 
 function ProductCard({ product, favoriteList = [], handelFavorit, handelCart }) {
+    
+    const { cart } = useSelector((state) => state.cart);    
     const isFavorit = () => {
         const fav = favoriteList.find((favId) => {
             return favId === product?._id
@@ -29,7 +26,6 @@ function ProductCard({ product, favoriteList = [], handelFavorit, handelCart }) 
         return false
     }
 
-    const [cart, setCart] = useState(getinitItems);
     const [favorite, setFavorite] = useState(isFavorit);
     const [inCart, setInCart] = useState(isInCart);
 
