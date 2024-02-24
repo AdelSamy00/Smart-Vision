@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   addProduct,
+  addToStore,
   getNotShownProducts,
   getProductById,
   getShowProducts,
@@ -10,6 +11,7 @@ const router = express.Router();
 
 //to help operetor manager
 router.get('/not-shown', getNotShownProducts);
+router.post('/add-to-store', addToStore);
 
 // CRUD Product -- RESTFULL API
 router.get('/', getShowProducts);

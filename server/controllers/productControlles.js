@@ -19,11 +19,39 @@ export const getShowProducts = async (req, res, next) => {
   }
 };
 
-export const addProduct = async (req, res, next) => {
+export const addToStore = async (req, res, next) => {
   try {
     const productData = req.body;
     // validation
     if (!productData.name || !productData.quantity || !productData.images) {
+      next('Please Provide needed fields');
+      return;
+    }
+    const product = await Products.findByIdAndUpdate(
+      { _id: productData._id },
+      { ...productData },
+      { new: true }
+    );
+    res.status(200).json({
+      success: true,
+      message: 'add product successfully to store',
+      product,
+    });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+export const addProduct = async (req, res, next) => {
+  try {
+    const productData = req.body;
+    // validation
+    if (
+      !productData.name ||
+      !productData.quantity ||
+      !productData.description ||
+      !productData.category
+    ) {
       next('Please Provide needed fields');
       return;
     }
