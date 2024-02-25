@@ -287,8 +287,8 @@ export const getFavoriteList = async (req, res, next) => {
 export const makeOrder = async (req, res, next) => {
   try {
     let flag = true;
-    const { id, cart, totalPrice, totalPoints } = req.body;
-    if (!id || !cart.length || !totalPrice) {
+    const { id, cart, totalPrice, totalPoints, customerData } = req.body;
+    if (!id || !cart.length || !totalPrice || !customerData) {
       next('Provide Required Fields!');
       return;
     }
@@ -308,6 +308,7 @@ export const makeOrder = async (req, res, next) => {
       });
       //make order
       const order = await Orders.create({
+        customerData: customerData,
         customer: id,
         products: cart,
         totalPrice,

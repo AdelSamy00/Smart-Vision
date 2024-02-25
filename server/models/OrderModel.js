@@ -5,12 +5,14 @@ const AutoIncrement = AutoIncrementFactory(mongoose);
 const orderSchema = new mongoose.Schema(
   {
     orderNumber: { type: Number },
-    firstName: { type: String },
-    lastName: { type: String },
-    phoneNumber: { type: Number },
-    city: { type: String },
-    country: { type: String },
-    address: { type: String },
+    customerData: {
+      firstName: { type: String },
+      lastName: { type: String },
+      phoneNumber: { type: Number },
+      city: { type: String },
+      country: { type: String },
+      address: { type: String },
+    },
     customer: {
       type: Schema.Types.ObjectId,
       ref: 'Customers',
