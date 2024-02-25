@@ -25,18 +25,12 @@ export const addMaterial = async (req, res, next) => {
 
 export const getMaterial = async (req, res, next) => {
   try {
-    const { id } = req.params;
-
-    // Find the material by ID
-    const material = await Materials.findById(id);
-
-    if (!material) {
-      return res
-        .status(404)
-        .json({ success: false, message: 'Material not found' });
+    const materials = await Materials.find();
+    if (materials.length === 0) {
+      return res.status(404).json({ success: false, message: 'No materials found' });
     }
 
-    res.status(200).json({ success: true, material });
+    res.status(200).json({ success: true, materials });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
