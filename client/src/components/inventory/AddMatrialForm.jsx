@@ -25,7 +25,7 @@ const AddMatrialForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/Materials/material", productData);
+      const response = await axios.post("/Materials/", productData);
       setProductData({
         name: "",
         quantity: ""

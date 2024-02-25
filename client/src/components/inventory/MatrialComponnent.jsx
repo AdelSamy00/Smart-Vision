@@ -12,7 +12,7 @@ function MatrialComponnent() {
   useEffect(() => {
     const fetchMaterials = async () => {
       try {
-        const response = await axios.get(`/Materials/material`);
+        const response = await axios.get(`/Materials/`);
         setMatrials(response.data.materials);
         setIsLoading(false);
       } catch (error) {
