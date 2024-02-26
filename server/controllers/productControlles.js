@@ -209,3 +209,19 @@ export const updateProductDetails = async (req, res, next) => {
     });
   }
 };
+
+export const deleteProduct = async (req, res, next) => {
+  try {
+    const { productId } = req.body;
+    await Products.findByIdAndDelete({ _id: productId });
+    res.status(200).json({
+      success: true,
+      message: 'deleted successfully',
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: 'failed to delete product',
+    });
+  }
+};
