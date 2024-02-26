@@ -181,3 +181,31 @@ export const getNotShownProducts = async (req, res, next) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+// this funcation will help us to Update Product Details when product in inverntory
+export const updateProductDetails = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { name, description, quantity, category, colors } = req.body;
+    if (!name || !quantity || !description || !category || !colors.length) {
+      next('Please Provide needed fields');
+      return;
+    }
+    const product = await Products.findByIdAndUpdate(
+      { _id: id },
+      { name, description, quantity, category, colors },
+      { new: true }
+    );
+    res.status(200).json({
+      success: true,
+      message: 'update product details successfully',
+      product,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({
+      success: false,
+      message: 'failed to update',
+    });
+  }
+};

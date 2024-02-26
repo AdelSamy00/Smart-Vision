@@ -86,21 +86,6 @@ export const verifyEmail = async (req, res, next) => {
   }
 };
 
-export const getCustomer = async (req, res, next) => {
-  const { token } = req.params;
-  const { id } = req.params;
-  const { customerId } = JWT.verify(token, process.env.JWT_SECRET_KEY);
-  console.log(customerId);
-  const customer = await Customers.findById({ _id: customerId }).select(
-    '-password'
-  );
-  res.status(200).json({
-    success: true,
-    message: 'get data successfully',
-    customer,
-  });
-};
-
 export const updateCustomer = async (req, res, next) => {
   try {
     const { customerId, username, gender, address } = req.body;
@@ -296,7 +281,7 @@ export const makeOrder = async (req, res, next) => {
     // to make sure that products in cart elready exist
     await Promise.all(
       cart.map(async (prod) => {
-        const exist = await existProduct(prod.productId);
+        const exist = await existProduct(prod.product);
         if (!exist) {
           flag = false;
         }
@@ -339,6 +324,7 @@ export const makeOrder = async (req, res, next) => {
       });
     }
   } catch (error) {
+    console.log(error);
     res.status(404).json({
       success: false,
       message: 'failed to place this order',

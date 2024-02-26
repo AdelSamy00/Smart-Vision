@@ -7,7 +7,6 @@ import {
   changePassword,
   deleteAcount,
   deleteReview,
-  getCustomer,
   getFavoriteList,
   getOrderHistory,
   getServiceHistory,
@@ -19,6 +18,7 @@ import {
   updateReview,
   verifyEmail,
 } from '../controllers/customerControllers.js';
+import customerAuth from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 const __dirname = path.resolve(path.dirname(''));
@@ -27,40 +27,37 @@ router.get('/verify/:customerId/:token', verifyEmail);
 router.get('/verified', (req, res) => {
   res.sendFile(path.join(__dirname, './views/build', 'index.html'));
 });
-// get customer data
-router.get('/get-customer/:token/:id?', getCustomer);
 
 // update customer data
-router.put('/', updateCustomer);
+router.put('/', customerAuth, updateCustomer);
 
 // sent feedback or problem from ContactUs page
 router.post('/contactUs', saveContactMesseage);
 
 //delete his account
 //need middleware
-router.delete('/delete-acount/:id', deleteAcount);
+router.delete('/delete-acount/:id', customerAuth, deleteAcount);
 
 //Change password
-router.put('/changePassword', changePassword);
+router.put('/changePassword', customerAuth, changePassword);
 
 //add or remove favorite product
-router.post('/favorite', makeFavorite);
+router.post('/favorite', customerAuth, makeFavorite);
 router.get('/favorite/:id', getFavoriteList);
 
 //order
-router.post('/order', makeOrder);
-router.delete('/order', cancelOrder);
+router.post('/order', customerAuth, makeOrder);
+router.delete('/order', customerAuth, cancelOrder);
 router.get('/order/:id', getOrderHistory);
 
 //review
-router.post('/review', addreview);
-//router.get('/review/:customerId/:productId', getReview);
-router.delete('/review', deleteReview);
-router.put('/review', updateReview);
+router.post('/review', customerAuth, addreview);
+router.delete('/review', customerAuth, deleteReview);
+router.put('/review', customerAuth, updateReview);
 
 //Services
-router.post('/service', makeService);
-router.delete('/service', cancelService);
+router.post('/service', customerAuth, makeService);
+router.delete('/service', customerAuth, cancelService);
 router.get('/service/:id', getServiceHistory);
 
 export default router;

@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation, Navigate, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   ContactUs,
   Landing,
@@ -18,7 +18,7 @@ import {
   Bag,
   Checkout,
   History,
-  ServicesDetails
+  ServicesDetails,
 } from './pages/';
 import axios from 'axios';
 import Footer from './components/Footer';
@@ -28,29 +28,32 @@ import OrderComponent from './components/OrderComponent';
 
 function App() {
   const location = useLocation();
-  const [shwoHeaderAndFooter, setShowHeaderAndFooter] = useState(null)
+  const [shwoHeaderAndFooter, setShowHeaderAndFooter] = useState(null);
+  const dispatch = useDispatch();
+  const { customer } = useSelector((state) => state.customer);
   axios.defaults.baseURL = 'http://localhost:3000';
+  axios.defaults.headers = {
+    'Content-Type': 'application/json',
+    Authorization: customer?.token ? `Bearer ${customer?.token}` : '',
+  };
   const Layout = () => {
     const { customer } = useSelector((state) => state.customer);
     console.log(customer);
-    return customer?._id ?
-      (
-        <Outlet />
-      )
-      :
-      (
-        <Navigate to="/login" state={{ from: location }} />
-      );
+    return customer?._id ? (
+      <Outlet />
+    ) : (
+      <Navigate to="/login" state={{ from: location }} />
+    );
   };
-  
+
   const shouldRenderHeaderAndFooter = () => {
     const routesWithoutHeader = ['/login', '/register', '/'];
     return !routesWithoutHeader.includes(location.pathname);
   };
 
   useEffect(() => {
-    const res = shouldRenderHeaderAndFooter()
-    setShowHeaderAndFooter(res)
+    const res = shouldRenderHeaderAndFooter();
+    setShowHeaderAndFooter(res);
   }, [location]);
 
   return (
@@ -73,7 +76,10 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/profile-details" element={<ProfileDetails />} />
           <Route path="/profile/change-password" element={<ChangePassword />} />
-          <Route path="/profile/delete-account" element={<DeleteAccountPage />} />
+          <Route
+            path="/profile/delete-account"
+            element={<DeleteAccountPage />}
+          />
           <Route path="/favourites" element={<Favourites />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/history" element={<History />} />
