@@ -55,7 +55,7 @@ const AddMatrialForm = () => {
         }}
       />
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} >
           <TextField
             fullWidth
             label="Product Name"
@@ -66,7 +66,7 @@ const AddMatrialForm = () => {
             required
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12}>
           <TextField
             fullWidth
             label="Quantity"

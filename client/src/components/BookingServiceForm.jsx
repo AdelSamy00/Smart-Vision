@@ -5,6 +5,8 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { handleMultipleFilesUpload } from "../utils";
 import Loading from "../components/Loading";
+import { TextField, Button, Grid } from "@mui/material";
+
 function BookingServiceForm() {
   const { state } = useLocation();
   const [images, setImages] = useState([{}]);
@@ -55,67 +57,67 @@ function BookingServiceForm() {
   };
   return (
     <div>
-      <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>
+      <h2
+        style={{ fontSize: "20px", fontWeight: "bold", paddingBottom: "20px" }}
+      >
         If You Need To Book This Service Fill This Form .
       </h2>
       {loading && <Loading />}
       {!formSubmitted && !loading && (
-        <form onSubmit={handleSubmit} className="form">
-          <label htmlFor="ServiceName" className="userNameLabel">
-            Service Name :
-          </label>
-          <input
-            type="text"
-            id="ServiceName"
-            name="ServiceName"
-            className="userNameInput"
-            value={service.title}
-            onChange={handleInputChange}
-            required
-            // style={{width:"50vw"}}
-          />
-          <label htmlFor="phoneNumber" className="phoneLabel">
-            Phone Number:
-          </label>
-          <input
-            type="tel"
-            id="phoneNumber"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleInputChange}
-            required
-            className="phoneInput"
-          />
-          <label htmlFor="address" className="adressLabel">
-            Address:
-          </label>
-          <textarea
-            id="address"
-            name="address"
-            value={formData.address}
-            onChange={handleInputChange}
-            required
-            className="adressInput"
-          ></textarea>
-          <label htmlFor="description" className="adressLabel">
-            Description
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            required
-            className="adressInput"
-          ></textarea>
-          <div className="p-2 w-full">
+        <form onSubmit={handleSubmit} className="Form">
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Service Name"
+                variant="outlined"
+                name="ServiceName"
+                value={service.title}
+                onChange={handleInputChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Phone Number"
+                variant="outlined"
+                name="phoneNumber"
+                type="tel"
+                value={formData.phoneNumber}
+                onChange={handleInputChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Address"
+                variant="outlined"
+                name="address"
+                multiline
+                rows={2}
+                value={formData.address}
+                onChange={handleInputChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Description"
+                variant="outlined"
+                name="description"
+                multiline
+                rows={3}
+                value={formData.description}
+                onChange={handleInputChange}
+                required
+              />
+            </Grid>
+          </Grid>
+          <div className="p-2 w-full" style={{ marginTop: "15px" }}>
             <div className="relative flex justify-items-center gap-2">
-              <label
-                htmlFor="image"
-                className="leading-7 text-sm text-gray-600 mt-1"
-              >
-                uploadFile
-              </label>
               <input
                 type="file"
                 id="images"
@@ -126,6 +128,12 @@ function BookingServiceForm() {
                 }}
                 multiple
               />
+              <label
+                htmlFor="image"
+                className="leading-7 text-sm text-gray-600 mt-1"
+              >
+                uploadFile
+              </label>
             </div>
           </div>
           <button
