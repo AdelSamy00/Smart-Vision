@@ -177,7 +177,7 @@ function MatrialComponnent() {
           </Grid>
         </Grid>
       ) : (
-        <p
+        <div
           style={{
             textAlign: "center",
             fontWeight: "bold",
@@ -189,8 +189,13 @@ function MatrialComponnent() {
             marginBottom: "5rem",
           }}
         >
-          there is no Matrials .
-        </p>
+          <p style={{marginBottom:"12px"}}>there is no Matrials .</p>
+          <Link to="/addMatrial">
+            <Button variant="contained" color="primary">
+              Add Matrial
+            </Button>
+          </Link>
+        </div>
       )}
     </>
   );

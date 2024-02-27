@@ -53,11 +53,6 @@ const InventoryHome = () => {
         <Loading />
       ) : (
         <ul>
-          {products.length === 0 && Matrials.length === 0 ? (
-            <Typography variant="body1" sx={{ marginLeft: "5%" }}>
-              No {label.toLowerCase()} to display.
-            </Typography>
-          ) : (
             <li>
               {showOrderHistory ? (
                 <HomeComponent/>
@@ -65,7 +60,6 @@ const InventoryHome = () => {
                 <MatrialComponnent/>
               )}
             </li>
-          )}
         </ul>
       )}
     </div>

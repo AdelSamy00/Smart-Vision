@@ -5,12 +5,11 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 function HomeComponent() {
   const [displayedOrders, setDisplayedOrders] = useState(1);
-
   const [products, setProducts] = useState([]);
-  const [isFormOpen, setIsFormOpen] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -22,9 +21,22 @@ function HomeComponent() {
         console.error("Error fetching products:", error);
       }
     };
-
     fetchProducts();
   }, []);
+
+  const handleDelete = async (productId) => {
+    try {
+      const response = await axios.delete("/products", { data: { productId } });
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product._id !== productId)
+      );
+      toast.dismiss();
+      toast.success(response.data.message);
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      toast.error("Failed to delete product. Please try again.");
+    }
+  };
 
   const [isLoading, setIsLoading] = useState(true);
   const handleShowMore = () => {
@@ -33,6 +45,20 @@ function HomeComponent() {
 
   return (
     <>
+      <Toaster
+        toastOptions={{
+          style: {
+            duration: 3000,
+            border: "1px solid #6A5ACD",
+            backgroundColor: "#6A5ACD",
+            padding: "16px",
+            color: "white",
+            fontWeight: "Bold",
+            marginTop: "65px",
+            textAlign: "center",
+          },
+        }}
+      />
       {isLoading ? (
         <Loading />
       ) : products.length > 0 ? (
@@ -165,6 +191,24 @@ function HomeComponent() {
                       {product.createdAt}
                     </Typography>
                   </Grid>
+                  <Grid container>
+                    <Grid item sm={6} xs={12} style={{ margin: "15px 0px" }}>
+                      <Link to={`/updateProduct/${product._id}`}>
+                        <Button variant="contained" color="primary">
+                          Update Product
+                        </Button>
+                      </Link>
+                    </Grid>
+                    <Grid item sm={6} xs={12} style={{ margin: "15px 0px" }}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleDelete(product._id)}
+                      >
+                        Delete Product
+                      </Button>
+                    </Grid>
+                  </Grid>
                 </Grid>
               ))}
               {products.length > displayedOrders && (
@@ -189,23 +233,30 @@ function HomeComponent() {
               </Link>
             </Grid>
           </Grid>
-
         </Grid>
       ) : (
-        <p
-          style={{
-            textAlign: "center",
-            fontWeight: "bold",
-            fontSize: "20px",
-            width: "65%",
-            border: "2px solid",
-            margin: "auto",
-            padding: "20px",
-            marginBottom: "5rem",
-          }}
+        <div
+        style={{
+          textAlign: "center",
+          fontWeight: "bold",
+          fontSize: "20px",
+          width: "45%",
+          border: "2px solid",
+          margin: "auto",
+          padding: "20px",
+          marginBottom: "5rem",
+          borderRadius:"5px"
+        }}
         >
-          There is no products .
-        </p>
+          <p style={{marginBottom:"12px"}}>
+            There is no products .
+          </p>
+          <Link to="/addProduct">
+            <Button variant="contained" color="primary">
+              Add Product
+            </Button>
+          </Link>
+        </div>
       )}
     </>
   );

@@ -19,13 +19,16 @@ import {
   Checkout,
   History,
   ServicesDetails,
+  InventoryHome
 } from './pages/';
 import axios from 'axios';
 import Footer from './components/Footer';
 import Header from './components/Header/Header';
 import { useEffect, useState } from 'react';
 import OrderComponent from './components/OrderComponent';
-
+import AddProductForm from './components/inventory/AddProductFrom';
+import AddMatrialForm from './components/inventory/AddMatrialForm';
+import UpdateProductForm from './components/inventory/UpdateProductForm';
 function App() {
   const location = useLocation();
   const [shwoHeaderAndFooter, setShowHeaderAndFooter] = useState(null);
@@ -71,6 +74,9 @@ function App() {
         <Route path="/store" element={<Store />} />
         <Route path="/product/:productId" element={<ProductDetails />} />
         <Route path="/order" element={<OrderComponent />} />
+        <Route path="/addProduct" element={<AddProductForm />} />
+        <Route path="/addMatrial" element={<AddMatrialForm />} />
+        <Route path="/updateProduct/:productId" element={<UpdateProductForm />} />
         <Route path="/bag" element={<Bag />} />
         <Route element={<Layout />}>
           <Route path="/profile" element={<Profile />} />
@@ -83,6 +89,7 @@ function App() {
           <Route path="/favourites" element={<Favourites />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/history" element={<History />} />
+          <Route path="/inventory" element={<InventoryHome />} />
         </Route>
       </Routes>
       {shwoHeaderAndFooter && <Footer />}
