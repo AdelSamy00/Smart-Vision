@@ -3,7 +3,7 @@ import {
   addMaterial,
   deleteMaterial,
   getMaterial,
-  materialExport,
+  materialsTransaction,
   updateMaterial,
 } from '../controllers/MaterialControllers.js';
 
@@ -11,7 +11,7 @@ const router = express.Router();
 router.post('/', addMaterial);
 router.get('/', getMaterial);
 router.delete('/', deleteMaterial);
-router.put('/export', materialExport);
+router.put('/transaction', materialsTransaction);
 router.put('/', updateMaterial);
 
 export default router;

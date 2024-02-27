@@ -27,7 +27,9 @@ export const getMaterial = async (req, res, next) => {
   try {
     const materials = await Materials.find();
     if (materials.length === 0) {
-      return res.status(404).json({ success: false, message: 'No materials found' });
+      return res
+        .status(404)
+        .json({ success: false, message: 'No materials found' });
     }
 
     res.status(200).json({ success: true, materials });
@@ -134,17 +136,17 @@ export const increaseMaterialQuantity = async (id, quantity, next) => {
   }
 };
 
-export const materialExport = async (req, res, next) => {
+export const materialsTransaction = async (req, res, next) => {
   try {
     let flag = true;
-    const { managerId, exports, method } = req.body;
-    if (!managerId || !exports.length || !method) {
+    const { managerId, materials, method } = req.body;
+    if (!managerId || !materials.length || !method) {
       next('Provide Required Fields!');
       return;
     }
     // to make sure that products in cart elready exist
     await Promise.all(
-      exports.map(async (material) => {
+      materials.map(async (material) => {
         const exist = await existMaterials(material.material);
         if (!exist) {
           flag = false;
@@ -152,14 +154,21 @@ export const materialExport = async (req, res, next) => {
       })
     );
     if (flag) {
-      exports.map(async (material) => {
-        await decreaseMaterialQuantity(material.material, material.quantity);
-      });
+      if (method === 'Export') {
+        materials.map(async (material) => {
+          await decreaseMaterialQuantity(material.material, material.quantity);
+        });
+      } else if (method === 'Import') {
+        materials.map(async (material) => {
+          await increaseMaterialQuantity(material.material, material.quantity);
+        });
+      }
+
       //make transaction
       const transaction = await IventoryTransactions.create({
         inventoryManager: managerId,
         transaction: method,
-        materials: exports,
+        materials: materials,
       });
       res.status(200).json({
         success: true,
