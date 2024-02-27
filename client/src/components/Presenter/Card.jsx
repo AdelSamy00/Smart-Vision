@@ -1,6 +1,6 @@
 import React from 'react'
 import Rating from '@mui/material/Rating';
-import './stylesheets/ProductCard.css'
+import '../stylesheets/ProductCard.css'
 import { Link } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -45,7 +45,7 @@ function Card({ product, handelCart }) {
             <div className="sbProductCardFooter h-16">
                 <Link
                     className='flex items-center text-xl bg-slate-700 hover:bg-slate-800 text-white py-1 px-2 rounded-xl'
-                    to={"/"}
+                    to={`/presenter-edit-product/${product?._id}`}
                 >
                     Edit
                     <EditIcon sx={{ fontSize: '20px', marginLeft: "5px" }} />

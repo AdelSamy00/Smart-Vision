@@ -8,14 +8,15 @@ import { useEffect } from "react";
 
 export default function Review() {
   const [products, setProducts] = React.useState([]);
-  const [shippingInfo, setshippingInfo] = React.useState(null);
-
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setProducts(storedCart);
-    const Shipping = JSON.parse(localStorage.getItem("shippingInfo"));
-    setshippingInfo(Shipping);
   }, []);
+  const [shippingInfo, setShippingInfo] = React.useState(() => {
+    const storedShippingInfo = JSON.parse(localStorage.getItem("shippingInfo"));
+    return storedShippingInfo || {};
+  });
+
   function calculateTotalPrice(cart) {
     if (!cart || cart.length === 0) {
       return 0;

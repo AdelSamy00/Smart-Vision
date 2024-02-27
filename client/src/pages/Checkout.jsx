@@ -17,17 +17,26 @@ import { clearCart } from "../redux/CartSlice";
 
 export default function Checkout() {
   const [activeStep, setActiveStep] = useState(0);
+  const [orderNumber, setOrderNumber] = useState(0);
   const steps = ["Shipping address", "Review your order"];
   const { customer } = useSelector((state) => state.customer);
   const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const [shippingInfo, setShippingInfo] = React.useState(null);
+
+  useEffect(() => {
+    const formDataString = localStorage.getItem("shippingInfo");
+    if (formDataString) {
+      setShippingInfo(JSON.parse(formDataString));
+    }
+  }, [activeStep]);
 
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <AddressForm />;
+        return <AddressForm/>;
       case 1:
-        return <Review products={cart} />;
+        return <Review/>;
       default:
         throw new Error("Unknown step");
     }
@@ -58,7 +67,7 @@ export default function Checkout() {
   }
   const totalPoints = calculateTotalPoints();
   //console.log(totalPoints);
-
+ 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };
@@ -73,21 +82,24 @@ export default function Checkout() {
         product: product?._id,
         quantity: product?.quantity,
       }));
+      console.log(shippingInfo);
       //console.log(productsWithDetails.length);
       const response = await axios.post("/customers/order", {
         id: customer._id,
         cart: productsWithDetails,
         totalPrice: totalPrice,
         totalPoints: totalPoints,
+        customerData: shippingInfo,
       });
       console.log("Order placed successfully:", response.data);
-      dispatch(clearCart())
+      dispatch(clearCart());
+      setOrderNumber(response.data.order.orderNumber);
       setActiveStep(activeStep + 1);
     } catch (error) {
       console.error("Error placing order:", error.response.data.message);
     }
   };
-  
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -112,7 +124,7 @@ export default function Checkout() {
                 Thank you for your order.
               </Typography>
               <Typography variant="subtitle1">
-                Your order number is #212345. We have emailed your order
+                Your order number is #{orderNumber}. We have emailed your order
                 confirmation, and will send you an update when your order has
                 shipped.
               </Typography>

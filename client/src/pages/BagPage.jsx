@@ -123,6 +123,7 @@ const Bag = () => {
           Your bag is empty.
         </p>
       ) : (
+        <>
         <ul className="BagList">
           {cart.map((item) => (
             <li
@@ -322,32 +323,34 @@ const Bag = () => {
             </li>
           ))}
         </ul>
+         <p
+         style={{
+           fontWeight: "bold",
+           fontSize: "30px",
+           marginBottom: "30px"
+         }}
+       >
+         Total Price: {totalPrice} EL
+       </p>
+       <Link to={"/checkout"}>
+         <Button
+           type="submit"
+           fullWidth
+           variant="contained"
+           sx={{
+             textTransform: "capitalize",
+             height: "60px",
+             borderRadius: "30px",
+             fontSize: "20px",
+           }}
+           className="checkout"
+         >
+           checkout
+         </Button>
+       </Link>
+       </>
       )}
-      <p
-        style={{
-          fontWeight: "bold",
-          fontSize: "30px",
-          marginBottom: "30px"
-        }}
-      >
-        Total Price: {totalPrice} EL
-      </p>
-      <Link to={"/checkout"}>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{
-            textTransform: "capitalize",
-            height: "60px",
-            borderRadius: "30px",
-            fontSize: "20px",
-          }}
-          className="checkout"
-        >
-          checkout
-        </Button>
-      </Link>
+     
     </div>
   );
 };

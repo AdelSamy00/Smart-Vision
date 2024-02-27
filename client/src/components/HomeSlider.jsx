@@ -82,7 +82,7 @@ function HomeSlider({ items, option, setSelectedOption }) {
       if (screenWidth < 580 && option !== "product") {
         setItemsToScroll(1.08);
       } else if (screenWidth < 890 && option !== "product") {
-        setItemsToScroll(2);
+        setItemsToScroll(2.1);
       } else if (screenWidth <= 1035 && option !== "product") {
         setItemsToScroll(3.2);
       } else if (screenWidth <= 1410 && option !== "product") {

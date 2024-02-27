@@ -9,7 +9,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { useSelector } from "react-redux";
-
+import toast, { Toaster } from "react-hot-toast";
 const defaultTheme = createTheme();
 
 export default function ChangePassword() {
@@ -78,7 +78,9 @@ export default function ChangePassword() {
         // Clear error message
         setErrorMessage("");
         setIsPasswordValid(true);
-        setSubmitMessage(response.data.message)
+        toast.dismiss();
+      toast.success(response.data.message);
+        // setSubmitMessage(response.data.message)
       } catch (error) {
         // console.error("Error changing password:", error);
         setSubmitMessage(error.response.data.message);
@@ -109,6 +111,20 @@ export default function ChangePassword() {
           }}
           onSubmit={submitChange}
         >
+           <Toaster
+        toastOptions={{
+          style: {
+            duration: 3000,
+            border: "1px solid #6A5ACD",
+            backgroundColor: "#6A5ACD",
+            padding: "16px",
+            color: "white",
+            fontWeight: "Bold",
+            marginTop: "65px",
+            textAlign: "center",
+          },
+        }}
+      />
           <h1
             style={{
               marginBottom: "50px",

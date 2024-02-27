@@ -1,7 +1,7 @@
 .productCard {
   width: 260px ;
   height: 440px;
-  /* background-color: rgba(239, 239, 239, 0.56); */
+  background-color: rgba(239, 239, 239, 0.56);
   border-radius: 1rem;
   border: 2px solid rgba(239, 239, 239, 0.56);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -12,7 +12,7 @@
 
 .sbProductCardData {
   padding: 1rem;
-  background-color: rgba(239, 239, 239, 0.56);
+  /* background-color: rgba(239, 239, 239, 0.56); */
 }
 
 .sbProductCardData h5 {
@@ -42,7 +42,7 @@
   padding: 0.54rem 0.9rem;
   position: absolute;
   bottom: 0;
-  background-color: rgba(239, 239, 239, 0.56);
+  /* background-color: rgba(239, 239, 239, 0.56); */
 }
 
 .sbProductCardFooterIcon {
@@ -80,6 +80,7 @@
 .sbProductCardDivImg {
   height: 180px;
   width: 100%;
+  background-color: white;
 }
 
 .sbProductCardDivFirstImg {

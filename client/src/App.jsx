@@ -29,6 +29,9 @@ import OrderComponent from './components/OrderComponent';
 import AddProductForm from './components/inventory/AddProductFrom';
 import AddMatrialForm from './components/inventory/AddMatrialForm';
 import UpdateProductForm from './components/inventory/UpdateProductForm';
+import EditProductForm from './components/Presenter/EditProductPresenter';
+import PresenterProductsView from './pages/Presenter/PresenterProductsview';
+import HomePresenter from './pages/Presenter/Homepresenter';
 function App() {
   const location = useLocation();
   const [shwoHeaderAndFooter, setShowHeaderAndFooter] = useState(null);
@@ -90,6 +93,9 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/history" element={<History />} />
           <Route path="/inventory" element={<InventoryHome />} />
+          <Route path="/presenter-home" element={<HomePresenter />} />
+        <Route path="/presenter-view" element={<PresenterProductsView />} />
+        <Route path="/presenter-edit-product/:productId" element={<EditProductForm />} />
         </Route>
       </Routes>
       {shwoHeaderAndFooter && <Footer />}

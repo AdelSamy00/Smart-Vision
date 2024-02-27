@@ -9,6 +9,7 @@ import { setCart } from "../redux/CartSlice";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import PropTypes from "prop-types";
+import CheckIcon from '@mui/icons-material/Check';
 
 const Store = ({ selectedCategory, selectedPrice }) => {
   const [selectedColor, setSelectedColor] = useState("");
@@ -27,7 +28,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
   const [selectedPriceRanges, setSelectedPriceRanges] = useState(
     selectedPrice ? [{ min: "", max: selectedPrice }] : []
   );
-  const colors = ["Red", "Blue", "Green", "Yellow", "White", "Black"];
+  const colors = ["Red", "Blue", "Green", "Gray", "Brown", "Black"];
   const categories = ["sofa", "chair", "bed", "Storage"];
   const [selectedCategories, setSelectedCategories] = useState([
     selectedCategory ? selectedCategory : "All",
@@ -117,7 +118,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
 
   const handleColorChange = (color) => {
     console.log("Selected Color:", color);
-    setSelectedColor(color);
+    setSelectedColor(color === selectedColor ? "" : color);
     setShowColorDropdown(false);
   };
 
@@ -222,7 +223,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get("/products/");
-        // console.log("API response:", response.data.products);
+        console.log("API response:", response.data.products);
         setProducts(response.data.products);
         setIsLoading(false);
       } catch (error) {
@@ -463,12 +464,18 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                   <div
                     key={index}
                     className="colorOption"
-                    onClick={() => handleColorChange(color.toLowerCase())}
+                    onClick={() => handleColorChange(color)}
                   >
                     <div
                       className="colorCircle"
-                      style={{ backgroundColor: color }}
-                    ></div>
+                      style={{ backgroundColor: color, position: "relative" }}
+                    >
+                      {selectedColor === color && (
+                        <div className="correctSign">
+                          <CheckIcon />
+                        </div>
+                      )}
+                    </div>
                     <div>{color}</div>
                   </div>
                 ))}
