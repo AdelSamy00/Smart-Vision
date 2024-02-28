@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import './StyleSheets/EditProduct.css';
+import './PresenterStyleSheets/EditProduct.css';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import InputColor from '../../components/Presenter/InputColor';
+import { Alert, Snackbar } from '@mui/material';
 
 function EditProduct() {
   const navigate = useNavigate();
@@ -17,7 +18,21 @@ function EditProduct() {
   const [colors, setColors] = useState(null);
   const [price, setPrice] = useState(null);
   const [show, setShow] = useState(null);
+  const [numberOfImages, setNumberOfImages] = useState(0);
   const [validated, setValidated] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const handleOpenSnackbar = () => {
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenSnackbar(false);
+  };
 
   function setProductData(product) {
     setProductName(product?.name);
@@ -27,12 +42,15 @@ function EditProduct() {
     setImages(product?.images);
     setPrice(product?.price);
     setShow(product?.show);
+    setNumberOfImages(product?.images.length);
   }
 
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
-    if (form.checkValidity() === false) {
+    if (numberOfImages === 0 || colors.length === 0) {
+      handleOpenSnackbar();
+    } else if (form.checkValidity() === false) {
       event.stopPropagation();
       setValidated(true);
     } else {
@@ -63,10 +81,11 @@ function EditProduct() {
     setNewImages((prevImages) => {
       return prevImages.filter((image) => image !== removeImage);
     });
+    setNumberOfImages(numberOfImages - 1);
   }
 
   async function conver2base64(e) {
-    const files = e.target.files;    
+    const files = e.target.files;
     for (let index = 0; index < files.length; index++) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -75,9 +94,10 @@ function EditProduct() {
         });
       };
       reader.readAsDataURL(files[index]);
+      setNumberOfImages(numberOfImages + 1);
     }
   }
-  
+
   async function getProduct(productId) {
     await axios
       .get(`/products/${productId}`)
@@ -105,9 +125,9 @@ function EditProduct() {
                 <Form.Label className="FormLabel">Images</Form.Label>
                 <div
                   className={
-                    images.length
+                    images.length || newImages.length
                       ? 'editProductFromImagesDiv'
-                      : 'editProductFromImagesDiv h-1/2'
+                      : 'editProductFromImagesDiv h-60'
                   }
                 >
                   {images.map((image, idx) => {
@@ -207,37 +227,41 @@ function EditProduct() {
                   </Form.Group>
                 </div>
                 {/* for colors */}
-                <div className="InputGroup">
-                  <InputColor colors={colors} setColors={setColors} />
-                </div>
-                <div className="InputGroup relative flex justify-items-center gap-2">
-                  <input
-                    type="file"
-                    id="uploadFile"
-                    name="uploadFile"
-                    className="uploadBtn file:hidden text-gray-700 bg-gray-300 w-1/4"
-                    onChange={(e) => conver2base64(e)}
-                    multiple
-                  />
-                  <label
-                    htmlFor="uploadFile"
-                    className="leading-7 text-sm text-gray-600 mt-1"
-                  >
-                    uploadFile
-                  </label>
-                </div>
-                {/* for show */}
                 <Form.Group className="InputGroup">
+                  <Form.Label className="FormLabel">Colors</Form.Label>
+                  <InputColor colors={colors} setColors={setColors} />
+                </Form.Group>
+                {/* for upload picture */}
+                {numberOfImages < 4 ? (
+                  <Form.Group className="InputGroup flex flex-wrap justify-items-center gap-2 items-center">
+                    <input
+                      type="file"
+                      id="uploadFile"
+                      name="uploadFile"
+                      className="uploadBtn hidden text-gray-700 bg-gray-300 w-1/4"
+                      onChange={(e) => conver2base64(e)}
+                    />
+                    <label
+                      htmlFor="uploadFile"
+                      className="uploadBtn text-gray-700 bg-gray-300 cursor-pointer"
+                    >
+                      Upload picture
+                    </label>
+                    <p>Maximum 4 pictures</p>
+                  </Form.Group>
+                ) : (
+                  <></>
+                )}
+                {/* for show */}
+                <Form.Group className="InputGroup flex items-center">
                   <Form.Label className="FormLabel mr-4">Show</Form.Label>
-                  <Form.Check
-                    className="text-2xl"
-                    inline
+                  <input
+                    type="checkbox"
+                    className="w-6 h-6"
                     value={show}
-                    type="switch"
                     checked={show}
                     onChange={() => {
                       setShow(!show);
-                      console.log(show);
                     }}
                   />
                 </Form.Group>
@@ -246,12 +270,12 @@ function EditProduct() {
             <div className="flex justify-between flex-row-reverse">
               <button
                 type="submit"
-                className="text-2xl bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-3xl  m-4 h-16"
+                className="text-2xl bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-xl mb-4 h-16"
               >
                 Save
               </button>
               <button
-                className="text-2xl bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded-3xl  m-4 h-16"
+                className="text-2xl bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded-xl mb-4 h-16"
                 onClick={(e) => {
                   e.preventDefault();
                   history.back();
@@ -265,6 +289,20 @@ function EditProduct() {
       ) : (
         <></>
       )}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Include at least one picture and color.
+        </Alert>
+      </Snackbar>
     </>
   );
 }

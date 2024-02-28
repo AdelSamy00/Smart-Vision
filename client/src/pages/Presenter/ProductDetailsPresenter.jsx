@@ -76,15 +76,15 @@ function ProductDetailsPresenter() {
 
   //handel remove product
   const handelDeleteProduct = async (productId) => {
-    console.log('first');
-    // await axios
-    //     .delete('', { productId })
-    //     .then((res) => {
-    //         console.log(res.data)
-    //     })
-    //     .catch((e) => {
-    //         console.log(e);
-    //     });
+    await axios
+      .delete('/products/', {data : { productId }})
+      .then((res) => {
+        console.log(res.data);
+        history.back()
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   async function getProduct(productId) {
@@ -272,11 +272,11 @@ function ProductDetailsPresenter() {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle sx={{ fontSize: '25px', fontWeight: 'bold' }}>
-          Your account is deleted
+          Delete Product
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            Your Smart Vision account has now been deleted.
+            Are you sure want to delete this product??
             <br />
             We are sad to see you leave, and hope you will come back in the
             future.
