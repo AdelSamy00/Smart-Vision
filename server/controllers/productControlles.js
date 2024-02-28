@@ -133,9 +133,10 @@ export const increaseQuantity = async (id, quantity) => {
 export const updateProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name, description, quantity, category, price, points } = req.body;
+    const { name, description, images, category, price, points, colors, show } = req.body;
     const productData = req.body;
-    if (!name || !quantity || !description || !category || !price || !points) {
+    console.log(name, description, images, category, price, points, colors, show)
+    if (!name || !images.length || !description || !category || !price || !points || !colors || !show) {
       next('Please Provide needed fields');
       return;
     }

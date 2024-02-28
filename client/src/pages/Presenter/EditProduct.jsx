@@ -6,6 +6,7 @@ import './PresenterStyleSheets/EditProduct.css';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import InputColor from '../../components/Presenter/InputColor';
 import { Alert, Snackbar } from '@mui/material';
+import { handleMultipleFilesUpload } from '../../utils';
 
 function EditProduct() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ function EditProduct() {
   const [category, setCategory] = useState(null);
   const [colors, setColors] = useState(null);
   const [price, setPrice] = useState(null);
+  const [points, setPoints] = useState(null);
   const [show, setShow] = useState(null);
   const [numberOfImages, setNumberOfImages] = useState(0);
   const [validated, setValidated] = useState(false);
@@ -42,9 +44,46 @@ function EditProduct() {
     setImages(product?.images);
     setPrice(product?.price);
     setShow(product?.show);
+    setPoints(product?.points);
     setNumberOfImages(product?.images.length);
   }
 
+  async function sendNewData(
+    name,
+    description,
+    images,
+    category,
+    price,
+    points,
+    colors,
+    show,
+    imagesUrl
+  ) {
+    await axios
+      .put(`/products/${productId}`, {
+        name,
+        description,
+        images: [...images, ...imagesUrl],
+        category,
+        price,
+        points,
+        colors,
+        show,
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  function getNewImagesFiles() {
+    let files = [];
+    newImages.map((item) => {
+      files.push(item.file[0]);
+    });
+    return files;
+  }
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
@@ -54,23 +93,21 @@ function EditProduct() {
       event.stopPropagation();
       setValidated(true);
     } else {
-      console.log(
+      const files = getNewImagesFiles();
+      const imagesUrl = newImages?.length
+        ? await handleMultipleFilesUpload(files)
+        : [];
+      sendNewData(
         productName,
-        category,
-        colors,
         description,
+        images,
+        category,
         price,
+        points,
+        colors,
         show,
-        images
+        imagesUrl
       );
-      // await axios.put('', { })
-      //     .then((res) => {
-      //         const newData = { ...res.data?.customer };
-      //         handleClose()
-      //     })
-      //     .catch((error) => {
-      //         console.log(error)
-      //     })
     }
   };
 
@@ -78,24 +115,30 @@ function EditProduct() {
     setImages((prevImages) => {
       return prevImages.filter((image) => image !== removeImage);
     });
+    setNumberOfImages(numberOfImages - 1);
+  }
+
+  function handleDeleteNewImage(removeImage) {
     setNewImages((prevImages) => {
-      return prevImages.filter((image) => image !== removeImage);
+      return prevImages.filter((image) => image.imgUrl !== removeImage.imgUrl);
     });
+
     setNumberOfImages(numberOfImages - 1);
   }
 
   async function conver2base64(e) {
     const files = e.target.files;
-    for (let index = 0; index < files.length; index++) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setNewImages((prev) => {
-          return [...prev, reader.result.toString()];
-        });
-      };
-      reader.readAsDataURL(files[index]);
-      setNumberOfImages(numberOfImages + 1);
-    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setNewImages((prev) => {
+        return [
+          ...prev,
+          { imgUrl: reader.result.toString(), file: [...files] },
+        ];
+      });
+    };
+    reader.readAsDataURL(files[0]);
+    setNumberOfImages(numberOfImages + 1);
   }
 
   async function getProduct(productId) {
@@ -153,7 +196,7 @@ function EditProduct() {
                       <div
                         key={idx}
                         className="editProductFormImageDiv"
-                        onClick={() => handleDeleteImage(image)}
+                        onClick={() => handleDeleteNewImage(image)}
                       >
                         <div className="editProductFormDeleteImage">
                           <DeleteForeverIcon
@@ -162,7 +205,10 @@ function EditProduct() {
                             }}
                           />
                         </div>
-                        <img className="editProductFromImage" src={image} />
+                        <img
+                          className="editProductFromImage"
+                          src={image.imgUrl}
+                        />
                       </div>
                     );
                   })}
@@ -210,6 +256,7 @@ function EditProduct() {
                     >
                       <option value="">Choose a category</option>
                       <option value="sofa">Sofa</option>
+                      <option value="bed">Bed</option>
                     </Form.Select>
                   </Form.Group>
                   {/* for Price */}
@@ -226,11 +273,26 @@ function EditProduct() {
                     />
                   </Form.Group>
                 </div>
+
                 {/* for colors */}
-                <Form.Group className="InputGroup">
+                <Form.Group className="InputGroup ">
                   <Form.Label className="FormLabel">Colors</Form.Label>
                   <InputColor colors={colors} setColors={setColors} />
                 </Form.Group>
+                {/* for points */}
+                <Form.Group className="InputGroup ">
+                  <Form.Label className="FormLabel">Points</Form.Label>
+                  <Form.Control
+                    required
+                    className="InputField"
+                    type="number"
+                    placeholder="Points"
+                    min={0}
+                    value={points}
+                    onChange={(e) => setPoints(e.target.value)}
+                  />
+                </Form.Group>
+
                 {/* for upload picture */}
                 {numberOfImages < 4 ? (
                   <Form.Group className="InputGroup flex flex-wrap justify-items-center gap-2 items-center">

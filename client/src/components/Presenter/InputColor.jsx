@@ -114,7 +114,7 @@ const Listbox = styled('ul')(
 );
 
 export default function InputColor({ colors, setColors }) {
-  const allColors = ['Red', 'Gray', 'Black'];
+  const allColors = ['Red', 'Gray', 'Black','Brown', 'Off-White'];
   const [initColors, setInitColors] = useState(colors);
   const {
     getInputProps,
