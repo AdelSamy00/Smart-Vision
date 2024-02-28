@@ -154,58 +154,73 @@ function HomeComponent() {
                     padding: "20px",
                   }}
                 >
-                  <Grid item xs={12} md={7}>
+                  <Grid item xs={12} >
+                    <Grid container>
+                      <Grid item sm={8} xs={12}>
+                        <Typography
+                          variant="body2"
+                          style={{ marginTop: "1rem", fontSize: "20px" }}
+                        >
+                          <span style={{ fontWeight: "bold" }}>
+                            Product Name :
+                          </span>{" "}
+                          {product.name}
+                        </Typography>
+                      </Grid>
+                      <Grid item sm={4} xs={12}>
+                      <Typography
+                          variant="body2"
+                          style={{ marginTop: "1rem", fontSize: "20px" }}
+                        >
+                          <span style={{ fontWeight: "bold" }}>Category:</span>{" "}
+                          {product.category}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <Grid container>
+                      <Grid item sm={8} xs={12}>
+                      <Typography
+                          variant="body2"
+                          style={{ marginTop: "1rem", fontSize: "20px" }}
+                        >
+                          <span style={{ fontWeight: "bold" }}>Quantity:</span>{" "}
+                          {product.quantity}
+                        </Typography>
+                      </Grid>
+                      <Grid item sm={4} xs={12}>
+                        <Typography
+                          variant="body2"
+                          style={{ marginTop: "1rem", fontSize: "20px" }}
+                        >
+                          <span style={{ fontWeight: "bold" }}>Colors:</span>{" "}
+                          {product.colors}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+
                     <Typography
                       variant="body2"
                       style={{ marginTop: "1rem", fontSize: "20px" }}
                     >
-                      <span style={{ fontWeight: "bold" }}>Product Name :</span>{" "}
-                      {product.name}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      style={{ marginTop: "1rem", fontSize: "20px" }}
-                    >
-                      <span style={{ fontWeight: "bold" }}>quantity:</span>{" "}
-                      {product.quantity}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      style={{ marginTop: "1rem", fontSize: "20px" }}
-                    >
-                      <span style={{ fontWeight: "bold" }}>Category:</span>{" "}
-                      {product.category}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      style={{ marginTop: "1rem", fontSize: "20px" }}
-                    >
-                      <span style={{ fontWeight: "bold" }}>Colors:</span>{" "}
-                      {product.colors}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      style={{ marginTop: "1rem", fontSize: "20px" }}
-                    >
-                      <span style={{ fontWeight: "bold" }}>Date Placed:</span>{" "}
-                      {product.createdAt}
+                      <span style={{ fontWeight: "bold" }}>Description:</span>{" "}
+                      {product.description}
                     </Typography>
                   </Grid>
                   <Grid container>
-                    <Grid item sm={6} xs={12} style={{ margin: "15px 0px" }}>
+                    <Grid item sm={8} xs={6} style={{ margin: "15px 0px" }}>
                       <Link to={`/updateProduct/${product._id}`}>
                         <Button variant="contained" color="primary">
-                          Update Product
+                          Update 
                         </Button>
                       </Link>
                     </Grid>
-                    <Grid item sm={6} xs={12} style={{ margin: "15px 0px" }}>
+                    <Grid item sm={4} xs={6} style={{ margin: "15px 0px" }}>
                       <Button
                         variant="contained"
                         color="primary"
                         onClick={() => handleDelete(product._id)}
                       >
-                        Delete Product
+                        Delete 
                       </Button>
                     </Grid>
                   </Grid>
@@ -236,21 +251,19 @@ function HomeComponent() {
         </Grid>
       ) : (
         <div
-        style={{
-          textAlign: "center",
-          fontWeight: "bold",
-          fontSize: "20px",
-          width: "45%",
-          border: "2px solid",
-          margin: "auto",
-          padding: "20px",
-          marginBottom: "5rem",
-          borderRadius:"5px"
-        }}
+          style={{
+            textAlign: "center",
+            fontWeight: "bold",
+            fontSize: "20px",
+            width: "45%",
+            border: "2px solid",
+            margin: "auto",
+            padding: "20px",
+            marginBottom: "5rem",
+            borderRadius: "5px",
+          }}
         >
-          <p style={{marginBottom:"12px"}}>
-            There is no products .
-          </p>
+          <p style={{ marginBottom: "12px" }}>There is no products .</p>
           <Link to="/addProduct">
             <Button variant="contained" color="primary">
               Add Product

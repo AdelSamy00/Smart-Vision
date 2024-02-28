@@ -4,11 +4,12 @@ import Loading from "../Loading";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+
 function MatrialComponnent() {
   const [Matrials, setMatrials] = useState([]);
   const [displayedOrders, setDisplayedOrders] = useState(1);
-
   useEffect(() => {
     const fetchMaterials = async () => {
       try {
@@ -22,13 +23,41 @@ function MatrialComponnent() {
 
     fetchMaterials();
   }, []);
+
   const [isLoading, setIsLoading] = useState(true);
   const handleShowMore = () => {
     setDisplayedOrders(Matrials.length);
   };
 
+  const handleDelete = async (matrialId) => {
+    try {
+      const response = await axios.delete("/Materials/", { data: {id: matrialId } });
+      setMatrials((prevMatrials) =>
+      prevMatrials.filter((Matrial) => Matrial._id !== matrialId)
+      );
+      toast.dismiss();
+      toast.success(response.data.message);
+    } catch (error) {
+      console.error("Error deleting matrial:", error);
+      toast.error("Failed to delete matrial. Please try again.");
+    }
+  };
   return (
     <>
+          <Toaster
+        toastOptions={{
+          style: {
+            duration: 3000,
+            border: "1px solid #6A5ACD",
+            backgroundColor: "#6A5ACD",
+            padding: "16px",
+            color: "white",
+            fontWeight: "Bold",
+            marginTop: "65px",
+            textAlign: "center",
+          },
+        }}
+      />
       {isLoading ? (
         <Loading />
       ) : Matrials.length > 0 ? (
@@ -148,6 +177,24 @@ function MatrialComponnent() {
                       <span style={{ fontWeight: "bold" }}>Date Placed:</span>{" "}
                       {Matrial.createdAt}
                     </Typography>
+                  </Grid>
+                  <Grid container style={{marginTop:"20px"}}>
+                    <Grid item sm={8} xs={6} style={{ margin: "15px 0px" }}>
+                      <Link to={`/updateMatrial/${Matrial._id}`}>
+                        <Button variant="contained" color="primary">
+                          Update
+                        </Button>
+                      </Link>
+                    </Grid>
+                    <Grid item sm={4}xs={6} style={{ margin: "15px 0px" }}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleDelete(Matrial._id)}
+                      >
+                        Delete
+                      </Button>
+                    </Grid>
                   </Grid>
                 </Grid>
               ))}

@@ -119,18 +119,21 @@ const AddProductForm = () => {
             required
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid container style={{marginTop:"20px"}}>
+        <Grid item xs={6}  style={{display:"flex",marginLeft:"15px"}}>
           <Button type="submit" variant="contained" color="primary">
-            Add Product
+            Add 
           </Button>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={5.6}  style={{display:"flex" ,justifyContent:"flex-end",marginRight:"-30px"}}>
           <Link to="/inventory">
             <Button variant="contained" color="primary">
-              Show Product
+              Show
             </Button>
           </Link>
         </Grid>
+        </Grid>
+
         {submitMessage && (
           <Grid item xs={12}>
             <p

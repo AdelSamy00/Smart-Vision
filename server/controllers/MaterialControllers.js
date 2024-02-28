@@ -60,6 +60,20 @@ export const deleteMaterial = async (req, res, next) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+export const getMaterialById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const material = await Materials.findById(id);
+
+    if (!material) {
+      return res.status(404).json({ success: false, message: 'Material not found' });
+    }
+
+    res.status(200).json({ success: true, material });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+}; 
 
 export const updateMaterial = async (req, res, next) => {
   try {

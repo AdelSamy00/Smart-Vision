@@ -29,6 +29,7 @@ import OrderComponent from './components/OrderComponent';
 import AddProductForm from './components/inventory/AddProductFrom';
 import AddMatrialForm from './components/inventory/AddMatrialForm';
 import UpdateProductForm from './components/inventory/UpdateProductForm';
+import UpdateMatrialForm from './components/inventory/UpdateMatrialeForm';
 import EditProductForm from './components/Presenter/EditProductPresenter';
 import PresenterProductsView from './pages/Presenter/PresenterProductsview';
 import HomePresenter from './pages/Presenter/Homepresenter';
@@ -80,6 +81,7 @@ function App() {
         <Route path="/addProduct" element={<AddProductForm />} />
         <Route path="/addMatrial" element={<AddMatrialForm />} />
         <Route path="/updateProduct/:productId" element={<UpdateProductForm />} />
+        <Route path="/updateMatrial/:matrialId" element={<UpdateMatrialForm />} />
         <Route path="/bag" element={<Bag />} />
         <Route element={<Layout />}>
           <Route path="/profile" element={<Profile />} />
