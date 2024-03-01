@@ -33,25 +33,19 @@ import UpdateMatrialForm from './components/inventory/UpdateMatrialeForm';
 import EditProductForm from './components/Presenter/EditProductPresenter';
 import PresenterProductsView from './pages/Presenter/PresenterProductsview';
 import HomePresenter from './pages/Presenter/Homepresenter';
+import ProductDetailsPresenter from './pages/Presenter/ProductDetailsPresenter';
+import EditProduct from './pages/Presenter/EditProduct';
+import { CustomerLayout } from './utils/Layouts.jsx';
 function App() {
   const location = useLocation();
   const [shwoHeaderAndFooter, setShowHeaderAndFooter] = useState(null);
-  const dispatch = useDispatch();
   const { customer } = useSelector((state) => state.customer);
   axios.defaults.baseURL = 'http://localhost:3000';
   axios.defaults.headers = {
     'Content-Type': 'application/json',
     Authorization: customer?.token ? `Bearer ${customer?.token}` : '',
   };
-  const Layout = () => {
-    const { customer } = useSelector((state) => state.customer);
-    console.log(customer);
-    return customer?._id ? (
-      <Outlet />
-    ) : (
-      <Navigate to="/login" state={{ from: location }} />
-    );
-  };
+
 
   const shouldRenderHeaderAndFooter = () => {
     const routesWithoutHeader = ['/login', '/register', '/'];
@@ -77,13 +71,24 @@ function App() {
         <Route path="/services/:serviceName" element={<ServicesDetails />} />
         <Route path="/store" element={<Store />} />
         <Route path="/product/:productId" element={<ProductDetails />} />
+        <Route
+          path="/p/product/:productId"
+          element={<ProductDetailsPresenter />}
+        />
+        <Route path="/ed/product/:productId" element={<EditProduct />} />
         <Route path="/order" element={<OrderComponent />} />
         <Route path="/addProduct" element={<AddProductForm />} />
         <Route path="/addMatrial" element={<AddMatrialForm />} />
-        <Route path="/updateProduct/:productId" element={<UpdateProductForm />} />
-        <Route path="/updateMatrial/:matrialId" element={<UpdateMatrialForm />} />
+        <Route
+          path="/updateProduct/:productId"
+          element={<UpdateProductForm />}
+        />
+        <Route
+          path="/updateMatrial/:matrialId"
+          element={<UpdateMatrialForm />}
+        />
         <Route path="/bag" element={<Bag />} />
-        <Route element={<Layout />}>
+        <Route element={<CustomerLayout />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/profile-details" element={<ProfileDetails />} />
           <Route path="/profile/change-password" element={<ChangePassword />} />
@@ -96,8 +101,11 @@ function App() {
           <Route path="/history" element={<History />} />
           <Route path="/inventory" element={<InventoryHome />} />
           <Route path="/presenter-home" element={<HomePresenter />} />
-        <Route path="/presenter-view" element={<PresenterProductsView />} />
-        <Route path="/presenter-edit-product/:productId" element={<EditProductForm />} />
+          <Route path="/presenter-view" element={<PresenterProductsView />} />
+          <Route
+            path="/presenter-edit-product/:productId"
+            element={<EditProductForm />}
+          />
         </Route>
       </Routes>
       {shwoHeaderAndFooter && <Footer />}

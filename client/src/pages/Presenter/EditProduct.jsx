@@ -7,10 +7,12 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import InputColor from '../../components/Presenter/InputColor';
 import { Alert, Snackbar } from '@mui/material';
 import { handleMultipleFilesUpload } from '../../utils';
+import Loading from '../../components/Loading';
 
 function EditProduct() {
   const navigate = useNavigate();
   const { productId } = useParams();
+  const [product, setProduct] = useState(null);
   const [description, setDescription] = useState(null);
   const [images, setImages] = useState(null);
   const [newImages, setNewImages] = useState([]);
@@ -23,6 +25,7 @@ function EditProduct() {
   const [numberOfImages, setNumberOfImages] = useState(0);
   const [validated, setValidated] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleOpenSnackbar = () => {
     setOpenSnackbar(true);
@@ -37,6 +40,7 @@ function EditProduct() {
   };
 
   function setProductData(product) {
+    setProduct(product);
     setProductName(product?.name);
     setCategory(product?.category);
     setColors(product?.colors);
@@ -46,6 +50,7 @@ function EditProduct() {
     setShow(product?.show);
     setPoints(product?.points);
     setNumberOfImages(product?.images.length);
+    setIsLoading(false);
   }
 
   async function sendNewData(
@@ -72,6 +77,7 @@ function EditProduct() {
       })
       .then((res) => {
         console.log(res.data);
+        history.back()
       })
       .catch((error) => {
         console.log(error);
@@ -93,6 +99,7 @@ function EditProduct() {
       event.stopPropagation();
       setValidated(true);
     } else {
+      setIsLoading(true)
       const files = getNewImagesFiles();
       const imagesUrl = newImages?.length
         ? await handleMultipleFilesUpload(files)
@@ -158,7 +165,7 @@ function EditProduct() {
 
   return (
     <>
-      {productName ? (
+      {!isLoading ? (
         <main className="editProductMain">
           <h1>Edit product</h1>
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -217,10 +224,14 @@ function EditProduct() {
               <div className="editProductFormAllData">
                 {/* for product Name */}
                 <Form.Group className="InputGroup">
-                  <Form.Label className="FormLabel">Product Name</Form.Label>
+                  <Form.Label htmlFor="productName" className="FormLabel">
+                    Product Name
+                  </Form.Label>
                   <Form.Control
                     required
                     className="InputField"
+                    name="productName"
+                    id="productName"
                     type="text"
                     placeholder="Product Name"
                     value={productName}
@@ -229,10 +240,17 @@ function EditProduct() {
                 </Form.Group>
                 {/* for Description */}
                 <Form.Group className="InputGroup">
-                  <Form.Label className="FormLabel">Description</Form.Label>
+                  <Form.Label
+                    htmlFor="productDescription"
+                    className="FormLabel"
+                  >
+                    Description
+                  </Form.Label>
                   <Form.Control
                     required
                     className="InputField h-auto"
+                    name="productDescription"
+                    id="productDescription"
                     type="text"
                     as="textarea"
                     rows={5}
@@ -244,13 +262,14 @@ function EditProduct() {
                 <div className="editProductCategoryAndPriceDiv">
                   {/*for category */}
                   <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv ">
-                    <Form.Label className="FormLabel" htmlFor="disabledSelect">
+                    <Form.Label className="FormLabel" htmlFor="productCategory">
                       Category
                     </Form.Label>
                     <Form.Select
                       required
                       className="InputField"
-                      id="disabledSelect"
+                      name="productCategory"
+                      id="productCategory"
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
                     >
@@ -261,10 +280,14 @@ function EditProduct() {
                   </Form.Group>
                   {/* for Price */}
                   <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv">
-                    <Form.Label className="FormLabel">Price</Form.Label>
+                    <Form.Label htmlFor="productPrice" className="FormLabel">
+                      Price
+                    </Form.Label>
                     <Form.Control
                       required
                       className="InputField"
+                      name="productPrice"
+                      id="productPrice"
                       type="number"
                       placeholder="Price"
                       min={0}
@@ -281,10 +304,14 @@ function EditProduct() {
                 </Form.Group>
                 {/* for points */}
                 <Form.Group className="InputGroup ">
-                  <Form.Label className="FormLabel">Points</Form.Label>
+                  <Form.Label htmlFor="productPoints" className="FormLabel">
+                    Points
+                  </Form.Label>
                   <Form.Control
                     required
                     className="InputField"
+                    name="productPoints"
+                    id="productPoints"
                     type="number"
                     placeholder="Points"
                     min={0}
@@ -316,10 +343,14 @@ function EditProduct() {
                 )}
                 {/* for show */}
                 <Form.Group className="InputGroup flex items-center">
-                  <Form.Label className="FormLabel mr-4">Show</Form.Label>
+                  <Form.Label htmlFor="productShow" className="FormLabel mr-4">
+                    Show
+                  </Form.Label>
                   <input
                     type="checkbox"
                     className="w-6 h-6"
+                    name="productShow"
+                    id="productShow"
                     value={show}
                     checked={show}
                     onChange={() => {
@@ -349,7 +380,9 @@ function EditProduct() {
           </Form>
         </main>
       ) : (
-        <></>
+        <div className="h-96">
+          <Loading />
+        </div>
       )}
       <Snackbar
         open={openSnackbar}
