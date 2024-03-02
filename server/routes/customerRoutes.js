@@ -29,35 +29,35 @@ router.get('/verified', (req, res) => {
 });
 
 // update customer data
-router.put('/', customerAuth, updateCustomer);
+router.put('/', updateCustomer);
 
 // sent feedback or problem from ContactUs page
 router.post('/contactUs', saveContactMesseage);
 
 //delete his account
 //need middleware
-router.delete('/delete-acount/:id', customerAuth, deleteAcount);
+router.delete('/delete-acount/:id', deleteAcount);
 
 //Change password
-router.put('/changePassword', customerAuth, changePassword);
+router.put('/changePassword', changePassword);
 
 //add or remove favorite product
-router.post('/favorite', customerAuth, makeFavorite);
+router.post('/favorite', makeFavorite);
 router.get('/favorite/:id', getFavoriteList);
 
 //order
-router.post('/order', customerAuth, makeOrder);
-router.delete('/order', customerAuth, cancelOrder);
+router.post('/order', makeOrder);
+router.delete('/order', cancelOrder);
 router.get('/order/:id', getOrderHistory);
 
 //review
-router.post('/review', customerAuth, addreview);
-router.delete('/review', customerAuth, deleteReview);
-router.put('/review', customerAuth, updateReview);
+router.post('/review', addreview);
+router.delete('/review', deleteReview);
+router.put('/review', updateReview);
 
 //Services
-router.post('/service', customerAuth, makeService);
-router.delete('/service', customerAuth, cancelService);
+router.post('/service', makeService);
+router.delete('/service', cancelService);
 router.get('/service/:id', getServiceHistory);
 
 export default router;

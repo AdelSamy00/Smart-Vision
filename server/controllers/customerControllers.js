@@ -552,7 +552,13 @@ export const updateReview = async (req, res, next) => {
 export const makeService = async (req, res, next) => {
   try {
     const serviceData = req.body;
-    if (!serviceData.id || !serviceData.service || !serviceData.description) {
+    if (
+      !serviceData.id ||
+      !serviceData.service ||
+      !serviceData.description ||
+      !serviceData.address ||
+      !serviceData.phone
+    ) {
       next('Provide Required Fields!');
       return;
     }

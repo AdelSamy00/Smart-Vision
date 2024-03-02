@@ -6,10 +6,6 @@ const serviceOrderSchema = new mongoose.Schema(
       ref: 'Customers',
     },
     state: { type: String, default: 'PENDING' },
-    /* serviceID: {
-      type: Schema.Types.ObjectId,
-      ref: 'Services',
-    }, */
     service: {
       type: String,
       required: [true, 'Service is Required!'],
@@ -18,7 +14,15 @@ const serviceOrderSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Description is Required!'],
     },
+    address: {
+      type: String,
+    },
+    phone: { type: Number },
     images: [{ type: String }],
+    data: {
+      type: String,
+    },
+    price: { type: Number },
     cancelServiceOrderExpiresAt: { type: Date },
   },
   {
