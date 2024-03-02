@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SetCustomer } from "../../redux/CustomerSlice";
 import { setCart } from "../../redux/CartSlice";
 import { useNavigate } from "react-router-dom";
-import "./PresenterStyleSheets/homePresenter.css";
+import "./StyleSheets/homePresenter.css";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 // import Loading from "../components/Loading";
 import Card from "../../components/Presenter/Card";

@@ -1,6 +1,6 @@
 import React from 'react'
 import Rating from '@mui/material/Rating';
-import '../stylesheets/ProductCard.css'
+import '../e-commers/StyleSheets/ProductCard.css';
 import { Link } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';

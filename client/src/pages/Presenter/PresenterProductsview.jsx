@@ -3,7 +3,7 @@ import { Grid, Typography, Button, CircularProgress } from "@mui/material";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import "./PresenterStyleSheets/PresenterProductsView.css"; // Import custom CSS for advanced styling
+import "./StyleSheets/PresenterProductsView.css"; // Import custom CSS for advanced styling
 
 function PresenterProductsView() {
   const [products, setProducts] = useState([]);

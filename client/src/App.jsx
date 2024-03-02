@@ -1,10 +1,11 @@
-import { Routes, Route, useLocation, Navigate, Outlet } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { CustomerLayout } from './utils/Layouts.jsx';
+import axios from 'axios';
+
 import {
   ContactUs,
-  Landing,
-  Login,
-  Register,
   Profile,
   ProfileDetails,
   Home,
@@ -19,23 +20,30 @@ import {
   Checkout,
   History,
   ServicesDetails,
-  InventoryHome
-} from './pages/';
-import axios from 'axios';
-import Footer from './components/Footer';
-import Header from './components/Header/Header';
-import { useEffect, useState } from 'react';
-import OrderComponent from './components/OrderComponent';
+  InventoryHome,
+} from './pages/e-commers/index.js';
+import {
+  EditProduct,
+  HomePresenter,
+  PresenterProductsView,
+  ProductDetailsPresenter,
+} from './pages/Presenter/index.js';
+import {
+    EmployeLogin,
+    Landing,
+    Login,
+    Register,
+} from './pages/shared/index.js'
+
+import Footer from './components/shared/Footer.jsx';
+import Header from './components/shared/Header.jsx';
+import OrderComponent from './components/e-commers/OrderComponent.jsx';
 import AddProductForm from './components/inventory/AddProductFrom';
 import AddMatrialForm from './components/inventory/AddMatrialForm';
 import UpdateProductForm from './components/inventory/UpdateProductForm';
 import UpdateMatrialForm from './components/inventory/UpdateMatrialeForm';
 import EditProductForm from './components/Presenter/EditProductPresenter';
-import PresenterProductsView from './pages/Presenter/PresenterProductsview';
-import HomePresenter from './pages/Presenter/Homepresenter';
-import ProductDetailsPresenter from './pages/Presenter/ProductDetailsPresenter';
-import EditProduct from './pages/Presenter/EditProduct';
-import { CustomerLayout } from './utils/Layouts.jsx';
+
 function App() {
   const location = useLocation();
   const [shwoHeaderAndFooter, setShowHeaderAndFooter] = useState(null);
@@ -46,9 +54,8 @@ function App() {
     Authorization: customer?.token ? `Bearer ${customer?.token}` : '',
   };
 
-
   const shouldRenderHeaderAndFooter = () => {
-    const routesWithoutHeader = ['/login', '/register', '/'];
+    const routesWithoutHeader = ['/login', '/register', '/', '/e/login'];
     return !routesWithoutHeader.includes(location.pathname);
   };
 
@@ -71,6 +78,7 @@ function App() {
         <Route path="/services/:serviceName" element={<ServicesDetails />} />
         <Route path="/store" element={<Store />} />
         <Route path="/product/:productId" element={<ProductDetails />} />
+        <Route path="/e/login" element={<EmployeLogin />} />
         <Route
           path="/p/product/:productId"
           element={<ProductDetailsPresenter />}

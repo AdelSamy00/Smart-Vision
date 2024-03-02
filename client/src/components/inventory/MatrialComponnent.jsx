@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { Grid, Typography, Button } from "@mui/material";
-import Loading from "../Loading";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import axios from "axios";
-import { Link, useParams } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { useState, useEffect } from 'react';
+import { Grid, Typography, Button } from '@mui/material';
+import Loading from '../shared/Loading';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import axios from 'axios';
+import { Link, useParams } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 
 function MatrialComponnent() {
   const [Matrials, setMatrials] = useState([]);
@@ -17,7 +17,7 @@ function MatrialComponnent() {
         setMatrials(response.data.materials);
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching materials:", error);
+        console.error('Error fetching materials:', error);
       }
     };
 
@@ -31,30 +31,32 @@ function MatrialComponnent() {
 
   const handleDelete = async (matrialId) => {
     try {
-      const response = await axios.delete("/Materials/", { data: {id: matrialId } });
+      const response = await axios.delete('/Materials/', {
+        data: { id: matrialId },
+      });
       setMatrials((prevMatrials) =>
-      prevMatrials.filter((Matrial) => Matrial._id !== matrialId)
+        prevMatrials.filter((Matrial) => Matrial._id !== matrialId)
       );
       toast.dismiss();
       toast.success(response.data.message);
     } catch (error) {
-      console.error("Error deleting matrial:", error);
-      toast.error("Failed to delete matrial. Please try again.");
+      console.error('Error deleting matrial:', error);
+      toast.error('Failed to delete matrial. Please try again.');
     }
   };
   return (
     <>
-          <Toaster
+      <Toaster
         toastOptions={{
           style: {
             duration: 3000,
-            border: "1px solid #6A5ACD",
-            backgroundColor: "#6A5ACD",
-            padding: "16px",
-            color: "white",
-            fontWeight: "Bold",
-            marginTop: "65px",
-            textAlign: "center",
+            border: '1px solid #6A5ACD',
+            backgroundColor: '#6A5ACD',
+            padding: '16px',
+            color: 'white',
+            fontWeight: 'Bold',
+            marginTop: '65px',
+            textAlign: 'center',
           },
         }}
       />
@@ -64,27 +66,27 @@ function MatrialComponnent() {
         <Grid
           container
           className="order-container"
-          sx={{ marginBottom: "2rem" }}
+          sx={{ marginBottom: '2rem' }}
         >
           <Grid
             item
             xs={11}
             md={7}
             sx={{
-              margin: "auto",
-              border: "2px solid #ddd",
-              borderRadius: "10px",
+              margin: 'auto',
+              border: '2px solid #ddd',
+              borderRadius: '10px',
             }}
           >
             <Grid
               container
               sx={{
-                borderBottom: "2px solid #ddd",
-                borderStartEndRadius: "10px",
-                borderStartStartRadius: "10px",
-                padding: "10px",
-                backgroundColor: "#f2f2f2",
-                alignItems: "center",
+                borderBottom: '2px solid #ddd',
+                borderStartEndRadius: '10px',
+                borderStartStartRadius: '10px',
+                padding: '10px',
+                backgroundColor: '#f2f2f2',
+                alignItems: 'center',
               }}
             >
               <Grid
@@ -93,15 +95,15 @@ function MatrialComponnent() {
                 md={4}
                 // lg={3}
                 sx={{
-                  textAlign: { xs: "start", md: "center" },
-                  padding: "10px 0px",
+                  textAlign: { xs: 'start', md: 'center' },
+                  padding: '10px 0px',
                 }}
               >
                 <Typography
                   variant="body1"
                   sx={{
                     // fontWeight: "bold",
-                    fontSize: { xs: "16px", md: "20px" },
+                    fontSize: { xs: '16px', md: '20px' },
                   }}
                 >
                   Inventory Matrials
@@ -113,24 +115,24 @@ function MatrialComponnent() {
                 md={4}
                 // lg={3}
                 sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginLeft: { md: "auto" },
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: { md: 'auto' },
                 }}
               >
                 <Typography
                   variant="body1"
                   sx={{
-                    marginRight: "1rem",
-                    fontSize: { xs: "16px", md: "20px" },
+                    marginRight: '1rem',
+                    fontSize: { xs: '16px', md: '20px' },
                   }}
                 >
-                  Total Matrials:{" "}
+                  Total Matrials:{' '}
                 </Typography>
                 <Typography
                   variant="body2"
-                  sx={{ fontSize: { xs: "16px", md: "19px" } }}
+                  sx={{ fontSize: { xs: '16px', md: '19px' } }}
                 >
                   {Matrials.length}
                 </Typography>
@@ -139,8 +141,8 @@ function MatrialComponnent() {
             <Grid
               container
               sx={{
-                borderTop: "none",
-                padding: "20px",
+                borderTop: 'none',
+                padding: '20px',
               }}
             >
               {Matrials.slice(0, displayedOrders).map((Matrial, index) => (
@@ -149,44 +151,44 @@ function MatrialComponnent() {
                   item
                   xs={12}
                   sx={{
-                    border: "2px solid #ddd",
-                    borderRadius: "5px",
-                    marginBottom: "20px",
-                    padding: "20px",
+                    border: '2px solid #ddd',
+                    borderRadius: '5px',
+                    marginBottom: '20px',
+                    padding: '20px',
                   }}
                 >
                   <Grid item xs={12} md={7}>
                     <Typography
                       variant="body2"
-                      style={{ marginTop: "1rem", fontSize: "20px" }}
+                      style={{ marginTop: '1rem', fontSize: '20px' }}
                     >
-                      <span style={{ fontWeight: "bold" }}>Matrial Name :</span>{" "}
+                      <span style={{ fontWeight: 'bold' }}>Matrial Name :</span>{' '}
                       {Matrial.name}
                     </Typography>
                     <Typography
                       variant="body2"
-                      style={{ marginTop: "1rem", fontSize: "20px" }}
+                      style={{ marginTop: '1rem', fontSize: '20px' }}
                     >
-                      <span style={{ fontWeight: "bold" }}>quantity:</span>{" "}
+                      <span style={{ fontWeight: 'bold' }}>quantity:</span>{' '}
                       {Matrial.quantity}
                     </Typography>
                     <Typography
                       variant="body2"
-                      style={{ marginTop: "1rem", fontSize: "20px" }}
+                      style={{ marginTop: '1rem', fontSize: '20px' }}
                     >
-                      <span style={{ fontWeight: "bold" }}>Date Placed:</span>{" "}
+                      <span style={{ fontWeight: 'bold' }}>Date Placed:</span>{' '}
                       {Matrial.createdAt}
                     </Typography>
                   </Grid>
-                  <Grid container style={{marginTop:"20px"}}>
-                    <Grid item sm={8} xs={6} style={{ margin: "15px 0px" }}>
+                  <Grid container style={{ marginTop: '20px' }}>
+                    <Grid item sm={8} xs={6} style={{ margin: '15px 0px' }}>
                       <Link to={`/updateMatrial/${Matrial._id}`}>
                         <Button variant="contained" color="primary">
                           Update
                         </Button>
                       </Link>
                     </Grid>
-                    <Grid item sm={4}xs={6} style={{ margin: "15px 0px" }}>
+                    <Grid item sm={4} xs={6} style={{ margin: '15px 0px' }}>
                       <Button
                         variant="contained"
                         color="primary"
@@ -203,9 +205,9 @@ function MatrialComponnent() {
                   <Typography
                     variant="body2"
                     style={{
-                      cursor: "pointer",
-                      fontSize: "19px",
-                      textDecoration: "underline",
+                      cursor: 'pointer',
+                      fontSize: '19px',
+                      textDecoration: 'underline',
                     }}
                     onClick={handleShowMore}
                   >
@@ -226,17 +228,17 @@ function MatrialComponnent() {
       ) : (
         <div
           style={{
-            textAlign: "center",
-            fontWeight: "bold",
-            fontSize: "20px",
-            width: "65%",
-            border: "2px solid",
-            margin: "auto",
-            padding: "20px",
-            marginBottom: "5rem",
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: '20px',
+            width: '65%',
+            border: '2px solid',
+            margin: 'auto',
+            padding: '20px',
+            marginBottom: '5rem',
           }}
         >
-          <p style={{marginBottom:"12px"}}>there is no Matrials .</p>
+          <p style={{ marginBottom: '12px' }}>there is no Matrials .</p>
           <Link to="/addMatrial">
             <Button variant="contained" color="primary">
               Add Matrial

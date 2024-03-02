@@ -16,7 +16,7 @@ import {
   Slide,
   Tooltip,
 } from '@mui/material';
-import '../StyleSheets/ProductDetails.css';
+import '../e-commers/StyleSheets/ProductDetails.css';
 import ReviewPresenter from '../../components/Presenter/ReviewsPresenter';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -61,7 +61,7 @@ function ProductDetailsPresenter() {
     progressBar.map((rating) => {
       totalReviews = totalReviews + rating.numOfRating;
     });
-    // 
+    //
     progressBar.map((rating) => {
       if (review?.rating === rating.number) {
         rating.numOfRating--;
@@ -77,10 +77,10 @@ function ProductDetailsPresenter() {
   //handel remove product
   const handelDeleteProduct = async (productId) => {
     await axios
-      .delete('/products/', {data : { productId }})
+      .delete('/products/', { data: { productId } })
       .then((res) => {
         console.log(res.data);
-        history.back()
+        history.back();
       })
       .catch((e) => {
         console.log(e);
@@ -114,14 +114,12 @@ function ProductDetailsPresenter() {
         data: { customerId, reviewId, productId },
       })
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         setReviews((prevReviews) => {
           return prevReviews.filter((review) => review._id !== reviewId);
         });
         setTotalRating(res.data.totalRating);
-        setProgressBar(
-          updatePrograssBar(res.data.deletedReview, progressBar,)
-        );
+        setProgressBar(updatePrograssBar(res.data.deletedReview, progressBar));
       })
       .catch((e) => {
         console.log(e);

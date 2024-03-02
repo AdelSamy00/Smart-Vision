@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import './PresenterStyleSheets/EditProduct.css';
+import './StyleSheets/EditProduct.css';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import InputColor from '../../components/Presenter/InputColor';
 import { Alert, Snackbar } from '@mui/material';
 import { handleMultipleFilesUpload } from '../../utils';
-import Loading from '../../components/Loading';
+import Loading from '../../components/shared/Loading';
 
 function EditProduct() {
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ function EditProduct() {
       })
       .then((res) => {
         console.log(res.data);
-        history.back()
+        history.back();
       })
       .catch((error) => {
         console.log(error);
@@ -99,7 +99,7 @@ function EditProduct() {
       event.stopPropagation();
       setValidated(true);
     } else {
-      setIsLoading(true)
+      setIsLoading(true);
       const files = getNewImagesFiles();
       const imagesUrl = newImages?.length
         ? await handleMultipleFilesUpload(files)

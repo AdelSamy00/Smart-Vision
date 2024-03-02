@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import HomeComponent from '../../components/inventory/HomeComponent'; 
+import HomeComponent from '../../components/inventory/HomeComponent';
 import MatrialComponnent from '../../components/inventory/matrialComponnent';
-import Loading from '../../components/Loading';
-import { Button, FormControlLabel, Switch, Typography } from "@mui/material";
+import Loading from '../../components/shared/Loading';
+import { Button, FormControlLabel, Switch, Typography } from '@mui/material';
 import axios from 'axios';
 
 const InventoryHome = () => {
@@ -12,7 +12,7 @@ const InventoryHome = () => {
   const [showOrderHistory, setShowOrderHistory] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [label, setLabel] = useState("Inventory Products");
+  const [label, setLabel] = useState('Inventory Products');
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -31,7 +31,9 @@ const InventoryHome = () => {
   const toggleHistory = () => {
     setShowOrderHistory((prevShowOrderHistory) => !prevShowOrderHistory);
     setLabel((prevLabel) =>
-      prevLabel === "Inventory Products" ? "Inventory Materials" : "Inventory Products"
+      prevLabel === 'Inventory Products'
+        ? 'Inventory Materials'
+        : 'Inventory Products'
     );
   };
 
@@ -47,19 +49,15 @@ const InventoryHome = () => {
             color="primary"
           />
         }
-        sx={{ marginBottom: "1rem", marginLeft: "5%" }}
+        sx={{ marginBottom: '1rem', marginLeft: '5%' }}
       />
       {isLoading ? (
         <Loading />
       ) : (
         <ul>
-            <li>
-              {showOrderHistory ? (
-                <HomeComponent/>
-              ) : (
-                <MatrialComponnent/>
-              )}
-            </li>
+          <li>
+            {showOrderHistory ? <HomeComponent /> : <MatrialComponnent />}
+          </li>
         </ul>
       )}
     </div>
