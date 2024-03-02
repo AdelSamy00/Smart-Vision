@@ -3,9 +3,9 @@ import './StyleSheets/Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Loading from '../../components/shared/Loading';
-import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { SetCustomer } from '../../redux/CustomerSlice';
+import { apiRequst } from '../../utils';
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -17,8 +17,12 @@ function Login() {
   } = useForm();
   const handleSubmitForm = async (data) => {
     try {
-      await axios
-        .post('/auth/login', { ...data })
+      console.log(data);
+      await apiRequst({
+        url: '/auth/login',
+        data: data,
+        method: 'POST',
+      })
         .then((res) => {
           console.log(res.data);
           alert(res.data.message);

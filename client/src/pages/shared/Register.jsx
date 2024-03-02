@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import './StyleSheets/Register.css';
 import { useForm } from 'react-hook-form';
 import Loading from '../../components/shared/Loading';
-import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
+import { apiRequst } from '../../utils';
 function Register() {
   const navigate = useNavigate();
   const {
@@ -16,8 +16,11 @@ function Register() {
   } = useForm();
   const handleSubmitForm = async (data) => {
     try {
-      await axios
-        .post('/auth/register', { ...data })
+      await apiRequst({
+        url: '/auth/register',
+        data: data,
+        method: 'POST',
+      })
         .then((res) => {
           console.log(res.data);
           toast(res.data.message);

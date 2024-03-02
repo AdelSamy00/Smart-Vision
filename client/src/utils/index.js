@@ -1,4 +1,6 @@
 import axios from 'axios';
+
+const API_URL = 'http://localhost:3000';
 const CLOUDINARY_ID = import.meta.env.VITE_APP_CLOUDINARY_ID;
 export const getCustomerInfo = async (token) => {
   try {
@@ -6,6 +8,29 @@ export const getCustomerInfo = async (token) => {
     return res.data.customer;
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const API = axios.create({
+  baseURL: API_URL,
+  responseType: 'json',
+});
+
+export const apiRequest = async ({ url, token, data, method }) => {
+  try {
+    const result = await API(url, {
+      method: method || 'GET',
+      data: data,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token ? `Bearer ${token}` : '',
+      },
+    });
+    return result;
+  } catch (error) {
+    const err = error.response.data;
+    console.log(err);
+    return { status: err.success, message: err.message };
   }
 };
 

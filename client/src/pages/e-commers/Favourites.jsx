@@ -38,7 +38,10 @@ function Favourites() {
     await axios
       .post('/customers/favorite', { id, productId })
       .then((res) => {
-        const newData = { ...res.data?.newCustomerData };
+        const newData = {
+          token: localStorage?.getItem('token'),
+          ...res.data?.newCustomerData,
+        };
         dispatch(SetCustomer(newData));
         toast.dismiss();
         toast(res.data.message);
