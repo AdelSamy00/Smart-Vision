@@ -66,14 +66,16 @@ export const getMaterialById = async (req, res, next) => {
     const material = await Materials.findById(id);
 
     if (!material) {
-      return res.status(404).json({ success: false, message: 'Material not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: 'Material not found' });
     }
 
     res.status(200).json({ success: true, material });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
-}; 
+};
 
 export const updateMaterial = async (req, res, next) => {
   try {
@@ -180,13 +182,14 @@ export const materialsTransaction = async (req, res, next) => {
 
       //make transaction
       const transaction = await IventoryTransactions.create({
+        category: 'Materials',
         inventoryManager: managerId,
         transaction: method,
         materials: materials,
       });
       res.status(200).json({
         success: true,
-        message: 'the Export Transaction has been made successfully',
+        message: 'the Transaction has been made successfully',
       });
     } else {
       res.status(404).json({

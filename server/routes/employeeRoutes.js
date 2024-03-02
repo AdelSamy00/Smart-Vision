@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  deleteReview,
   getAllCustomers,
   updateOrderState,
   updateServiceOrderState,
@@ -14,5 +15,8 @@ router.put('/order', updateOrderState);
 
 //update Service Order state
 router.put('/service', updateServiceOrderState);
+
+//delete unfavorite Reviews
+router.delete('/delete-review', deleteReview);
 
 export default router;

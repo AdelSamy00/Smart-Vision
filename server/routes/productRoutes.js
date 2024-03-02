@@ -6,6 +6,7 @@ import {
   getNotShownProducts,
   getProductById,
   getShowProducts,
+  productsTransaction,
   updateProduct,
   updateProductDetails,
 } from '../controllers/productControlles.js';
@@ -17,6 +18,7 @@ router.post('/add-to-store', addToStore);
 
 //to help inventory manager
 router.put('/updateDetails/:id', updateProductDetails);
+router.put('/transaction', productsTransaction);
 
 // CRUD Product -- RESTFULL API
 router.get('/', getShowProducts);

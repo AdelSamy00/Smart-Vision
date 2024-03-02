@@ -1,4 +1,5 @@
 import Products from '../models/ProductModel.js';
+import IventoryTransactions from '../models/inventoryTransaction.js';
 
 export const getShowProducts = async (req, res, next) => {
   try {
@@ -133,10 +134,9 @@ export const increaseQuantity = async (id, quantity) => {
 export const updateProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name, description, images, category, price, points, colors, show } = req.body;
+    const { name, description, quantity, category, price, points } = req.body;
     const productData = req.body;
-    console.log(name, description, images, category, price, points, colors, show)
-    if (!name || !images.length || !description || !category || !price || !points || !colors || !show) {
+    if (!name || !quantity || !description || !category || !price || !points) {
       next('Please Provide needed fields');
       return;
     }
@@ -223,6 +223,61 @@ export const deleteProduct = async (req, res, next) => {
     res.status(404).json({
       success: false,
       message: 'failed to delete product',
+    });
+  }
+};
+
+// this funcation help us in inventory to record Product Transactions
+export const productsTransaction = async (req, res, next) => {
+  try {
+    let flag = true;
+    const { managerId, products, method } = req.body;
+    if (!managerId || !products.length || !method) {
+      next('Provide Required Fields!');
+      return;
+    }
+    // to make sure that products in cart elready exist
+    await Promise.all(
+      products.map(async (prod) => {
+        const exist = await existProduct(prod.product);
+        if (!exist) {
+          flag = false;
+        }
+      })
+    );
+    if (flag) {
+      if (method === 'Export') {
+        products.map(async (prod) => {
+          await decreseQuantity(prod.product, prod.quantity);
+        });
+      } else if (method === 'Import') {
+        products.map(async (prod) => {
+          await increaseQuantity(prod.product, prod.quantity);
+        });
+      }
+
+      //make transaction
+      const transaction = await IventoryTransactions.create({
+        category: 'Products',
+        inventoryManager: managerId,
+        transaction: method,
+        products: products,
+      });
+      res.status(200).json({
+        success: true,
+        message: 'the Transaction has been made successfully',
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'product is not found',
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({
+      success: false,
+      message: 'failed to place this transaction',
     });
   }
 };
