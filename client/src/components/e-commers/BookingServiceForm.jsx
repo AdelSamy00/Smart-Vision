@@ -4,7 +4,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { handleMultipleFilesUpload } from '../../utils';
-import Loading from '../components/Loading';
+import Loading from '../shared/Loading';
 import { TextField, Button, Grid } from '@mui/material';
 
 function BookingServiceForm() {
