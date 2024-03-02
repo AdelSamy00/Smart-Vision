@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import Loading from '../components/Loading';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
+import { SetEmploye } from '../redux/EmployeSlice';
 
 function EmployeLogin() {
   const navigate = useNavigate();
@@ -19,13 +20,13 @@ function EmployeLogin() {
   const handleSubmitForm = async (data) => {
     try {
       await axios
-        .post('/auth/login', { ...data })
+        .post('/auth/employee-login', { ...data })
         .then((res) => {
           console.log(res.data);
           alert(res.data.message);
           localStorage.setItem('token', res.data.token);
-          const newData = { token: res.data?.token, ...res.data?.customer };
-          dispatch(SetCustomer(newData));
+          const newData = { token: res.data?.token, ...res.data?.employee };
+          dispatch(SetEmploye(newData));
           navigate('/store');
         })
         .catch((error) => {
