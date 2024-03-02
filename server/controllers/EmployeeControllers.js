@@ -110,3 +110,21 @@ export const deleteReview = async (req, res, next) => {
     });
   }
 };
+
+export const getCustomizationOrders = async (req, res, next) => {
+  try {
+    const customizationOrders = await ServicesOrders.find({
+      service: 'Customization Service',
+    }).populate({
+      path: 'customer',
+      select: '-password',
+    });
+    res.status(200).json({
+      success: true,
+      message: 'get customization orders successfully',
+      customizationOrders,
+    });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};

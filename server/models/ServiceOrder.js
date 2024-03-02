@@ -19,10 +19,14 @@ const serviceOrderSchema = new mongoose.Schema(
     },
     phone: { type: Number },
     images: [{ type: String }],
-    data: {
+    details: {
       type: String,
     },
     price: { type: Number },
+    assignedEngineer: {
+      type: Schema.Types.ObjectId,
+      ref: 'Employees',
+    },
     cancelServiceOrderExpiresAt: { type: Date },
   },
   {
