@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import Loading from '../../components/shared/Loading';
 import { useDispatch, useSelector } from 'react-redux';
 import { SetCustomer } from '../../redux/CustomerSlice';
-import { apiRequst } from '../../utils';
+import { apiRequest } from '../../utils/index.js';
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ function Login() {
   const handleSubmitForm = async (data) => {
     try {
       console.log(data);
-      await apiRequst({
+      await apiRequest({
         url: '/auth/login',
         data: data,
         method: 'POST',

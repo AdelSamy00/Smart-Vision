@@ -4,7 +4,7 @@ import './StyleSheets/Register.css';
 import { useForm } from 'react-hook-form';
 import Loading from '../../components/shared/Loading';
 import toast, { Toaster } from 'react-hot-toast';
-import { apiRequst } from '../../utils';
+import { apiRequest } from '../../utils';
 function Register() {
   const navigate = useNavigate();
   const {
@@ -16,7 +16,7 @@ function Register() {
   } = useForm();
   const handleSubmitForm = async (data) => {
     try {
-      await apiRequst({
+      await apiRequest({
         url: '/auth/register',
         data: data,
         method: 'POST',

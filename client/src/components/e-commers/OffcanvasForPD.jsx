@@ -9,7 +9,7 @@ import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { SetCustomer } from '../../redux/CustomerSlice';
-import { apiRequst } from '../../utils';
+import { apiRequest } from '../../utils';
 
 function OffcanvasForPD({ ...props }) {
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ function OffcanvasForPD({ ...props }) {
       event.stopPropagation();
       setValidated(true);
     } else {
-      await apiRequst({
+      await apiRequest({
         url: '/customers/',
         method: 'PUT',
         data: {
