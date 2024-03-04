@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import Loading from '../../components/shared/Loading';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { SetEmploye } from '../../redux/EmployeSlice';
+import { SetEmployee } from '../../redux/EmployeeSlice';
 
 function EmployeLogin() {
   const navigate = useNavigate();
@@ -17,6 +17,16 @@ function EmployeLogin() {
     formState: { errors, isSubmitting },
   } = useForm();
 
+
+  function rdirectEmployeeAfterLogin(employee) {
+    if (employee?.jobTitle === 'Inventory] Manager') {
+      navigate('/order')
+    }
+    else {
+      navigate('/')
+    }
+  }
+
   const handleSubmitForm = async (data) => {
     try {
       await axios
@@ -26,8 +36,8 @@ function EmployeLogin() {
           alert(res.data.message);
           localStorage.setItem('token', res.data.token);
           const newData = { token: res.data?.token, ...res.data?.employee };
-          dispatch(SetEmploye(newData));
-          navigate('/store');
+          dispatch(SetEmployee(newData));
+          rdirectEmployeeAfterLogin(newData)
         })
         .catch((error) => {
           throw error.response.data;

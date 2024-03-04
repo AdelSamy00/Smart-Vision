@@ -29,11 +29,12 @@ import {
   ProductDetailsPresenter,
 } from './pages/Presenter/index.js';
 import {
-    EmployeLogin,
-    Landing,
-    Login,
-    Register,
-} from './pages/shared/index.js'
+  EmployeLogin,
+  Landing,
+  Login,
+  Register,
+  Page404,
+} from './pages/shared/index.js';
 
 import Footer from './components/shared/Footer.jsx';
 import Header from './components/shared/Header.jsx';
@@ -42,60 +43,35 @@ import AddProductForm from './components/inventory/AddProductFrom';
 import AddMatrialForm from './components/inventory/AddMatrialForm';
 import UpdateProductForm from './components/inventory/UpdateProductForm';
 import UpdateMatrialForm from './components/inventory/UpdateMatrialeForm';
-import EditProductForm from './components/Presenter/EditProductPresenter';
-
+import { shouldRenderHeaderAndFooter, shouldRenderHeaderAndFooterEmployee } from './utils/ShouldRender.jsx';
 function App() {
-  const location = useLocation();
-  const [shwoHeaderAndFooter, setShowHeaderAndFooter] = useState(null);
+    const location = useLocation();
   const { customer } = useSelector((state) => state.customer);
+  console.log("first")
   axios.defaults.baseURL = 'http://localhost:3000';
   axios.defaults.headers = {
     'Content-Type': 'application/json',
     Authorization: customer?.token ? `Bearer ${customer?.token}` : '',
   };
 
-  const shouldRenderHeaderAndFooter = () => {
-    const routesWithoutHeader = ['/login', '/register', '/', '/e/login'];
-    return !routesWithoutHeader.includes(location.pathname);
-  };
-
-  useEffect(() => {
-    const res = shouldRenderHeaderAndFooter();
-    setShowHeaderAndFooter(res);
-  }, [location]);
-
   return (
     <>
-      {shwoHeaderAndFooter && <Header />}
+      {shouldRenderHeaderAndFooter(location) && <Header />}
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Landing />} />
-        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/e/login" element={<EmployeLogin />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/services" element={<Services />} />
         <Route path="/services/:serviceName" element={<ServicesDetails />} />
         <Route path="/store" element={<Store />} />
-        <Route path="/product/:productId" element={<ProductDetails />} />
-        <Route path="/e/login" element={<EmployeLogin />} />
-        <Route
-          path="/p/product/:productId"
-          element={<ProductDetailsPresenter />}
-        />
-        <Route path="/ed/product/:productId" element={<EditProduct />} />
-        <Route path="/order" element={<OrderComponent />} />
-        <Route path="/addProduct" element={<AddProductForm />} />
-        <Route path="/addMatrial" element={<AddMatrialForm />} />
-        <Route
-          path="/updateProduct/:productId"
-          element={<UpdateProductForm />}
-        />
-        <Route
-          path="/updateMatrial/:matrialId"
-          element={<UpdateMatrialForm />}
-        />
+        <Route path="/product/:productId" element={<ProductDetails />} />{' '}
         <Route path="/bag" element={<Bag />} />
+        {/* Private Customer Routes (Logged in) */}
         <Route element={<CustomerLayout />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/profile-details" element={<ProfileDetails />} />
@@ -107,16 +83,34 @@ function App() {
           <Route path="/favourites" element={<Favourites />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/history" element={<History />} />
-          <Route path="/inventory" element={<InventoryHome />} />
-          <Route path="/presenter-home" element={<HomePresenter />} />
-          <Route path="/presenter-view" element={<PresenterProductsView />} />
-          <Route
-            path="/presenter-edit-product/:productId"
-            element={<EditProductForm />}
-          />
         </Route>
+        {/* Private Inventory Manager Routes */}
+        <Route path="/inventory" element={<InventoryHome />} />
+        <Route path="/order" element={<OrderComponent />} />
+        <Route path="/addProduct" element={<AddProductForm />} />
+        <Route path="/addMatrial" element={<AddMatrialForm />} />
+        <Route
+          path="/updateProduct/:productId"
+          element={<UpdateProductForm />}
+        />
+        <Route
+          path="/updateMatrial/:matrialId"
+          element={<UpdateMatrialForm />}
+        />
+        {/* Private Presenter Routes */}
+        <Route
+          path="/p/product/:productId"
+          element={<ProductDetailsPresenter />}
+        />
+        <Route path="/presenter-home" element={<HomePresenter />} />
+        <Route path="/presenter-view" element={<PresenterProductsView />} />
+        <Route path="/ed/product/:productId" element={<EditProduct />} />
+        {/* Private Enginer Routes */}
+        {/* Private Factory Routes */}
+        {/* Private Operator Routes */}
+        <Route path="*" element={<Page404 />} /> {/*The path not found.*/}
       </Routes>
-      {shwoHeaderAndFooter && <Footer />}
+      {shouldRenderHeaderAndFooter(location) && <Footer />}
     </>
   );
 }
