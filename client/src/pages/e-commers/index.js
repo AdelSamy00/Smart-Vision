@@ -16,7 +16,6 @@ import Bag from './BagPage';
 import Checkout from './Checkout'
 import History from './History';
 import ServicesDetails from './servicesDetails';
-import InventoryHome from '../inventory/inventoryHome';
 export {
   ContactUs,
   Profile,
@@ -33,5 +32,4 @@ export {
   Checkout,
   History,
   ServicesDetails,
-  InventoryHome
 };

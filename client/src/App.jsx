@@ -20,7 +20,7 @@ import {
   Checkout,
   History,
   ServicesDetails,
-  InventoryHome,
+  // InventoryHome,
 } from './pages/e-commers/index.js';
 import {
   EditProduct,
@@ -28,6 +28,10 @@ import {
   PresenterProductsView,
   ProductDetailsPresenter,
 } from './pages/Presenter/index.js';
+import{
+  InventoryHome,
+  TransactionsPage,
+}from'./pages/inventory/index.js';
 import {
   EmployeLogin,
   Landing,
@@ -97,11 +101,13 @@ function App() {
           path="/updateMatrial/:matrialId"
           element={<UpdateMatrialForm />}
         />
+        <Route path="/Transaction" element={<TransactionsPage />} />
         {/* Private Presenter Routes */}
         <Route
           path="/p/product/:productId"
           element={<ProductDetailsPresenter />}
         />
+          
         <Route path="/presenter-home" element={<HomePresenter />} />
         <Route path="/presenter-view" element={<PresenterProductsView />} />
         <Route path="/ed/product/:productId" element={<EditProduct />} />

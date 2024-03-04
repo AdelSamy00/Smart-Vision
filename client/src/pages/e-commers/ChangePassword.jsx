@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState } from "react";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import toast, { Toaster } from "react-hot-toast";
+import { useEffect, useRef, useState } from 'react';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import { useSelector } from 'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
+import { apiRequest } from '../../utils';
 const defaultTheme = createTheme();
 
 export default function ChangePassword() {
@@ -21,65 +21,70 @@ export default function ChangePassword() {
   const confirmNewPasswordRef = useRef(null);
   const newPasswordRef = useRef(null);
   const [accountInfo, setAccountInfo] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
   });
-  const { customer } = useSelector((state) => state.customer);
+  const { customer } = useSelector((state) => state?.customer);
   const confirmNewPasswordHandle = (event) => {
     setAccountInfo({ ...accountInfo, confirmPassword: event.target.value });
     if (!event.target.value.trim()) {
-      setErrorMessage("The confirm new password field cannot be left empty");
+      setErrorMessage('The confirm new password field cannot be left empty');
     } else {
       setIsFormSubmitted(false);
-      setErrorMessage("");
+      setErrorMessage('');
     }
   };
 
   const newPasswordHandle = (event) => {
     setAccountInfo({ ...accountInfo, newPassword: event.target.value });
     if (!event.target.value.trim()) {
-      setErrorMessage("The new password field cannot be left empty");
+      setErrorMessage('The new password field cannot be left empty');
     } else {
       setIsNewPasswordChanged(true);
       setIsFormSubmitted(false);
-      setErrorMessage("");
+      setErrorMessage('');
     }
   };
 
   const submitChange = async (e) => {
     e.preventDefault();
-    setIsFormSubmitted(true)
+    setIsFormSubmitted(true);
     if (
       !accountInfo.currentPassword.trim() ||
       !accountInfo.newPassword.trim() ||
       !accountInfo.confirmPassword.trim()
     ) {
-      setErrorMessage("All fields are required");
+      setErrorMessage('All fields are required');
     } else if (!isPasswordValid) {
-      setErrorMessage("The password is not valid");
+      setErrorMessage('The password is not valid');
     } else if (accountInfo.newPassword !== accountInfo.confirmPassword) {
-      setErrorMessage("The passwords do not match");
+      setErrorMessage('The passwords do not match');
     } else {
       try {
-        const response = await axios.put("/customers/changePassword", {
-          oldPassword: accountInfo.currentPassword,
-          newPassword: accountInfo.newPassword,
-          id: customer._id,
+        const response = await apiRequest({
+          method: 'PUT',
+          url: '/customers/changePassword',
+          data: {
+            oldPassword: accountInfo.currentPassword,
+            newPassword: accountInfo.newPassword,
+            id: customer._id,
+          },
+          token: customer?.token,
         });
-        console.log("API Response:", response.data.message);
+        console.log('API Response:', response.data.message);
         // Clear text fields after successful submission
         setAccountInfo({
           ...accountInfo,
-          currentPassword: "",
-          newPassword: "",
-          confirmPassword: "",
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: '',
         });
         // Clear error message
-        setErrorMessage("");
+        setErrorMessage('');
         setIsPasswordValid(true);
         toast.dismiss();
-      toast.success(response.data.message);
+        toast.success(response.data.message);
         // setSubmitMessage(response.data.message)
       } catch (error) {
         // console.error("Error changing password:", error);
@@ -103,42 +108,42 @@ export default function ChangePassword() {
         <CssBaseline />
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "column",
+            display: 'flex',
+            flexDirection: 'column',
             // justifyContent: "center",
-            alignItems: "flex-start",
-            minHeight: "100vh",
+            alignItems: 'flex-start',
+            minHeight: '100vh',
           }}
           onSubmit={submitChange}
         >
-           <Toaster
-        toastOptions={{
-          style: {
-            duration: 3000,
-            border: "1px solid #6A5ACD",
-            backgroundColor: "#6A5ACD",
-            padding: "16px",
-            color: "white",
-            fontWeight: "Bold",
-            marginTop: "65px",
-            textAlign: "center",
-          },
-        }}
-      />
+          <Toaster
+            toastOptions={{
+              style: {
+                duration: 3000,
+                border: '1px solid #6A5ACD',
+                backgroundColor: '#6A5ACD',
+                padding: '16px',
+                color: 'white',
+                fontWeight: 'Bold',
+                marginTop: '65px',
+                textAlign: 'center',
+              },
+            }}
+          />
           <h1
             style={{
-              marginBottom: "50px",
-              fontWeight: "bold",
-              fontSize: "32px",
+              marginBottom: '50px',
+              fontWeight: 'bold',
+              fontSize: '32px',
             }}
           >
             Change Password
           </h1>
-          <p style={{ width: "100%", marginBottom: "50px", fontSize: "19px", }}>
+          <p style={{ width: '100%', marginBottom: '50px', fontSize: '19px' }}>
             It&apos;s a good idea to update your password regularly and to make
             sure it&apos;s unique from other passwords you use.
           </p>
-          <Box component="form" noValidate sx={{ mt: 1, width: "100%" }}>
+          <Box component="form" noValidate sx={{ mt: 1, width: '100%' }}>
             <label htmlFor="CurrentPassword">Current Password</label>
             <TextField
               margin="normal"
@@ -157,37 +162,37 @@ export default function ChangePassword() {
 
                 if (!event.target.value.trim()) {
                   setErrorMessage(
-                    "The current password field cannot be left empty"
+                    'The current password field cannot be left empty'
                   );
                 } else {
                   setIsFormSubmitted(false);
-                  setErrorMessage("");
+                  setErrorMessage('');
                 }
               }}
               autoFocus
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (e.key === 'Enter') {
                   e.preventDefault();
                   if (!accountInfo.currentPassword.trim()) {
                     setErrorMessage(
-                      "The current password field cannot be left empty"
+                      'The current password field cannot be left empty'
                     );
                   } else {
                     newPasswordRef.current.focus();
-                    setErrorMessage("");
+                    setErrorMessage('');
                   }
                 }
               }}
               error={
                 !accountInfo.currentPassword.trim() &&
                 errorMessage ===
-                  "The current password field cannot be left empty"
+                  'The current password field cannot be left empty'
               }
               sx={{
-                marginTop: "0px",
-                marginBottom: "25px",
-                display: "block",
-                width: "100%",
+                marginTop: '0px',
+                marginBottom: '25px',
+                display: 'block',
+                width: '100%',
               }}
             />
             <label htmlFor="NewPassword">New Password</label>
@@ -203,43 +208,46 @@ export default function ChangePassword() {
               inputRef={newPasswordRef}
               autoComplete="New Password"
               error={
-                (isNewPasswordChanged && !isPasswordValid&&!isFormSubmitted) ||
+                (isNewPasswordChanged &&
+                  !isPasswordValid &&
+                  !isFormSubmitted) ||
                 (!accountInfo.currentPassword.trim() &&
                   errorMessage ===
-                    "The new password field cannot be left empty")
+                    'The new password field cannot be left empty')
               }
               helperText={
-                (isNewPasswordChanged && !isFormSubmitted) &&(
+                isNewPasswordChanged &&
+                !isFormSubmitted && (
                   <ul
                     style={{
-                      color: "black",
-                      paddingLeft: "20px",
-                      listStyleType: "none",
-                      fontSize: "15px",
+                      color: 'black',
+                      paddingLeft: '20px',
+                      listStyleType: 'none',
+                      fontSize: '15px',
                     }}
                   >
                     <li>
                       {/[a-z]/.test(accountInfo.newPassword) ? (
-                        <CheckIcon style={{ color: "green" }} />
+                        <CheckIcon style={{ color: 'green' }} />
                       ) : (
-                        <CloseIcon style={{ color: "red" }} />
-                      )}{" "}
+                        <CloseIcon style={{ color: 'red' }} />
+                      )}{' '}
                       A lowercase letter (a-z)
                     </li>
                     <li>
                       {/[A-Z]/.test(accountInfo.newPassword) ? (
-                        <CheckIcon style={{ color: "green" }} />
+                        <CheckIcon style={{ color: 'green' }} />
                       ) : (
-                        <CloseIcon style={{ color: "red" }} />
-                      )}{" "}
+                        <CloseIcon style={{ color: 'red' }} />
+                      )}{' '}
                       An uppercase letter (A-Z)
                     </li>
                     <li>
                       {/\d/.test(accountInfo.newPassword) ? (
-                        <CheckIcon style={{ color: "green" }} />
+                        <CheckIcon style={{ color: 'green' }} />
                       ) : (
-                        <CloseIcon style={{ color: "red" }} />
-                      )}{" "}
+                        <CloseIcon style={{ color: 'red' }} />
+                      )}{' '}
                       A number
                     </li>
                     {/* <li>
@@ -261,21 +269,21 @@ export default function ChangePassword() {
                     <li>
                       {accountInfo.newPassword.length >= 8 &&
                       accountInfo.newPassword.length <= 20 ? (
-                        <CheckIcon style={{ color: "green" }} />
+                        <CheckIcon style={{ color: 'green' }} />
                       ) : (
-                        <CloseIcon style={{ color: "red" }} />
-                      )}{" "}
+                        <CloseIcon style={{ color: 'red' }} />
+                      )}{' '}
                       8-20 characters
                     </li>
                   </ul>
                 )
               }
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (e.key === 'Enter') {
                   e.preventDefault();
                   if (!accountInfo.newPassword.trim()) {
                     setErrorMessage(
-                      "The new password field cannot be left empty"
+                      'The new password field cannot be left empty'
                     );
                   } else {
                     if (isPasswordValid) {
@@ -284,15 +292,15 @@ export default function ChangePassword() {
                     } else {
                       newPasswordRef.current.focus();
                     }
-                    setErrorMessage("");
+                    setErrorMessage('');
                   }
                 }
               }}
               sx={{
-                marginTop: "0px",
-                marginBottom: "25px",
-                display: "block",
-                width: "100%",
+                marginTop: '0px',
+                marginBottom: '25px',
+                display: 'block',
+                width: '100%',
               }}
             />
             <label htmlFor="Confirm New Password">Confirm New Password</label>
@@ -305,14 +313,14 @@ export default function ChangePassword() {
               id="Confirm New Password"
               autoComplete="Confirm New Password"
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (e.key === 'Enter') {
                   e.preventDefault();
                   if (!accountInfo.confirmPassword.trim()) {
                     setErrorMessage(
-                      "The confirm new password field cannot be left empty"
+                      'The confirm new password field cannot be left empty'
                     );
                   } else {
-                    setErrorMessage("");
+                    setErrorMessage('');
                     submitChange(e);
                   }
                 }
@@ -320,25 +328,25 @@ export default function ChangePassword() {
               error={
                 !accountInfo.confirmPassword.trim() &&
                 errorMessage ===
-                  "The confirm new password field cannot be left empty"
+                  'The confirm new password field cannot be left empty'
               }
               inputRef={confirmNewPasswordRef}
               value={accountInfo.confirmPassword}
               onChange={confirmNewPasswordHandle}
               sx={{
-                marginTop: "0px",
-                marginBottom: "25px",
-                display: "block",
-                width: "100%",
+                marginTop: '0px',
+                marginBottom: '25px',
+                display: 'block',
+                width: '100%',
               }}
             />
             {errorMessage && (
-              <p style={{ color: "red", marginBottom: "10px" }}>
+              <p style={{ color: 'red', marginBottom: '10px' }}>
                 {errorMessage}
               </p>
             )}
-            {(submitMessage&&isFormSubmitted) && (
-              <p style={{ color: "black", marginBottom: "10px" }}>
+            {submitMessage && isFormSubmitted && (
+              <p style={{ color: 'black', marginBottom: '10px' }}>
                 {submitMessage}
               </p>
             )}
@@ -349,13 +357,13 @@ export default function ChangePassword() {
               sx={{
                 mt: 3,
                 mb: 2,
-                width: "100%",
-                textTransform: "capitalize",
-                bgcolor: "black",
-                ":hover": { backgroundColor: "rgba(0,0,0,0.8)" },
-                height: "60px",
-                borderRadius: "30px",
-                fontSize: "19px",
+                width: '100%',
+                textTransform: 'capitalize',
+                bgcolor: 'black',
+                ':hover': { backgroundColor: 'rgba(0,0,0,0.8)' },
+                height: '60px',
+                borderRadius: '30px',
+                fontSize: '19px',
               }}
             >
               Change Password
