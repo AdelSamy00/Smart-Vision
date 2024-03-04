@@ -8,9 +8,11 @@ import {
 } from '../controllers/EmployeeControllers.js';
 import {
   getAssignedCustomizationOrders,
+  getCustomizationOrdersById,
   sendCustomizationDetails,
 } from '../controllers/EngineerControllers.js';
 import { getMaterialOrders } from '../controllers/InventoryManager.js';
+import { getCustomizationOrdersDetails } from '../controllers/FactoryControllers.js';
 const router = express.Router();
 
 //get Customers
@@ -31,6 +33,12 @@ router.get('/customizationOrders', getCustomizationOrders);
 router.get('/customizationOrders/:id', getAssignedCustomizationOrders);
 
 router.post('/send-customization-details', sendCustomizationDetails);
+
+// get customization Order by Id to engineer
+router.get('/customizationOrder/:serviceId', getCustomizationOrdersById);
+
+//get Customization Order Details to Factory
+router.get('/customizationOrdersDetails', getCustomizationOrdersDetails);
 
 router.get('/material-order', getMaterialOrders);
 

@@ -26,6 +26,32 @@ export const getAssignedCustomizationOrders = async (req, res, next) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+export const getCustomizationOrdersById = async (req, res, next) => {
+  try {
+    const { serviceId } = req.params;
+    const order = await ServicesOrders.findById({
+      _id: serviceId,
+    }).populate([
+      {
+        path: 'customer',
+        select: 'username phone email address -password',
+      },
+      {
+        path: 'assignedEngineer',
+        select: '_id username email -password',
+      },
+    ]);
+    res.status(200).json({
+      success: true,
+      message: 'get customization orders successfully',
+      customizationOrder: order,
+    });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
 export const sendCustomizationDetails = async (req, res, next) => {
   try {
     const { serviceId, engineerId, materials, details } = req.body;
