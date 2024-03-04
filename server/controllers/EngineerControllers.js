@@ -76,3 +76,30 @@ export const sendCustomizationDetails = async (req, res, next) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+export const getCustomizedOrderById = async (req, res, next) => {
+  try {
+    const { requestId } = req.params; 
+    const customizedOrder = await ServicesOrders.findById(requestId).populate([
+      {
+        path: 'customer',
+        select: 'username phone email address -password',
+      },
+      {
+        path: 'assignedEngineer',
+        select: '_id username email -password',
+      },
+    ]);
+    if (!customizedOrder) {
+      return res.status(404).json({ message: 'Customized order not found' });
+    }
+    res.status(200).json({
+      success: true,
+      message: 'Customized order found successfully',
+      customizationOrder: customizedOrder,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};

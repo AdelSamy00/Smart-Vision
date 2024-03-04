@@ -3,45 +3,44 @@ import { Grid, Button, Typography } from "@mui/material";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-function OrderComponent({ order }) {
+function TransactionComponent({ transaction }) {
   const [showOrder, setShowOrder] = useState(false);
-  const [updatedOrder, setUpdatedOrder] = useState(order);
-  const [deleteMessage, setDeletemessage] = useState(null);
+//   const [updatedTransaction, setUpdatedTransaction] = useState(transaction);
+//   const [deleteMessage, setDeletemessage] = useState(null);
   const { customer } = useSelector((state) => state.customer);
 
   const toggleOrder = () => {
     setShowOrder(!showOrder);
   };
-  const calculateTotalItems = () => {
-    let totalItems = 0;
-    order?.products.map((product) => {
-      // console.log(product.quantity);
-      totalItems += product?.quantity || 1;
-    });
-    return totalItems;
-  };
-  const cancelOrder = async (orderId) => {
-    try {
-      const response = await axios.delete(`/customers/order`, {
-        data: { id: customer?._id, orderId: orderId },
-      });
-      if (response.status === 200) {
-        setUpdatedOrder(response.data.order);
-        // console.log(response.data);
-      }
-    } catch (error) {
-      // console.error("Error cancelling order:", error.response.data.message);
-      setDeletemessage(error.response.data.message);
-    }
-  };
+//   const calculateTotalItems = () => {
+//     let totalItems = 0;
+//     transaction?.materials.map((material) => {
+//       // console.log(product.quantity);
+//       totalItems += product?.quantity || 1;
+//     });
+//     return totalItems;
+//   };
+//   const cancelOrder = async (orderId) => {
+//     try {
+//       const response = await axios.delete(`/customers/order`, {
+//         data: { id: customer?._id, orderId: orderId },
+//       });
+//       if (response.status === 200) {
+//         setUpdatedTransaction(response.data.order);
+//         // console.log(response.data);
+//       }
+//     } catch (error) {
+//       // console.error("Error cancelling order:", error.response.data.message);
+//       setDeletemessage(error.response.data.message);
+//     }
+//   };
   const [formattedDate, setFormattedDate] = useState('');
 
   useEffect(() => {
-    const date = new Date(order?.createdAt);
-    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
-    const formatted = date.toLocaleDateString(undefined, options);
+    const date = new Date(transaction?.createdAt);
+    const formatted = date.toLocaleDateString();
     setFormattedDate(formatted);
-  }, [order?.createdAt]);
+  }, [transaction?.createdAt]);
   return (
     <Grid container className="order-container" sx={{ marginBottom: "2rem" }}>
       <Grid
@@ -89,7 +88,7 @@ function OrderComponent({ order }) {
               variant="body2"
               sx={{ textAlign: { xs: "end", md: "center" } }}
             >
-              {updatedOrder?.orderNumber}
+              {/* {transaction?.orderNumber} */}
             </Typography>
           </Grid>
           <Grid
@@ -101,7 +100,7 @@ function OrderComponent({ order }) {
             sx={{ textAlign: { xs: "start", md: "center" } }}
           >
             <Typography variant="body1">Total Amount</Typography>
-            <Typography variant="body2">{calculateTotalItems()}</Typography>
+            {/* <Typography variant="body2">{calculateTotalItems()}</Typography> */}
           </Grid>
           <Grid
             item
@@ -144,7 +143,7 @@ function OrderComponent({ order }) {
             }}
           >
             {/* {console.log(order)} */}
-            {order?.products.map((product, index) => (
+            {transaction?.materials?.map((product, index) => (
               <Grid
                 key={index}
                 item
@@ -157,7 +156,7 @@ function OrderComponent({ order }) {
                 }}
               >
                 <Grid container spacing={2}>
-                  <Grid item xs={12} md={4}>
+                  {/* <Grid item xs={12} md={4}>
                     <img
                       src={product?.product?.images[0]}
                       alt={product?.product?.name}
@@ -167,7 +166,7 @@ function OrderComponent({ order }) {
                         borderRadius: "5px",
                       }}
                     />
-                  </Grid>
+                  </Grid> */}
                   <Grid item xs={12} md={8}>
                     <Grid
                       item
@@ -236,10 +235,10 @@ function OrderComponent({ order }) {
             >
               <Typography variant="body1" xs={6}>
                 <span style={{ fontWeight: "bold" }}>State: </span>{" "}
-                {updatedOrder?.state}
+                {/* {updatedOrder?.state} */}
               </Typography>
               <Typography variant="body1" xs={6}>
-                {updatedOrder.state !== "CANCELED" && (
+                {/* {updatedOrder.state !== "CANCELED" && ( */}
                   <Button
                     onClick={() => {
                       // console.log(order?._id);
@@ -275,4 +274,4 @@ function OrderComponent({ order }) {
   );
 }
 
-export default OrderComponent;
+export default TransactionComponent;

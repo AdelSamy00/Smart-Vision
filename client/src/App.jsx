@@ -48,6 +48,9 @@ import AddMatrialForm from './components/inventory/AddMatrialForm';
 import UpdateProductForm from './components/inventory/UpdateProductForm';
 import UpdateMatrialForm from './components/inventory/UpdateMatrialeForm';
 import { shouldRenderHeaderAndFooter } from './utils/ShouldRender.jsx';
+import TransactionHistory from './pages/inventory/TransactionHistory.jsx';
+import CustomOrderForm from './pages/engineer/customizedOrderform.jsx';
+import ViewCutomizedOrder from './pages/engineer/ViewCustomizedOrders.jsx';
 function App() {
     const location = useLocation();
   const { customer } = useSelector((state) => state.customer);
@@ -93,6 +96,7 @@ function App() {
         <Route path="/order" element={<OrderComponent />} />
         <Route path="/addProduct" element={<AddProductForm />} />
         <Route path="/addMatrial" element={<AddMatrialForm />} />
+        <Route path="/transactionhistory" element={<TransactionHistory />} />
         <Route
           path="/updateProduct/:productId"
           element={<UpdateProductForm />}
@@ -112,6 +116,8 @@ function App() {
         <Route path="/presenter-view" element={<PresenterProductsView />} />
         <Route path="/ed/product/:productId" element={<EditProduct />} />
         {/* Private Enginer Routes */}
+        <Route path="/engineer/send-request/:requestId" element={<CustomOrderForm />} />
+          <Route path="/engineer/view-requests" element={<ViewCutomizedOrder />} />
         {/* Private Factory Routes */}
         {/* Private Operator Routes */}
         <Route path="*" element={<Page404 />} /> {/*The path not found.*/}

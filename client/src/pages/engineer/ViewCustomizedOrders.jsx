@@ -1,33 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Typography, Button, CircularProgress } from "@mui/material";
-import axios from "axios";
+import {
+  Grid,
+  Typography,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import "./StyleSheets/PresenterProductsView.css"; // Import custom CSS for advanced styling
-import Loading from "../../components/shared/Loading";
+import "../Presenter/StyleSheets/PresenterProductsView.css";
+import { apiRequest } from "../../utils";
 
-function PresenterProductsView() {
-  const [products, setProducts] = useState([]);
+function ViewCutomizedOrder() {
+  const [requests, setRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  // const [displayedProducts, setDisplayedProducts] = useState(3); // Show initial 3 orders
-
+  const { employee } = useSelector((state) => state.employee);
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("/products/not-shown/");
-        console.log("API response:", response.data.products);
-        setProducts(response.data.products);
+        const response = await apiRequest({
+          method: "GET",
+          url: `/employees/customizationOrders/${employee._id}`,
+        });
+        console.log("API response:", response.data.customizationOrders);
+        setRequests(response.data.customizationOrders);
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching products:", error.response.data.message);
+        console.error("Error fetching products:", error.response);
       }
     };
 
     fetchProducts();
   }, []);
-  // const handleShowMore = () => {
-  //   setDisplayedProducts(products.length); // Show all orders when "Show All" is clicked
-  // };
 
   return (
     <Grid
@@ -37,15 +40,14 @@ function PresenterProductsView() {
       className="presenter-products-container"
     >
       {" "}
-      {/* Apply advanced styling class */}
       {isLoading ? (
         <Grid item>
-          <Loading />
+          <CircularProgress />
         </Grid>
-      ) : products.length > 0 ? (
+      ) : requests.length > 0 ? (
         <Grid item xs={12} sm={10} md={10}>
           <Typography variant="h4" align="center" gutterBottom>
-            Products in Inventory
+            Sevice Requests
           </Typography>
           <Grid
             container
@@ -54,25 +56,18 @@ function PresenterProductsView() {
             align="center"
             justifyContent="center"
           >
-            {products.map((product, index) => (
+            {requests.map((request, index) => (
               <Grid key={index} item xs={12} md={6} lg={4}>
                 <div className={`presenter-product-card`}>
                   {" "}
-                  <Typography
-                    variant="h6"
-                    align="center"
-                    gutterBottom
-                    className="presenter-product-title"
-                  >
-                    {product.name}
-                  </Typography>
+                  {console.log(request)}
                   <Typography
                     variant="body2"
                     align="center"
                     gutterBottom
                     className="presenter-product-info"
                   >
-                    Quantity: {product.quantity}
+                    Customer: {request.customer.username}
                   </Typography>
                   <Typography
                     variant="body2"
@@ -80,21 +75,50 @@ function PresenterProductsView() {
                     gutterBottom
                     className="presenter-product-description"
                   >
-                    Description: {product.description}
+                    Description: {request.description}
+                  </Typography>
+                  <Typography>
+                    <Link to={"/"}>
+                      <Button
+                        variant="text"
+                        sx={{
+                          textDecoration: "underline",
+                          textTransform: "capitalize",
+                          padding: 0,
+                          "&:hover": {
+                            backgroundColor: "white",
+                            color: "black",
+                            textDecoration: "underline",
+                          },
+                        }}
+                      >
+                        Service Details
+                      </Button>
+                    </Link>
                   </Typography>
                   <div className="button-container">
                     {" "}
                     <Link
-                      to={`/presenter-edit-product/${product?._id}`}
+                      to={`/engineer/send-request/${request._id}`}
                       className="link-style"
                     >
                       <Button
                         variant="contained"
                         color="primary"
                         className="add-to-store-button"
+                        style={{
+                          background:
+                            "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+                        //   borderRadius: 3,
+                        //   border: 0,
+                        //   color: "white",
+                        textTransform:"capitalize",
+                          height: 38,
+                          padding: "0px 15px",
+                        }}
                       >
                         {" "}
-                        Add to Store
+                        Send Order To Factory
                       </Button>
                     </Link>
                   </div>
@@ -114,4 +138,4 @@ function PresenterProductsView() {
   );
 }
 
-export default PresenterProductsView;
+export default ViewCutomizedOrder;

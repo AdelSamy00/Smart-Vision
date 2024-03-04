@@ -4,14 +4,9 @@ import '../../pages/e-commers/StyleSheets/Homepage.css';
 import ProductCard from './ProductCard';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
+import { setCart } from "../../redux/CartSlice";
 import { SetCustomer } from '../../redux/CustomerSlice';
 import { useNavigate } from 'react-router-dom';
-
-const getinitItems = () => {
-  const data = JSON.parse(localStorage.getItem('cart'));
-  if (!data) return [];
-  return data;
-};
 
 function HomeSlider({ items, option, setSelectedOption }) {
   const categoryCardsRef = useRef(null);
@@ -19,30 +14,33 @@ function HomeSlider({ items, option, setSelectedOption }) {
   const rightArrowRef = useRef(null);
   const sliderContainerRef = useRef(null);
   const [itemsToScroll, setItemsToScroll] = useState(5.75); // Initial value
+  //add by youssef
   const { customer } = useSelector((state) => state.customer);
+  const { cart } = useSelector((state) => state.cart);
   const [favoriteList, setFavoriteList] = useState(customer?.favoriteList);
-  const [cart, setCart] = useState(getinitItems);
   const [inCart, setInCart] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  //remove product from cart
+  function deleteProductFromCart(prevCart, id) {
+    return prevCart.filter((t) => t._id !== id);
+  }
+
   const handelCart = (id, name, price, images, points) => {
-    console.log(id, name, price, images, points);
-    const res = cart.find((prod) => {
+    const inCart = cart.find((prod) => {
       return prod._id === id;
     });
-    if (res) {
-      console.log('remove');
-      setCart((prevCart) => {
-        return prevCart.filter((t) => t._id !== id);
-      });
+    //item all ready in the cart
+    if (inCart) {
+      dispatch(setCart(deleteProductFromCart(cart, id)));
       setInCart(false);
     } else {
-      console.log('add');
-      setCart([...cart, { _id: id, name, price, images, points }]);
-      localStorage.setItem(
-        'cart',
-        JSON.stringify([...cart, { _id: id, name, price, images, points }])
+      dispatch(
+        setCart([
+          ...cart,
+          { _id: id, name, price, images, points, quantity: 1 },
+        ])
       );
       setInCart(true);
     }
@@ -50,16 +48,14 @@ function HomeSlider({ items, option, setSelectedOption }) {
 
   const handelFavorit = (id) => {
     if (customer?._id) {
-      console.log('fired2');
       favorites(customer?._id, id);
     } else {
-      navigate('/login');
+      navigate("/login");
     }
   };
   async function favorites(id, productId) {
-    console.log(id, productId);
     await axios
-      .post('/customers/favorite', { id, productId })
+      .post("/customers/favorite", { id, productId })
       .then((res) => {
         const newData = { ...res.data?.newCustomerData };
         dispatch(SetCustomer(newData));
@@ -70,24 +66,24 @@ function HomeSlider({ items, option, setSelectedOption }) {
       });
   }
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
+    localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
   useEffect(() => {
     // const container = categoryCardsRef.current;
     const updateItemsToScroll = () => {
       // Check if the screen width is less than or equal to a certain value (e.g., 600px)
       const screenWidth = window.innerWidth;
-      // console.log(screenWidth); // Log the screenWidth
+      console.log(screenWidth); // Log the screenWidth
 
-      if (screenWidth < 580 && option !== 'product') {
+      if (screenWidth < 580 && option !== "product") {
         setItemsToScroll(1.08);
-      } else if (screenWidth < 890 && option !== 'product') {
+      } else if (screenWidth < 890 && option !== "product") {
         setItemsToScroll(2.1);
-      } else if (screenWidth <= 1035 && option !== 'product') {
+      } else if (screenWidth <= 1035 && option !== "product") {
         setItemsToScroll(3.2);
-      } else if (screenWidth <= 1410 && option !== 'product') {
+      } else if (screenWidth <= 1410 && option !== "product") {
         setItemsToScroll(4.3);
-      } else if (option === 'product' && screenWidth < 780) {
+      } else if (option === "product" && screenWidth < 780) {
         setItemsToScroll(1);
       } else {
         setItemsToScroll(5.3);
@@ -95,8 +91,8 @@ function HomeSlider({ items, option, setSelectedOption }) {
     };
 
     updateItemsToScroll();
-    window.addEventListener('resize', updateItemsToScroll);
-    return () => window.removeEventListener('resize', updateItemsToScroll);
+    window.addEventListener("resize", updateItemsToScroll);
+    return () => window.removeEventListener("resize", updateItemsToScroll);
   }, []);
 
   useEffect(() => {
@@ -111,13 +107,13 @@ function HomeSlider({ items, option, setSelectedOption }) {
 
         if (leftArrowRef.current) {
           leftArrowRef.current.style.visibility = showLeftArrow
-            ? 'visible'
-            : 'hidden';
+            ? "visible"
+            : "hidden";
         }
         if (rightArrowRef.current) {
           rightArrowRef.current.style.visibility = showRightArrow
-            ? 'visible'
-            : 'hidden';
+            ? "visible"
+            : "hidden";
         }
       }
     };
@@ -127,11 +123,11 @@ function HomeSlider({ items, option, setSelectedOption }) {
     };
 
     if (container) {
-      container.addEventListener('scroll', throttledScroll);
+      container.addEventListener("scroll", throttledScroll);
     }
 
     if (sliderContainer) {
-      sliderContainer.addEventListener('mouseenter', () => {
+      sliderContainer.addEventListener("mouseenter", () => {
         if (container) {
           const showLeftArrow = container.scrollLeft > 0;
           const showRightArrow =
@@ -140,28 +136,28 @@ function HomeSlider({ items, option, setSelectedOption }) {
 
           if (leftArrowRef.current) {
             leftArrowRef.current.style.visibility = showLeftArrow
-              ? 'visible'
-              : 'hidden';
+              ? "visible"
+              : "hidden";
           }
           if (rightArrowRef.current) {
             rightArrowRef.current.style.visibility = showRightArrow
-              ? 'visible'
-              : 'hidden';
+              ? "visible"
+              : "hidden";
           }
         }
       });
 
-      sliderContainer.addEventListener('mouseleave', () => {
+      sliderContainer.addEventListener("mouseleave", () => {
         if (leftArrowRef.current && rightArrowRef.current) {
-          leftArrowRef.current.style.visibility = 'hidden';
-          rightArrowRef.current.style.visibility = 'hidden';
+          leftArrowRef.current.style.visibility = "hidden";
+          rightArrowRef.current.style.visibility = "hidden";
         }
       });
     }
 
     return () => {
       if (container) {
-        container.removeEventListener('scroll', throttledScroll);
+        container.removeEventListener("scroll", throttledScroll);
       }
     };
   }, []);
@@ -173,7 +169,7 @@ function HomeSlider({ items, option, setSelectedOption }) {
       let scrollAmount = -1 * scrollWidth;
       container.scrollTo({
         left: container.scrollLeft + scrollAmount,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
@@ -185,7 +181,7 @@ function HomeSlider({ items, option, setSelectedOption }) {
       let scrollAmount = 1 * scrollWidth;
       container.scrollTo({
         left: container.scrollLeft + scrollAmount,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
@@ -193,19 +189,19 @@ function HomeSlider({ items, option, setSelectedOption }) {
   return (
     <div
       className="home-slider-container"
-      style={{ position: 'relative' }}
+      style={{ position: "relative" }}
       ref={sliderContainerRef}
     >
       <div className="category-cards" ref={categoryCardsRef}>
         {items.map((item, index) =>
-          option === 'category' || option === 'price' ? (
+          option === "category" || option === "price" ? (
             <CategoryCard
               key={index}
               name={item.name}
               imageUrl={item.imageUrl}
               isLast={index === items.length - 1}
               onClick={() =>
-                setSelectedOption(option === 'category' ? item.name : item.low)
+                setSelectedOption(option === "category" ? item.name : item.low)
               }
             />
           ) : (
@@ -224,16 +220,16 @@ function HomeSlider({ items, option, setSelectedOption }) {
       <div
         className="overlay"
         style={{
-          position: 'absolute',
-          width: '100%',
-          height: '20%',
-          alignItems: 'center',
-          display: 'flex',
-          justifyContent: 'space-between',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          pointerEvents: 'none',
+          position: "absolute",
+          width: "100%",
+          height: "20%",
+          alignItems: "center",
+          display: "flex",
+          justifyContent: "space-between",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          pointerEvents: "none",
         }}
       >
         <button
@@ -241,8 +237,8 @@ function HomeSlider({ items, option, setSelectedOption }) {
           onClick={scrollLeft}
           ref={leftArrowRef}
           style={{
-            visibility: 'hidden',
-            pointerEvents: 'auto',
+            visibility: "hidden",
+            pointerEvents: "auto",
           }}
         >
           &#10094;
@@ -252,8 +248,8 @@ function HomeSlider({ items, option, setSelectedOption }) {
           onClick={scrollRight}
           ref={rightArrowRef}
           style={{
-            visibility: 'hidden',
-            pointerEvents: 'auto',
+            visibility: "hidden",
+            pointerEvents: "auto",
           }}
         >
           &#10095;

@@ -63,13 +63,12 @@
   width: 90%;
   margin: auto;
   align-items: center;
-  
-  /* justify-content: space-between; */
+  display: flex;
+  justify-content: space-between;
   background-color: white;
   z-index: 1;
   border-bottom: 2px solid black;
   margin-bottom: 3rem;
-  /* padding: 0px 5rem; */
 }
 .colorDropDown {
   display: flex;
@@ -194,6 +193,9 @@
 @media only screen and (min-width: 725px) {
   .products-container {
     justify-content: space-between;
+  }
+  .filters-container{
+    justify-content: flex-start;
   }
 }
 @media only screen and (min-width: 1280px) {

@@ -14,6 +14,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearCart } from '../../redux/CartSlice';
+import { apiRequest } from '../../utils';
 
 export default function Checkout() {
   const [activeStep, setActiveStep] = useState(0);
@@ -84,13 +85,25 @@ export default function Checkout() {
       }));
       console.log(shippingInfo);
       //console.log(productsWithDetails.length);
-      const response = await axios.post('/customers/order', {
-        id: customer._id,
-        cart: productsWithDetails,
-        totalPrice: totalPrice,
-        totalPoints: totalPoints,
-        customerData: shippingInfo,
+      const response = await apiRequest({
+        method: 'POST',
+        url: '/customers/order',
+        data: {
+          id: customer._id,
+          cart: productsWithDetails,
+          totalPrice: totalPrice,
+          totalPoints: totalPoints,
+          customerData: shippingInfo,
+        },
+        token: customer?.token,
       });
+      // const response = await axios.post('/customers/order', {
+      //   id: customer._id,
+      //   cart: productsWithDetails,
+      //   totalPrice: totalPrice,
+      //   totalPoints: totalPoints,
+      //   customerData: shippingInfo,
+      // });
       console.log('Order placed successfully:', response.data);
       dispatch(clearCart());
       setOrderNumber(response.data.order.orderNumber);

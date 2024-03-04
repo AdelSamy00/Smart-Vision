@@ -9,6 +9,7 @@ import {
 import {
   getAssignedCustomizationOrders,
   getCustomizationOrdersById,
+  getCustomizedOrderById,
   sendCustomizationDetails,
 } from '../controllers/EngineerControllers.js';
 import { getMaterialOrders } from '../controllers/InventoryManager.js';
@@ -33,6 +34,8 @@ router.get('/customizationOrders', getCustomizationOrders);
 router.get('/customizationOrders/:id', getAssignedCustomizationOrders);
 
 router.post('/send-customization-details', sendCustomizationDetails);
+
+router.get('/customizationOrder/:requestId', getCustomizedOrderById);
 
 // get customization Order by Id to engineer
 router.get('/customizationOrder/:serviceId', getCustomizationOrdersById);
