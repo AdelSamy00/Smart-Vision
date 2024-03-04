@@ -47,7 +47,7 @@ import AddProductForm from './components/inventory/AddProductFrom';
 import AddMatrialForm from './components/inventory/AddMatrialForm';
 import UpdateProductForm from './components/inventory/UpdateProductForm';
 import UpdateMatrialForm from './components/inventory/UpdateMatrialeForm';
-import { shouldRenderHeaderAndFooter, shouldRenderHeaderAndFooterEmployee } from './utils/ShouldRender.jsx';
+import { shouldRenderHeaderAndFooter } from './utils/ShouldRender.jsx';
 function App() {
     const location = useLocation();
   const { customer } = useSelector((state) => state.customer);
