@@ -14,12 +14,6 @@ export const getMaterialTransactions = async (req, res, next) => {
           path: 'material',
         },
       })
-      .populate({
-        path: 'products',
-        populate: {
-          path: 'product',
-        },
-      });
 
     if (!transactions || transactions.length === 0) {
       return res.status(404).json({
@@ -48,12 +42,6 @@ export const getProductTransactions = async (req, res, next) => {
       .populate({
         path: 'inventoryManager',
         select: '_id username email -password',
-      })
-      .populate({
-        path: 'materials',
-        populate: {
-          path: 'material',
-        },
       })
       .populate({
         path: 'products',
