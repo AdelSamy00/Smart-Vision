@@ -28,10 +28,11 @@ import {
   PresenterProductsView,
   ProductDetailsPresenter,
 } from './pages/Presenter/index.js';
-import{
+import {
   InventoryHome,
   TransactionsPage,
-}from'./pages/inventory/index.js';
+  TransactionHistory,
+} from './pages/inventory/index.js';
 import {
   EmployeLogin,
   Landing,
@@ -40,6 +41,13 @@ import {
   Page404,
 } from './pages/shared/index.js';
 
+import {
+  CustomOrderForm,
+  ViewCutomizedOrder,
+  OrderDetailsEnginer,
+} from './pages/engineer/index.js';
+
+import { OrderDetailsFactory } from './pages/factory/index.js';
 import Footer from './components/shared/Footer.jsx';
 import Header from './components/shared/Header.jsx';
 import OrderComponent from './components/e-commers/OrderComponent.jsx';
@@ -48,13 +56,10 @@ import AddMatrialForm from './components/inventory/AddMatrialForm';
 import UpdateProductForm from './components/inventory/UpdateProductForm';
 import UpdateMatrialForm from './components/inventory/UpdateMatrialeForm';
 import { shouldRenderHeaderAndFooter } from './utils/ShouldRender.jsx';
-import TransactionHistory from './pages/inventory/TransactionHistory.jsx';
-import CustomOrderForm from './pages/engineer/customizedOrderform.jsx';
-import ViewCutomizedOrder from './pages/engineer/ViewCustomizedOrders.jsx';
+
 function App() {
-    const location = useLocation();
+  const location = useLocation();
   const { customer } = useSelector((state) => state.customer);
-  console.log("first")
   axios.defaults.baseURL = 'http://localhost:3000';
   axios.defaults.headers = {
     'Content-Type': 'application/json',
@@ -111,14 +116,21 @@ function App() {
           path="/p/product/:productId"
           element={<ProductDetailsPresenter />}
         />
-          
         <Route path="/presenter-home" element={<HomePresenter />} />
         <Route path="/presenter-view" element={<PresenterProductsView />} />
         <Route path="/ed/product/:productId" element={<EditProduct />} />
         {/* Private Enginer Routes */}
-        <Route path="/engineer/send-request/:requestId" element={<CustomOrderForm />} />
-          <Route path="/engineer/view-requests" element={<ViewCutomizedOrder />} />
+        <Route
+          path="/engineer/send-request/:requestId"
+          element={<CustomOrderForm />}
+        />
+        <Route
+          path="/engineer/view-requests"
+          element={<ViewCutomizedOrder />}
+        />
+        <Route path="/e/order-details" element={<OrderDetailsEnginer />} />
         {/* Private Factory Routes */}
+        <Route path="/f/order-details" element={<OrderDetailsFactory />} />
         {/* Private Operator Routes */}
         <Route path="*" element={<Page404 />} /> {/*The path not found.*/}
       </Routes>
