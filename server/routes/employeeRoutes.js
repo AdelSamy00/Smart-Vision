@@ -12,7 +12,7 @@ import {
   getCustomizedOrderById,
   sendCustomizationDetails,
 } from '../controllers/EngineerControllers.js';
-import { getMaterialOrders } from '../controllers/InventoryManager.js';
+import { getMaterialOrders, getTransaction } from '../controllers/InventoryManager.js';
 import { getCustomizationOrdersDetails } from '../controllers/FactoryControllers.js';
 const router = express.Router();
 
@@ -44,5 +44,6 @@ router.get('/customizationOrder/:serviceId', getCustomizationOrdersById);
 router.get('/customizationOrdersDetails', getCustomizationOrdersDetails);
 
 router.get('/material-order', getMaterialOrders);
+router.get ('/transaction/:transactionId',getTransaction)
 
 export default router;

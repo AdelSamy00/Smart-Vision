@@ -21,7 +21,7 @@ const inventoryTransactionSchema = new mongoose.Schema(
     products: [
       {
         quantity: { type: Number },
-        material: {
+        product: {
           type: Schema.Types.ObjectId,
           ref: 'Products',
         },
