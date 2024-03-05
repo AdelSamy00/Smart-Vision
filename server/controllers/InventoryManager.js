@@ -27,10 +27,11 @@ export const getMaterialOrders = async (req, res, next) => {
   }
 };
 
-export const getTransaction = async (req, res, next) => {
+
+
+export const getAllTransactions = async (req, res, next) => {
   try {
-    const { transactionId } = req.params;
-    const transaction = await IventoryTransactions.findById(transactionId).populate([
+    const transactions = await IventoryTransactions.find().populate([
       {
         path: 'inventoryManager',
         select: '_id username email -password',
@@ -47,26 +48,19 @@ export const getTransaction = async (req, res, next) => {
           path:'product'
         },
       }
-
-    ])
-
-    if (!transaction) {
-      return res.status(404).json({
-        success: false,
-        message: 'Transaction not found',
-      });
-    }
+    ]);
 
     res.status(200).json({
       success: true,
-      message: 'Transaction retrieved successfully',
-      transaction: transaction,
+      message: 'Transactions retrieved successfully',
+      transactions: transactions,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: 'Failed to retrieve transaction',
+      message: 'Failed to retrieve transactions',
     });
   }
 };
+
