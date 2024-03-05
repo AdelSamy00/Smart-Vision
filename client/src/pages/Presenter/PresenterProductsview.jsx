@@ -92,6 +92,14 @@ function PresenterProductsView() {
                         variant="contained"
                         color="primary"
                         className="add-to-store-button"
+                        style={{
+                          background:
+                            "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+
+                          textTransform: "capitalize",
+                          height: 34,
+                          padding: "0px 15px",
+                        }}
                       >
                         {" "}
                         Add to Store

@@ -1,24 +1,21 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-// import OrderComponent from "../../components/e-commers/OrderComponent";
-import ServiceHistory from "../../components/e-commers/serviceHistory";
 import Loading from "../../components/shared/Loading";
 import { Button, FormControlLabel, Switch } from "@mui/material";
 import TransactionComponent from "../../components/inventory/Transactioncomponent";
 const TransactionHistory = () => {
   const [transactiontHistory, setTransactionHistory] = useState([]);
-  const { customer } = useSelector((state) => state.customer);
   const [showOrderHistory, setShowOrderHistory] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchOrderHistory() {
       try {
-        const response = await axios.get(`/customers/order/${customer._id}`);
-        setTransactionHistory(response.data.history);
+        const response = await axios.get(`/employees/material-transactions`);
+        setTransactionHistory(response.data.transactions);
         setIsLoading(false);
-        console.log(response.data);
+        console.log(response.data.transactions);
       } catch (error) {
         console.error(
           "Error fetching order history:",
@@ -77,7 +74,7 @@ const TransactionHistory = () => {
             </li>
           ) : (
             <li>
-              <ServiceHistory />
+              {/* <ServiceHistory /> */}
             </li>
           )}
         </ul>

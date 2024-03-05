@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import "../Presenter/StyleSheets/PresenterProductsView.css";
 import { apiRequest } from "../../utils";
+import Loading from "../../components/shared/Loading";
 
 function ViewCutomizedOrder() {
   const [requests, setRequests] = useState([]);
@@ -42,7 +43,7 @@ function ViewCutomizedOrder() {
       {" "}
       {isLoading ? (
         <Grid item>
-          <CircularProgress />
+          <Loading />
         </Grid>
       ) : requests.length > 0 ? (
         <Grid item xs={12} sm={10} md={10}>

@@ -101,7 +101,7 @@ function App() {
         <Route path="/order" element={<OrderComponent />} />
         <Route path="/addProduct" element={<AddProductForm />} />
         <Route path="/addMatrial" element={<AddMatrialForm />} />
-        <Route path="/transactionhistory" element={<TransactionHistory />} />
+        <Route path="/transactions-history" element={<TransactionHistory />} />
         <Route
           path="/updateProduct/:productId"
           element={<UpdateProductForm />}

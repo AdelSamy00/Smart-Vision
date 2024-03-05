@@ -1,40 +1,21 @@
 import { useEffect, useState } from "react";
 import { Grid, Button, Typography } from "@mui/material";
-import axios from "axios";
-import { useSelector } from "react-redux";
 
 function TransactionComponent({ transaction }) {
   const [showOrder, setShowOrder] = useState(false);
-//   const [updatedTransaction, setUpdatedTransaction] = useState(transaction);
-//   const [deleteMessage, setDeletemessage] = useState(null);
-  const { customer } = useSelector((state) => state.customer);
 
   const toggleOrder = () => {
     setShowOrder(!showOrder);
   };
-//   const calculateTotalItems = () => {
-//     let totalItems = 0;
-//     transaction?.materials.map((material) => {
-//       // console.log(product.quantity);
-//       totalItems += product?.quantity || 1;
-//     });
-//     return totalItems;
-//   };
-//   const cancelOrder = async (orderId) => {
-//     try {
-//       const response = await axios.delete(`/customers/order`, {
-//         data: { id: customer?._id, orderId: orderId },
-//       });
-//       if (response.status === 200) {
-//         setUpdatedTransaction(response.data.order);
-//         // console.log(response.data);
-//       }
-//     } catch (error) {
-//       // console.error("Error cancelling order:", error.response.data.message);
-//       setDeletemessage(error.response.data.message);
-//     }
-//   };
-  const [formattedDate, setFormattedDate] = useState('');
+  const calculateTotalMaterials = () => {
+    let totalItems = 0;
+    transaction?.materials.map((material) => {
+      // console.log(product.quantity);
+      totalItems += material?.quantity || 1;
+    });
+    return totalItems;
+  };
+  const [formattedDate, setFormattedDate] = useState("");
 
   useEffect(() => {
     const date = new Date(transaction?.createdAt);
@@ -69,7 +50,13 @@ function TransactionComponent({ transaction }) {
             sx={{ marginBottom: { xs: "1.5rem", md: "0rem" } }}
           >
             <Typography variant="body1">Date Placed</Typography>
-            <Typography variant="body2">{formattedDate}</Typography>
+            <Typography variant="body2">
+              {transaction.createdAt
+                .substring(0, 10)
+                .split("-")
+                .reverse()
+                .join("-")}
+            </Typography>
           </Grid>
           <Grid
             item
@@ -79,32 +66,31 @@ function TransactionComponent({ transaction }) {
             sx={{
               textAlign: { xs: "end", md: "center" },
               marginBottom: { xs: "1.5rem", md: "0rem" },
-              marginTop: { xs: "-1.5rem", md: "0rem" },
-              // backgroundColor:"red"
             }}
           >
-            <Typography variant="body1">Order Number</Typography>
+            <Typography variant="body1">Transaction Type</Typography>
             <Typography
               variant="body2"
               sx={{ textAlign: { xs: "end", md: "center" } }}
             >
-              {/* {transaction?.orderNumber} */}
+              {transaction?.transaction}
             </Typography>
           </Grid>
           <Grid
             item
-            xs={6}
-            // sm={6}
+            xs={8}
             md={4}
             lg={3}
             sx={{ textAlign: { xs: "start", md: "center" } }}
           >
-            <Typography variant="body1">Total Amount</Typography>
-            {/* <Typography variant="body2">{calculateTotalItems()}</Typography> */}
+            <Typography variant="body1">
+              Total {transaction?.transaction} Materials
+            </Typography>
+            <Typography variant="body2">{calculateTotalMaterials()}</Typography>
           </Grid>
           <Grid
             item
-            xs={6}
+            xs={4}
             md={4}
             lg={3}
             sx={{
@@ -129,7 +115,7 @@ function TransactionComponent({ transaction }) {
                 },
               }}
             >
-              {showOrder ? "close" : "Order Details"}
+              {showOrder ? "close" : "Details"}
             </Button>
           </Grid>
         </Grid>
@@ -143,7 +129,7 @@ function TransactionComponent({ transaction }) {
             }}
           >
             {/* {console.log(order)} */}
-            {transaction?.materials?.map((product, index) => (
+            {transaction?.materials?.map((material, index) => (
               <Grid
                 key={index}
                 item
@@ -156,18 +142,7 @@ function TransactionComponent({ transaction }) {
                 }}
               >
                 <Grid container spacing={2}>
-                  {/* <Grid item xs={12} md={4}>
-                    <img
-                      src={product?.product?.images[0]}
-                      alt={product?.product?.name}
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        borderRadius: "5px",
-                      }}
-                    />
-                  </Grid> */}
-                  <Grid item xs={12} md={8}>
+                  <Grid item xs={12}>
                     <Grid
                       item
                       container
@@ -175,50 +150,92 @@ function TransactionComponent({ transaction }) {
                         fontSize: "18px",
                         fontWeight: "bold",
                         color: "gray",
-                        alignItems: "flex-start",
                       }}
                     >
-                      <Grid item xs={12} md={8} variant="body1">
-                        <span style={{ color: "" }}>
-                          {product?.product?.name}
-                        </span>
+                      <Grid
+                        item
+                        xs={12}
+                        md={6}
+                        variant="body1"
+                        sx={{
+                          display: "flex",
+                          justifyContent: {xs:"center",md:"flex-start"},
+                          color: "black",
+                          marginBottom: "1rem",
+                        }}
+                      >
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            fontSize: {
+                              xs: "16px",
+                              md: "20px",
+                              color: "black",
+                            },
+                          }}
+                        >
+                          Material Name:{" "}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{ fontSize: { xs: "16px", md: "20px" } }}
+                        >
+                          {material?.material?.name}
+                        </Typography>
                       </Grid>
                       <Grid
                         item
-                        variant="body1"
                         xs={12}
-                        md={4}
+                        md={6}
+                        variant="body1"
                         sx={{
-                          marginTop: { xs: "1rem", md: "0rem" },
                           display: "flex",
-                          alignItems: "end",
-
-                          justifyContent: { md: "end" },
+                          justifyContent: {xs:"center",md:"flex-end"},
+                          marginBottom: "1rem",
                         }}
                       >
-                        <span>{product?.product?.price} EGP</span>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            fontSize: {
+                              xs: "16px",
+                              md: "20px",
+                              color: "black",
+                            },
+                          }}
+                        >
+                          {transaction?.transaction} Quantity: {"   "}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{ fontSize: { xs: "16px", md: "22px" ,color:"black"} }}
+                        >
+                          {material?.quantity}
+                        </Typography>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                        md={12}
+                        variant="body1"
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          marginLeft: { md: "auto" },
+                        }}
+                      >
+                        <Typography variant="body1" sx={{}}>
+                          Remaining Quantity :{" "}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          // sx={{ fontSize: { xs: "16px", md: "19px" } }}
+                        >
+                          {material?.material?.quantity}
+                        </Typography>
                       </Grid>
                     </Grid>
-                    <Typography
-                      variant="body2"
-                      style={{ marginTop: "1rem", fontSize: { xs: "10px" } }}
-                    >
-                      <span style={{ fontWeight: "bold", fontSize: "17px" }}>
-                        Description:
-                      </span>{" "}
-                      {product?.product?.description}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      style={{ marginTop: "1rem", fontSize: { xs: "10px" } }}
-                    >
-                      <span style={{ fontWeight: "bold", fontSize: "17px" }}>
-                        Quantity:
-                      </span>{" "}
-                      <span style={{ fontSize: "18px" }}>
-                        {product?.quantity}
-                      </span>
-                    </Typography>
                   </Grid>
                 </Grid>
               </Grid>
@@ -232,40 +249,14 @@ function TransactionComponent({ transaction }) {
                 justifyContent: "space-between",
                 alignItems: "center",
               }}
-            >
-              <Typography variant="body1" xs={6}>
-                <span style={{ fontWeight: "bold" }}>State: </span>{" "}
-                {/* {updatedOrder?.state} */}
-              </Typography>
-              <Typography variant="body1" xs={6}>
-                {/* {updatedOrder.state !== "CANCELED" && ( */}
-                  <Button
-                    onClick={() => {
-                      // console.log(order?._id);
-                      cancelOrder(order?._id);
-                    }}
-                    variant="contained"
-                    sx={{
-                      backgroundColor: "#009688",
-                      color: "white",
-                      borderRadius: "5px",
-                      ":hover": {
-                        backgroundColor: "#009688",
-                      },
-                    }}
-                  >
-                    Cancel Order
-                  </Button>
-                )}
-              </Typography>
-            </Grid>
+            ></Grid>
             <Grid
               xs={12}
               item
               sx={{ display: "flex", justifyContent: "flex-end", color: "red" }}
             >
               {" "}
-              <Typography xs={12}>{deleteMessage}</Typography>
+              <Typography xs={12}>{}</Typography>
             </Grid>
           </Grid>
         )}
