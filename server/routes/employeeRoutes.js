@@ -24,6 +24,7 @@ import {
   getAllOrders,
   getOrderById,
   updateOrderStatus,
+  updateServiceOrderStatus,
 } from '../controllers/OperatorController.js';
 const router = express.Router();
 
@@ -73,6 +74,7 @@ router.get('/product-transactions', getProductTransactions);
 router.get('/orders', getAllOrders);
 router.get('/orders/:orderId', getOrderById);
 router.put('/orders', updateOrderStatus);
+router.put('/material-orders', updateServiceOrderStatus)
 //#endregion
 
 export default router;

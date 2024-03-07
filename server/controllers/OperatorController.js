@@ -1,4 +1,5 @@
 import Orders from "../models/OrderModel.js";
+import ServicesOrders from "../models/ServiceOrder.js";
 export const getAllOrders = async (req, res, next) => {
     try {
       const orders = await Orders.find().populate([
@@ -96,6 +97,39 @@ export const getAllOrders = async (req, res, next) => {
       res.status(500).json({
         success: false,
         message: 'Failed to update order status',
+      });
+    }
+  };
+
+  export const updateServiceOrderStatus = async (req, res, next) => {
+    try {
+      const orderId = req.body.orderId; // Assuming the order ID is passed in the request parameters
+      const { newState } = req.body; // Assuming the new state is passed in the request body
+  
+      // Find the service order by ID
+      const serviceOrder = await ServicesOrders.findById(orderId);
+  
+      if (!serviceOrder) {
+        return res.status(404).json({
+          success: false,
+          message: 'Service order not found',
+        });
+      }
+  
+      // Update the state
+      serviceOrder.state = newState;
+      await serviceOrder.save();
+  
+      res.status(200).json({
+        success: true,
+        message: 'Service order state updated successfully',
+        serviceOrder: serviceOrder,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to update service order state',
       });
     }
   };
