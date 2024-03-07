@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  assignedEnginerToCustomizationServices,
   deleteReview,
   getAllCustomers,
   getCustomizationOrders,
@@ -12,9 +13,18 @@ import {
   getCustomizedOrderById,
   sendCustomizationDetails,
 } from '../controllers/EngineerControllers.js';
-import { getAllTransactions, getMaterialOrders, getMaterialTransactions, getProductTransactions } from '../controllers/InventoryManager.js';
+import {
+  getAllTransactions,
+  getMaterialOrders,
+  getMaterialTransactions,
+  getProductTransactions,
+} from '../controllers/InventoryManager.js';
 import { getCustomizationOrdersDetails } from '../controllers/FactoryControllers.js';
-import { getAllOrders, getOrderById, updateOrderStatus } from '../controllers/OperatorController.js';
+import {
+  getAllOrders,
+  getOrderById,
+  updateOrderStatus,
+} from '../controllers/OperatorController.js';
 const router = express.Router();
 
 //get Customers
@@ -29,30 +39,40 @@ router.put('/service', updateServiceOrderState);
 //delete unfavorite Reviews
 router.delete('/delete-review', deleteReview);
 
+//#region Engineer
+//get Assigned Customization Orders to Engineer
+router.get('/engineer/:id', getAssignedCustomizationOrders); // /customizationOrders/:id
+
+// Assigned Engineer to Customization Services
+router.post('/engineer', assignedEnginerToCustomizationServices);
+//#endregion
+
+//#region Customization Orders
 //get Customization Orders
 router.get('/customizationOrders', getCustomizationOrders);
 
-router.get('/customizationOrders/:id', getAssignedCustomizationOrders);
-
-router.post('/send-customization-details', sendCustomizationDetails);
-
-router.get('/customizationOrder/:requestId', getCustomizedOrderById);
-
 // get customization Order by Id to engineer
-router.get('/customizationOrder/:serviceId', getCustomizationOrdersById);
+router.get('/customizationOrders/:serviceId', getCustomizationOrdersById);
+
+// Customization Orders Details
+router.post('/customizationOrders', sendCustomizationDetails); ///send-customization-details
 
 //get Customization Order Details to Factory
 router.get('/customizationOrdersDetails', getCustomizationOrdersDetails);
+//#endregion
 
 router.get('/material-order', getMaterialOrders);
 
-router.get ('/transaction',getAllTransactions);
+//#region Transactions
+router.get('/transaction', getAllTransactions);
+router.get('/material-transactions', getMaterialTransactions);
+router.get('/product-transactions', getProductTransactions);
+//#endregion
 
-router.get ('/material-transactions',getMaterialTransactions);
-
-router.get ('/product-transactions',getProductTransactions);
-router.get('/all-orders',getAllOrders)
-router.get('/order-id/:orderId',getOrderById)
+//#region Orders
+router.get('/orders', getAllOrders);
+router.get('/orders/:orderId', getOrderById);
 router.put('/orders', updateOrderStatus);
+//#endregion
 
 export default router;

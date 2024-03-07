@@ -128,3 +128,25 @@ export const getCustomizationOrders = async (req, res, next) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+export const assignedEnginerToCustomizationServices = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const { engineerId, serviceId } = req.body;
+    const service = await ServicesOrders.findByIdAndUpdate(
+      { _id: serviceId },
+      { assignedEngineer: engineerId },
+      { new: true }
+    );
+    res.status(200).json({
+      success: true,
+      message: 'assignd engineer to order successfully',
+      service: service,
+    });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
