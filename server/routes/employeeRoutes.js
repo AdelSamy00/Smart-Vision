@@ -14,6 +14,7 @@ import {
 } from '../controllers/EngineerControllers.js';
 import { getAllTransactions, getMaterialOrders, getMaterialTransactions, getProductTransactions } from '../controllers/InventoryManager.js';
 import { getCustomizationOrdersDetails } from '../controllers/FactoryControllers.js';
+import { getAllOrders, getOrderById } from '../controllers/OperatorController.js';
 const router = express.Router();
 
 //get Customers
@@ -50,5 +51,7 @@ router.get ('/transaction',getAllTransactions);
 router.get ('/material-transactions',getMaterialTransactions);
 
 router.get ('/product-transactions',getProductTransactions);
+router.get('/all-orders',getAllOrders)
+router.get('/order-id/:orderId',getOrderById)
 
 export default router;
