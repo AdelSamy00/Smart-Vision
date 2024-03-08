@@ -7,6 +7,7 @@
     padding-block: 1rem;
     font-size: 20px;
 }
+
 .CustomizedOrderAccordion .accordion-collapse span {
     font-weight: 600;
 }
@@ -24,7 +25,7 @@
     padding: 0;
 }
 
-.customeOrderDetailsPdfButton a {
+.customizedOrderDetailsPdfButton a {
     font-size: 24px;
     font-weight: 600;
     color: white;
@@ -36,27 +37,27 @@
     margin-top: 2rem;
 }
 
-.customeOrderDetailsPdfButton a:hover {
+.customizedOrderDetailsPdfButton a:hover {
     background-color: rgb(0, 0, 0);
 }
 
-.customeOrderDetailsImages {
+.customizedOrderDetailsImages {
     width: 100%;
     display: flex;
 }
 
-.customeOrderDetailsMainImage {
+.customizedOrderDetailsMainImage {
     width: 100%;
     height: 100%;
 }
 
-.customeOrderDetailsMainImageDiv {
+.customizedOrderDetailsMainImageDiv {
     width: 50%;
     height: 500px;
     margin-right: 1rem;
 }
 
-.customeOrderDetailsSubImagesDiv {
+.customizedOrderDetailsSubImagesDiv {
     width: 50%;
     display: flex;
     flex-wrap: wrap;
@@ -64,70 +65,80 @@
     height: fit-content;
 }
 
-.customeOrderDetailsSubImage {
+.customizedOrderDetailsSubImage {
     width: 31%;
     height: 150px;
     cursor: pointer;
 }
 
-.customeOrderDetailsSubImage:hover {
+.customizedOrderDetailsSubImage:hover {
     opacity: .6;
 }
 
 @media screen and (max-width:1066px) {
-    .customeOrderDetailsSubImage {
+    .customizedOrderDetailsSubImage {
         width: 30%;
 
     }
 }
 
 @media screen and (max-width:792px) {
-    .customeOrderDetailsSubImage {
+    .customizedOrderDetailsSubImage {
         width: 47%;
 
     }
 }
 
 @media screen and (max-width:686px) {
-    .customeOrderDetailsImages {
+    .customizedOrderDetailsImages {
         flex-wrap: wrap;
     }
 
-    .customeOrderDetailsMainImageDiv {
+    .customizedOrderDetailsMainImageDiv {
         width: 100%;
         margin-right: 0rem;
         margin-bottom: 1rem;
     }
 
-    .customeOrderDetailsSubImagesDiv {
+    .customizedOrderDetailsSubImagesDiv {
         width: 100%;
     }
 
-    .customeOrderDetailsSubImage {
+    .customizedOrderDetailsSubImage {
         width: 31%;
         height: 150px;
         cursor: pointer;
     }
 }
 
+.customizedOrderDetailsNoImages {
+    width: 100%;
+    border: 1px #7a7a7a solid;
+    padding-block: 1rem;
+    font-size: 28px;
+    text-align: center;
+    color: #7a7a7a;
+    box-shadow: 0 0 2px 2px #7a7a7a;
+}
+
 @media screen and (max-width:596px) {
-    .customeOrderDetailsSubImage {
+    .customizedOrderDetailsSubImage {
         width: 30%;
     }
 }
 
 @media screen and (max-width:458px) {
-    .customeOrderDetailsSubImage {
+    .customizedOrderDetailsSubImage {
         width: 47%;
     }
 }
 
 @media screen and (max-width:340px) {
-    .customeOrderDetailsMainImageDiv {
+    .customizedOrderDetailsMainImageDiv {
         display: none;
     }
 
-    .customeOrderDetailsSubImage {
+    .customizedOrderDetailsSubImage {
         width: 100%;
         height: 200px;
     }

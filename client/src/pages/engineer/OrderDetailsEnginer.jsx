@@ -4,20 +4,25 @@ import axios from 'axios';
 import Loading from '../../components/shared/Loading';
 import '../factory/StyleSheets/OrderDetailsFactory.css';
 import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 function OrderDetailsEnginer() {
   const [order, setorder] = useState();
   const [orderNumber, setorderNumber] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const { orderId } = useParams();
+
 
   async function getCustomizedOrderDetail() {
     await axios
-      .get(`/employees/customizationOrders/65e38cbf7b8682031ae21ac7`)
+      .get(`/employees/customizationOrders/${orderId}`)
       .then((res) => {
-        setorder(res?.data?.customizationOrders[0]);
-        const First8IdDigets =
-          res?.data?.customizationOrders[0]?._id?.substring(0, 8); //to get first 8 diget in _Id
+        console.log(res);
+        setorder(res?.data?.customizationOrder);
+        const First8IdDigets = res?.data?.customizationOrder?._id?.substring(
+          0,
+          8
+        ); //to get first 8 diget in _Id
         setorderNumber(First8IdDigets);
         setIsLoading(false);
       })

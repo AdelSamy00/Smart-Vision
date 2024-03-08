@@ -3,21 +3,22 @@ import { Link } from 'react-router-dom';
 import './StyleSheets/CustomizedOrderDetails.css';
 import Accordion from 'react-bootstrap/Accordion';
 import Table from 'react-bootstrap/Table';
+// [
+//   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848315/Smart%20Vision/vojtech-bruzek-Yrxr3bsPdS0-unsplash_ekmimc.jpg',
+//   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848324/Smart%20Vision/febrian-zakaria-2QTsCoQnoag-unsplash_vjvjwj.jpg',
+//   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848324/Smart%20Vision/febrian-zakaria-2QTsCoQnoag-unsplash_vjvjwj.jpg',
+//   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848324/Smart%20Vision/febrian-zakaria-2QTsCoQnoag-unsplash_vjvjwj.jpg',
+//   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848329/Smart%20Vision/kenny-eliason-iAftdIcgpFc-unsplash_l33xyj.jpg',
+// ];
 function CustomizedOrderDetails({ order, employeeType }) {
   console.log(order);
-  const images = [
-    'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848315/Smart%20Vision/vojtech-bruzek-Yrxr3bsPdS0-unsplash_ekmimc.jpg',
-    'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848324/Smart%20Vision/febrian-zakaria-2QTsCoQnoag-unsplash_vjvjwj.jpg',
-    'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848324/Smart%20Vision/febrian-zakaria-2QTsCoQnoag-unsplash_vjvjwj.jpg',
-    'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848324/Smart%20Vision/febrian-zakaria-2QTsCoQnoag-unsplash_vjvjwj.jpg',
-    'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848329/Smart%20Vision/kenny-eliason-iAftdIcgpFc-unsplash_l33xyj.jpg',
-  ]; //order?.images;
+  const images = order?.images;
   const customer = order?.customer;
   const engineer = order?.assignedEngineer;
   const pdf = order?.details;
-  const date = order?.updatedAt?.substring(0, 10);
+  const date = order?.updatedAt?.substring(0, 10); // to take date only
   const [mainImage, setmainImage] = useState(images[0]);
-  console.log(pdf);
+
 
   return (
     <>
@@ -47,21 +48,21 @@ function CustomizedOrderDetails({ order, employeeType }) {
         <Accordion.Item eventKey="1">
           <Accordion.Header>Atachments</Accordion.Header>
           <Accordion.Body>
-            <div className="customeOrderDetailsAtachments">
-              {images ? (
-                <div className="customeOrderDetailsImages">
-                  <div className="customeOrderDetailsMainImageDiv">
+            <div className="customizedOrderDetailsAtachments">
+              {images.length ? (
+                <div className="customizedOrderDetailsImages">
+                  <div className="customizedOrderDetailsMainImageDiv">
                     <img
-                      className="customeOrderDetailsMainImage"
+                      className="customizedOrderDetailsMainImage"
                       src={mainImage}
                     />
                   </div>
-                  <div className="customeOrderDetailsSubImagesDiv">
+                  <div className="customizedOrderDetailsSubImagesDiv">
                     {images.map((image, idx) => {
                       return (
                         <img
                           key={idx}
-                          className="customeOrderDetailsSubImage"
+                          className="customizedOrderDetailsSubImage"
                           src={image}
                           onClick={() => setmainImage(image)}
                         />
@@ -70,17 +71,15 @@ function CustomizedOrderDetails({ order, employeeType }) {
                   </div>
                 </div>
               ) : (
-                <></>
+                <>
+                  <div className="customizedOrderDetailsNoImages">
+                    No photos are attached
+                  </div>
+                </>
               )}
               {employeeType === 'FACTORY' ? (
-                <div className="customeOrderDetailsPdfButton flex ">
-                  <Link
-                    to={
-                      'https://res.cloudinary.com/dkep2voqw/image/upload/v1709415991/Example.Learning-Log_-Think-about-data-in-daily-life_imhpf8.pdf'
-                    }
-                  >
-                    Download PDF
-                  </Link>
+                <div className="customizedOrderDetailsPdfButton flex ">
+                  <Link to={pdf}>Download PDF</Link>
                 </div>
               ) : (
                 <></>
@@ -142,7 +141,7 @@ function CustomizedOrderDetails({ order, employeeType }) {
           <></>
         )}
         <Accordion.Item eventKey="4">
-          <Accordion.Header>Customer Data</Accordion.Header>
+          <Accordion.Header>customer Data</Accordion.Header>
           <Accordion.Body>
             <p>
               <span>Name: </span> {customer?.username}

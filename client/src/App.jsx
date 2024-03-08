@@ -128,9 +128,15 @@ function App() {
           path="/engineer/view-requests"
           element={<ViewCutomizedOrder />}
         />
-        <Route path="/e/order-details" element={<OrderDetailsEnginer />} />
+        <Route
+          path="/e/order-details/:orderId"
+          element={<OrderDetailsEnginer />}
+        />
         {/* Private Factory Routes */}
-        <Route path="/f/order-details" element={<OrderDetailsFactory />} />
+        <Route
+          path="/f/order-details/:orderId"
+          element={<OrderDetailsFactory />}
+        />
         {/* Private Operator Routes */}
         <Route path="*" element={<Page404 />} /> {/*The path not found.*/}
       </Routes>
