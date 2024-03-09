@@ -16,6 +16,7 @@ function HomeComponent() {
       try {
         const response = await axios.get(`/products/not-shown`);
         setProducts(response.data.products);
+        console.log(products)
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching products:', error);
