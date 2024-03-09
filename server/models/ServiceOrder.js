@@ -27,6 +27,10 @@ const serviceOrderSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: 'Employees',
     },
+    date: {
+      day: { type: String },
+      time: { type: String },
+    },
     cancelServiceOrderExpiresAt: { type: Date },
   },
   {

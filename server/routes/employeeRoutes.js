@@ -1,16 +1,12 @@
 import express from 'express';
 import {
-  assignedEnginerToCustomizationServices,
   deleteReview,
   getAllCustomers,
   getCustomizationOrders,
-  updateOrderState,
-  updateServiceOrderState,
 } from '../controllers/EmployeeControllers.js';
 import {
   getAssignedCustomizationOrders,
   getCustomizationOrdersById,
-  getCustomizedOrderById,
   sendCustomizationDetails,
 } from '../controllers/EngineerControllers.js';
 import {
@@ -21,6 +17,7 @@ import {
 } from '../controllers/InventoryManager.js';
 import { getCustomizationOrdersDetails } from '../controllers/FactoryControllers.js';
 import {
+  assignedEnginerToService,
   getAllOrders,
   getOrderById,
   updateOrderStatus,
@@ -28,24 +25,19 @@ import {
 } from '../controllers/OperatorController.js';
 const router = express.Router();
 
+//#region Customer
 //get Customers
 router.get('/getCustomers', getAllCustomers);
-
-//update Order state
-router.put('/order', updateOrderState);
-
-//update Service Order state
-router.put('/service', updateServiceOrderState);
-
 //delete unfavorite Reviews
 router.delete('/delete-review', deleteReview);
+//#endregion
 
 //#region Engineer
 //get Assigned Customization Orders to Engineer
 router.get('/engineer/:id', getAssignedCustomizationOrders); // /customizationOrders/:id
 
-// Assigned Engineer to Customization Services
-router.post('/engineer', assignedEnginerToCustomizationServices);
+// Assigned Engineer to Services
+router.post('/engineer', assignedEnginerToService);
 //#endregion
 
 //#region Customization Orders
@@ -74,7 +66,11 @@ router.get('/product-transactions', getProductTransactions);
 router.get('/orders', getAllOrders);
 router.get('/orders/:orderId', getOrderById);
 router.put('/orders', updateOrderStatus);
-router.put('/material-orders', updateServiceOrderStatus)
+//#endregion
+
+//#region services
+router.put('/services', updateServiceOrderStatus);
+
 //#endregion
 
 export default router;

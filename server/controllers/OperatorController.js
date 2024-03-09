@@ -1,135 +1,169 @@
-import Orders from "../models/OrderModel.js";
-import ServicesOrders from "../models/ServiceOrder.js";
+import Orders from '../models/OrderModel.js';
+import ServicesOrders from '../models/ServiceOrder.js';
 export const getAllOrders = async (req, res, next) => {
-    try {
-      const orders = await Orders.find().populate([
-        {
-            path: 'customer',
-            select: '_id username email -password',
-          },
-          {
-            path:'products',
-            populate:{
-              path:'product'
-            },
-          }
-      ]);
-  
-      res.status(200).json({
-        success: true,
-        message: 'Orders retrieved successfully',
-        orders: orders,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        success: false,
-        message: 'Failed to retrieve orders',
-      });
-    }
-  };
-
-  export const getOrderById = async (req, res, next) => {
-    try {
-      const orderId = req.params.orderId; 
-  
-      // Find the order by ID and populate customer and products
-      const order = await Orders.findById(orderId).populate([
-        {
-          path: 'customer',
-          select: '_id username email -password',
+  try {
+    const orders = await Orders.find().populate([
+      {
+        path: 'customer',
+        select: '_id username email -password',
+      },
+      {
+        path: 'products',
+        populate: {
+          path: 'product',
         },
-        {
-          path: 'products',
-          populate: {
-            path: 'product',
-          },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      message: 'Orders retrieved successfully',
+      orders: orders,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve orders',
+    });
+  }
+};
+
+export const getOrderById = async (req, res, next) => {
+  try {
+    const orderId = req.params.orderId;
+
+    // Find the order by ID and populate customer and products
+    const order = await Orders.findById(orderId).populate([
+      {
+        path: 'customer',
+        select: '_id username email -password',
+      },
+      {
+        path: 'products',
+        populate: {
+          path: 'product',
         },
-      ]);
-  
-      if (!order) {
-        return res.status(404).json({
-          success: false,
-          message: 'Order not found',
-        });
-      }
-  
-      res.status(200).json({
-        success: true,
-        message: 'Order retrieved successfully',
-        order: order,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        success: false,
-        message: 'Failed to retrieve the order',
-      });
-    }
-  };
+      },
+    ]);
 
-  export const updateOrderStatus = async (req, res, next) => {
-    try {
-      const orderId = req.body.orderId; // Assuming the order ID is passed in the request parameters
-      const { newStatus } = req.body; // Assuming the new status is passed in the request body
-  
-      // Find the order by ID
-      const order = await Orders.findById(orderId);
-  
-      if (!order) {
-        return res.status(404).json({
-          success: false,
-          message: 'Order not found',
-        });
-      }
-  
-      // Update the status
-      order.state = newStatus;
-      await order.save();
-  
-      res.status(200).json({
-        success: true,
-        message: 'Order status updated successfully',
-        order: order,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({
+    if (!order) {
+      return res.status(404).json({
         success: false,
-        message: 'Failed to update order status',
+        message: 'Order not found',
       });
     }
-  };
 
-  export const updateServiceOrderStatus = async (req, res, next) => {
-    try {
-      const orderId = req.body.orderId; // Assuming the order ID is passed in the request parameters
-      const { newState } = req.body; // Assuming the new state is passed in the request body
-  
-      // Find the service order by ID
-      const serviceOrder = await ServicesOrders.findById(orderId);
-  
-      if (!serviceOrder) {
-        return res.status(404).json({
-          success: false,
-          message: 'Service order not found',
-        });
-      }
-  
-      // Update the state
-      serviceOrder.state = newState;
-      await serviceOrder.save();
-  
-      res.status(200).json({
-        success: true,
-        message: 'Service order state updated successfully',
-        serviceOrder: serviceOrder,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({
+    res.status(200).json({
+      success: true,
+      message: 'Order retrieved successfully',
+      order: order,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve the order',
+    });
+  }
+};
+
+export const updateOrderStatus = async (req, res, next) => {
+  try {
+    const orderId = req.body.orderId; // Assuming the order ID is passed in the request parameters
+    const { newStatus } = req.body; // Assuming the new status is passed in the request body
+    if (!newStatus || !orderId) {
+      next('Provide Required Fields!');
+      return;
+    }
+    // Find the order by ID
+    const order = await Orders.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({
         success: false,
-        message: 'Failed to update service order state',
+        message: 'Order not found',
       });
     }
-  };
+
+    // Update the status
+    order.state = newStatus;
+    await order.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Order status updated successfully',
+      order: order,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update order status',
+    });
+  }
+};
+
+export const updateServiceOrderStatus = async (req, res, next) => {
+  try {
+    const orderId = req.body.orderId; // Assuming the order ID is passed in the request parameters
+    const { newState } = req.body; // Assuming the new state is passed in the request body
+    if (!newState || !orderId) {
+      next('Provide Required Fields!');
+      return;
+    }
+    // Find the service order by ID
+    const serviceOrder = await ServicesOrders.findById(orderId);
+
+    if (!serviceOrder) {
+      return res.status(404).json({
+        success: false,
+        message: 'Service order not found',
+      });
+    }
+
+    // Update the state
+    serviceOrder.state = newState;
+    await serviceOrder.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Service order state updated successfully',
+      serviceOrder: serviceOrder,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update service order state',
+    });
+  }
+};
+
+export const assignedEnginerToService = async (req, res, next) => {
+  try {
+    const { engineerId, serviceId, date } = req.body;
+    let service;
+    if (date) {
+      service = await ServicesOrders.findByIdAndUpdate(
+        { _id: serviceId },
+        { assignedEngineer: engineerId, date: date },
+        { new: true }
+      );
+    } else {
+      service = await ServicesOrders.findByIdAndUpdate(
+        { _id: serviceId },
+        { assignedEngineer: engineerId },
+        { new: true }
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'assignd engineer to order successfully',
+      service: service,
+    });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};

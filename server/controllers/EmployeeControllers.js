@@ -15,60 +15,6 @@ export const getAllCustomers = async (req, res, next) => {
   });
 };
 
-export const updateOrderState = async (req, res, next) => {
-  try {
-    const { orderId, state } = req.body;
-    if (!state || !orderId) {
-      next('Provide Required Fields!');
-      return;
-    }
-    const order = await Orders.findByIdAndUpdate(
-      { _id: orderId },
-      { state: state },
-      {
-        new: true,
-      }
-    );
-    res.status(200).json({
-      success: true,
-      message: 'update state order successfully',
-      order: order,
-    });
-  } catch (error) {
-    res.status(404).json({
-      success: false,
-      message: 'failed to update this order',
-    });
-  }
-};
-
-export const updateServiceOrderState = async (req, res, next) => {
-  try {
-    const { serviceId, state } = req.body;
-    if (!state || !serviceId) {
-      next('Provide Required Fields!');
-      return;
-    }
-    const serviceOrder = await ServicesOrders.findByIdAndUpdate(
-      { _id: serviceId },
-      { state: state },
-      {
-        new: true,
-      }
-    );
-    res.status(200).json({
-      success: true,
-      message: 'update state order successfully',
-      serviceOrder: serviceOrder,
-    });
-  } catch (error) {
-    res.status(404).json({
-      success: false,
-      message: 'failed to update this order',
-    });
-  }
-};
-
 export const deleteReview = async (req, res, next) => {
   try {
     const { customerId, reviewId, productId } = req.body;
@@ -123,28 +69,6 @@ export const getCustomizationOrders = async (req, res, next) => {
       success: true,
       message: 'get customization orders successfully',
       customizationOrders,
-    });
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-};
-
-export const assignedEnginerToCustomizationServices = async (
-  req,
-  res,
-  next
-) => {
-  try {
-    const { engineerId, serviceId } = req.body;
-    const service = await ServicesOrders.findByIdAndUpdate(
-      { _id: serviceId },
-      { assignedEngineer: engineerId },
-      { new: true }
-    );
-    res.status(200).json({
-      success: true,
-      message: 'assignd engineer to order successfully',
-      service: service,
     });
   } catch (error) {
     res.status(404).json({ message: error.message });
