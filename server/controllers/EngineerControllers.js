@@ -1,26 +1,44 @@
 import Employees from '../models/Employee.js';
 import MaterialOrders from '../models/MaterialOrder.js';
 import ServicesOrders from '../models/ServiceOrder.js';
-export const getAssignedCustomizationOrders = async (req, res, next) => {
+
+export const getAssignedServices = async (req, res, nex) => {
   try {
     const { id } = req.params;
-    const assignedOrders = await ServicesOrders.find({
-      service: 'Customization Service',
-      assignedEngineer: id,
-    }).populate([
-      {
-        path: 'customer',
-        select: 'username phone email address -password',
-      },
-      {
-        path: 'assignedEngineer',
-        select: '_id username email -password',
-      },
-    ]);
+    const { serviceName } = req.body;
+    let assignedOrders;
+    if (serviceName) {
+      assignedOrders = await ServicesOrders.find({
+        assignedEngineer: id,
+        service: serviceName,
+      }).populate([
+        {
+          path: 'customer',
+          select: 'username phone email address -password',
+        },
+        {
+          path: 'assignedEngineer',
+          select: '_id username email -password',
+        },
+      ]);
+    } else {
+      assignedOrders = await ServicesOrders.find({
+        assignedEngineer: id,
+      }).populate([
+        {
+          path: 'customer',
+          select: 'username phone email address -password',
+        },
+        {
+          path: 'assignedEngineer',
+          select: '_id username email -password',
+        },
+      ]);
+    }
     res.status(200).json({
       success: true,
       message: 'get customization orders successfully',
-      customizationOrders: assignedOrders,
+      services: assignedOrders,
     });
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -79,7 +97,7 @@ export const sendCustomizationDetails = async (req, res, next) => {
 
 export const getCustomizedOrderById = async (req, res, next) => {
   try {
-    const { requestId } = req.params; 
+    const { requestId } = req.params;
     const customizedOrder = await ServicesOrders.findById(requestId).populate([
       {
         path: 'customer',

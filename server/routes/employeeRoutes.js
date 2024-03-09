@@ -5,7 +5,7 @@ import {
   getCustomizationOrders,
 } from '../controllers/EmployeeControllers.js';
 import {
-  getAssignedCustomizationOrders,
+  getAssignedServices,
   getCustomizationOrdersById,
   sendCustomizationDetails,
 } from '../controllers/EngineerControllers.js';
@@ -34,7 +34,7 @@ router.delete('/delete-review', deleteReview);
 
 //#region Engineer
 //get Assigned Customization Orders to Engineer
-router.get('/engineer/:id', getAssignedCustomizationOrders); // /customizationOrders/:id
+router.get('/engineer/:id', getAssignedServices);
 
 // Assigned Engineer to Services
 router.post('/engineer', assignedEnginerToService);
