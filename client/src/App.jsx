@@ -32,7 +32,8 @@ import {
   InventoryHome,
   TransactionsPage,
   TransactionHistory,
-  InventoryMatrialsOrders
+  InventoryMatrialsOrders,
+  InventoryProductOrders
 } from './pages/inventory/index.js';
 import {
   EmployeLogin,
@@ -105,8 +106,9 @@ function App() {
         <Route path="/order" element={<OrderComponent />} />
         <Route path="/addProduct" element={<AddProductForm />} />
         <Route path="/addMatrial" element={<AddMatrialForm />} />
-        <Route path="/transactions-history" element={<TransactionHistory />} />
-        <Route path="/inventory-Order" element={<InventoryMatrialsOrders />} />
+        <Route path="/transactions-history" element={<TransactionHistory />} />       
+        <Route path="/inventory-Order-matrials" element={<InventoryMatrialsOrders />} />
+        <Route path="/inventory-Order-products" element={<InventoryProductOrders />} />
         <Route
           path="/updateProduct/:productId"
           element={<UpdateProductForm />}

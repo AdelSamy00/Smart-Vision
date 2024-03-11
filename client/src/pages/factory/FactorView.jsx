@@ -2,24 +2,19 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { apiRequest } from "../../utils";
 import { Select, MenuItem } from "@mui/material";
+import Loading from "../../components/shared/Loading";
+
 import {
   Grid,
   Typography,
-  Button,
   Card,
   CardActions,
   CardHeader,
   CardContent,
   IconButton,
-  Avatar,
   Collapse,
 } from "@mui/material";
-import DetailsIcon from "@mui/icons-material/Details";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { red } from "@mui/material/colors";
 import MoreIcon from "@mui/icons-material/More";
 import { Link } from "react-router-dom";
 const ExpandMore = ({ expand, ...other }) => <IconButton {...other} />;
@@ -46,17 +41,15 @@ const FactorView = () => {
   }, []);
 
   const [selectedState, setSelectedState] = useState("");
-
-  // ... (your other useEffect and functions)
-
   const handleUpdateOrderStatus = async (orderId) => {
     try {
+        console.log("Updating order status. Order ID:", orderId, "New State:", selectedState);
       const response = await apiRequest({
         method: "put",
-        url: "/employees/orders",
+        url: "/employees/services",
         data: {
           orderId,
-          newStatus: selectedState,
+          newState: selectedState,
         },
       });
 
@@ -64,9 +57,6 @@ const FactorView = () => {
     } catch (error) {
       console.error("Error updating order status:", error);
     }
-  };
-  const handleShowMore = () => {
-    setDisplayedOrders(customizationOrders.length);
   };
 
   const handleExpandClick = (orderId) => {
@@ -88,7 +78,7 @@ const FactorView = () => {
       className="presenter-products-container"
     >
       {isLoading ? (
-        <Grid item>{/* Add your loading indicator component */}</Grid>
+        <Grid item><Loading/> </Grid>
       ) : customizationOrders.length > 0 ? (
         <Grid item xs={12} sm={10} md={10}>
           <Typography variant="h4" align="center" gutterBottom>
@@ -117,7 +107,6 @@ const FactorView = () => {
                   </CardContent>
                   <CardActions disableSpacing>
                     <IconButton
-                      aria-label="add to favorites"
                       style={{ marginTop: "-30px" }}
                     >
                       <Link to={`/f/order-details/${order._id}`}>
@@ -162,9 +151,10 @@ const FactorView = () => {
                         onChange={(e) => setSelectedState(e.target.value)}
                         displayEmpty
                         inputProps={{ "aria-label": "Without label" }}
+                        sx={{ border: "none", "&:before, &:after": { border: "none" } }}
                       >
                         <MenuItem value="" disabled>
-                          Select State
+                         <ModeEditOutlineSharpIcon/>
                         </MenuItem>
                         <MenuItem value="COMPLETED">Completed</MenuItem>
                       </Select>
@@ -185,7 +175,7 @@ const FactorView = () => {
         </Grid>
       ) : (
         <div>
-          <p>There is no Materials.</p>
+          <p>There is no orders.</p>
         </div>
       )}
     </Grid>
