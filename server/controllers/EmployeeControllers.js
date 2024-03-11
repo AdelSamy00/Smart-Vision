@@ -61,10 +61,17 @@ export const getCustomizationOrders = async (req, res, next) => {
   try {
     const customizationOrders = await ServicesOrders.find({
       service: 'Customization Service',
-    }).populate({
-      path: 'customer',
-      select: '-password',
-    });
+    }).populate([
+      {
+        path: 'customer',
+        select: '-password',
+      },
+      {
+        path: 'assignedEngineer',
+        select: '_id username email -password',
+      },
+    ]
+);
     res.status(200).json({
       success: true,
       message: 'get customization orders successfully',

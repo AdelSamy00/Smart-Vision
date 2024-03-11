@@ -1,3 +1,3 @@
 import OrderDetailsFactory from './OrderDetailsFactory.jsx';
-
-export { OrderDetailsFactory }
+import FactorView from './FactorView.jsx';
+export { OrderDetailsFactory ,FactorView}

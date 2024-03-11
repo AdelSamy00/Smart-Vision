@@ -120,7 +120,7 @@ function TransactionsPage() {
         <Grid item>
           <CircularProgress />
         </Grid>
-      ) : transactions.length > 0 ? (
+      ) :
         <Grid item xs={12} sm={10} md={10}>
           <Typography variant="h4" align="center" gutterBottom>
             Products in Inventory
@@ -191,13 +191,7 @@ function TransactionsPage() {
             </Button>
           </Grid>
         </Grid>
-      ) : (
-        <Grid item xs={12} sm={8}>
-          <Typography variant="h5" align="center" gutterBottom>
-            All products in inventory have been added to the store.
-          </Typography>
-        </Grid>
-      )}
+      }
     </Grid>
   );
 }

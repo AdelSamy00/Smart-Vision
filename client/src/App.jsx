@@ -47,7 +47,9 @@ import {
   ViewCutomizedOrder,
   OrderDetailsEnginer,
 } from './pages/engineer/index.js';
-
+import{
+  FactorView
+}from './pages/factory/index.js'
 import { OrderDetailsFactory } from './pages/factory/index.js';
 import Footer from './components/shared/Footer.jsx';
 import Header from './components/shared/Header.jsx';
@@ -138,6 +140,10 @@ function App() {
         <Route
           path="/f/order-details/:orderId"
           element={<OrderDetailsFactory />}
+        />
+                <Route
+          path="/f/factorView"
+          element={<FactorView />}
         />
         {/* Private Operator Routes */}
         <Route path="*" element={<Page404 />} /> {/*The path not found.*/}
