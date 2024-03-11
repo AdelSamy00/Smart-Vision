@@ -1,14 +1,39 @@
 import { useEffect, useState } from "react";
-import { Grid, Button, Typography } from "@mui/material";
-import axios from "axios";
-import { useSelector } from "react-redux";
+import {
+  Grid,
+  Button,
+  Typography,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  useMediaQuery,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
+import { apiRequest } from "../../utils";
 
-function OrderComponent({ order }) {
+function ProductOrderComponent({ order }) {
   const [showOrder, setShowOrder] = useState(false);
   const [updatedOrder, setUpdatedOrder] = useState(order);
-  const [deleteMessage, setDeletemessage] = useState(null);
-  const { customer } = useSelector((state) => state.customer);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  console.log(updatedOrder)
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 900); // Adjust this value as needed
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   const toggleOrder = () => {
     setShowOrder(!showOrder);
   };
@@ -19,21 +44,25 @@ function OrderComponent({ order }) {
     });
     return totalPrice;
   };
-  const cancelOrder = async (orderId) => {
+  const handleStateChange = async (event) => {
+    const newStatus = event.target.value;
+
     try {
-      const response = await axios.delete(`/customers/order`, {
-        data: { id: customer?._id, orderId: orderId },
+      const response = await apiRequest({
+        method: "PUT",
+        url: `/employees/orders`,
+        data: {
+          orderId: order._id,
+          newStatus: newStatus,
+        },
       });
-      if (response.status === 200) {
-        setUpdatedOrder(response.data.order);
-        // console.log(response.data);
-      }
+      console.log(response.data); // Log the response from the server
+      setUpdatedOrder(response.data.order);
+      console.log("Updated order state:", updatedOrder.state);
     } catch (error) {
-      // console.error("Error cancelling order:", error.response.data.message);
-      setDeletemessage(error.response.data.message);
+      console.error("Error updating order status:", error);
     }
   };
-
   return (
     <Grid container className="order-container" sx={{ marginBottom: "2rem" }}>
       <Grid
@@ -64,11 +93,7 @@ function OrderComponent({ order }) {
           >
             <Typography variant="body1">Date Placed</Typography>
             <Typography variant="body2">
-              {order.createdAt
-                .substring(0, 10)
-                .split("-")
-                .reverse()
-                .join("-")}
+              {order.createdAt.substring(0, 10).split("-").reverse().join("-")}
             </Typography>
           </Grid>
           <Grid
@@ -88,17 +113,18 @@ function OrderComponent({ order }) {
               variant="body2"
               sx={{ textAlign: { xs: "end", md: "center" } }}
             >
-              {updatedOrder?.orderNumber}
+              {order?.orderNumber}
             </Typography>
           </Grid>
           <Grid
             item
             xs={6}
+            // sm={6}
             md={3}
             lg={3}
             sx={{ textAlign: { xs: "start", md: "center" } }}
           >
-            <Typography variant="body1">Total Amount</Typography>
+            <Typography variant="body1">Total Price</Typography>
             <Typography variant="body2">{calculateTotalPrice()}</Typography>
           </Grid>
           <Grid
@@ -111,7 +137,9 @@ function OrderComponent({ order }) {
               justifyContent: {
                 xs: "flex-end",
                 md: "center",
+                // lg: "flex-end",
               },
+            //   marginTop: { md: "1.7rem", lg: "0rem" },
             }}
           >
             <Button
@@ -140,6 +168,61 @@ function OrderComponent({ order }) {
             }}
           >
             {/* {console.log(order)} */}
+            <Grid
+              item
+              xs={12}
+              md={6}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                marginBottom: "1rem",
+              }}
+            >
+              <Typography
+                variant="body1"
+                sx={{
+                  marginRight: "1rem",
+                  fontSize: { xs: "16px", md: "20px", fontWeight: "bold" },
+                }}
+              >
+                Customer Name:{" "}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ fontSize: { xs: "16px", md: "19px", color: "gray" } }}
+              >
+                {order?.customerData.firstName + order?.customerData.lastName}
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              md={6}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: { xs: "flex-start", md: "flex-end" },
+                marginBottom: "1rem",
+              }}
+            >
+              <Typography
+                variant="body1"
+                sx={{
+                  marginRight: "1rem",
+                  fontSize: { xs: "16px", md: "20px", fontWeight: "bold" },
+                }}
+              >
+                Phone Number:{" "}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ fontSize: { xs: "16px", md: "19px", color: "gray" } }}
+              >
+                {order?.customerData.phoneNumber}
+              </Typography>
+            </Grid>
+
             {order?.products.map((product, index) => (
               <Grid
                 key={index}
@@ -224,45 +307,70 @@ function OrderComponent({ order }) {
             <Grid
               item
               xs={12}
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
+              container
+              style={{ justifyContent: "center", alignItems: "center" }}
             >
-              <Typography variant="body1" xs={6}>
-                <span style={{ fontWeight: "bold" }}>State: </span>{" "}
-                {updatedOrder?.state}
-              </Typography>
-              <Typography variant="body1" xs={6}>
-                {updatedOrder.state !== "CANCELED" && (
-                  <Button
-                    onClick={() => {
-                      // console.log(order?._id);
-                      cancelOrder(order?._id);
-                    }}
-                    variant="contained"
-                    sx={{
-                      backgroundColor: "#009688",
-                      color: "white",
-                      borderRadius: "5px",
-                      ":hover": {
-                        backgroundColor: "#009688",
-                      },
-                    }}
-                  >
-                    Cancel Order
-                  </Button>
-                )}
-              </Typography>
-            </Grid>
-            <Grid
-              xs={12}
-              item
-              sx={{ display: "flex", justifyContent: "flex-end", color: "red" }}
-            >
-              {" "}
-              <Typography xs={12}>{deleteMessage}</Typography>
+              <Grid item xs={3} md={2} style={{ justifyContent: "center" }}>
+                <Typography variant="body1">
+                  <span style={{ fontWeight: "bold", fontSize: "20px" }}>
+                    State:{" "}
+                  </span>{" "}
+                </Typography>
+              </Grid>
+              {isSmallScreen ? (
+                <Grid
+                  item
+                  xs={9}
+                  md={10}
+                  style={{ textAlign: "center", justifyContent: "center" }}
+                >
+                  <FormControl fullWidth>
+                    <Select
+                      labelId="order-state-label"
+                      id="order-state"
+                      value={updatedOrder?.state}
+                      onChange={handleStateChange}
+                    >
+                        {console.log(updatedOrder)}
+                      <MenuItem value="PENDING">Pending</MenuItem>
+                      <MenuItem value="In Progress">Processing</MenuItem>
+                      <MenuItem value="Shipped">Shipped</MenuItem>
+                      <MenuItem value="Delivered">Delivered</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+              ) : (
+                <RadioGroup
+                  row
+                  aria-label="order-state"
+                  name="order-state"
+                  value={updatedOrder?.state}
+                  onChange={handleStateChange}
+                >
+                    {console.log(updatedOrder)}
+                  <FormControlLabel
+                    value="PENDING"
+                    control={<Radio />}
+                    label="Pending"
+                  />
+                  <FormControlLabel
+                    value="In Progress"
+                    control={<Radio />}
+                    label="Processing"
+                  />
+                  <FormControlLabel
+                    value="Shipped"
+                    control={<Radio />}
+                    label="Shipped"
+                  />
+                  <FormControlLabel
+                    value="Delivered"
+                    control={<Radio />}
+                    label="Delivered"
+                  />
+                </RadioGroup>
+              )}
+              {/* </Grid> */}
             </Grid>
           </Grid>
         )}
@@ -271,4 +379,4 @@ function OrderComponent({ order }) {
   );
 }
 
-export default OrderComponent;
+export default ProductOrderComponent;

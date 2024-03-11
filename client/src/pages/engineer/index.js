@@ -1,9 +1,9 @@
 import CustomOrderForm from './customizedOrderform.jsx';
-import ViewCutomizedOrder from './ViewCustomizedOrders.jsx';
 import OrderDetailsEnginer from './OrderDetailsEnginer.jsx';
+import ViewCutomizedOrders from './ViewCutomizedOrders.jsx';
 
 export {
     CustomOrderForm,
-    ViewCutomizedOrder,
+    ViewCutomizedOrders,
     OrderDetailsEnginer
 }

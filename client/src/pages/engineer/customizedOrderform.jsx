@@ -12,13 +12,13 @@ import {
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useParams } from "react-router-dom";
 import "./EngineerStyleSheets/CustomizedOrderForm.css";
-import { apiRequest } from "../../utils";
+import { apiRequest, handleFileUpload } from "../../utils";
 import { useSelector } from "react-redux";
 
 const CustomOrderForm = () => {
   const { requestId } = useParams();
   const [error, setError] = useState("");
-  const { employe } = useSelector((state) => state.employee);
+  const { employee } = useSelector((state) => state.employee);
   const [orderDetails, setOrderDetails] = useState({
     customerName: "",
     description: "",
@@ -36,10 +36,10 @@ const CustomOrderForm = () => {
       try {
         const response = await apiRequest({
           method: "GET",
-          url: `/employees/customizationOrder/${requestId}`,
+          url: `/employees/customizationOrders/${requestId}`,
         });
         setCustomOrder(response.data.customizationOrder);
-        console.log(response.data.customizationOrder);
+        // console.log(response.data.customizationOrder);
       } catch (error) {
         console.error("Error fetching custom order:", error);
       }
@@ -88,7 +88,9 @@ const CustomOrderForm = () => {
     materials.splice(index, 1);
     setOrderDetails({ ...orderDetails, materials });
   };
-
+  const handleFileChange = (e) => {
+    setOrderDetails({ ...orderDetails, details: e.target.files[0] });
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (orderDetails.materials.length === 0) {
@@ -96,14 +98,17 @@ const CustomOrderForm = () => {
       return;
     }
     try {
+      const file =
+        orderDetails.details && (await handleFileUpload(orderDetails.details));
+      console.log(file );
       const response = await apiRequest({
         method: "POST",
-        url: "employees/send-customization-details/",
+        url: "employees/customizationOrders/",
         data: {
           serviceId: requestId,
-          engineerId: employe._id,
+          engineerId: employee._id,
           materials: orderDetails.materials,
-          // details: customOrder.details,
+          details: file,
         },
       });
       setOrderDetails({
@@ -112,7 +117,7 @@ const CustomOrderForm = () => {
       });
       console.log("Order placed successfully:", response.data);
     } catch (error) {
-      console.error("Error placing order:", error.response.data.message);
+      console.error("Error placing order:", error.response);
     }
   };
   return (
@@ -143,7 +148,7 @@ const CustomOrderForm = () => {
             onChange={handleChange}
             disabled
             InputLabelProps={{
-              shrink: true, 
+              shrink: true,
             }}
           />
         </Grid>
@@ -156,6 +161,7 @@ const CustomOrderForm = () => {
         <Grid item xs={5}>
           <TextField
             label="Material Name"
+            type="text"
             name="newMaterialName"
             inputRef={newMaterialNameRef}
             value={orderDetails.newMaterialName}
@@ -181,19 +187,21 @@ const CustomOrderForm = () => {
           />
         </Grid>
         <Grid item xs={2}>
-          <Button
-            fullWidth
-            onClick={addMaterial}
-            style={{ marginTop: "10px" }}
-          >
+          <Button fullWidth onClick={addMaterial} style={{ marginTop: "10px" }}>
             Add
           </Button>
         </Grid>
         {orderDetails.materials.length > 0 && (
           <Grid item xs={12}>
-            <List>
+            <List
+              style={{
+                maxHeight: "200px",
+                overflowY: "auto",
+                paddingTop: "0px",
+              }}
+            >
               {orderDetails.materials.map((material, index) => (
-                <ListItem key={index}>
+                <ListItem key={index} style={{ paddingBottom: "0px" }}>
                   <ListItemText primary={material.material} />
                   <ListItemText secondary={material.quantity} />
                   <IconButton
@@ -211,35 +219,49 @@ const CustomOrderForm = () => {
         <Grid item xs={12}>
           {error && <Typography color="error">{error}</Typography>}
         </Grid>
-        {/* <Grid item xs={12}> */}
-          {/* <a
-            href={customOrder.details}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <TextField
-              label="Additional Details"
-              name="pdfLink"
-              value={customOrder.details}
-              fullWidth
-              InputProps={{
-                readOnly: true, // Make the input read-only
-              }}
-              InputLabelProps={{
-                shrink: true, // Move the label up when input has a value
-              }}
+        <Grid
+          item
+          xs={12}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "-0.5rem",
+          }}
+        >
+          <Grid container item xs={8}>
+            <input
+              type="file"
+              id="uploadFile"
+              name="uploadFile"
+              className="uploadBtn file:hidden text-black bg-white w-full p-3 rounded-md border border-gray-300"
+              onChange={handleFileChange}
+              style={{ boxShadow: "none" }}
             />
-          </a> */}
-        
-        {/* </Grid> */}
+          </Grid>
+          <Grid container item xs={4} justify="center">
+            <label
+              htmlFor="uploadFile"
+              className="leading-7 text-md text-gray-600 mt-1 w-full h-full cursor-pointer"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                fontWeight: "bold",
+              }}
+            >
+              Upload File
+            </label>
+          </Grid>
+        </Grid>
         <Grid item xs={12}>
           <Button
             type="submit"
             variant="contained"
             color="primary"
-            style={{ marginTop: "20px",textTransform:"capitalize" }}
+            style={{ marginTop: "10px", textTransform: "capitalize" }}
           >
-            Submit Request
+            Send Request
           </Button>
         </Grid>
       </Grid>

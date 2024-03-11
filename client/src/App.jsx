@@ -44,12 +44,13 @@ import {
 
 import {
   CustomOrderForm,
-  ViewCutomizedOrder,
+  ViewCutomizedOrders,
   OrderDetailsEnginer,
 } from './pages/engineer/index.js';
-import{
-  FactorView
-}from './pages/factory/index.js'
+import {
+  ViewProductOrders
+} from './pages/operator/index.js';
+
 import { OrderDetailsFactory } from './pages/factory/index.js';
 import Footer from './components/shared/Footer.jsx';
 import Header from './components/shared/Header.jsx';
@@ -128,9 +129,13 @@ function App() {
           path="/engineer/send-request/:requestId"
           element={<CustomOrderForm />}
         />
+         <Route
+          path="/engineer/view-measured-customized-requests"
+          element={<ViewCutomizedOrders measure="true" />}
+        />
         <Route
-          path="/engineer/view-requests"
-          element={<ViewCutomizedOrder />}
+          path="/engineer/view-customized-requests"
+          element={<ViewCutomizedOrders measure="false" />}
         />
         <Route
           path="/e/order-details/:orderId"
@@ -141,11 +146,11 @@ function App() {
           path="/f/order-details/:orderId"
           element={<OrderDetailsFactory />}
         />
-                <Route
-          path="/f/factorView"
-          element={<FactorView />}
-        />
         {/* Private Operator Routes */}
+        <Route
+          path="/operator/view-product-orders"
+          element={<ViewProductOrders />}
+        />
         <Route path="*" element={<Page404 />} /> {/*The path not found.*/}
       </Routes>
       {shouldRenderHeaderAndFooter(location) && <Footer />}

@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  Grid,
-  Typography,
-  Button,
-  CircularProgress,
-} from "@mui/material";
+import { Grid, Typography, Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import "../Presenter/StyleSheets/PresenterProductsView.css";
 import { apiRequest } from "../../utils";
 import Loading from "../../components/shared/Loading";
 
-function ViewCutomizedOrder() {
+function ViewCutomizedOrders({ measure }) {
   const [requests, setRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { employee } = useSelector((state) => state.employee);
@@ -20,10 +15,23 @@ function ViewCutomizedOrder() {
       try {
         const response = await apiRequest({
           method: "GET",
-          url: `/employees/customizationOrders/${employee._id}`,
+          url: `/employees/engineer/${employee._id}`,
         });
-        console.log("API response:", response.data.customizationOrders);
-        setRequests(response.data.customizationOrders);
+        console.log("API response:", response.data);
+        // Filter services based on date condition
+        var filteredRequests;
+        if (measure === "true") {
+          filteredRequests = response.data.services.filter(
+            (request) => request.date
+          );
+        } else {
+          filteredRequests = response.data.services.filter(
+            (request) => !request.date
+          );
+        }
+
+        setRequests(filteredRequests);
+        // setRequests(response.data.services);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error.response);
@@ -47,9 +55,16 @@ function ViewCutomizedOrder() {
         </Grid>
       ) : requests.length > 0 ? (
         <Grid item xs={12} sm={10} md={10}>
-          <Typography variant="h4" align="center" gutterBottom>
-            Sevice Requests
-          </Typography>
+          {measure === "true" ? (
+            <Typography variant="h4" align="center" gutterBottom>
+              Needs Measuring Sevice Requests
+            </Typography>
+          ) : (
+            <Typography variant="h4" align="center" gutterBottom>
+              Sevice Requests
+            </Typography>
+          )}
+
           <Grid
             container
             spacing={3}
@@ -85,6 +100,7 @@ function ViewCutomizedOrder() {
                         sx={{
                           textDecoration: "underline",
                           textTransform: "capitalize",
+                          fontSize: "19px",
                           padding: 0,
                           "&:hover": {
                             backgroundColor: "white",
@@ -97,6 +113,19 @@ function ViewCutomizedOrder() {
                       </Button>
                     </Link>
                   </Typography>
+                  {measure === "true" && (
+                    <Typography
+                      variant="body3"
+                      align="center"
+                      gutterBottom
+                      className="presenter-product-description"
+                    >
+                      Day: {request.date.day}
+                      <span style={{ marginLeft: "1.5rem" }}>
+                        Hour :{request.date.time}
+                      </span>
+                    </Typography>
+                  )}
                   <div className="button-container">
                     {" "}
                     <Link
@@ -110,16 +139,13 @@ function ViewCutomizedOrder() {
                         style={{
                           background:
                             "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
-                        //   borderRadius: 3,
-                        //   border: 0,
-                        //   color: "white",
-                        textTransform:"capitalize",
+                          textTransform: "capitalize",
                           height: 38,
                           padding: "0px 15px",
                         }}
                       >
                         {" "}
-                        Send Order To Factory
+                        Send Order
                       </Button>
                     </Link>
                   </div>
@@ -131,7 +157,7 @@ function ViewCutomizedOrder() {
       ) : (
         <Grid item xs={12} sm={8}>
           <Typography variant="h5" align="center" gutterBottom>
-            All products in inventory have been added to the store.
+            There's no requests at the moment.
           </Typography>
         </Grid>
       )}
@@ -139,4 +165,4 @@ function ViewCutomizedOrder() {
   );
 }
 
-export default ViewCutomizedOrder;
+export default ViewCutomizedOrders;
