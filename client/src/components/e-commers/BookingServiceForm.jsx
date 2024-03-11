@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { handleMultipleFilesUpload } from '../../utils';
 import Loading from '../shared/Loading';
 import { TextField, Button, Grid } from '@mui/material';
-
+import { apiRequest } from '../../utils';
 function BookingServiceForm() {
   const { state } = useLocation();
   const [images, setImages] = useState([{}]);
@@ -38,14 +38,27 @@ function BookingServiceForm() {
         images && (await handleMultipleFilesUpload(images));
 
       console.log('Uploaded Image URL:', uploadedImages);
-      const response = await axios.post('/customers/service', {
-        id: customer._id,
-        service: service.title,
-        description: formData.description,
-        images: uploadedImages,
-        phone: formData.phoneNumber,
-        address: formData.address,
-      });
+      const response = await apiRequest({
+        method:"post",
+        url:'/customers/service',
+        data:{
+          id: customer._id,
+          service: service.title,
+          description: formData.description,
+          images: uploadedImages,
+          phone: formData.phoneNumber,
+          address: formData.address,
+        }
+      })
+      
+      // axios.post('/customers/service', {
+      //   id: customer._id,
+      //   service: service.title,
+      //   description: formData.description,
+      //   images: uploadedImages,
+      //   phone: formData.phoneNumber,
+      //   address: formData.address,
+      // });
       if (response.data.success) {
         setFormSubmitted(true);
       } else {

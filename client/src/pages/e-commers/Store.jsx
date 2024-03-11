@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import Loading from '../../components/shared/Loading';
 import PropTypes from 'prop-types';
 import CheckIcon from '@mui/icons-material/Check';
-
+import { apiRequest } from '../../utils';
 const Store = ({ selectedCategory, selectedPrice }) => {
   const [selectedColor, setSelectedColor] = useState('');
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
@@ -78,8 +78,13 @@ const Store = ({ selectedCategory, selectedPrice }) => {
     }
   };
   async function favorites(id, productId) {
-    await axios
-      .post('/customers/favorite', { id, productId })
+    await apiRequest({
+      method:"post",
+      url:"/customers/favorite",
+      data:{
+        id, productId
+      }
+    })
       .then((res) => {
         const newData = {
           token: localStorage?.getItem('token'),

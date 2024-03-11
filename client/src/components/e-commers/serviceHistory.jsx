@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
-import { Grid, Typography, Button } from '@mui/material';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
-import Loading from '../shared/Loading';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import { useState, useEffect } from "react";
+import { Grid, Typography, Button } from "@mui/material";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import Loading from "../shared/Loading";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { apiRequest } from "../../utils";
 function ServiceHistory() {
   const [orderServiceHistory, setOrderServiceHistory] = useState([]);
   const { customer } = useSelector((state) => state.customer);
@@ -14,14 +15,18 @@ function ServiceHistory() {
   useEffect(() => {
     async function fetchOrderServiceHistory() {
       try {
-        const response = await axios.get(`/customers/service/${customer._id}`);
+        const response = await apiRequest({
+          method: "get",
+          url: `/customers/service/${customer._id}`,
+          data: {},
+        });
         setOrderServiceHistory(response.data.history);
         setIsLoading(false);
         console.log(response.data);
         console.log(response.data.createdAt);
       } catch (error) {
         console.error(
-          'Error fetching order history:',
+          "Error fetching order history:",
           error.response.data.message
         );
       }
@@ -34,21 +39,22 @@ function ServiceHistory() {
 
   const cancelService = async (serviceId) => {
     try {
-      const response = await axios.delete(`/customers/service`, {
+      const response = await apiRequest({
+        method: "delete",
+        url: "/customers/service",
         data: { id: customer._id, serviceId },
       });
       console.log(response.data);
       setOrderServiceHistory((prevOrderServiceHistory) =>
         prevOrderServiceHistory.map((entry) =>
-          entry._id === serviceId ? { ...entry, state: 'CANCELED' } : entry
+          entry._id === serviceId ? { ...entry, state: "CANCELED" } : entry
         )
       );
     } catch (error) {
-      console.error('Error cancelling service:', error.response.data.message);
+      console.error("Error cancelling service:", error.response.data.message);
     }
   };
   const handleShowMore = () => {
-    // setDisplayedOrders((prevDisplayedOrders) => prevDisplayedOrders + 2); // Display additional 2 orders
     setDisplayedOrders(orderServiceHistory.length);
   };
   const settings = {
@@ -70,27 +76,27 @@ function ServiceHistory() {
         <Grid
           container
           className="order-container"
-          sx={{ marginBottom: '2rem' }}
+          sx={{ marginBottom: "2rem" }}
         >
           <Grid
             item
             xs={11}
             md={7}
             sx={{
-              margin: 'auto',
-              border: '2px solid #ddd',
-              borderRadius: '10px',
+              margin: "auto",
+              border: "2px solid #ddd",
+              borderRadius: "10px",
             }}
           >
             <Grid
               container
               sx={{
-                borderBottom: '2px solid #ddd',
-                borderStartEndRadius: '10px',
-                borderStartStartRadius: '10px',
-                padding: '10px',
-                backgroundColor: '#f2f2f2',
-                alignItems: 'center',
+                borderBottom: "2px solid #ddd",
+                borderStartEndRadius: "10px",
+                borderStartStartRadius: "10px",
+                padding: "10px",
+                backgroundColor: "#f2f2f2",
+                alignItems: "center",
               }}
             >
               <Grid
@@ -99,15 +105,15 @@ function ServiceHistory() {
                 md={4}
                 // lg={3}
                 sx={{
-                  textAlign: { xs: 'start', md: 'center' },
-                  padding: '10px 0px',
+                  textAlign: { xs: "start", md: "center" },
+                  padding: "10px 0px",
                 }}
               >
                 <Typography
                   variant="body1"
                   sx={{
                     // fontWeight: "bold",
-                    fontSize: { xs: '16px', md: '20px' },
+                    fontSize: { xs: "16px", md: "20px" },
                   }}
                 >
                   Service History
@@ -119,24 +125,24 @@ function ServiceHistory() {
                 md={4}
                 // lg={3}
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginLeft: { md: 'auto' },
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginLeft: { md: "auto" },
                 }}
               >
                 <Typography
                   variant="body1"
                   sx={{
-                    marginRight: '1rem',
-                    fontSize: { xs: '16px', md: '20px' },
+                    marginRight: "1rem",
+                    fontSize: { xs: "16px", md: "20px" },
                   }}
                 >
-                  Total Orders:{' '}
+                  Total Orders:{" "}
                 </Typography>
                 <Typography
                   variant="body2"
-                  sx={{ fontSize: { xs: '16px', md: '19px' } }}
+                  sx={{ fontSize: { xs: "16px", md: "19px" } }}
                 >
                   {orderServiceHistory.length}
                 </Typography>
@@ -145,8 +151,8 @@ function ServiceHistory() {
             <Grid
               container
               sx={{
-                borderTop: 'none',
-                padding: '20px',
+                borderTop: "none",
+                padding: "20px",
               }}
             >
               {orderServiceHistory
@@ -157,10 +163,10 @@ function ServiceHistory() {
                     item
                     xs={12}
                     sx={{
-                      border: '2px solid #ddd',
-                      borderRadius: '5px',
-                      marginBottom: '20px',
-                      padding: '20px',
+                      border: "2px solid #ddd",
+                      borderRadius: "5px",
+                      marginBottom: "20px",
+                      padding: "20px",
                     }}
                   >
                     <Grid container spacing={4}>
@@ -168,11 +174,11 @@ function ServiceHistory() {
                         {historyEntry.images.length === 0 ? (
                           <p
                             style={{
-                              height: '150px',
-                              display: 'flex',
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              border: '1px solid',
+                              height: "150px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              border: "1px solid",
                             }}
                           >
                             No images uploaded
@@ -181,7 +187,7 @@ function ServiceHistory() {
                           <img
                             src={historyEntry.images[0]}
                             alt={`Image 1`}
-                            style={{ width: '100%', height: '150px' }}
+                            style={{ width: "100%", height: "150px" }}
                           />
                         ) : (
                           <Slider {...settings}>
@@ -190,7 +196,7 @@ function ServiceHistory() {
                                 <img
                                   src={image}
                                   alt={`Image ${index + 1}`}
-                                  style={{ width: '100%', height: '150px' }}
+                                  style={{ width: "100%", height: "150px" }}
                                 />
                               </div>
                             ))}
@@ -200,29 +206,33 @@ function ServiceHistory() {
                       <Grid item xs={12} md={7}>
                         <Typography
                           variant="body2"
-                          style={{ marginTop: '1rem', fontSize: '20px' }}
+                          style={{ marginTop: "1rem", fontSize: "20px" }}
                         >
-                          <span style={{ fontWeight: 'bold' }}>
+                          <span style={{ fontWeight: "bold" }}>
                             Service Name :
-                          </span>{' '}
+                          </span>{" "}
                           {historyEntry.service}
                         </Typography>
                         <Typography
                           variant="body2"
-                          style={{ marginTop: '1rem', fontSize: '20px' }}
+                          style={{ marginTop: "1rem", fontSize: "20px" }}
                         >
-                          <span style={{ fontWeight: 'bold' }}>
+                          <span style={{ fontWeight: "bold" }}>
                             Date Placed:
-                          </span>{' '}
-                          {historyEntry.createdAt}
+                          </span>{" "}
+                          {historyEntry.createdAt
+                            .substring(0, 10)
+                            .split("-")
+                            .reverse()
+                            .join("-")}
                         </Typography>
                         <Typography
                           variant="body2"
-                          style={{ marginTop: '1rem', fontSize: '20px' }}
+                          style={{ marginTop: "1rem", fontSize: "20px" }}
                         >
-                          <span style={{ fontWeight: 'bold' }}>
+                          <span style={{ fontWeight: "bold" }}>
                             Description:
-                          </span>{' '}
+                          </span>{" "}
                           {historyEntry.description}
                         </Typography>
                       </Grid>
@@ -230,10 +240,10 @@ function ServiceHistory() {
                         item
                         xs={12}
                         sx={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          textAlign: 'center',
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          textAlign: "center",
                           // backgroundColor:"red",
                           // paddingTop:"0"
                         }}
@@ -241,26 +251,26 @@ function ServiceHistory() {
                         <Typography
                           variant="body2"
                           // xs={6}
-                          style={{ fontSize: '20px', paddingTop: '0' }}
+                          style={{ fontSize: "20px", paddingTop: "0" }}
                         >
-                          <span style={{ fontWeight: 'bold', color: '#222' }}>
+                          <span style={{ fontWeight: "bold", color: "#222" }}>
                             State:
-                          </span>{' '}
+                          </span>{" "}
                           {historyEntry.state}
                         </Typography>
-                        {historyEntry.state !== 'CANCELED' && (
+                        {historyEntry.state !== "CANCELED" && (
                           <Button
                             onClick={() => cancelService(historyEntry._id)}
                             variant="contained"
                             color="error"
                             xs={4}
                             sx={{
-                              backgroundColor: '#009688',
-                              color: 'white',
-                              borderRadius: '5px',
+                              backgroundColor: "#009688",
+                              color: "white",
+                              borderRadius: "5px",
                               // paddingTop:"0",
-                              ':hover': {
-                                backgroundColor: '#009688',
+                              ":hover": {
+                                backgroundColor: "#009688",
                               },
                             }}
                           >
@@ -276,9 +286,9 @@ function ServiceHistory() {
                   <Typography
                     variant="body2"
                     style={{
-                      cursor: 'pointer',
-                      fontSize: '19px',
-                      textDecoration: 'underline',
+                      cursor: "pointer",
+                      fontSize: "19px",
+                      textDecoration: "underline",
                     }}
                     onClick={handleShowMore}
                   >
@@ -294,14 +304,14 @@ function ServiceHistory() {
       ) : (
         <p
           style={{
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: '20px',
-            width: '65%',
-            border: '2px solid',
-            margin: 'auto',
-            padding: '20px',
-            marginBottom: '5rem',
+            textAlign: "center",
+            fontWeight: "bold",
+            fontSize: "20px",
+            width: "65%",
+            border: "2px solid",
+            margin: "auto",
+            padding: "20px",
+            marginBottom: "5rem",
           }}
         >
           Your service history is empty.

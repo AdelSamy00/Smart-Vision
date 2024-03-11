@@ -12,7 +12,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-
+import { apiRequest } from '../../utils';
 //to Tranition the message from the end of the page
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -34,15 +34,14 @@ const DeleteAccountPage = () => {
 
   const handleDelete = async (password) => {
     try {
-      const response = await axios.delete(
-        `/customers/delete-acount/${customer._id}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          data: { password },
-        }
-      );
+      const response = await apiRequest({
+        method:"delete",
+        url:`/customers/delete-acount/${customer._id}`,
+        data:{password},
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       if (response.status === 200) {
         setShowMessage(true);
       } else if (password !== customer.password) {

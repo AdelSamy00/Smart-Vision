@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { apiRequest } from "../../utils";
-import { Select, MenuItem } from "@mui/material";
 import Loading from "../../components/shared/Loading";
 
 import {
@@ -21,7 +20,6 @@ const ExpandMore = ({ expand, ...other }) => <IconButton {...other} />;
 
 const FactorView = () => {
   const [customizationOrders, setCustomizationOrders] = useState([]);
-  const [displayedOrders, setDisplayedOrders] = useState(1);
   const [expandedStates, setExpandedStates] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
@@ -39,26 +37,6 @@ const FactorView = () => {
 
     fetchCustomizationOrders();
   }, []);
-
-  const [selectedState, setSelectedState] = useState("");
-  const handleUpdateOrderStatus = async (orderId) => {
-    try {
-        console.log("Updating order status. Order ID:", orderId, "New State:", selectedState);
-      const response = await apiRequest({
-        method: "put",
-        url: "/employees/services",
-        data: {
-          orderId,
-          newState: selectedState,
-        },
-      });
-
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error updating order status:", error);
-    }
-  };
-
   const handleExpandClick = (orderId) => {
     setExpandedStates((prevStates) => ({
       ...prevStates,
@@ -145,27 +123,6 @@ const FactorView = () => {
                       <Typography variant="body2" style={{ fontSize: "15px" }}>
                         State: {order?.state}
                       </Typography>
-
-                      {/* <Select
-                        value={selectedState}
-                        onChange={(e) => setSelectedState(e.target.value)}
-                        displayEmpty
-                        inputProps={{ "aria-label": "Without label" }}
-                        sx={{ border: "none", "&:before, &:after": { border: "none" } }}
-                      >
-                        <MenuItem value="" disabled>
-                         <ModeEditOutlineSharpIcon/>
-                        </MenuItem>
-                        <MenuItem value="COMPLETED">Completed</MenuItem>
-                      </Select>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        disabled={!selectedState}
-                        onClick={() => handleUpdateOrderStatus(order._id)}
-                      >
-                        Change Status
-                      </Button> */}
                     </CardContent>
                   </Collapse>
                 </Card>

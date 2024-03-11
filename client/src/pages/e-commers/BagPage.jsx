@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SetCustomer } from '../../redux/CustomerSlice';
 import axios from 'axios';
 import { setCart } from '../../redux/CartSlice';
+import { apiRequest } from '../../utils';
 const Bag = () => {
   const [productsInCart, setproductsInCart] = useState(null);
   const [open, setOpen] = useState(false);
@@ -31,8 +32,13 @@ const Bag = () => {
 
   const handelFavorit = async (id, productId) => {
     if (customer._id) {
-      await axios
-        .post('/customers/favorite', { id, productId })
+      await apiRequest({
+        method:"post",
+        url:"/customers/favorite",
+        data:{
+          id, productId
+        }
+      })
         .then((res) => {
           const newData = { ...res.data?.newCustomerData };
           dispatch(SetCustomer(newData));
