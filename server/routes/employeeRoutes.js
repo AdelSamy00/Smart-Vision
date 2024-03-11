@@ -19,6 +19,7 @@ import { getCustomizationOrdersDetails } from '../controllers/FactoryControllers
 import {
   assignedEnginerToService,
   getAllOrders,
+  getAllServices,
   getOrderById,
   updateOrderStatus,
   updateServiceOrderStatus,
@@ -69,7 +70,8 @@ router.put('/orders', updateOrderStatus);
 //#endregion
 
 //#region services
-router.put('/services', updateServiceOrderStatus);
+router.get('/services', getAllServices);
+router.put('/services', updateServiceOrderStatus); // to get services order to operator
 
 //#endregion
 
