@@ -50,7 +50,7 @@ export const deleteReview = async (req, res, next) => {
       return;
     }
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       success: false,
       message: 'failed to delete review',
     });
@@ -70,14 +70,44 @@ export const getCustomizationOrders = async (req, res, next) => {
         path: 'assignedEngineer',
         select: '_id username email -password',
       },
-    ]
-);
+    ]);
     res.status(200).json({
       success: true,
       message: 'get customization orders successfully',
       customizationOrders,
     });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getServiceById = async (req, res, next) => {
+  try {
+    const { serviceId } = req.params;
+    const service = await ServicesOrders.find({ _id: serviceId }).populate([
+      {
+        path: 'customer',
+        select: '_id username email gender phone verified address -password',
+      },
+      {
+        path: 'assignedEngineer',
+        select: '_id username email -password',
+      },
+    ]);
+
+    if (!service || service.length === 0) {
+      next('No service orders found');
+      return;
+    }
+    res.status(200).json({
+      success: true,
+      message: 'found successfully',
+      service,
+    });
+  } catch (error) {
+    res.status(404).json({
+      success: false,
+      message: 'this service not found',
+    });
   }
 };

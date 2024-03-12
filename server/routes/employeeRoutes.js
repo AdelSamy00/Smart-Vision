@@ -3,6 +3,7 @@ import {
   deleteReview,
   getAllCustomers,
   getCustomizationOrders,
+  getServiceById,
 } from '../controllers/EmployeeControllers.js';
 import {
   getAssignedServices,
@@ -43,10 +44,10 @@ router.post('/engineer', assignedEnginerToService);
 
 //#region Customization Orders
 //get Customization Orders
-router.get('/customizationOrders', getCustomizationOrders);
+//router.get('/customizationOrders', getCustomizationOrders);
 
 // get customization Order by Id to engineer
-router.get('/customizationOrders/:serviceId', getCustomizationOrdersById);
+//router.get('/customizationOrders/:serviceId', getCustomizationOrdersById);
 
 // Customization Orders Details
 router.post('/customizationOrders', sendCustomizationDetails); ///send-customization-details
@@ -71,6 +72,7 @@ router.put('/orders', updateOrderStatus);
 
 //#region services
 router.get('/services', getAllServices);
+router.get('/services/:serviceId', getServiceById);
 router.put('/services', updateServiceOrderStatus); // to get services order to operator
 
 //#endregion
