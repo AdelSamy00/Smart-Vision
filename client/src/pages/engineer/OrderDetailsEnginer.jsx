@@ -15,14 +15,11 @@ function OrderDetailsEnginer() {
 
   async function getCustomizedOrderDetail() {
     await axios
-      .get(`/employees/customizationOrders/${orderId}`)
+      .get(`/employees/services/${orderId}`)
       .then((res) => {
         console.log(res);
-        setorder(res?.data?.customizationOrder);
-        const First8IdDigets = res?.data?.customizationOrder?._id?.substring(
-          0,
-          8
-        ); //to get first 8 diget in _Id
+        setorder(res?.data?.service[0]);
+        const First8IdDigets = res?.data?.service[0]?._id?.substring(0, 8); //to get first 8 diget in _Id
         setorderNumber(First8IdDigets);
         setIsLoading(false);
       })
@@ -66,7 +63,7 @@ function OrderDetailsEnginer() {
               </Button>
             </Link>
           </div>
-          <CustomizedOrderDetails order={order} employeeType={'ENGINER'} />
+          <CustomizedOrderDetails order={order} employeeType={'ENGINEER'} />
         </main>
       ) : (
         <div className="h-screen">
