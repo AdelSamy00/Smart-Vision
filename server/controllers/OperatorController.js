@@ -170,12 +170,14 @@ export const assignedEnginerToService = async (req, res, next) => {
 
 export const getAllServices = async (req, res, next) => {
   try {
-    const services = await ServicesOrders.find({}).populate({
-      path: 'customer',
-      select: '_id username email gender phone verified address -password',
-    });
-    if (!services) {
-      next('No any services Orders found');
+    const services = await ServicesOrders.find({ state: { $ne: 'CANCELED' } })
+      .populate({
+        path: 'customer',
+        select: '_id username email gender phone verified address -password',
+      });
+
+    if (!services || services.length === 0) {
+      next('No service orders found');
       return;
     }
     res.status(200).json({

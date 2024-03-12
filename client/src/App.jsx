@@ -1,8 +1,8 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { CustomerLayout } from './utils/Layouts.jsx';
-import axios from 'axios';
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { CustomerLayout } from "./utils/Layouts.jsx";
+import axios from "axios";
 
 import {
   ContactUs,
@@ -21,54 +21,52 @@ import {
   History,
   ServicesDetails,
   // InventoryHome,
-} from './pages/e-commers/index.js';
+} from "./pages/e-commers/index.js";
 import {
   EditProduct,
   HomePresenter,
   PresenterProductsView,
   ProductDetailsPresenter,
-} from './pages/Presenter/index.js';
+} from "./pages/Presenter/index.js";
 import {
   InventoryHome,
   TransactionsPage,
   TransactionHistory,
   InventoryMatrialsOrders,
-  InventoryProductOrders
-} from './pages/inventory/index.js';
+  InventoryProductOrders,
+} from "./pages/inventory/index.js";
 import {
   EmployeLogin,
   Landing,
   Login,
   Register,
   Page404,
-} from './pages/shared/index.js';
+} from "./pages/shared/index.js";
 
 import {
   CustomOrderForm,
   ViewCutomizedOrders,
   OrderDetailsEnginer,
-} from './pages/engineer/index.js';
-import {
-  ViewProductOrders
-} from './pages/operator/index.js';
+} from "./pages/engineer/index.js";
+import { ViewProductOrders, ViewServiceOrder } from "./pages/operator/index.js";
 
-import { OrderDetailsFactory } from './pages/factory/index.js';
-import Footer from './components/shared/Footer.jsx';
-import Header from './components/shared/Header.jsx';
-import OrderComponent from './components/e-commers/OrderComponent.jsx';
-import AddProductForm from './components/inventory/AddProductFrom';
-import AddMatrialForm from './components/inventory/AddMatrialForm';
-import UpdateProductForm from './components/inventory/UpdateProductForm';
-import UpdateMatrialForm from './components/inventory/UpdateMatrialeForm';
-import { shouldRenderHeaderAndFooter } from './utils/ShouldRender.jsx';
+import { OrderDetailsFactory } from "./pages/factory/index.js";
+import Footer from "./components/shared/Footer.jsx";
+import Header from "./components/shared/Header.jsx";
+import OrderComponent from "./components/e-commers/OrderComponent.jsx";
+import AddProductForm from "./components/inventory/AddProductFrom";
+import AddMatrialForm from "./components/inventory/AddMatrialForm";
+import UpdateProductForm from "./components/inventory/UpdateProductForm";
+import UpdateMatrialForm from "./components/inventory/UpdateMatrialeForm";
+import { shouldRenderHeaderAndFooter } from "./utils/ShouldRender.jsx";
 
 function App() {
   const location = useLocation();
   const { customer } = useSelector((state) => state.customer);
-  axios.defaults.baseURL = 'http://localhost:3000';
+  axios.defaults.baseURL = "http://localhost:3000";
   axios.defaults.headers = {
-    'Content-Type': 'application/json',
-    Authorization: customer?.token ? `Bearer ${customer?.token}` : '',
+    "Content-Type": "application/json",
+    Authorization: customer?.token ? `Bearer ${customer?.token}` : "",
   };
 
   return (
@@ -86,7 +84,7 @@ function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/services/:serviceName" element={<ServicesDetails />} />
         <Route path="/store" element={<Store />} />
-        <Route path="/product/:productId" element={<ProductDetails />} />{' '}
+        <Route path="/product/:productId" element={<ProductDetails />} />{" "}
         <Route path="/bag" element={<Bag />} />
         {/* Private Customer Routes (Logged in) */}
         <Route element={<CustomerLayout />}>
@@ -106,9 +104,15 @@ function App() {
         <Route path="/order" element={<OrderComponent />} />
         <Route path="/addProduct" element={<AddProductForm />} />
         <Route path="/addMatrial" element={<AddMatrialForm />} />
-        <Route path="/transactions-history" element={<TransactionHistory />} />       
-        <Route path="/inventory-Order-matrials" element={<InventoryMatrialsOrders />} />
-        <Route path="/inventory-Order-products" element={<InventoryProductOrders />} />
+        <Route path="/transactions-history" element={<TransactionHistory />} />
+        <Route
+          path="/inventory-Order-matrials"
+          element={<InventoryMatrialsOrders />}
+        />
+        <Route
+          path="/inventory-Order-products"
+          element={<InventoryProductOrders />}
+        />
         <Route
           path="/updateProduct/:productId"
           element={<UpdateProductForm />}
@@ -131,7 +135,7 @@ function App() {
           path="/engineer/send-request/:requestId"
           element={<CustomOrderForm />}
         />
-         <Route
+        <Route
           path="/engineer/view-measured-customized-requests"
           element={<ViewCutomizedOrders measure="true" />}
         />
@@ -152,6 +156,10 @@ function App() {
         <Route
           path="/operator/view-product-orders"
           element={<ViewProductOrders />}
+        />
+        <Route
+          path="/operator/view-Service-orders"
+          element={<ViewServiceOrder />}
         />
         <Route path="*" element={<Page404 />} /> {/*The path not found.*/}
       </Routes>
