@@ -48,7 +48,11 @@ import {
   ViewCutomizedOrders,
   OrderDetailsEnginer,
 } from "./pages/engineer/index.js";
-import { ViewProductOrders, ViewServiceOrder } from "./pages/operator/index.js";
+import {
+  ViewProductOrders,
+  ViewServiceOrder,
+  ServiseDetailsOperator,
+} from './pages/operator/index.js';
 
 import { OrderDetailsFactory } from "./pages/factory/index.js";
 import Footer from "./components/shared/Footer.jsx";
@@ -84,7 +88,7 @@ function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/services/:serviceName" element={<ServicesDetails />} />
         <Route path="/store" element={<Store />} />
-        <Route path="/product/:productId" element={<ProductDetails />} />{" "}
+        <Route path="/product/:productId" element={<ProductDetails />} />{' '}
         <Route path="/bag" element={<Bag />} />
         {/* Private Customer Routes (Logged in) */}
         <Route element={<CustomerLayout />}>
@@ -161,7 +165,12 @@ function App() {
           path="/operator/view-Service-orders"
           element={<ViewServiceOrder />}
         />
-        <Route path="*" element={<Page404 />} /> {/*The path not found.*/}
+        <Route
+          path="/operator/servise-details/:serviceId"
+          element={<ServiseDetailsOperator />}
+        />
+        {/*The path not found.*/}
+        <Route path="*" element={<Page404 />} />
       </Routes>
       {shouldRenderHeaderAndFooter(location) && <Footer />}
     </>

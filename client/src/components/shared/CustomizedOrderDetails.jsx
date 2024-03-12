@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './StyleSheets/CustomizedOrderDetails.css';
 import Accordion from 'react-bootstrap/Accordion';
 import Table from 'react-bootstrap/Table';
+import Form from 'react-bootstrap/Form';
+import axios from 'axios';
+
 // [
 //   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848315/Smart%20Vision/vojtech-bruzek-Yrxr3bsPdS0-unsplash_ekmimc.jpg',
 //   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848324/Smart%20Vision/febrian-zakaria-2QTsCoQnoag-unsplash_vjvjwj.jpg',
@@ -12,13 +15,94 @@ import Table from 'react-bootstrap/Table';
 // ];
 function CustomizedOrderDetails({ order, employeeType }) {
   console.log(order);
+  let current = new Date();
   const images = order?.images;
   const customer = order?.customer;
   const engineer = order?.assignedEngineer;
   const pdf = order?.details;
-  const date = order?.updatedAt?.substring(0, 10); // to take date only
-  const [mainImage, setmainImage] = useState(images[0]);
+  const orderDate = order?.updatedAt?.substring(0, 10); // to take date only
+  const [mainImage, setmainImage] = useState(images ? images[0] : null);
+  const [assignedEngineer, setassignedEngineer] = useState(null);
+  const [measuringDate, setmeasuringDate] = useState(null);
+  const [measuringTime, setmeasuringTime] = useState(null);
+  const [minMeasuringTime, setminMeasuringTime] = useState('10:00');
+  const [validated, setValidated] = useState(false);
+  const [allEngineers, setallEngineers] = useState(null);
 
+  async function getAllEngineers() {
+    await axios
+      .get(`/employees/engineer`)
+      .then((res) => {
+        setallEngineers(res?.data?.engineers);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  useEffect(() => {
+    getAllEngineers();
+  }, []);
+
+  const handleSubmit = async (event) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+      setValidated(true);
+    } else {
+      await axios
+        .post(
+          `/employees/engineer`,
+          measuringDate
+            ? {
+                engineerId: assignedEngineer,
+                serviceId: order?._id,
+                date: {
+                  day: measuringDate,
+                  time: measuringTime,
+                },
+              }
+            : {
+                engineerId: assignedEngineer,
+                serviceId: order?._id,
+              }
+        )
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    function getMinMeasuringDateToday() {
+      const currentTime = current.toTimeString().substring(0, 5);
+      let currentHoure = currentTime.substring(0, 2);
+      let currentMineates = currentTime.substring(3);
+      let minHoure = +currentHoure + 1;
+      if (minHoure === 24) {
+        minHoure = '00';
+      }
+      if (minHoure < 10) {
+        minHoure = `0${minHoure}`;
+      }
+      return `${minHoure}:${currentMineates}`;
+    }
+
+    function CheckMinMesuringTimeToday() {
+      if (measuringDate === current.toISOString().substring(0, 10)) {
+        //to set with the current time
+        setminMeasuringTime(getMinMeasuringDateToday());
+      } else {
+        setminMeasuringTime('10:00');
+      }
+    }
+
+    useEffect(() => {
+      CheckMinMesuringTimeToday();
+    }, [measuringDate]);
+  };
 
   return (
     <>
@@ -30,15 +114,12 @@ function CustomizedOrderDetails({ order, employeeType }) {
         <Accordion.Item eventKey="0">
           <Accordion.Header>Details</Accordion.Header>
           <Accordion.Body>
-            <p>
-              <span>Description: </span>Lorem ipsum dolor sit amet consectetur
-              adipisicing elit. Architecto autem adipisci nobis explicabo
-              veritatis facere, assumenda dolor delectus laudantium iure enim
-              omnis atque ad beatae illo, repudiandae voluptatibus consequuntur
-              veniam!
+            <p className="mb-6">
+              <span className="block">Description: </span>
+              {order?.description}
             </p>
             <p>
-              <span>Date:</span> {date}
+              <span>Date:</span> {orderDate}
             </p>
             <p>
               <span>State:</span> {order?.state.toLowerCase()}.
@@ -49,7 +130,7 @@ function CustomizedOrderDetails({ order, employeeType }) {
           <Accordion.Header>Atachments</Accordion.Header>
           <Accordion.Body>
             <div className="customizedOrderDetailsAtachments">
-              {images.length ? (
+              {images?.length ? (
                 <div className="customizedOrderDetailsImages">
                   <div className="customizedOrderDetailsMainImageDiv">
                     <img
@@ -71,19 +152,15 @@ function CustomizedOrderDetails({ order, employeeType }) {
                   </div>
                 </div>
               ) : (
-                <>
-                  <div className="customizedOrderDetailsNoImages">
-                    No photos are attached
-                  </div>
-                </>
+                <div className="customizedOrderDetailsNoImages">
+                  No photos are attached
+                </div>
               )}
               {employeeType === 'FACTORY' ? (
                 <div className="customizedOrderDetailsPdfButton flex ">
                   <Link to={pdf}>Download PDF</Link>
                 </div>
-              ) : (
-                <></>
-              )}
+              ) : null}
             </div>
           </Accordion.Body>
         </Accordion.Item>
@@ -125,8 +202,39 @@ function CustomizedOrderDetails({ order, employeeType }) {
                 </Table>
               </Accordion.Body>
             </Accordion.Item>
+          </>
+        ) : null}
+        <Accordion.Item eventKey="4">
+          <Accordion.Header>customer Data</Accordion.Header>
+          <Accordion.Body>
+            <p>
+              <span>Name: </span> {customer?.username}
+            </p>
+            {employeeType !== 'FACTORY' ? (
+              <>
+                <p>
+                  <span>Email: </span> {customer?.email}
+                </p>
+                <p>
+                  <span>phone:</span> 0{customer?.phone} - 0{order?.phone}
+                </p>
+                <p>
+                  <span>Address:</span> {order?.address}
+                </p>
+              </>
+            ) : null}
+            {employeeType !== 'FACTORY' && order?.date ? (
+              <p>
+                <span>Measuring Date: </span>
+                {order?.date?.day} - {order?.date?.time}
+              </p>
+            ) : null}
+          </Accordion.Body>
+        </Accordion.Item>
+        {employeeType !== 'ENGINEER' && engineer ? (
+          <>
             <Accordion.Item eventKey="3">
-              <Accordion.Header>Enginer Data</Accordion.Header>
+              <Accordion.Header>Engineer Data</Accordion.Header>
               <Accordion.Body>
                 <p>
                   <span>Name: </span> {engineer?.username}
@@ -137,23 +245,98 @@ function CustomizedOrderDetails({ order, employeeType }) {
               </Accordion.Body>
             </Accordion.Item>
           </>
-        ) : (
-          <></>
-        )}
-        <Accordion.Item eventKey="4">
-          <Accordion.Header>customer Data</Accordion.Header>
-          <Accordion.Body>
-            <p>
-              <span>Name: </span> {customer?.username}
-            </p>
-            <p>
-              <span>Email: </span> {customer?.email}
-            </p>
-            <p>
-              <span>phone:</span> {customer?.phone}
-            </p>
-          </Accordion.Body>
-        </Accordion.Item>
+        ) : null}
+        {employeeType === 'OPERATOR' && !engineer ? (
+          <Accordion.Item eventKey="5">
+            <Accordion.Header>Assign Engineer</Accordion.Header>
+            <Accordion.Body>
+              <Form
+                noValidate
+                validated={validated}
+                onSubmit={handleSubmit}
+                className="assignEngineerForm"
+              >
+                <Form.Group className="InputGroup">
+                  <Form.Label
+                    className="FormLabel text-2xl font-bold"
+                    htmlFor="assignedEngineer"
+                  >
+                    Choose Engineer
+                  </Form.Label>
+                  <Form.Select
+                    required
+                    className="InputField"
+                    name="assignedEngineer"
+                    id="assignedEngineer"
+                    onChange={(e) => setassignedEngineer(e.target.value)}
+                  >
+                    <option value="">Choose an Engineer</option>
+                    {allEngineers?.map((engineer, idx) => {
+                      return (
+                        <option key={idx} value={engineer?._id}>
+                          {engineer?.username?.toLowerCase()}
+                        </option>
+                      );
+                    })}
+                  </Form.Select>
+                </Form.Group>
+                {/* only show when the coustomer need measuring */}
+                {/* {1 > 2 ? (
+                  <> */}
+                    <Form.Group className="InputGroup">
+                      <Form.Label
+                        className="FormLabel text-2xl font-bold"
+                        htmlFor="measuringDate"
+                      >
+                        Date for measuring
+                      </Form.Label>
+                      <Form.Control
+                        required
+                        className="InputField"
+                        name="measuringDate"
+                        id="measuringDate"
+                        type="date"
+                        //The current date is the minimum date.
+                        min={current.toISOString().substring(0, 10)}
+                        onChange={(e) => setmeasuringDate(e.target.value)}
+                      />
+                    </Form.Group>
+                    <Form.Group className="InputGroup">
+                      <Form.Label
+                        className="FormLabel text-2xl font-bold"
+                        htmlFor="measuringTime"
+                      >
+                        Time{' '}
+                        <span className="text-base">(10:00AM - 22:00PM)</span>
+                      </Form.Label>
+                      <Form.Control
+                        required
+                        className="InputField"
+                        name="measuringTime"
+                        id="measuringTime"
+                        type="time"
+                        min={minMeasuringTime}
+                        max="22:00"
+                        onChange={(e) => setmeasuringTime(e.target.value)}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Choose a valid time and after one hour.
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  {/* </>
+                ) : null} */}
+                <div className=" assignEnginterButtonDiv">
+                  <button
+                    type="submit"
+                    className="text-2xl bg-gray-900 hover:bg-black text-white font-bold rounded-xl h-fit px-4 py-3 m-auto"
+                  >
+                    Assign
+                  </button>
+                </div>
+              </Form>
+            </Accordion.Body>
+          </Accordion.Item>
+        ) : null}
       </Accordion>
     </>
   );
