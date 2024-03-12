@@ -1,3 +1,4 @@
+import Employees from '../models/Employee.js';
 import Orders from '../models/OrderModel.js';
 import ServicesOrders from '../models/ServiceOrder.js';
 export const getAllOrders = async (req, res, next) => {
@@ -170,11 +171,12 @@ export const assignedEnginerToService = async (req, res, next) => {
 
 export const getAllServices = async (req, res, next) => {
   try {
-    const services = await ServicesOrders.find({ state: { $ne: 'CANCELED' } })
-      .populate({
-        path: 'customer',
-        select: '_id username email gender phone verified address -password',
-      });
+    const services = await ServicesOrders.find({
+      state: { $ne: 'CANCELED' },
+    }).populate({
+      path: 'customer',
+      select: '_id username email gender phone verified address -password',
+    });
 
     if (!services || services.length === 0) {
       next('No service orders found');
@@ -189,6 +191,27 @@ export const getAllServices = async (req, res, next) => {
     res.status(500).json({
       success: false,
       message: 'Failed to get services orders',
+    });
+  }
+};
+
+export const getAllEngineers = async (req, res, next) => {
+  try {
+    const engineers = await Employees.find({ jobTitle: 'Engineer' });
+
+    if (!engineers || engineers.length === 0) {
+      next('No engineers found');
+      return;
+    }
+    res.status(200).json({
+      success: true,
+      message: 'Get engineers',
+      engineers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get all engineers',
     });
   }
 };

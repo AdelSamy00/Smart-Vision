@@ -19,6 +19,7 @@ import {
 import { getCustomizationOrdersDetails } from '../controllers/FactoryControllers.js';
 import {
   assignedEnginerToService,
+  getAllEngineers,
   getAllOrders,
   getAllServices,
   getOrderById,
@@ -35,9 +36,9 @@ router.delete('/delete-review', deleteReview);
 //#endregion
 
 //#region Engineer
+router.get('/engineer', getAllEngineers); //help operator to get all engineer.
 //get Assigned Customization Orders to Engineer
 router.get('/engineer/:id', getAssignedServices);
-
 // Assigned Engineer to Services
 router.post('/engineer', assignedEnginerToService);
 //#endregion
