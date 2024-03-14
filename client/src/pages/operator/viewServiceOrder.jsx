@@ -1,9 +1,26 @@
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { apiRequest } from "../../utils";
 import Loading from "../../components/shared/Loading";
-import ServiceOrderComponent from "../../components/Operator/ServiceOrderComponent";
-const ViewProductOrders = () => {
-  const [productOrders, setProductOrders] = useState([]);
+
+import {
+  Grid,
+  Typography,
+  Card,
+  CardActions,
+  CardHeader,
+  CardContent,
+  IconButton,
+  Collapse,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import MoreIcon from "@mui/icons-material/More";
+import { Link } from "react-router-dom";
+const ExpandMore = ({ expand, ...other }) => <IconButton {...other} />;
+
+const ViewServiceOrders = () => {
+  const [expandedStates, setExpandedStates] = useState({});
+    const [productOrders, setProductOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -23,41 +40,95 @@ const ViewProductOrders = () => {
 
     fetchOrderHistory();
   }, []);
+  const handleExpandClick = (orderId) => {
+    setExpandedStates((prevStates) => ({
+      ...prevStates,
+      [orderId]: !prevStates[orderId],
+    }));
+  };
 
-  
   return (
-    <div>
-        <h1 style={{fontSize:"25px",margin:"20px"}}>service history</h1>
-    {isLoading ? (
-      <Loading />
-    ) : (
-      <ul>
-        <li>
-          {productOrders.length > 0 ? (
-            productOrders?.map((order, index) => (
-              <ServiceOrderComponent key={index} order={order} />
-            ))
-          ) : (
-            <p
-              style={{
-                textAlign: "center",
-                fontWeight: "bold",
-                fontSize: "18px",
-                width: "65%",
-                border: "2px solid",
-                margin: "auto",
-                padding: "20px",
-                marginBottom: "5rem",
-              }}
-            >
-              service order history is empty.
-            </p>
-          )}
-        </li>
-      </ul>
-    )}
-  </div>
-);
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      className="presenter-products-container"
+    >
+      {isLoading ? (
+        <Grid item><Loading/> </Grid>
+      ) : productOrders.length > 0 ? (
+        <Grid item xs={12} sm={10} md={10}>
+          <Typography variant="h4" align="center" gutterBottom>
+            Service Orders
+          </Typography>
+          <Grid
+            container
+            spacing={3}
+            className="presenter-products"
+            align="center"
+            justifyContent="center"
+          >
+            {productOrders.map((order, index) => (
+              <Grid key={index} item xs={12} md={6} lg={4}>
+                <Card sx={{ maxWidth: 300 }}>
+                  <CardHeader
+                    title={order.service}
+                    style={{ marginTop: "10px" }}
+                  />
+                  <CardContent style={{ marginTop: "-20px" }}>
+                    {`Date: ${order.createdAt
+                      .substring(0, 10)
+                      .split("-")
+                      .reverse()
+                      .join("-")}`}
+                  </CardContent>
+                  <CardActions disableSpacing>
+                    <IconButton
+                      style={{ marginTop: "-30px" }}
+                    >
+                      <Link to={`/operator/servise-details/${order._id}`}>
+                        <MoreIcon />
+                      </Link>
+                    </IconButton>
+                    <ExpandMore
+                      expand={expandedStates[order._id]}
+                      onClick={() => handleExpandClick(order._id)}
+                      aria-expanded={expandedStates[order._id]}
+                      aria-label="show more"
+                      style={{ marginLeft: "auto", marginTop: "-30px" }}
+                    >
+                      <ExpandMoreIcon />
+                    </ExpandMore>
+                  </CardActions>
+                  <Collapse
+                    in={expandedStates[order._id]}
+                    timeout="auto"
+                    unmountOnExit
+                  >
+                    <CardContent sx={{ marginTop: "-20px" }}>
+                      <Typography
+                        variant="body2"
+                        style={{ marginBottom: "5px", fontSize: "15px" }}
+                      >
+                        {order.description}
+                      </Typography>
+                      <Typography variant="body2" style={{ fontSize: "15px" }}>
+                        State: {order?.state}
+                      </Typography>
+                    </CardContent>
+                  </Collapse>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
+      ) : (
+        <div>
+          <p>There is no orders.</p>
+        </div>
+      )}
+    </Grid>
+  );
 };
 
-export default ViewProductOrders;
+export default ViewServiceOrders;

@@ -10,7 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 function TransactionsPage() {
   const [transactions, setTransactions] = useState([]);
   const [modifiedQuantities, setModifiedQuantities] = useState({});
-  const { customer } = useSelector((state) => state.customer);
+  const { employee } = useSelector((state) => state.employee);
   const [Matrials, setMatrials] = useState([{ material: "", quantity: "" }]);
   const [isLoading, setIsLoading] = useState(true);
   const cart = useSelector((state) => state.matrialCard.cart);
@@ -48,7 +48,7 @@ function TransactionsPage() {
 
   const handleTransaction = async (method) => {
     try {
-      const managerId = customer._id;
+      const managerId = employee._id;
       console.log(transactions);
       const response = await axios.put("/Materials/transaction", {
         managerId,
