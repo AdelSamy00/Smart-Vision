@@ -1,8 +1,7 @@
-import { Routes, Route, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { CustomerLayout } from "./utils/Layouts.jsx";
-import axios from "axios";
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { CustomerLayout } from './utils/Layouts.jsx';
+import axios from 'axios';
 
 import {
   ContactUs,
@@ -21,67 +20,70 @@ import {
   History,
   ServicesDetails,
   // InventoryHome,
-} from "./pages/e-commers/index.js";
+} from './pages/e-commers/index.js';
 import {
   EditProduct,
   HomePresenter,
   PresenterProductsView,
   ProductDetailsPresenter,
-} from "./pages/Presenter/index.js";
+} from './pages/Presenter/index.js';
 import {
   InventoryHome,
   TransactionsPage,
   TransactionHistory,
   InventoryMatrialsOrders,
   InventoryProductOrders,
-} from "./pages/inventory/index.js";
+} from './pages/inventory/index.js';
 import {
   EmployeLogin,
   Landing,
   Login,
   Register,
   Page404,
-} from "./pages/shared/index.js";
+} from './pages/shared/index.js';
 
 import {
   CustomOrderForm,
   ViewCutomizedOrders,
   OrderDetailsEnginer,
-} from "./pages/engineer/index.js";
+} from './pages/engineer/index.js';
 import {
   ViewProductOrders,
   ViewServiceOrder,
   ServiseDetailsOperator,
 } from './pages/operator/index.js';
 
-import { OrderDetailsFactory } from "./pages/factory/index.js";
-import Footer from "./components/shared/Footer.jsx";
-import Header from "./components/shared/Header.jsx";
-import OrderComponent from "./components/e-commers/OrderComponent.jsx";
-import AddProductForm from "./components/inventory/AddProductFrom";
-import AddMatrialForm from "./components/inventory/AddMatrialForm";
-import UpdateProductForm from "./components/inventory/UpdateProductForm";
-import UpdateMatrialForm from "./components/inventory/UpdateMatrialeForm";
-import { shouldRenderHeaderAndFooter } from "./utils/ShouldRender.jsx";
+import { OrderDetailsFactory } from './pages/factory/index.js';
+import OrderComponent from './components/e-commers/OrderComponent.jsx';
+import AddProductForm from './components/inventory/AddProductFrom';
+import AddMatrialForm from './components/inventory/AddMatrialForm';
+import UpdateProductForm from './components/inventory/UpdateProductForm';
+import UpdateMatrialForm from './components/inventory/UpdateMatrialeForm';
+import {
+  shouldRenderEmployeeHeader,
+  shouldRenderECommersHeader,
+  shouldRenderECommersFooter,
+} from './utils/ShouldRender.jsx';
 
 function App() {
   const location = useLocation();
   const { customer } = useSelector((state) => state.customer);
-  axios.defaults.baseURL = "http://localhost:3000";
+  axios.defaults.baseURL = 'http://localhost:3000';
   axios.defaults.headers = {
-    "Content-Type": "application/json",
-    Authorization: customer?.token ? `Bearer ${customer?.token}` : "",
+    'Content-Type': 'application/json',
+    Authorization: customer?.token ? `Bearer ${customer?.token}` : '',
   };
 
   return (
     <>
-      {shouldRenderHeaderAndFooter(location) && <Header />}
+      {shouldRenderECommersHeader(location) ||
+        shouldRenderEmployeeHeader(location)}
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/e/login" element={<EmployeLogin />} />
+        <Route path="/login/employee" element={<EmployeLogin />} />
         <Route path="/home" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact-us" element={<ContactUs />} />
@@ -172,7 +174,7 @@ function App() {
         {/*The path not found.*/}
         <Route path="*" element={<Page404 />} />
       </Routes>
-      {shouldRenderHeaderAndFooter(location) && <Footer />}
+      {shouldRenderECommersFooter(location)}
     </>
   );
 }

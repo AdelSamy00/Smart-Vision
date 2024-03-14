@@ -1,0 +1,67 @@
+.employeeHeaderMain {
+    width: 100%;
+    height: 80px;
+    background-color: #dcdcdc;
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    padding-inline: 1rem;
+}
+
+.employeeHeaderLogo {
+    display: flex;
+    align-items: center;
+    margin-right: 2rem;
+}
+
+.employeeHeaderLinks {
+    width: calc(100% - 277px);
+    display: flex;
+    gap: 1rem;
+}
+
+.employeeHeaderLinks a {
+    font-size: 22px;
+    color: #000000;
+}
+
+.employeeHeaderLinks a:hover {
+    color: #696969;
+}
+
+.employeeHeaderLinks a.active {
+    color: #696969;
+}
+
+.employeeHeaderLogoutIcon {
+    margin-left: auto;
+}
+
+.employeeHeaderDehazeIcon {
+    margin-left: auto;
+    display: none;
+}
+
+.employeeHeaderOffcanvasLinks a {
+    font-size: 28px;
+    font-weight: 600;
+    display: block;
+}
+
+.employeeHeaderOffcanvasLinks a.active {
+    color: #696969;
+}
+
+@media screen and (max-width:750px) {
+    .employeeHeaderLinks {
+        display: none;
+    }
+
+    .employeeHeaderLogoutIcon {
+        display: none;
+    }
+
+    .employeeHeaderDehazeIcon {
+        display: block;
+    }
+}
