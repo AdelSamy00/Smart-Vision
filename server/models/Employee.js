@@ -17,7 +17,7 @@ const employeeSchema = new mongoose.Schema(
       select: true,
     },
     jobTitle: { type: String, required: [true, 'jobTitle is Required!'] },
-    verified: { type: Boolean, default: false },
+    verified: { type: Boolean, default: true },
   },
   {
     timestamps: true,

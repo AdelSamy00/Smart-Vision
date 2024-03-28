@@ -1,9 +1,14 @@
 import express from 'express';
 import {
+  addEmployee,
+  deleteEmployeeById,
   deleteReview,
   getAllCustomers,
+  getAllEmployees,
   getCustomizationOrders,
+  getEmployeeById,
   getServiceById,
+  updateEmployee,
 } from '../controllers/EmployeeControllers.js';
 import {
   getAssignedServices,
@@ -77,5 +82,13 @@ router.get('/services/:serviceId', getServiceById);
 router.put('/services', updateServiceOrderStatus); // to get services order to operator
 
 //#endregion
+
+//#region employee
+router.post('/employee',addEmployee)
+router.put('/employee',updateEmployee)
+router.get('/employee',getAllEmployees)
+router.get('/employee/:employeeId',getEmployeeById)
+router.delete('/employee',deleteEmployeeById)
+//#end region
 
 export default router;
