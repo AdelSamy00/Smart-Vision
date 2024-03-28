@@ -1,7 +1,7 @@
 import express from 'express';
 import {
   addEmployee,
-  deleteEmployeeById,
+  deleteEmployee,
   deleteReview,
   getAllCustomers,
   getAllEmployees,
@@ -87,8 +87,8 @@ router.put('/services', updateServiceOrderStatus); // to get services order to o
 router.post('/employee',addEmployee)
 router.put('/employee',updateEmployee)
 router.get('/employee',getAllEmployees)
-router.get('/employee/:employeeId',getEmployeeById)
-router.delete('/employee',deleteEmployeeById)
+router.get('/employee/:id',getEmployeeById)
+router.delete('/employee',deleteEmployee)
 //#end region
 
 export default router;

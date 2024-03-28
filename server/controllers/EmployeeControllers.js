@@ -7,6 +7,7 @@ import Reviews from '../models/Review.js';
 import ServicesOrders from '../models/ServiceOrder.js';
 import Employees from '../models/Employee.js';
 import bcrypt from 'bcrypt'; // Import bcrypt for password hashing
+import jwt from 'jsonwebtoken';
 
 export const getAllCustomers = async (req, res, next) => {
   const customers = await Customers.find({}).select('-password');
@@ -113,26 +114,23 @@ export const getServiceById = async (req, res, next) => {
     });
   }
 };
-
-
-
 export const addEmployee = async (req, res, next) => {
   try {
-    const { username, email, password, jobTitle } = req.body; // Assuming employee details are passed in the request body
+    const { firstName, lastName, username, email, password, gender, jobTitle, image, qualification, birthday, salary } = req.body;
 
-    // Check if the email is valid
-    if (!validateEmail(email)) {
+    // Check if the email is provided and it's valid
+    if (!email || !email.includes('@')) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid email format',
+        message: 'Please provide a valid email address',
       });
     }
 
-    // Check if the password meets minimum length requirement
-    if (password.length < 6) {
+    // Check if the password meets the length requirement
+    if (!password || password.length < 7) {
       return res.status(400).json({
         success: false,
-        message: 'Password must be at least 6 characters long',
+        message: 'Password must be at least 7 characters long',
       });
     }
 
@@ -146,14 +144,21 @@ export const addEmployee = async (req, res, next) => {
     }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10); // 10 is the salt rounds, you can adjust as needed
+    const hashedPassword = await bcrypt.hash(password, 10); // 10 is the salt rounds
 
-    // Create a new employee instance with the hashed password
+    // Create a new employee instance
     const newEmployee = new Employees({
+      firstName: firstName,
+      lastName: lastName,
       username: username,
       email: email,
       password: hashedPassword, // Store the hashed password
+      gender: gender,
       jobTitle: jobTitle,
+      image: image,
+      qualification: qualification,
+      birthday: birthday,
+      salary: salary,
     });
 
     // Save the new employee to the database
@@ -173,62 +178,61 @@ export const addEmployee = async (req, res, next) => {
   }
 };
 
-// Function to validate email format
-function validateEmail(email) {
-  const emailRegex = /\S+@\S+\.\S+/;
-  return emailRegex.test(email);
-}
-
 export const updateEmployee = async (req, res, next) => {
   try {
-    const { employeeId } = req.body; // Assuming employee ID is passed in the request params
-    const { username, email, password, jobTitle } = req.body; // Assuming updated employee details are passed in the request body
+    const { id } = req.body; // Assuming the employee ID is passed as a parameter in the URL
+    const { firstName, lastName, username, email, password, gender, jobTitle, image, qualification, birthday, salary } = req.body;
 
-    // Check if the email is valid
-    if (!validateEmail(email)) {
+    // Check if the email is provided and it's valid
+    if (!email || !email.includes('@')) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid email format',
+        message: 'Please provide a valid email address',
       });
     }
 
-    // Check if the password meets the minimum length requirement
-    if (password && password.length < 6) {
+    // Check if the password meets the length requirement
+    if (password && password.length < 7) {
       return res.status(400).json({
         success: false,
-        message: 'Password must be at least 6 characters long',
+        message: 'Password must be at least 7 characters long',
       });
     }
 
-    // Find the employee by ID
-    const employee = await Employees.findById(employeeId);
-
-    // If employee not found
-    if (!employee) {
+    // Check if the employee with the given ID exists
+    const existingEmployee = await Employees.findById(id);
+    if (!existingEmployee) {
       return res.status(404).json({
         success: false,
         message: 'Employee not found',
       });
     }
 
-    // Update employee details
-    employee.username = username;
-    employee.email = email;
-    employee.jobTitle = jobTitle;
+    // Update employee fields
+    existingEmployee.firstName = firstName;
+    existingEmployee.lastName = lastName;
+    existingEmployee.username = username;
+    existingEmployee.email = email;
+    existingEmployee.gender = gender;
+    existingEmployee.jobTitle = jobTitle;
+    existingEmployee.image = image;
+    existingEmployee.qualification = qualification;
+    existingEmployee.birthday = birthday;
+    existingEmployee.salary = salary;
 
-    // Update password if provided
+    // Hash and update the password if provided
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
-      employee.password = hashedPassword;
+      existingEmployee.password = hashedPassword;
     }
 
     // Save the updated employee to the database
-    await employee.save();
+    await existingEmployee.save();
 
     res.status(200).json({
       success: true,
       message: 'Employee updated successfully',
-      employee: employee,
+      employee: existingEmployee,
     });
   } catch (error) {
     console.error(error);
@@ -241,13 +245,13 @@ export const updateEmployee = async (req, res, next) => {
 
 export const getAllEmployees = async (req, res, next) => {
   try {
-    // Retrieve all employees from the database
-    const employees = await Employees.find();
+    // Query the database to get all employees
+    const allEmployees = await Employees.find();
 
     res.status(200).json({
       success: true,
-      message: 'Employees retrieved successfully',
-      employees: employees,
+      message: 'All employees retrieved successfully',
+      employees: allEmployees,
     });
   } catch (error) {
     console.error(error);
@@ -259,12 +263,11 @@ export const getAllEmployees = async (req, res, next) => {
 };
 export const getEmployeeById = async (req, res, next) => {
   try {
-    const { employeeId } = req.params; // Extracting the employee ID from the request parameters
+    const { id } = req.params; // Assuming the employee ID is passed as a parameter in the URL
 
-    // Find the employee by ID
-    const employee = await Employees.findById(employeeId);
+    // Query the database to find the employee by ID
+    const employee = await Employees.findById(id);
 
-    // If employee not found
     if (!employee) {
       return res.status(404).json({
         success: false,
@@ -286,14 +289,13 @@ export const getEmployeeById = async (req, res, next) => {
   }
 };
 
-export const deleteEmployeeById = async (req, res, next) => {
+export const deleteEmployee = async (req, res, next) => {
   try {
-    const { employeeId } = req.body; // Extracting the employee ID from the request parameters
+    const { id } = req.body; // Assuming the employee ID is passed as a parameter in the URL
 
-    // Find the employee by ID and delete
-    const deletedEmployee = await Employees.findByIdAndDelete(employeeId);
+    // Find the employee by ID and delete it
+    const deletedEmployee = await Employees.findByIdAndDelete(id);
 
-    // If employee not found
     if (!deletedEmployee) {
       return res.status(404).json({
         success: false,

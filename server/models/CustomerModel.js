@@ -19,6 +19,7 @@ const customerSchema = new mongoose.Schema(
     gender: { type: String },
     address: { type: String },
     phone: { type: Number, unique: true },
+    
     points: { type: Number, default: 0 },
     favoriteList: [
       {
