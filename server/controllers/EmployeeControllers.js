@@ -6,8 +6,7 @@ import Products from '../models/ProductModel.js';
 import Reviews from '../models/Review.js';
 import ServicesOrders from '../models/ServiceOrder.js';
 import Employees from '../models/Employee.js';
-import bcrypt from 'bcrypt'; // Import bcrypt for password hashing
-import jwt from 'jsonwebtoken';
+import { hashString } from '../utils/index.js';
 
 export const getAllCustomers = async (req, res, next) => {
   const customers = await Customers.find({}).select('-password');
@@ -114,12 +113,38 @@ export const getServiceById = async (req, res, next) => {
     });
   }
 };
+
 export const addEmployee = async (req, res, next) => {
   try {
-    const { firstName, lastName, username, email, password, gender, jobTitle, image, qualification, birthday, salary } = req.body;
-
+    const {
+      firstName,
+      lastName,
+      username,
+      email,
+      password,
+      gender,
+      jobTitle,
+      image,
+      qualification,
+      birthday,
+      salary,
+    } = req.body;
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !password ||
+      !gender ||
+      !jobTitle ||
+      !qualification ||
+      !birthday ||
+      !salary
+    ) {
+      next('Provide Required Fields!');
+      return;
+    }
     // Check if the email is provided and it's valid
-    if (!email || !email.includes('@')) {
+    if (!email.includes('@')) {
       return res.status(400).json({
         success: false,
         message: 'Please provide a valid email address',
@@ -127,7 +152,7 @@ export const addEmployee = async (req, res, next) => {
     }
 
     // Check if the password meets the length requirement
-    if (!password || password.length < 7) {
+    if (password.length < 7) {
       return res.status(400).json({
         success: false,
         message: 'Password must be at least 7 characters long',
@@ -142,12 +167,10 @@ export const addEmployee = async (req, res, next) => {
         message: 'Email is already registered',
       });
     }
-
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10); // 10 is the salt rounds
-
+    const hashedPassword = await hashString(password);
     // Create a new employee instance
-    const newEmployee = new Employees({
+    const newEmployee = await Employees.create({
       firstName: firstName,
       lastName: lastName,
       username: username,
@@ -160,9 +183,6 @@ export const addEmployee = async (req, res, next) => {
       birthday: birthday,
       salary: salary,
     });
-
-    // Save the new employee to the database
-    await newEmployee.save();
 
     res.status(201).json({
       success: true,
@@ -178,67 +198,55 @@ export const addEmployee = async (req, res, next) => {
   }
 };
 
-export const updateEmployee = async (req, res, next) => {
+export const manageEmployees = async (req, res, next) => {
   try {
-    const { id } = req.body; // Assuming the employee ID is passed as a parameter in the URL
-    const { firstName, lastName, username, email, password, gender, jobTitle, image, qualification, birthday, salary } = req.body;
-
-    // Check if the email is provided and it's valid
-    if (!email || !email.includes('@')) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide a valid email address',
-      });
+    const {
+      employeeId,
+      firstName,
+      lastName,
+      username,
+      email,
+      gender,
+      jobTitle,
+      image,
+      qualification,
+      birthday,
+      salary,
+    } = req.body;
+    const employeeData = req.body;
+    if (
+      !employeeId ||
+      !firstName ||
+      !lastName ||
+      !email ||
+      !gender ||
+      !jobTitle ||
+      !qualification ||
+      !birthday ||
+      !salary
+    ) {
+      next('Provide Required Fields!');
+      return;
     }
-
-    // Check if the password meets the length requirement
-    if (password && password.length < 7) {
-      return res.status(400).json({
-        success: false,
-        message: 'Password must be at least 7 characters long',
-      });
+    if (salary < 0) {
+      next('salary cannot be less then 0!');
+      return;
     }
-
-    // Check if the employee with the given ID exists
-    const existingEmployee = await Employees.findById(id);
-    if (!existingEmployee) {
-      return res.status(404).json({
-        success: false,
-        message: 'Employee not found',
-      });
-    }
-
-    // Update employee fields
-    existingEmployee.firstName = firstName;
-    existingEmployee.lastName = lastName;
-    existingEmployee.username = username;
-    existingEmployee.email = email;
-    existingEmployee.gender = gender;
-    existingEmployee.jobTitle = jobTitle;
-    existingEmployee.image = image;
-    existingEmployee.qualification = qualification;
-    existingEmployee.birthday = birthday;
-    existingEmployee.salary = salary;
-
-    // Hash and update the password if provided
-    if (password) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      existingEmployee.password = hashedPassword;
-    }
-
-    // Save the updated employee to the database
-    await existingEmployee.save();
-
+    const updatedEmployee = await Employees.findByIdAndUpdate(
+      { _id: employeeId },
+      { ...employeeData },
+      { new: true }
+    );
     res.status(200).json({
       success: true,
-      message: 'Employee updated successfully',
-      employee: existingEmployee,
+      message: 'update employee successfully',
+      updatedEmployee,
     });
   } catch (error) {
-    console.error(error);
+    console.log(error);
     res.status(500).json({
       success: false,
-      message: 'Failed to update employee',
+      message: 'failed to update employee data',
     });
   }
 };
@@ -261,6 +269,7 @@ export const getAllEmployees = async (req, res, next) => {
     });
   }
 };
+
 export const getEmployeeById = async (req, res, next) => {
   try {
     const { id } = req.params; // Assuming the employee ID is passed as a parameter in the URL
@@ -316,4 +325,3 @@ export const deleteEmployee = async (req, res, next) => {
     });
   }
 };
-

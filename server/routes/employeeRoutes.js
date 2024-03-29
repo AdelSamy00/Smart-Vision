@@ -8,7 +8,7 @@ import {
   getCustomizationOrders,
   getEmployeeById,
   getServiceById,
-  updateEmployee,
+  manageEmployees,
 } from '../controllers/EmployeeControllers.js';
 import {
   getAssignedServices,
@@ -31,6 +31,7 @@ import {
   updateOrderStatus,
   updateServiceOrderStatus,
 } from '../controllers/OperatorController.js';
+
 const router = express.Router();
 
 //#region Customer
@@ -83,12 +84,12 @@ router.put('/services', updateServiceOrderStatus); // to get services order to o
 
 //#endregion
 
-//#region employee
-router.post('/employee',addEmployee)
-router.put('/employee',updateEmployee)
-router.get('/employee',getAllEmployees)
-router.get('/employee/:id',getEmployeeById)
-router.delete('/employee',deleteEmployee)
+//#region Actor & Employees
+router.post('/', addEmployee);
+router.put('/', manageEmployees);
+router.get('/', getAllEmployees);
+router.get('/:id', getEmployeeById);
+router.delete('/', deleteEmployee);
 //#end region
 
 export default router;
