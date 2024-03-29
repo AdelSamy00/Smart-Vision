@@ -21,7 +21,7 @@ import {
   getMaterialTransactions,
   getProductTransactions,
 } from '../controllers/InventoryManager.js';
-import { getCustomizationOrdersDetails } from '../controllers/FactoryControllers.js';
+import { getCustomizationOrdersDetails, updateServiceOrderStateToManufactured } from '../controllers/FactoryControllers.js';
 import {
   assignedEnginerToService,
   getAllEngineers,
@@ -92,4 +92,5 @@ router.get('/:id', getEmployeeById);
 router.delete('/', deleteEmployee);
 //#end region
 
+router.put('/update_state',updateServiceOrderStateToManufactured)
 export default router;
