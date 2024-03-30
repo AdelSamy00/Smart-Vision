@@ -43,7 +43,7 @@ export const addAccountTransaction = async (req, res, next) => {
 
 export const getAllAccountTransactions = async (req, res, next) => {
   try {
-    const { method } = req?.params;
+    const { method } = req?.body;
     let transaction;
     if (method) {
       transaction = await AccountTransactions.find({ method });
@@ -60,5 +60,57 @@ export const getAllAccountTransactions = async (req, res, next) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const getAccountTransactionById = async (req, res, next) => {
+  try {
+    const { transactionId } = req.params;
+    const transaction = await AccountTransactions.findById({
+      _id: transactionId,
+    });
+    if (!transaction) {
+      return res.status(404).json({
+        success: false,
+        message: 'Transaction is not found',
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: 'get account transaction successfully',
+        transaction: transaction,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateAccountTransaction = async (req, res, next) => {
+  try {
+    const transactionData = req.body;
+    const transaction = await AccountTransactions.findById({
+      _id: transactionData.transactionId,
+    });
+    if (!transaction) {
+      return res.status(404).json({
+        success: false,
+        message: 'Transaction is not found',
+      });
+    } else {
+      const updatedTransaction = await AccountTransactions.findByIdAndUpdate(
+        { _id: transactionData.transactionId },
+        { ...transactionData },
+        { new: true }
+      );
+      res.status(200).json({
+        success: true,
+        message: 'update account transaction successfully',
+        updatedTransaction: updatedTransaction,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'wrong Id' });
   }
 };
