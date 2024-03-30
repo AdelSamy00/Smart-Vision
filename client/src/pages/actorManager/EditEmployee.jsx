@@ -1,7 +1,7 @@
 import React from 'react';
 import EmployeeForm from '../../components/actorManager/EmployeeForm';
 
-function AddEmployee() {
+function EditEmployee() {
   return (
     <main>
       <EmployeeForm />
@@ -9,4 +9,4 @@ function AddEmployee() {
   );
 }
 
-export default AddEmployee;
+export default EditEmployee;

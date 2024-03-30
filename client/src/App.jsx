@@ -53,7 +53,7 @@ import {
   ServiseDetailsOperator,
 } from './pages/operator/index.js';
 
-import {AddEmployee} from './pages/actorManager/index.js'
+import {AddEmployee, EditEmployee} from './pages/actorManager/index.js'
 import { OrderDetailsFactory } from './pages/factory/index.js';
 import OrderComponent from './components/e-commers/OrderComponent.jsx';
 import AddProductForm from './components/inventory/AddProductFrom';
@@ -172,10 +172,14 @@ function App() {
           path="/operator/servise-details/:serviceId"
           element={<ServiseDetailsOperator />}
         />
-        {/* Private Operator Routes */}
+        {/* Private actor manager Routes */}
         <Route
           path="/actor/add-employee"
           element={<AddEmployee />}
+        />
+        <Route
+          path="/actor/edit-employee/:employeeId"
+          element={<EditEmployee />}
         />
         {/*The path not found.*/}
         <Route path="*" element={<Page404 />} />
