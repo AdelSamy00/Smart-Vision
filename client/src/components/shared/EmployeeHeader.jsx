@@ -123,8 +123,8 @@ function EmployeeHeader({ props }) {
     <>
       <header className="employeeHeaderMain">
         <div className="employeeHeaderLogo">
-          <img className="w-16 h-16" src="/smartVisionLogo.png" />
-          <span className="ml-3 text-2xl font-bold">Smart Vision</span>
+          <img src="/smartVisionLogo.png" />
+          <span>Smart Vision</span>
         </div>
         <div className="employeeHeaderLinks">
           {navLinks?.map((item, idx) => {
@@ -135,7 +135,7 @@ function EmployeeHeader({ props }) {
             );
           })}
         </div>
-        <button className="employeeHeaderLogoutIcon mr-4">
+        <button className="ml-auto mr-4">
           <Badge badgeContent={numberOfNotifications} color="primary">
             <NotificationsIcon color="action" />
           </Badge>
@@ -145,7 +145,7 @@ function EmployeeHeader({ props }) {
             <LogoutIcon sx={{ fontSize: '25px' }} />
           </Tooltip>
         </button>
-        <button className="employeeHeaderDehazeIcon" onClick={handleShow}>
+        <button className="employeeHeaderDehazeIcon ml-0" onClick={handleShow}>
           <DehazeIcon sx={{ fontSize: '30px' }} />
         </button>
       </header>

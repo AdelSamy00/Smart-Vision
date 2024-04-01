@@ -14,8 +14,19 @@
     margin-right: 2rem;
 }
 
+.employeeHeaderLogo span {
+    font-size: 30px;
+    font-weight: 700;
+    margin-left: .5rem;
+}
+
+.employeeHeaderLogo img {
+    width: 4rem;
+    height: 4rem;
+}
+
 .employeeHeaderLinks {
-    width: calc(100% - 277px);
+    width: calc(100% - 350px);
     display: flex;
     gap: 1rem;
 }
@@ -63,5 +74,21 @@
 
     .employeeHeaderDehazeIcon {
         display: block;
+    }
+
+    .employeeHeaderLogo {
+        margin-right: .5rem;
+    }
+}
+
+@media screen and (max-width:361px) {
+    .employeeHeaderLogo span {
+        font-size: 26px;
+        font-weight: 600;
+    }
+
+    .employeeHeaderLogo img {
+        width: 3rem;
+        height: 3rem;
     }
 }
