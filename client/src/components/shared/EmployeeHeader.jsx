@@ -11,6 +11,7 @@ import { Logout } from '../../redux/EmployeeSlice';
 import Badge from '@mui/material/Badge';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MailIcon from '@mui/icons-material/Mail';
+import { clearNotification } from '../../redux/NotificationSlice';
 
 const ENGINEER = [
   {
@@ -91,9 +92,11 @@ function EmployeeHeader({ props }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { employee } = useSelector((state) => state.employee);
+  const { notification } = useSelector((state) => state.notification);
+  const [open, setOpen] = useState(false);
   const jobTitle = employee?.jobTitle;
   const [navLinks, setnavLinks] = useState(null);
-  const [numberOfNotifications, setnumberOfNotifications] = useState(5);
+  const [numberOfNotifications, setnumberOfNotifications] = useState(0);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -114,11 +117,40 @@ function EmployeeHeader({ props }) {
       setnavLinks(PRESENTER);
     }
   }
-
   useEffect(() => {
     setNavLinksWithEmployeeType();
   }, []);
-
+  //made by adel
+  function getNumberOfNotifications(notification) {
+    return notification?.length;
+  }
+  useEffect(() => {
+    let number = getNumberOfNotifications(notification);
+    setnumberOfNotifications(number);
+  }, [notification]);
+  const displayNotifications = (notification) => {
+    let msg;
+    console.log(notification);
+    switch (notification?.type) {
+      case 'addOrder':
+        msg = 'place new order';
+        break;
+      case 'addService':
+        msg = 'place new Service order';
+        break;
+      default:
+        msg = 'wrong';
+        break;
+    }
+    return (
+      <span className="notification">{`${notification.user.firstName} ${notification.user.lastName} ${msg}`}</span>
+    );
+  };
+  const handleRead = () => {
+    dispatch(clearNotification());
+    setnumberOfNotifications(0);
+    setOpen(!open);
+  };
   return (
     <>
       <header className="employeeHeaderMain">
@@ -135,7 +167,14 @@ function EmployeeHeader({ props }) {
             );
           })}
         </div>
-        <button className="ml-auto mr-4">
+        <button
+          className="ml-auto mr-4"
+          onClick={() => {
+            if (notification?.length >= 1) {
+              setOpen(!open);
+            }
+          }}
+        >
           <Badge badgeContent={numberOfNotifications} color="primary">
             <NotificationsIcon color="action" />
           </Badge>
@@ -148,6 +187,14 @@ function EmployeeHeader({ props }) {
         <button className="employeeHeaderDehazeIcon ml-0" onClick={handleShow}>
           <DehazeIcon sx={{ fontSize: '30px' }} />
         </button>
+        {open && (
+          <div className="notifications border-2 ">
+            {notification.map((n) => displayNotifications(n))}
+            <button className="readBtn" onClick={() => handleRead()}>
+              Mark as read
+            </button>
+          </div>
+        )}
       </header>
       <Offcanvas show={show} onHide={handleClose} {...props} placement="end">
         <Offcanvas.Header>

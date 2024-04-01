@@ -33,6 +33,7 @@ import {
   TransactionHistory,
   InventoryMatrialsOrders,
   InventoryProductOrders,
+  InventoryMaterialTransactions,
 } from './pages/inventory/index.js';
 import {
   EmployeLogin,
@@ -67,37 +68,46 @@ import {
 } from './utils/ShouldRender.jsx';
 import { io } from 'socket.io-client';
 import { useEffect, useState } from 'react';
+import EmployeeHeader from './components/shared/EmployeeHeader.jsx';
 
 function App() {
   const location = useLocation();
   const { customer } = useSelector((state) => state.customer);
+  const { employee } = useSelector((state) => state.employee);
   axios.defaults.baseURL = 'http://localhost:3000';
   axios.defaults.headers = {
     'Content-Type': 'application/json',
     Authorization: customer?.token ? `Bearer ${customer?.token}` : '',
   };
   //add by adel
-  const [socket, setSocket] = useState(
-    customer ? io('http://localhost:3000') : null
-  );
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    if (customer?.token) {
+    if (customer?.email || employee?.email) {
       setSocket(io('http://localhost:3000'));
     }
   }, []);
   useEffect(() => {
     async function getConnection() {
-      if (customer?.token) {
+      if (customer?.email) {
         await socket?.emit('newUser', { user: customer });
       }
     }
     getConnection();
   }, [socket, customer]);
+  useEffect(() => {
+    async function getConnection() {
+      if (employee?.email) {
+        await socket?.emit('newUser', { user: employee });
+      }
+    }
+    getConnection();
+  }, [socket, employee]);
+
   return (
     <>
       {shouldRenderECommersHeader(location) ||
-        shouldRenderEmployeeHeader(location)}
+        shouldRenderEmployeeHeader(location, socket, setSocket)}
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Landing />} />
@@ -125,7 +135,10 @@ function App() {
             element={<DeleteAccountPage />}
           />
           <Route path="/favourites" element={<Favourites />} />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route
+            path="/checkout"
+            element={<Checkout socket={socket} setSocket={setSocket} />}
+          />
           <Route path="/history" element={<History />} />
         </Route>
         {/* Private Inventory Manager Routes */}
@@ -151,6 +164,10 @@ function App() {
           element={<UpdateMatrialForm />}
         />
         <Route path="/Transaction" element={<TransactionsPage />} />
+        <Route
+          path="/all-transactions"
+          element={<InventoryMaterialTransactions />}
+        />
         {/* Private Presenter Routes */}
         <Route
           path="/p/product/:productId"
@@ -184,7 +201,7 @@ function App() {
         {/* Private Operator Routes */}
         <Route
           path="/operator/view-product-orders"
-          element={<ViewProductOrders />}
+          element={<ViewProductOrders socket={socket} setSocket={setSocket} />}
         />
         <Route
           path="/operator/view-Service-orders"

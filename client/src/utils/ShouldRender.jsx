@@ -33,10 +33,11 @@ export const shouldRenderECommersFooter = (location) => {
   return flag ? <Footer /> : null;
 };
 
-export const shouldRenderEmployeeHeader = (location) => {
+export const shouldRenderEmployeeHeader = (location, socket, setSocket) => {
   let flag;
   const routes = [...eCommersRoutesWithHeaderAndFooter, ...routesWithOutHeader];
   const firstPath = location?.pathname.split('/')[1];
   flag = !routes.includes(firstPath);
-  return flag ? <EmployeeHeader /> : null;
+  console.log(socket?.id);
+  return flag ? <EmployeeHeader soket={socket} setSocket={setSocket} /> : null;
 };

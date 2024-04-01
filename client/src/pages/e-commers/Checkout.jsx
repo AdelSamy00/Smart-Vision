@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { clearCart } from '../../redux/CartSlice';
 import { apiRequest } from '../../utils';
 
-export default function Checkout() {
+export default function Checkout({ socket, setSocket }) {
   const [activeStep, setActiveStep] = useState(0);
   const [orderNumber, setOrderNumber] = useState(0);
   const steps = ['Shipping address', 'Review your order'];
@@ -105,6 +105,11 @@ export default function Checkout() {
       //   customerData: shippingInfo,
       // });
       console.log('Order placed successfully:', response.data);
+      socket?.emit('setOrder', {
+        user: shippingInfo,
+        products: productsWithDetails,
+        type: 'addOrder',
+      });
       dispatch(clearCart());
       setOrderNumber(response.data.order.orderNumber);
       setActiveStep(activeStep + 1);

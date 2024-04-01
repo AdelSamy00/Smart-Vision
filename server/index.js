@@ -12,7 +12,7 @@ import helmet from 'helmet';
 import dbConnection from './db/index.js';
 import router from './routes/index.js';
 import errorMiddleware from './middlewares/errorMiddleware.js';
-import { addNewOnline, removeUser } from './utils/index.js';
+import { addNewOnline, getOperator, removeUser } from './utils/index.js';
 
 dotenv.config();
 const __dirname = path.resolve(path.dirname(''));
@@ -48,10 +48,24 @@ io.on('connection', (socket) => {
     addNewOnline(user, socket.id, onlineUsers);
     console.log('add', onlineUsers);
   });
-  //when the user left
+
+  //when client set order
+  socket.on('setOrder', ({ user, products, type }) => {
+    const operator = getOperator(onlineUsers)[0];
+    console.log('--------------------------');
+    console.log(operator);
+    console.log('--------------------------');
+    io.to(operator.socketId).emit('getOrders', { user, products, type });
+  });
+
+  //when the user logout
   socket.on('close', () => {
     onlineUsers = removeUser(socket.id, onlineUsers);
     console.log('delete', onlineUsers);
+  });
+  //when the user left
+  socket.on('disconnect', () => {
+    onlineUsers = removeUser(socket.id, onlineUsers);
   });
 });
 

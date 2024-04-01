@@ -19,9 +19,16 @@ export function createJWT(id) {
 }
 
 //Socket io
-export const addNewOnline = (user, socketId, onlineUsers) => {
-  !onlineUsers.some((User) => User.user.email === user.email) &&
+export const addNewOnline = ({ user }, socketId, onlineUsers) => {
+  const users = onlineUsers.filter((User) => User.email === user.email);
+  if (users) {
+    users.map((User) => {
+      onlineUsers.pop(User);
+    });
     onlineUsers.push({ ...user, socketId });
+  } else {
+    onlineUsers.push({ ...user, socketId });
+  }
 };
 
 export const removeUser = (socketId, onlineUsers) => {
@@ -29,5 +36,9 @@ export const removeUser = (socketId, onlineUsers) => {
 };
 
 export const getUser = (username, onlineUsers) => {
-  return onlineUsers.find((User) => User.user.username !== username);
+  return onlineUsers.find((User) => User?.username !== username);
+};
+
+export const getOperator = (onlineUsers) => {
+  return onlineUsers.filter((User) => User?.jobTitle === 'Operator');
 };
