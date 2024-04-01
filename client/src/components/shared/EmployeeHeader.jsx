@@ -8,6 +8,9 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { Logout } from '../../redux/EmployeeSlice';
+import Badge from '@mui/material/Badge';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import MailIcon from '@mui/icons-material/Mail';
 
 const ENGINEER = [
   {
@@ -90,6 +93,7 @@ function EmployeeHeader({ props }) {
   const { employee } = useSelector((state) => state.employee);
   const jobTitle = employee?.jobTitle;
   const [navLinks, setnavLinks] = useState(null);
+  const [numberOfNotifications, setnumberOfNotifications] = useState(5);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -131,6 +135,11 @@ function EmployeeHeader({ props }) {
             );
           })}
         </div>
+        <button className="employeeHeaderLogoutIcon mr-4">
+          <Badge badgeContent={numberOfNotifications} color="primary">
+            <NotificationsIcon color="action" />
+          </Badge>
+        </button>
         <button className="employeeHeaderLogoutIcon" onClick={handleLogout}>
           <Tooltip title="Logout">
             <LogoutIcon sx={{ fontSize: '25px' }} />
