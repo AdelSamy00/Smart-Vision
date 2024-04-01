@@ -3,13 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import './StyleSheets/Profile.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Logout } from '../../redux/CustomerSlice';
-function Profile() {
+function Profile({ socket, setSocket }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { customer } = useSelector((state) => state.customer);
 
   return (
     <>
+      {console.log(socket.id)}
       <section className="Profile">
         <div className="sbProfileHeader">
           <h1>He! {customer.username}</h1>
@@ -17,6 +18,11 @@ function Profile() {
             Need to change account?
             <button
               onClick={() => {
+                if (socket) {
+                  console.log(socket);
+                  socket.emit('close', { socketId: socket.id });
+                  setSocket(null);
+                }
                 dispatch(Logout());
                 navigate('/');
               }}

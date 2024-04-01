@@ -17,3 +17,17 @@ export function createJWT(id) {
     expiresIn: '1d',
   });
 }
+
+//Socket io
+export const addNewOnline = (user, socketId, onlineUsers) => {
+  !onlineUsers.some((User) => User.user.email === user.email) &&
+    onlineUsers.push({ ...user, socketId });
+};
+
+export const removeUser = (socketId, onlineUsers) => {
+  return onlineUsers.filter((User) => User.socketId !== socketId);
+};
+
+export const getUser = (username, onlineUsers) => {
+  return onlineUsers.find((User) => User.user.username !== username);
+};

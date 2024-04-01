@@ -53,7 +53,7 @@ import {
   ServiseDetailsOperator,
 } from './pages/operator/index.js';
 
-import {AddEmployee, EditEmployee} from './pages/actorManager/index.js'
+import { AddEmployee, EditEmployee } from './pages/actorManager/index.js';
 import { OrderDetailsFactory } from './pages/factory/index.js';
 import OrderComponent from './components/e-commers/OrderComponent.jsx';
 import AddProductForm from './components/inventory/AddProductFrom';
@@ -65,6 +65,8 @@ import {
   shouldRenderECommersHeader,
   shouldRenderECommersFooter,
 } from './utils/ShouldRender.jsx';
+import { io } from 'socket.io-client';
+import { useEffect, useState } from 'react';
 
 function App() {
   const location = useLocation();
@@ -74,7 +76,24 @@ function App() {
     'Content-Type': 'application/json',
     Authorization: customer?.token ? `Bearer ${customer?.token}` : '',
   };
+  //add by adel
+  const [socket, setSocket] = useState(
+    customer ? io('http://localhost:3000') : null
+  );
 
+  useEffect(() => {
+    if (customer?.token) {
+      setSocket(io('http://localhost:3000'));
+    }
+  }, []);
+  useEffect(() => {
+    async function getConnection() {
+      if (customer?.token) {
+        await socket?.emit('newUser', { user: customer });
+      }
+    }
+    getConnection();
+  }, [socket, customer]);
   return (
     <>
       {shouldRenderECommersHeader(location) ||
@@ -95,7 +114,10 @@ function App() {
         <Route path="/bag" element={<Bag />} />
         {/* Private Customer Routes (Logged in) */}
         <Route element={<CustomerLayout />}>
-          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/profile"
+            element={<Profile socket={socket} setSocket={setSocket} />}
+          />
           <Route path="/profile/profile-details" element={<ProfileDetails />} />
           <Route path="/profile/change-password" element={<ChangePassword />} />
           <Route
@@ -173,10 +195,7 @@ function App() {
           element={<ServiseDetailsOperator />}
         />
         {/* Private actor manager Routes */}
-        <Route
-          path="/actor/add-employee"
-          element={<AddEmployee />}
-        />
+        <Route path="/actor/add-employee" element={<AddEmployee />} />
         <Route
           path="/actor/edit-employee/:employeeId"
           element={<EditEmployee />}
