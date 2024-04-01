@@ -2,13 +2,13 @@ import InventoryHome from "./inventoryHome";
 import TransactionsPage from "./TransactionPage";
 import TransactionHistory from "./TransactionHistory";
 import InventoryProductOrders from "./InventoryProductOrders";
-
 import InventoryMatrialsOrders from "./InventoryMatrialsOrders";
-export{
+import InventoryMaterialTransactions from './InventoryMaterialTransactions'
+export {
     InventoryHome,
     TransactionsPage,
     TransactionHistory,
     InventoryMatrialsOrders,
-    InventoryProductOrders
-
+    InventoryProductOrders,
+    InventoryMaterialTransactions
 }
