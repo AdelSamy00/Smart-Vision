@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
   Grid,
   Button,
@@ -11,27 +11,27 @@ import {
   InputLabel,
   Select,
   MenuItem,
-} from "@mui/material";
-import { apiRequest } from "../../utils";
+} from '@mui/material';
+import { apiRequest } from '../../utils';
 
 function ProductOrderComponent({ order }) {
   const [showOrder, setShowOrder] = useState(false);
   const [updatedOrder, setUpdatedOrder] = useState(order);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
-  console.log(updatedOrder)
+  //console.log(updatedOrder)
 
   useEffect(() => {
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth < 900); // Adjust this value as needed
     };
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
     // Initial check
     handleResize();
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
   const toggleOrder = () => {
@@ -49,7 +49,7 @@ function ProductOrderComponent({ order }) {
 
     try {
       const response = await apiRequest({
-        method: "PUT",
+        method: 'PUT',
         url: `/employees/orders`,
         data: {
           orderId: order._id,
@@ -58,30 +58,30 @@ function ProductOrderComponent({ order }) {
       });
       console.log(response.data); // Log the response from the server
       setUpdatedOrder(response.data.order);
-      console.log("Updated order state:", updatedOrder.state);
+      console.log('Updated order state:', updatedOrder.state);
     } catch (error) {
-      console.error("Error updating order status:", error);
+      console.error('Error updating order status:', error);
     }
   };
   return (
-    <Grid container className="order-container" sx={{ marginBottom: "2rem" }}>
+    <Grid container className="order-container" sx={{ marginBottom: '2rem' }}>
       <Grid
         item
         xs={11}
         sm={9}
         md={9}
         lg={7}
-        sx={{ margin: "auto", border: "2px solid #ddd", borderRadius: "10px" }}
+        sx={{ margin: 'auto', border: '2px solid #ddd', borderRadius: '10px' }}
       >
         <Grid
           container
           sx={{
-            borderBottom: showOrder ? "2px solid #ddd" : "none",
-            borderStartEndRadius: "10px",
-            borderStartStartRadius: "10px",
-            padding: "20px",
-            backgroundColor: "#f2f2f2",
-            alignItems: "center",
+            borderBottom: showOrder ? '2px solid #ddd' : 'none',
+            borderStartEndRadius: '10px',
+            borderStartStartRadius: '10px',
+            padding: '20px',
+            backgroundColor: '#f2f2f2',
+            alignItems: 'center',
           }}
         >
           <Grid
@@ -89,11 +89,11 @@ function ProductOrderComponent({ order }) {
             xs={6}
             md={3}
             lg={3}
-            sx={{ marginBottom: { xs: "1.5rem", md: "0rem" } }}
+            sx={{ marginBottom: { xs: '1.5rem', md: '0rem' } }}
           >
             <Typography variant="body1">Date Placed</Typography>
             <Typography variant="body2">
-              {order.createdAt.substring(0, 10).split("-").reverse().join("-")}
+              {order.createdAt.substring(0, 10).split('-').reverse().join('-')}
             </Typography>
           </Grid>
           <Grid
@@ -102,16 +102,16 @@ function ProductOrderComponent({ order }) {
             md={3}
             lg={3}
             sx={{
-              textAlign: { xs: "end", md: "center" },
-              marginBottom: { xs: "1.5rem", md: "0rem" },
-              marginTop: { xs: "-1.5rem", md: "0rem" },
+              textAlign: { xs: 'end', md: 'center' },
+              marginBottom: { xs: '1.5rem', md: '0rem' },
+              marginTop: { xs: '-1.5rem', md: '0rem' },
               // backgroundColor:"red"
             }}
           >
             <Typography variant="body1">Order Number</Typography>
             <Typography
               variant="body2"
-              sx={{ textAlign: { xs: "end", md: "center" } }}
+              sx={{ textAlign: { xs: 'end', md: 'center' } }}
             >
               {order?.orderNumber}
             </Typography>
@@ -122,10 +122,10 @@ function ProductOrderComponent({ order }) {
             // sm={6}
             md={3}
             lg={3}
-            sx={{ textAlign: { xs: "start", md: "center" } }}
+            sx={{ textAlign: { xs: 'start', md: 'center' } }}
           >
             <Typography variant="body1">Total Price</Typography>
-            <Typography variant="body2">{calculateTotalPrice()}</Typography>
+            <Typography variant="body2">{order.totalPrice}</Typography>
           </Grid>
           <Grid
             item
@@ -133,28 +133,28 @@ function ProductOrderComponent({ order }) {
             md={3}
             lg={3}
             sx={{
-              display: "flex",
+              display: 'flex',
               justifyContent: {
-                xs: "flex-end",
-                md: "center",
+                xs: 'flex-end',
+                md: 'center',
                 // lg: "flex-end",
               },
-            //   marginTop: { md: "1.7rem", lg: "0rem" },
+              //   marginTop: { md: "1.7rem", lg: "0rem" },
             }}
           >
             <Button
               onClick={toggleOrder}
               variant="contained"
               sx={{
-                backgroundColor: "#009688",
-                color: "white",
-                borderRadius: "5px",
-                ":hover": {
-                  backgroundColor: "#009688",
+                backgroundColor: '#009688',
+                color: 'white',
+                borderRadius: '5px',
+                ':hover': {
+                  backgroundColor: '#009688',
                 },
               }}
             >
-              {showOrder ? "close" : "Order Details"}
+              {showOrder ? 'close' : 'Order Details'}
             </Button>
           </Grid>
         </Grid>
@@ -163,8 +163,8 @@ function ProductOrderComponent({ order }) {
             container
             item
             sx={{
-              borderTop: "none",
-              padding: "20px",
+              borderTop: 'none',
+              padding: '20px',
             }}
           >
             {/* {console.log(order)} */}
@@ -173,24 +173,24 @@ function ProductOrderComponent({ order }) {
               xs={12}
               md={6}
               sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-start",
-                marginBottom: "1rem",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                marginBottom: '1rem',
               }}
             >
               <Typography
                 variant="body1"
                 sx={{
-                  marginRight: "1rem",
-                  fontSize: { xs: "16px", md: "20px", fontWeight: "bold" },
+                  marginRight: '1rem',
+                  fontSize: { xs: '16px', md: '20px', fontWeight: 'bold' },
                 }}
               >
-                Customer Name:{" "}
+                Customer Name:{' '}
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ fontSize: { xs: "16px", md: "19px", color: "gray" } }}
+                sx={{ fontSize: { xs: '16px', md: '19px', color: 'gray' } }}
               >
                 {order?.customerData.firstName + order?.customerData.lastName}
               </Typography>
@@ -200,24 +200,24 @@ function ProductOrderComponent({ order }) {
               xs={12}
               md={6}
               sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: { xs: "flex-start", md: "flex-end" },
-                marginBottom: "1rem",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: { xs: 'flex-start', md: 'flex-end' },
+                marginBottom: '1rem',
               }}
             >
               <Typography
                 variant="body1"
                 sx={{
-                  marginRight: "1rem",
-                  fontSize: { xs: "16px", md: "20px", fontWeight: "bold" },
+                  marginRight: '1rem',
+                  fontSize: { xs: '16px', md: '20px', fontWeight: 'bold' },
                 }}
               >
-                Phone Number:{" "}
+                Phone Number:{' '}
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ fontSize: { xs: "16px", md: "19px", color: "gray" } }}
+                sx={{ fontSize: { xs: '16px', md: '19px', color: 'gray' } }}
               >
                 {order?.customerData.phoneNumber}
               </Typography>
@@ -229,10 +229,10 @@ function ProductOrderComponent({ order }) {
                 item
                 xs={12}
                 sx={{
-                  border: "2px solid #ddd",
-                  borderRadius: "5px",
-                  marginBottom: "20px",
-                  padding: "20px",
+                  border: '2px solid #ddd',
+                  borderRadius: '5px',
+                  marginBottom: '20px',
+                  padding: '20px',
                 }}
               >
                 <Grid container spacing={2}>
@@ -241,9 +241,9 @@ function ProductOrderComponent({ order }) {
                       src={product?.product?.images[0]}
                       alt={product?.product?.name}
                       style={{
-                        width: "100%",
-                        height: "150px",
-                        borderRadius: "5px",
+                        width: '100%',
+                        height: '150px',
+                        borderRadius: '5px',
                       }}
                     />
                   </Grid>
@@ -252,14 +252,14 @@ function ProductOrderComponent({ order }) {
                       item
                       container
                       sx={{
-                        fontSize: "18px",
-                        fontWeight: "bold",
-                        color: "gray",
-                        alignItems: "flex-start",
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                        color: 'gray',
+                        alignItems: 'flex-start',
                       }}
                     >
                       <Grid item xs={12} md={8} variant="body1">
-                        <span style={{ color: "" }}>
+                        <span style={{ color: '' }}>
                           {product?.product?.name}
                         </span>
                       </Grid>
@@ -269,11 +269,11 @@ function ProductOrderComponent({ order }) {
                         xs={12}
                         md={4}
                         sx={{
-                          marginTop: { xs: "1rem", md: "0rem" },
-                          display: "flex",
-                          alignItems: "end",
+                          marginTop: { xs: '1rem', md: '0rem' },
+                          display: 'flex',
+                          alignItems: 'end',
 
-                          justifyContent: { md: "end" },
+                          justifyContent: { md: 'end' },
                         }}
                       >
                         <span>{product?.product?.price} EGP</span>
@@ -281,21 +281,21 @@ function ProductOrderComponent({ order }) {
                     </Grid>
                     <Typography
                       variant="body2"
-                      style={{ marginTop: "1rem", fontSize: { xs: "10px" } }}
+                      style={{ marginTop: '1rem', fontSize: { xs: '10px' } }}
                     >
-                      <span style={{ fontWeight: "bold", fontSize: "17px" }}>
+                      <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                         Description:
-                      </span>{" "}
+                      </span>{' '}
                       {product?.product?.description}
                     </Typography>
                     <Typography
                       variant="body2"
-                      style={{ marginTop: "1rem", fontSize: { xs: "10px" } }}
+                      style={{ marginTop: '1rem', fontSize: { xs: '10px' } }}
                     >
-                      <span style={{ fontWeight: "bold", fontSize: "17px" }}>
+                      <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                         Quantity:
-                      </span>{" "}
-                      <span style={{ fontSize: "18px" }}>
+                      </span>{' '}
+                      <span style={{ fontSize: '18px' }}>
                         {product?.quantity}
                       </span>
                     </Typography>
@@ -308,13 +308,13 @@ function ProductOrderComponent({ order }) {
               item
               xs={12}
               container
-              style={{ justifyContent: "center", alignItems: "center" }}
+              style={{ justifyContent: 'center', alignItems: 'center' }}
             >
-              <Grid item xs={3} md={2} style={{ justifyContent: "center" }}>
+              <Grid item xs={3} md={2} style={{ justifyContent: 'center' }}>
                 <Typography variant="body1">
-                  <span style={{ fontWeight: "bold", fontSize: "20px" }}>
-                    State:{" "}
-                  </span>{" "}
+                  <span style={{ fontWeight: 'bold', fontSize: '20px' }}>
+                    State:{' '}
+                  </span>{' '}
                 </Typography>
               </Grid>
               {isSmallScreen ? (
@@ -322,7 +322,7 @@ function ProductOrderComponent({ order }) {
                   item
                   xs={9}
                   md={10}
-                  style={{ textAlign: "center", justifyContent: "center" }}
+                  style={{ textAlign: 'center', justifyContent: 'center' }}
                 >
                   <FormControl fullWidth>
                     <Select
@@ -331,7 +331,7 @@ function ProductOrderComponent({ order }) {
                       value={updatedOrder?.state}
                       onChange={handleStateChange}
                     >
-                        {console.log(updatedOrder)}
+                      {console.log(updatedOrder)}
                       <MenuItem value="PENDING">Pending</MenuItem>
                       <MenuItem value="In Progress">Processing</MenuItem>
                       <MenuItem value="Shipped">Shipped</MenuItem>
@@ -347,7 +347,7 @@ function ProductOrderComponent({ order }) {
                   value={updatedOrder?.state}
                   onChange={handleStateChange}
                 >
-                    {console.log(updatedOrder)}
+                  {console.log(updatedOrder)}
                   <FormControlLabel
                     value="PENDING"
                     control={<Radio />}

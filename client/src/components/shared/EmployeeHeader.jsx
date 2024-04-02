@@ -128,9 +128,9 @@ function EmployeeHeader({ props }) {
     let number = getNumberOfNotifications(notification);
     setnumberOfNotifications(number);
   }, [notification]);
-  const displayNotifications = (notification) => {
+  const displayNotifications = (notification, idx) => {
     let msg;
-    console.log(notification);
+    //console.log(notification);
     switch (notification?.type) {
       case 'addOrder':
         msg = 'place new order';
@@ -143,7 +143,10 @@ function EmployeeHeader({ props }) {
         break;
     }
     return (
-      <span className="notification">{`${notification.user.firstName} ${notification.user.lastName} ${msg}`}</span>
+      <span
+        className="notification"
+        key={idx}
+      >{`${notification.user.firstName} ${notification.user.lastName} ${msg}`}</span>
     );
   };
   const handleRead = () => {
@@ -189,7 +192,7 @@ function EmployeeHeader({ props }) {
         </button>
         {open && (
           <div className="notifications border-2 ">
-            {notification.map((n) => displayNotifications(n))}
+            {notification.map((n, idx) => displayNotifications(n, idx))}
             <button className="readBtn" onClick={() => handleRead()}>
               Mark as read
             </button>

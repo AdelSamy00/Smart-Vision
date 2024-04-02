@@ -10,7 +10,7 @@ function Profile({ socket, setSocket }) {
 
   return (
     <>
-      {console.log(socket.id)}
+      {console.log(socket?.id)}
       <section className="Profile">
         <div className="sbProfileHeader">
           <h1>He! {customer.username}</h1>

@@ -50,12 +50,12 @@ io.on('connection', (socket) => {
   });
 
   //when client set order
-  socket.on('setOrder', ({ user, products, type }) => {
+  socket.on('setOrder', ({ user, products, type, order }) => {
     const operator = getOperator(onlineUsers)[0];
     console.log('--------------------------');
     console.log(operator);
     console.log('--------------------------');
-    io.to(operator.socketId).emit('getOrders', { user, products, type });
+    io.to(operator.socketId).emit('getOrders', { user, products, type, order });
   });
 
   //when the user logout

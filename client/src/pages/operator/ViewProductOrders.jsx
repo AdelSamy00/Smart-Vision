@@ -17,7 +17,7 @@ const ViewProductOrders = ({ socket, setSocket }) => {
         const response = await axios.get(`/employees/orders`);
         setProductOrders(response.data.orders);
         setIsLoading(false);
-        console.log(response.data.orders);
+        //console.log(response.data.orders);
       } catch (error) {
         console.error(
           'Error fetching order history:',
@@ -27,7 +27,7 @@ const ViewProductOrders = ({ socket, setSocket }) => {
     }
 
     fetchOrderHistory();
-  }, []);
+  }, [notification]);
   useEffect(() => {
     socket?.on('getOrders', (data) => {
       console.log(data);
@@ -43,6 +43,24 @@ const ViewProductOrders = ({ socket, setSocket }) => {
         <Loading />
       ) : (
         <ul>
+          {notification?.length >= 1 && (
+            <div className="">
+              <h2 className=" flex flex-col justify-center items-center text-[#696969] text-3xl p-2">
+                New orders
+              </h2>
+              <li>
+                {console.log(notification)}
+                {notification?.map((notify, idx) => {
+                  let order = notify.order;
+                  console.log(order);
+                  return <ProductOrderComponent key={idx} order={order} />;
+                })}
+              </li>
+            </div>
+          )}
+          <h2 className=" flex flex-col justify-center items-center text-[#696969] text-3xl pb-4">
+            Orders
+          </h2>
           <li>
             {productOrders.length > 0 ? (
               productOrders?.map((order, index) => (

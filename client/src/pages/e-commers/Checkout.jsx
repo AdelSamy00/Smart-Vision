@@ -109,6 +109,7 @@ export default function Checkout({ socket, setSocket }) {
         user: shippingInfo,
         products: productsWithDetails,
         type: 'addOrder',
+        order: response.data.order,
       });
       dispatch(clearCart());
       setOrderNumber(response.data.order.orderNumber);

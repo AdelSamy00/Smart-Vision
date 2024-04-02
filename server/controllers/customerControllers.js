@@ -302,6 +302,12 @@ export const makeOrder = async (req, res, next) => {
           new Date().setDate(new Date().getDate() + 3)
         ),
       });
+      const populateOrder = await Orders.findById({ _id: order._id }).populate({
+        path: 'products',
+        populate: {
+          path: 'product',
+        },
+      });
       //save order to customer history and update his point
       customer.orderHistory.push(order._id);
       //customer will get points after his receive this order
@@ -315,7 +321,7 @@ export const makeOrder = async (req, res, next) => {
         success: true,
         message: 'the order has been made successfully',
         customer: updatedCustomer,
-        order: order,
+        order: populateOrder,
       });
     } else {
       res.status(404).json({
