@@ -128,6 +128,8 @@ export const addEmployee = async (req, res, next) => {
       qualification,
       birthday,
       salary,
+      phone,
+      address,
     } = req.body;
     if (
       !firstName ||
@@ -138,7 +140,7 @@ export const addEmployee = async (req, res, next) => {
       !jobTitle ||
       !qualification ||
       !birthday ||
-      !salary
+      !salary || !phone ||!address
     ) {
       next('Provide Required Fields!');
       return;
@@ -182,6 +184,8 @@ export const addEmployee = async (req, res, next) => {
       qualification: qualification,
       birthday: birthday,
       salary: salary,
+      phone:phone,
+      address:address,
     });
 
     res.status(201).json({
@@ -212,6 +216,8 @@ export const manageEmployees = async (req, res, next) => {
       qualification,
       birthday,
       salary,
+      phone,
+      address,
     } = req.body;
     const employeeData = req.body;
     if (
@@ -223,7 +229,9 @@ export const manageEmployees = async (req, res, next) => {
       !jobTitle ||
       !qualification ||
       !birthday ||
-      !salary
+      !salary ||
+      !phone ||
+      !address
     ) {
       next('Provide Required Fields!');
       return;

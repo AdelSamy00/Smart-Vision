@@ -29,6 +29,14 @@ const employeeSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Gender is Required!'],
     },
+    address: {
+      type: String,
+      required: [true, 'Address is Required!'],
+    },
+    phone: {
+      type: Number,
+      required: [true, 'Phone is Required!'],
+    },
     qualification: {
       type: String,
       required: [true, 'Qualification is Required!'],
