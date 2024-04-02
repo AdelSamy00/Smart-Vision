@@ -41,8 +41,16 @@
     gap: 8px;
 }
 
-.materialTransactionsFilterNavbarItem input,
-select {
+.materialTransactionsFilterNavbarItem input  {
+    border: 1px solid #9a9a9a;
+    border-radius: .5rem;
+    padding: 6px 10px;
+    text-align: center;
+    padding: 3px !important;
+    margin-right: .5rem !important;
+}
+
+.materialTransactionsFilterNavbarItem select {
     border: 1px solid #9a9a9a;
     border-radius: .5rem;
     padding: 6px 10px;

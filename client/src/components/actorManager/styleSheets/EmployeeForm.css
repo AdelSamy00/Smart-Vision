@@ -26,6 +26,7 @@
 }
 
 .employeeFormHeader button {
+    margin-top: .5rem;
     margin-left: auto;
     margin-right: 1rem;
     padding: .8rem 1rem;
@@ -74,4 +75,11 @@
     .employeeFormDivForTowFields .InputGroup {
         width: 100%;
     }
+
+    .customerFormHeader button {
+        margin-right: 0;
+        padding: .4rem .5rem;
+        margin-top: .5rem;
+    }
+
 }
