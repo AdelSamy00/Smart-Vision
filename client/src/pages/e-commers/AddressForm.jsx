@@ -1,44 +1,27 @@
-import React, { useEffect, useState } from "react";
+// AddressForm.js
+
+import React, { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 
-
-export default function AddressForm() {
-  const [formData, setFormData] = useState(() => {
-    const storedFormData = JSON.parse(localStorage.getItem("shippingInfo"));
-    return storedFormData || {
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
-      city: "",
-      country: "",
-      address: "",
-    };
-  });
-
-
+export default function AddressForm({ formData, onChange, errorMessage }) {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    onChange({ ...formData, [name]: value });
   };
+
   useEffect(() => {
     localStorage.setItem("shippingInfo", JSON.stringify(formData));
-    console.log(formData);
   }, [formData]);
-
 
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
         Shipping Address
       </Typography>
-      <form >
-      <Grid container spacing={2}>
+      <form>
+        <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField
               required
@@ -49,8 +32,11 @@ export default function AddressForm() {
               value={formData.firstName}
               onChange={handleInputChange}
               fullWidth
+              error={!!errorMessage.firstName}
+              helperText={errorMessage.firstName}
             />
           </Grid>
+
           <Grid item xs={12} sm={6}>
             <TextField
               required
@@ -61,6 +47,8 @@ export default function AddressForm() {
               value={formData.lastName}
               onChange={handleInputChange}
               fullWidth
+              error={!!errorMessage.lastName}
+              helperText={errorMessage.lastName}
             />
           </Grid>
           <Grid item xs={12}>
@@ -73,6 +61,8 @@ export default function AddressForm() {
               value={formData.phoneNumber}
               onChange={handleInputChange}
               fullWidth
+              error={!!errorMessage.phoneNumber}
+              helperText={errorMessage.phoneNumber}
             />
           </Grid>
           <Grid item xs={12}>
@@ -85,6 +75,8 @@ export default function AddressForm() {
               value={formData.address}
               onChange={handleInputChange}
               fullWidth
+              error={!!errorMessage.address}
+              helperText={errorMessage.address}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -97,6 +89,8 @@ export default function AddressForm() {
               required
               onChange={handleInputChange}
               fullWidth
+              error={!!errorMessage.city}
+              helperText={errorMessage.city}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -109,6 +103,8 @@ export default function AddressForm() {
               required
               onChange={handleInputChange}
               fullWidth
+              error={!!errorMessage.country}
+              helperText={errorMessage.country}
             />
           </Grid>
         </Grid>

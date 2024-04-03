@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography, Button } from "@mui/material";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "../Presenter/StyleSheets/PresenterProductsView.css";
 import { apiRequest } from "../../utils";
 import Loading from "../../components/shared/Loading";
 
-function ViewCutomizedOrders({ measure }) {
+function ViewCutomizedOrders() {
   const [requests, setRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { employee } = useSelector((state) => state.employee);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -18,20 +19,12 @@ function ViewCutomizedOrders({ measure }) {
           url: `/employees/engineer/${employee._id}`,
         });
         console.log("API response:", response.data);
-        // Filter services based on date condition
-        var filteredRequests;
-        if (measure === "true") {
-          filteredRequests = response.data.services.filter(
-            (request) => request.date
-          );
-        } else {
-          filteredRequests = response.data.services.filter(
-            (request) => !request.date
-          );
-        }
+        const filteredRequests = response.data.services.filter(
+          (request) => !request.date
+        );
 
         setRequests(filteredRequests);
-        // setRequests(response.data.services);
+
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching products:", error.response);
@@ -41,6 +34,7 @@ function ViewCutomizedOrders({ measure }) {
     fetchProducts();
   }, []);
 
+  console.log(requests);
   return (
     <Grid
       container
@@ -55,15 +49,9 @@ function ViewCutomizedOrders({ measure }) {
         </Grid>
       ) : requests.length > 0 ? (
         <Grid item xs={12} sm={10} md={10}>
-          {measure === "true" ? (
-            <Typography variant="h4" align="center" gutterBottom>
-              Needs Measuring Sevice Requests
-            </Typography>
-          ) : (
-            <Typography variant="h4" align="center" gutterBottom>
-              Sevice Requests
-            </Typography>
-          )}
+          <Typography variant="h4" align="center" gutterBottom>
+            Sevice Requests
+          </Typography>
 
           <Grid
             container
@@ -83,7 +71,7 @@ function ViewCutomizedOrders({ measure }) {
                     gutterBottom
                     className="presenter-product-info"
                   >
-                    Customer: {request.customer.username}
+                    Customer Name: {request.customer.username}
                   </Typography>
                   <Typography
                     variant="body2"
@@ -91,7 +79,7 @@ function ViewCutomizedOrders({ measure }) {
                     gutterBottom
                     className="presenter-product-description"
                   >
-                    Description: {request.description}
+                    Customer Number: 0{request.customer.phone}
                   </Typography>
                   <Typography>
                     <Link to={"/"}>
@@ -113,19 +101,6 @@ function ViewCutomizedOrders({ measure }) {
                       </Button>
                     </Link>
                   </Typography>
-                  {measure === "true" && (
-                    <Typography
-                      variant="body3"
-                      align="center"
-                      gutterBottom
-                      className="presenter-product-description"
-                    >
-                      Day: {request.date.day}
-                      <span style={{ marginLeft: "1.5rem" }}>
-                        Hour :{request.date.time}
-                      </span>
-                    </Typography>
-                  )}
                   <div className="button-container">
                     {" "}
                     <Link

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { handleMultipleFilesUpload } from "../../utils";
+import { apiRequest, handleMultipleFilesUpload } from "../../utils";
 import toast, { Toaster } from "react-hot-toast";
 import { TextField, Button, Grid, Typography } from "@mui/material";
 
@@ -67,10 +67,19 @@ function EditProductForm() {
       const updatedImages =
         uploadedImages.length > 0 ? uploadedImages : product.images;
       console.log(updatedImages);
-      const response = await axios.post(`/products/add-to-store/`, {
-        ...formData,
-        images: updatedImages,
-        show: true,
+      // const response = await axios.post(`/products/add-to-store/`, {
+      //   ...formData,
+      //   images: updatedImages,
+      //   show: true,
+      // });
+      const response = await apiRequest({
+        method: "POST",
+        url: `/products/add-to-store/`,
+        data: {
+          ...formData,
+          images: updatedImages,
+          show: true,
+        },
       });
       setFormData({
         name: "",
@@ -112,7 +121,7 @@ function EditProductForm() {
       />
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h4">Edit Product</Typography>
+          <Typography variant="h4">Add Product To Store</Typography>
         </Grid>
         <Grid item xs={6}>
           <TextField
@@ -206,7 +215,17 @@ function EditProductForm() {
           </label>
         </Grid>
         <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
-          <Button type="submit" variant="contained" color="primary">
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            style={{
+              height: 44,
+              padding: "0px 15px",
+              borderRadius: "5px",
+            }}
+          >
             {product?.show ? "Update Product" : "Add To Store"}
           </Button>
         </Grid>

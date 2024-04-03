@@ -46,6 +46,7 @@ import {
 import {
   CustomOrderForm,
   ViewCutomizedOrders,
+  ViewMeasuredCutomizedOrders,
   OrderDetailsEnginer,
 } from './pages/engineer/index.js';
 import {
@@ -54,7 +55,7 @@ import {
   ServiseDetailsOperator,
 } from './pages/operator/index.js';
 
-import { AddEmployee, EditEmployee } from './pages/actorManager/index.js';
+import { AddEmployee, EditEmployee,ViewEmployees } from './pages/actorManager/index.js';
 import { OrderDetailsFactory } from './pages/factory/index.js';
 import OrderComponent from './components/e-commers/OrderComponent.jsx';
 import AddProductForm from './components/inventory/AddProductFrom';
@@ -69,6 +70,7 @@ import {
 import { io } from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import EmployeeHeader from './components/shared/EmployeeHeader.jsx';
+import EditProductForm from './components/Presenter/EditProductPresenter.jsx';
 
 function App() {
   const location = useLocation();
@@ -176,6 +178,7 @@ function App() {
         <Route path="/presenter-home" element={<HomePresenter />} />
         <Route path="/presenter-view" element={<PresenterProductsView />} />
         <Route path="/ed/product/:productId" element={<EditProduct />} />
+        <Route path="addtoStore/product/:productId" element={<EditProductForm/>} />
         {/* Private Enginer Routes */}
         <Route
           path="/engineer/send-request/:requestId"
@@ -183,11 +186,11 @@ function App() {
         />
         <Route
           path="/engineer/view-measured-customized-requests"
-          element={<ViewCutomizedOrders measure="true" />}
+          element={<ViewMeasuredCutomizedOrders  />}
         />
         <Route
           path="/engineer/view-customized-requests"
-          element={<ViewCutomizedOrders measure="false" />}
+          element={<ViewCutomizedOrders  />}
         />
         <Route
           path="/e/order-details/:orderId"
@@ -213,6 +216,7 @@ function App() {
         />
         {/* Private actor manager Routes */}
         <Route path="/actor/add-employee" element={<AddEmployee />} />
+        <Route path="/actor/view-employees" element={<ViewEmployees/>} />
         <Route
           path="/actor/edit-employee/:employeeId"
           element={<EditEmployee />}

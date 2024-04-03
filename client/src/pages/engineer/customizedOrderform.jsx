@@ -30,16 +30,16 @@ const CustomOrderForm = () => {
   const [customOrder, setCustomOrder] = useState("");
   const newMaterialNameRef = useRef(null);
   const newMaterialQuantityRef = useRef(null);
-
+  console.log(requestId);
   useEffect(() => {
     const fetchCustomOrder = async () => {
       try {
         const response = await apiRequest({
           method: "GET",
-          url: `/employees/customizationOrders/${requestId}`,
+          url: `/employees/services/${requestId}`,
         });
-        setCustomOrder(response.data.customizationOrder);
-        // console.log(response.data.customizationOrder);
+        setCustomOrder(response.data.service[0]);
+        console.log(response.data.service[0].customer.username);
       } catch (error) {
         console.error("Error fetching custom order:", error);
       }
@@ -100,7 +100,7 @@ const CustomOrderForm = () => {
     try {
       const file =
         orderDetails.details && (await handleFileUpload(orderDetails.details));
-      console.log(file );
+      console.log(file);
       const response = await apiRequest({
         method: "POST",
         url: "employees/customizationOrders/",
@@ -121,9 +121,6 @@ const CustomOrderForm = () => {
     }
   };
   return (
-    //   <Typography variant="h2" style={{ marginBottom: "20px" }}>
-    //     Custom Order Form
-    //   </Typography>
     <form onSubmit={handleSubmit} className="custom-order-form">
       <Grid container spacing={2}>
         <Grid item xs={12} container>
