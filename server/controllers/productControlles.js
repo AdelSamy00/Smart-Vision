@@ -281,3 +281,24 @@ export const productsTransaction = async (req, res, next) => {
     });
   }
 };
+
+export const getProductsByCategory = async (req, res, next) => {
+  try {
+    const { category } = req.params; 
+
+    // Query the database for products based on the category
+    const products = await Products.find({ category: category });
+
+    res.status(200).json({
+      success: true,
+      message: 'Products retrieved successfully',
+      products: products,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve products',
+    });
+  }
+};

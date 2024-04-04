@@ -5,6 +5,7 @@ import {
   deleteProduct,
   getNotShownProducts,
   getProductById,
+  getProductsByCategory,
   getShowProducts,
   productsTransaction,
   updateProduct,
@@ -26,5 +27,6 @@ router.post('/', addProduct);
 router.get('/:id', getProductById);
 router.put('/:id', updateProduct);
 router.delete('/', deleteProduct);
+router.get('/category/:category',getProductsByCategory)
 
 export default router;
