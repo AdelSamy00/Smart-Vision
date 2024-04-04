@@ -7,6 +7,8 @@ import Reviews from '../models/Review.js';
 import ServicesOrders from '../models/ServiceOrder.js';
 import Employees from '../models/Employee.js';
 import { hashString } from '../utils/index.js';
+import bcrypt from 'bcrypt';
+
 
 export const getAllCustomers = async (req, res, next) => {
   const customers = await Customers.find({}).select('-password');
@@ -219,7 +221,9 @@ export const manageEmployees = async (req, res, next) => {
       phone,
       address,
     } = req.body;
+
     const employeeData = req.body;
+
     if (
       !employeeId ||
       !firstName ||
@@ -236,33 +240,37 @@ export const manageEmployees = async (req, res, next) => {
       next('Provide Required Fields!');
       return;
     }
+
     if (salary < 0) {
-      next('salary cannot be less then 0!');
+      next('salary cannot be less than 0!');
       return;
     }
+
     const updatedEmployee = await Employees.findByIdAndUpdate(
       { _id: employeeId },
       { ...employeeData },
-      { new: true }
+      { new: true, select: '-password' } // Correct placement of .select('-password')
     );
+
     res.status(200).json({
       success: true,
-      message: 'update employee successfully',
+      message: 'Update employee successfully',
       updatedEmployee,
     });
   } catch (error) {
     console.log(error);
     res.status(500).json({
       success: false,
-      message: 'failed to update employee data',
+      message: 'Failed to update employee data',
     });
   }
 };
 
+
 export const getAllEmployees = async (req, res, next) => {
   try {
     // Query the database to get all employees
-    const allEmployees = await Employees.find();
+    const allEmployees = await Employees.find().select('-password');
 
     res.status(200).json({
       success: true,
@@ -283,7 +291,7 @@ export const getEmployeeById = async (req, res, next) => {
     const { id } = req.params; // Assuming the employee ID is passed as a parameter in the URL
 
     // Query the database to find the employee by ID
-    const employee = await Employees.findById(id);
+    const employee = await Employees.findById(id).select('-password');
 
     if (!employee) {
       return res.status(404).json({
@@ -330,6 +338,52 @@ export const deleteEmployee = async (req, res, next) => {
     res.status(500).json({
       success: false,
       message: 'Failed to delete employee',
+    });
+  }
+};
+
+export const changePassword = async (req, res, next) => {
+  try {
+    const { email, currentPassword, newPassword } = req.body;
+
+    // Find the employee by email
+    const employee = await Employees.findOne({ email });
+
+    // If employee not found
+    if (!employee) {
+      return res.status(404).json({
+        success: false,
+        message: 'Employee not found',
+      });
+    }
+
+    // Check if the current password matches
+    const passwordMatch = await bcrypt.compare(currentPassword, employee.password);
+    if (!passwordMatch) {
+      return res.status(401).json({
+        success: false,
+        message: 'Current password is incorrect',
+      });
+    }
+
+    // Hash the new password
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the employee's password
+    employee.password = hashedNewPassword;
+
+    // Save the updated employee to the database
+    await employee.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Password changed successfully',
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to change password',
     });
   }
 };

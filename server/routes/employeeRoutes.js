@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   addEmployee,
+  changePassword,
   deleteEmployee,
   deleteReview,
   getAllCustomers,
@@ -90,6 +91,7 @@ router.put('/', manageEmployees);
 router.get('/', getAllEmployees);
 router.get('/:id', getEmployeeById);
 router.delete('/', deleteEmployee);
+router.put('/change_password',changePassword)
 //#end region
 
 router.put('/update_state',updateServiceOrderStateToManufactured)
