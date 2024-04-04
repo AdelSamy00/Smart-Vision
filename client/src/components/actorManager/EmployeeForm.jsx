@@ -167,7 +167,6 @@ function EmployeeForm() {
     await axios
       .get(`/employees/${employeeId}`)
       .then((res) => {
-        console.log(res?.data?.employee);
         setEmployeetData(res?.data?.employee);
       })
       .catch((e) => {
@@ -395,46 +394,49 @@ function EmployeeForm() {
                 </div>
               </Form.Group>
             </div>
-            <div className="employeeFormDivForTowFields">
-              <Form.Group className="InputGroup">
-                <Form.Label htmlFor="password" className="FormLabel">
-                  Password
-                </Form.Label>
-                <Form.Control
-                  required
-                  className="InputField"
-                  name="password"
-                  id="password"
-                  type="password"
-                  placeholder="Password"
-                  minLength={'8'}
-                  value={password}
-                  onChange={(e) => setpassword(e.target.value)}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Minimum 8 characters.
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group className="InputGroup">
-                <Form.Label htmlFor="confirmpassword" className="FormLabel">
-                  confirm Password
-                </Form.Label>
-                <Form.Control
-                  isInvalid={!PasswordConformed}
-                  className="InputField"
-                  name="confirmpassword"
-                  id="confirmpassword"
-                  type="password"
-                  minLength={'8'}
-                  placeholder="confirm Password"
-                  value={confirmpassword}
-                  onChange={(e) => setconfirmpassword(e.target.value)}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Password not Conform.
-                </Form.Control.Feedback>
-              </Form.Group>
-            </div>
+            {!employeeId? (
+              <div className="employeeFormDivForTowFields">
+                <Form.Group className="InputGroup">
+                  <Form.Label htmlFor="password" className="FormLabel">
+                    Password
+                  </Form.Label>
+                  <Form.Control
+                    required
+                    className="InputField"
+                    name="password"
+                    id="password"
+                    type="password"
+                    placeholder="Password"
+                    minLength={'8'}
+                    value={password}
+                    onChange={(e) => setpassword(e.target.value)}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Minimum 8 characters.
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="InputGroup">
+                  <Form.Label htmlFor="confirmpassword" className="FormLabel">
+                    confirm Password
+                  </Form.Label>
+                  <Form.Control
+                    isInvalid={!PasswordConformed}
+                    className="InputField"
+                    name="confirmpassword"
+                    id="confirmpassword"
+                    type="password"
+                    minLength={'8'}
+                    placeholder="confirm Password"
+                    value={confirmpassword}
+                    onChange={(e) => setconfirmpassword(e.target.value)}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Password not Conform.
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </div>
+            ):null}
+
             <div className="flex justify-around flex-row-reverse ">
               <button
                 type="submit"
