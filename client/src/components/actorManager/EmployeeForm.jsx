@@ -47,7 +47,7 @@ function EmployeeForm() {
   const [qualification, setqualification] = useState('');
   const [employeeType, setemployeeType] = useState('');
   const [salary, setsalary] = useState('');
-  const [photo, setphoto] = useState('');
+  const [image, setimage] = useState('');
   const [password, setpassword] = useState('');
   const [confirmpassword, setconfirmpassword] = useState('');
   const [PasswordConformed, setPasswordConformed] = useState(false);
@@ -65,7 +65,7 @@ function EmployeeForm() {
     setaddress(employee?.address);
     setqualification(employee?.qualification);
     setphone(employee?.phone);
-    setphoto(employee?.photo);
+    setimage(employee?.image);
     setemployeeType(employee?.jobTitle);
     setpassword(employee?.password);
     setconfirmpassword(employee?.password);
@@ -73,7 +73,6 @@ function EmployeeForm() {
   }
 
   async function handleDeleteEmployee() {
-    console.log('handleDeleteEmplyee');
     try {
       await axios
         .delete(`/employees/`, {
@@ -90,8 +89,65 @@ function EmployeeForm() {
     }
   }
 
-  function handleAddEmployee() {}
-  function handleUpdateEmployee() {}
+  async function handleAddEmployee() {
+    try {
+      await axios
+        .post(`/employees/`, {
+          firstName,
+          lastName,
+          username: `${firstName} ${lastName}`,
+          email,
+          password,
+          gender,
+          jobTitle: employeeType,
+          qualification,
+          birthday: dateOfBirth,
+          salary,
+          phone,
+          address,
+          image,
+        })
+        .then((res) => {
+          // navigate('/');
+          console.log(res);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function handleUpdateEmployee() {
+    try {
+      await axios
+        .put(`/employees/`, {
+          employeeId,
+          firstName,
+          lastName,
+          username: `${firstName} ${lastName}`,
+          email,
+          password,
+          gender,
+          jobTitle: employeeType,
+          qualification,
+          birthday: dateOfBirth,
+          salary,
+          phone,
+          address,
+          image,
+        })
+        .then((res) => {
+          // navigate('/');
+          console.log(res);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
@@ -101,9 +157,9 @@ function EmployeeForm() {
       setValidated(true);
     } else {
       console.log('first');
-      setIsLoading(true);
+      // setIsLoading(true);
       employeeId ? handleUpdateEmployee() : handleAddEmployee();
-      //const picture = photo && (await handleFileUpload(photo));
+      //const picture = image && (await handleFileUpload(image));
     }
   };
 
@@ -333,7 +389,7 @@ function EmployeeForm() {
                     className="uploadBtn file:hidden text-gray-700 bg-gray-300"
                     style={{ width: '145px' }}
                     onChange={(e) => {
-                      setphoto(e.target.files[0]);
+                      setimage(e.target.files[0]);
                     }}
                   />
                 </div>
