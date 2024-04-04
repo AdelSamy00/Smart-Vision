@@ -55,7 +55,28 @@ io.on('connection', (socket) => {
     console.log('--------------------------');
     console.log(operator);
     console.log('--------------------------');
-    io.to(operator.socketId).emit('getOrders', { user, products, type, order });
+    if (operator) {
+      io.to(operator?.socketId).emit('notifications', {
+        user,
+        products,
+        type,
+        order,
+      });
+    }
+  });
+
+  socket.on('setService', ({ user, type, serviceOrder }) => {
+    const operator = getOperator(onlineUsers)[0];
+    console.log('--------------------------');
+    console.log(operator);
+    console.log('--------------------------');
+    if (operator) {
+      io.to(operator?.socketId).emit('notifications', {
+        user,
+        type,
+        serviceOrder,
+      });
+    }
   });
 
   //when the user logout

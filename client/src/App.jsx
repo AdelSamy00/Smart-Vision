@@ -57,7 +57,11 @@ import {
   EditCustomer,
 } from './pages/operator/index.js';
 
-import { AddEmployee, EditEmployee,ViewEmployees } from './pages/actorManager/index.js';
+import {
+  AddEmployee,
+  EditEmployee,
+  ViewEmployees,
+} from './pages/actorManager/index.js';
 import { OrderDetailsFactory } from './pages/factory/index.js';
 import OrderComponent from './components/e-commers/OrderComponent.jsx';
 import AddProductForm from './components/inventory/AddProductFrom';
@@ -88,7 +92,7 @@ function App() {
 
   useEffect(() => {
     if (customer?.email || employee?.email) {
-      setSocket(io('http://localhost:3000'));
+      setSocket(io(import.meta.env.VITE_APP_SERVER_URL));
     }
   }, []);
   useEffect(() => {
@@ -122,7 +126,10 @@ function App() {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/services" element={<Services />} />
-        <Route path="/services/:serviceName" element={<ServicesDetails />} />
+        <Route
+          path="/services/:serviceName"
+          element={<ServicesDetails socket={socket} setSocket={setSocket} />}
+        />
         <Route path="/store" element={<Store />} />
         <Route path="/product/:productId" element={<ProductDetails />} />{' '}
         <Route path="/bag" element={<Bag />} />
@@ -213,7 +220,7 @@ function App() {
         />
         <Route
           path="/operator/view-Service-orders"
-          element={<ViewServiceOrder />}
+          element={<ViewServiceOrder socket={socket} setSocket={setSocket} />}
         />
         <Route
           path="/operator/servise-details/:serviceId"

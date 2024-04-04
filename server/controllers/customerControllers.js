@@ -577,6 +577,13 @@ export const makeService = async (req, res, next) => {
         new Date().setDate(new Date().getDate() + 3)
       ),
     });
+
+    const populatedServiceOrder = await ServicesOrders.findById({
+      _id: serviceOrder._id,
+    }).populate({
+      path: 'customer',
+      select: '_id username email gender phone verified address -password',
+    });
     //save service order to customer history
     customer.serviceHistory.push(serviceOrder._id);
     const updatedCustomer = await Customers.findByIdAndUpdate(
@@ -588,6 +595,7 @@ export const makeService = async (req, res, next) => {
       success: true,
       message: 'the order has been made successfully',
       customer: updatedCustomer,
+      serviceOrder: populatedServiceOrder,
     });
   } catch (error) {
     res.status(404).json({

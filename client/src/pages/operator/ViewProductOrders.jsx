@@ -11,6 +11,7 @@ const ViewProductOrders = ({ socket, setSocket }) => {
   const [isLoading, setIsLoading] = useState(true);
   const { notification } = useSelector((state) => state?.notification);
   const dispatch = useDispatch();
+  const [ordersNotification, setOrdersNotification] = useState([]);
   useEffect(() => {
     async function fetchOrderHistory() {
       try {
@@ -29,13 +30,17 @@ const ViewProductOrders = ({ socket, setSocket }) => {
     fetchOrderHistory();
   }, [notification]);
   useEffect(() => {
-    socket?.on('getOrders', (data) => {
+    socket?.on('notifications', (data) => {
       console.log(data);
       //let number = getNumberOfNotifications(notification);
       dispatch(setNotification([...notification, data]));
-      //setNotification([...notification, data]);
     });
   }, [socket]);
+  useEffect(() => {
+    setOrdersNotification(
+      notification.filter((notify) => notify.type === 'addOrder')
+    );
+  }, [notification]);
   return (
     <div>
       {console.log(socket?.id)}
@@ -43,14 +48,14 @@ const ViewProductOrders = ({ socket, setSocket }) => {
         <Loading />
       ) : (
         <ul>
-          {notification?.length >= 1 && (
+          {console.log(ordersNotification)}
+          {ordersNotification?.length >= 1 && (
             <div className="">
               <h2 className=" flex flex-col justify-center items-center text-[#696969] text-3xl p-2">
                 New orders
               </h2>
               <li>
-                {console.log(notification)}
-                {notification?.map((notify, idx) => {
+                {ordersNotification?.map((notify, idx) => {
                   let order = notify.order;
                   console.log(order);
                   return <ProductOrderComponent key={idx} order={order} />;

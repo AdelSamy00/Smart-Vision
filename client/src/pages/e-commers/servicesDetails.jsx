@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import BookingServiceForm from '../../components/e-commers/BookingServiceForm';
 import './StyleSheets/servicesdetails.css';
-function ServicesDetails() {
+function ServicesDetails({ socket, setSocket }) {
   const { state } = useLocation();
   const service = state ? state.service : null;
 
@@ -25,7 +25,7 @@ function ServicesDetails() {
         </p>
       </div>
       <div className="formContent">
-        <BookingServiceForm />
+        <BookingServiceForm socket={socket} setSocket={socket} />
       </div>
     </div>
   );

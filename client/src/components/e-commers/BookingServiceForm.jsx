@@ -7,7 +7,7 @@ import { handleMultipleFilesUpload } from '../../utils';
 import Loading from '../shared/Loading';
 import { TextField, Button, Grid } from '@mui/material';
 import { apiRequest } from '../../utils';
-function BookingServiceForm() {
+function BookingServiceForm({ socket, setSocket }) {
   const { state } = useLocation();
   const [images, setImages] = useState([{}]);
   const service = state ? state.service : null;
@@ -39,28 +39,25 @@ function BookingServiceForm() {
 
       console.log('Uploaded Image URL:', uploadedImages);
       const response = await apiRequest({
-        method:"post",
-        url:'/customers/service',
-        data:{
+        method: 'post',
+        url: '/customers/service',
+        data: {
           id: customer._id,
           service: service.title,
           description: formData.description,
           images: uploadedImages,
           phone: formData.phoneNumber,
           address: formData.address,
-        }
-      })
-      
-      // axios.post('/customers/service', {
-      //   id: customer._id,
-      //   service: service.title,
-      //   description: formData.description,
-      //   images: uploadedImages,
-      //   phone: formData.phoneNumber,
-      //   address: formData.address,
-      // });
+        },
+      });
       if (response.data.success) {
+        console.log(response.data);
         setFormSubmitted(true);
+        socket?.emit('setService', {
+          user: customer,
+          type: 'addService',
+          serviceOrder: response?.data.serviceOrder,
+        });
       } else {
         console.error(response.data.message);
       }
@@ -72,6 +69,7 @@ function BookingServiceForm() {
   };
   return (
     <div>
+      {console.log(socket)}
       <h2
         style={{ fontSize: '20px', fontWeight: 'bold', paddingBottom: '20px' }}
       >

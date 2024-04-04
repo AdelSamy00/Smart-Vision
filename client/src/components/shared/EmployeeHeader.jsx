@@ -133,20 +133,20 @@ function EmployeeHeader({ props }) {
     //console.log(notification);
     switch (notification?.type) {
       case 'addOrder':
-        msg = 'place new order';
+        msg = `${notification.user.firstName} ${notification.user.lastName} place new order`;
         break;
       case 'addService':
-        msg = 'place new Service order';
+        msg = `${notification.serviceOrder.customer.username} place new Service order`;
         break;
       default:
         msg = 'wrong';
         break;
     }
     return (
-      <span
-        className="notification"
-        key={idx}
-      >{`${notification.user.firstName} ${notification.user.lastName} ${msg}`}</span>
+      <span className="notification" key={idx}>
+        {/* {`${notification.user.firstName} ${notification.user.lastName} ${msg}`} */}
+        {`${msg}`}
+      </span>
     );
   };
   const handleRead = () => {
