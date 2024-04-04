@@ -53,6 +53,8 @@ import {
   ViewProductOrders,
   ViewServiceOrder,
   ServiseDetailsOperator,
+  AddCustomer,
+  EditCustomer,
 } from './pages/operator/index.js';
 
 import { AddEmployee, EditEmployee,ViewEmployees } from './pages/actorManager/index.js';
@@ -178,7 +180,10 @@ function App() {
         <Route path="/presenter-home" element={<HomePresenter />} />
         <Route path="/presenter-view" element={<PresenterProductsView />} />
         <Route path="/ed/product/:productId" element={<EditProduct />} />
-        <Route path="addtoStore/product/:productId" element={<EditProductForm/>} />
+        <Route
+          path="addtoStore/product/:productId"
+          element={<EditProductForm />}
+        />
         {/* Private Enginer Routes */}
         <Route
           path="/engineer/send-request/:requestId"
@@ -186,11 +191,11 @@ function App() {
         />
         <Route
           path="/engineer/view-measured-customized-requests"
-          element={<ViewMeasuredCutomizedOrders  />}
+          element={<ViewMeasuredCutomizedOrders />}
         />
         <Route
           path="/engineer/view-customized-requests"
-          element={<ViewCutomizedOrders  />}
+          element={<ViewCutomizedOrders />}
         />
         <Route
           path="/e/order-details/:orderId"
@@ -214,9 +219,14 @@ function App() {
           path="/operator/servise-details/:serviceId"
           element={<ServiseDetailsOperator />}
         />
+        <Route path="/operator/add-customer" element={<AddCustomer />} />
+        <Route
+          path="/operator/edit-customer/:customerId"
+          element={<EditCustomer />}
+        />
         {/* Private actor manager Routes */}
         <Route path="/actor/add-employee" element={<AddEmployee />} />
-        <Route path="/actor/view-employees" element={<ViewEmployees/>} />
+        <Route path="/actor/view-employees" element={<ViewEmployees />} />
         <Route
           path="/actor/edit-employee/:employeeId"
           element={<EditEmployee />}
