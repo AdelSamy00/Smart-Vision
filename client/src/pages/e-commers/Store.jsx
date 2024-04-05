@@ -11,6 +11,7 @@ import Loading from '../../components/shared/Loading';
 import PropTypes from 'prop-types';
 import CheckIcon from '@mui/icons-material/Check';
 import { apiRequest } from '../../utils';
+import LoginMessage from '../../components/e-commers/LoginMessage';
 const Store = ({ selectedCategory, selectedPrice }) => {
   const [selectedColor, setSelectedColor] = useState('');
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
@@ -43,6 +44,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
   const { cart } = useSelector((state) => state.cart);
   const [favoriteList, setFavoriteList] = useState(customer?.favoriteList);
   const [inCart, setInCart] = useState(null);
+  const [showLoginMessage, setshowLoginMessage] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -74,16 +76,17 @@ const Store = ({ selectedCategory, selectedPrice }) => {
     if (customer?._id) {
       favorites(customer?._id, id);
     } else {
-      navigate('/login');
+      setshowLoginMessage(true);
     }
   };
   async function favorites(id, productId) {
     await apiRequest({
-      method:"post",
-      url:"/customers/favorite",
-      data:{
-        id, productId
-      }
+      method: 'post',
+      url: '/customers/favorite',
+      data: {
+        id,
+        productId,
+      },
     })
       .then((res) => {
         const newData = {
@@ -515,6 +518,10 @@ const Store = ({ selectedCategory, selectedPrice }) => {
           />
         ))}
       </div>
+      <LoginMessage
+        showLoginMessage={showLoginMessage}
+        setshowLoginMessage={setshowLoginMessage}
+      />
     </div>
   );
 };
