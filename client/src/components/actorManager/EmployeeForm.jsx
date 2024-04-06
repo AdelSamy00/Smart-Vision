@@ -60,7 +60,7 @@ function EmployeeForm() {
     setlastName(employee?.lastName);
     setemail(employee?.email);
     setgender(employee?.gender);
-    setdateOfBirth(employee?.birthday.substring(0, 10));
+    setdateOfBirth(employee?.birthday?.substring(0, 10));
     setsalary(employee?.salary);
     setaddress(employee?.address);
     setqualification(employee?.qualification);
