@@ -11,6 +11,7 @@ import './StyleSheets/ProductDetails.css';
 import AddReview from '../../components/e-commers/AddReview';
 import { setCart } from '../../redux/CartSlice';
 import Loading from '../../components/shared/Loading';
+import LoginMessage from '../../components/e-commers/LoginMessage';
 
 function ProductDetails() {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ function ProductDetails() {
   const [progressBar, setProgressBar] = useState(null);
   const [inCart, setInCart] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showLoginMessage, setshowLoginMessage] = useState(false);
 
   //set valuse to prograss bar
   function setUpPrograssBar(reviews) {
@@ -100,13 +102,13 @@ function ProductDetails() {
           console.log(e);
         });
     } else {
-      navigate('/login');
+      setshowLoginMessage(true)
     }
   };
 
   function isFavorite(product) {
     const flag = product?.likes.find((fav) => {
-      return fav === customer._id;
+      return fav === customer?._id;
     });
     if (flag) {
       setFavorite(true);
@@ -140,7 +142,7 @@ function ProductDetails() {
     await axios
       .post('/customers/review', { customerId, productId, comment, rating })
       .then((res) => {
-        console.log(res.data.review);
+        // console.log(res.data.review);
         setReviews((prevReviews) => {
           return [...prevReviews, res.data.review];
         });
@@ -177,7 +179,7 @@ function ProductDetails() {
     await axios
       .put('/customers/review', { productId, reviewId, comment, rating })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setReviews((prevReviews) => {
           return prevReviews.map((review) => {
             if (review?._id === reviewId) {
@@ -410,6 +412,10 @@ function ProductDetails() {
           </div>
         </>
       )}
+      <LoginMessage
+        showLoginMessage={showLoginMessage}
+        setshowLoginMessage={setshowLoginMessage}
+      />
     </main>
   );
 }

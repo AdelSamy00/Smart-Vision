@@ -12,6 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import { Link, useNavigate } from 'react-router-dom';
 import Badge from '@mui/material/Badge';
 import axios from 'axios';
+import LoginMessage from '../e-commers/LoginMessage';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const Header = () => {
   const [Products, setProducts] = useState([]);
   const [filteredProducts, setfilteredProducts] = useState([]);
   const [searchValue, setsearchValue] = useState('');
+  const [showLoginMessage, setshowLoginMessage] = useState(false);
 
   async function getProducts() {
     try {
@@ -120,12 +122,15 @@ const Header = () => {
             <button
               className="btnHover favorite"
               style={{ outline: 'none', padding: '4px 12px' }}
+              onClick={() => {
+                customer?._id
+                  ? navigate('/favourites')
+                  : setshowLoginMessage(true);
+              }}
             >
-              <Link to={'/favourites'}>
-                <FavoriteIcon
-                  style={{ fontSize: '22px', marginTop: '0.8rem' }}
-                ></FavoriteIcon>
-              </Link>
+              <FavoriteIcon
+                style={{ fontSize: '22px', marginTop: '0.8rem' }}
+              ></FavoriteIcon>
             </button>
             <Link to={'./bag'}>
               <IconButton
@@ -178,7 +183,7 @@ const Header = () => {
               onFocus={() => setshowSearchResults(true)}
               onBlur={() => {
                 setTimeout(() => {
-                  setsearchValue('')
+                  setsearchValue('');
                   setshowSearchResults(false);
                 }, 150);
               }}
@@ -242,6 +247,10 @@ const Header = () => {
           </button>
         </Toolbar>
       </div>
+      <LoginMessage
+        showLoginMessage={showLoginMessage}
+        setshowLoginMessage={setshowLoginMessage}
+      />
     </header>
   );
 };

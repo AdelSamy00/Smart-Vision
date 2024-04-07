@@ -7,12 +7,10 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   position: relative;
-  flex: 0 0 auto;
 }
 
 .sbProductCardData {
   padding: 1rem;
-  /* background-color: rgba(239, 239, 239, 0.56); */
 }
 
 .sbProductCardData h5 {
@@ -42,7 +40,6 @@
   padding: 0.54rem 0.9rem;
   position: absolute;
   bottom: 0;
-  /* background-color: rgba(239, 239, 239, 0.56); */
 }
 
 .sbProductCardFooterIcon {
@@ -111,14 +108,3 @@
   text-decoration: underline;
 }
 
-@media screen and (max-width: 725px) {
-  .productCard {
-    width: 320px ;
-  }
-  .sbProductCardData h5 {
-    font-size: 25px;
-  }
-  .sbProductCardFooter {
-    padding: 0.29rem 1rem;
-  }
-}
