@@ -9,10 +9,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import Slide from '@mui/material/Slide';
 import CloseIcon from '@mui/icons-material/Close';
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import { useSelector } from 'react-redux';
 
 // const tempImages = [
 //   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848315/Smart%20Vision/vojtech-bruzek-Yrxr3bsPdS0-unsplash_ekmimc.jpg',
@@ -24,7 +21,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 //   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848324/Smart%20Vision/febrian-zakaria-2QTsCoQnoag-unsplash_vjvjwj.jpg',
 //   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848329/Smart%20Vision/kenny-eliason-iAftdIcgpFc-unsplash_l33xyj.jpg',
 // ];
-function CustomizedOrderDetails({ order, employeeType }) {
+function CustomizedOrderDetails({ order, employeeType, socket, setSocket }) {
+  const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
   console.log(order);
   let current = new Date();
   const images = order?.images;
@@ -32,6 +32,7 @@ function CustomizedOrderDetails({ order, employeeType }) {
   const engineer = order?.assignedEngineer;
   const pdf = order?.details;
   const orderDate = order?.updatedAt?.substring(0, 10); // to take date only
+  const { employee } = useSelector((state) => state?.employee);
   const [mainImage, setmainImage] = useState(images ? images[0] : null);
   const [assignedEngineer, setassignedEngineer] = useState(null);
   const [measuringDate, setmeasuringDate] = useState(null);
@@ -82,6 +83,13 @@ function CustomizedOrderDetails({ order, employeeType }) {
         )
         .then((res) => {
           console.log(res.data);
+          console.log({ assignedEngineer });
+          socket?.emit('assignEngineer', {
+            user: employee,
+            to: assignedEngineer,
+            type: 'assignEngineerToCustomizationOrder',
+            serviceOrder: res.data.service,
+          });
         })
         .catch((error) => {
           console.log(error);

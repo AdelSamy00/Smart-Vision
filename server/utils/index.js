@@ -42,3 +42,9 @@ export const getUser = (username, onlineUsers) => {
 export const getOperator = (onlineUsers) => {
   return onlineUsers.filter((User) => User?.jobTitle === 'Operator');
 };
+
+export const getEngineer = (onlineUsers, to) => {
+  return onlineUsers.filter(
+    (User) => User?.jobTitle === 'Engineer' && User?._id === to
+  );
+};

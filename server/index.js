@@ -12,7 +12,12 @@ import helmet from 'helmet';
 import dbConnection from './db/index.js';
 import router from './routes/index.js';
 import errorMiddleware from './middlewares/errorMiddleware.js';
-import { addNewOnline, getOperator, removeUser } from './utils/index.js';
+import {
+  addNewOnline,
+  getOperator,
+  removeUser,
+  getEngineer,
+} from './utils/index.js';
 
 dotenv.config();
 const __dirname = path.resolve(path.dirname(''));
@@ -72,6 +77,21 @@ io.on('connection', (socket) => {
     console.log('--------------------------');
     if (operator) {
       io.to(operator?.socketId).emit('notifications', {
+        user,
+        type,
+        serviceOrder,
+      });
+    }
+  });
+  //assign engineer
+  socket.on('assignEngineer', ({ user, to, type, serviceOrder }) => {
+    console.log('to: ', to);
+    const engineer = getEngineer(onlineUsers, to)[0];
+    console.log('--------------------------');
+    console.log(engineer);
+    console.log('--------------------------');
+    if (engineer) {
+      io.to(engineer?.socketId).emit('notifications', {
         user,
         type,
         serviceOrder,

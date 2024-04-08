@@ -150,15 +150,20 @@ export const assignedEnginerToService = async (req, res, next) => {
         { _id: serviceId },
         { assignedEngineer: engineerId, date: date },
         { new: true }
-      );
+      ).populate({
+        path: 'customer',
+        select: '_id username email gender phone verified address -password',
+      });
     } else {
       service = await ServicesOrders.findByIdAndUpdate(
         { _id: serviceId },
         { assignedEngineer: engineerId },
         { new: true }
-      );
+      ).populate({
+        path: 'customer',
+        select: '_id username email gender phone verified address -password',
+      });
     }
-
     res.status(200).json({
       success: true,
       message: 'assignd engineer to order successfully',

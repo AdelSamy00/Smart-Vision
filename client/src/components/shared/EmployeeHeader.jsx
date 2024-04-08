@@ -138,6 +138,9 @@ function EmployeeHeader({ props }) {
       case 'addService':
         msg = `${notification.serviceOrder.customer.username} place new Service order`;
         break;
+      case 'assignEngineerToCustomizationOrder':
+        msg = `${notification.user.username} assign you to new customization order`;
+        break;
       default:
         msg = 'wrong';
         break;

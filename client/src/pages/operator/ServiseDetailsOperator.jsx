@@ -4,7 +4,7 @@ import CustomizedOrderDetails from '../../components/shared/CustomizedOrderDetai
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-function ServiseDetailsOperator() {
+function ServiseDetailsOperator({ socket, setSocket }) {
   const [order, setorder] = useState();
   const [orderNumber, setorderNumber] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -30,12 +30,18 @@ function ServiseDetailsOperator() {
 
   return (
     <>
+      {console.log(socket?.id)}
       {!isLoading ? (
         <main className="OrderDetailsFactoryMain">
           <h1>
             Order ID: <span>{orderNumber}</span>
           </h1>
-          <CustomizedOrderDetails order={order} employeeType={'OPERATOR'} />
+          <CustomizedOrderDetails
+            order={order}
+            employeeType={'OPERATOR'}
+            socket={socket}
+            setSocket={setSocket}
+          />
         </main>
       ) : (
         <div className="h-screen">

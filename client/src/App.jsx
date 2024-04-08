@@ -198,11 +198,18 @@ function App() {
         />
         <Route
           path="/engineer/view-measured-customized-requests"
-          element={<ViewMeasuredCutomizedOrders />}
+          element={
+            <ViewMeasuredCutomizedOrders
+              socket={socket}
+              setSocket={setSocket}
+            />
+          }
         />
         <Route
           path="/engineer/view-customized-requests"
-          element={<ViewCutomizedOrders />}
+          element={
+            <ViewCutomizedOrders socket={socket} setSocket={setSocket} />
+          }
         />
         <Route
           path="/e/order-details/:orderId"
@@ -224,7 +231,9 @@ function App() {
         />
         <Route
           path="/operator/servise-details/:serviceId"
-          element={<ServiseDetailsOperator />}
+          element={
+            <ServiseDetailsOperator socket={socket} setSocket={setSocket} />
+          }
         />
         <Route path="/operator/add-customer" element={<AddCustomer />} />
         <Route

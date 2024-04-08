@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreIcon from '@mui/icons-material/More';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { setNotification } from '../../redux/NotificationSlice';
 import { useDispatch, useSelector } from 'react-redux';
 const ExpandMore = ({ expand, ...other }) => <IconButton {...other} />;
@@ -27,6 +27,7 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
   const { notification } = useSelector((state) => state?.notification);
   const [serviceNotifications, setServiceNotifications] = useState([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     async function fetchOrderHistory() {
       try {
@@ -98,7 +99,12 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
                         title={order.service}
                         style={{ marginTop: '10px' }}
                       />
-                      <CardContent style={{ marginTop: '-20px' }}>
+                      <CardContent
+                        style={{ marginTop: '-20px' }}
+                        onClick={() => {
+                          navigate(`/operator/servise-details/${order?._id}`);
+                        }}
+                      >
                         {`Date: ${order.createdAt
                           .substring(0, 10)
                           .split('-')
@@ -164,7 +170,12 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
                     title={order.service}
                     style={{ marginTop: '10px' }}
                   />
-                  <CardContent style={{ marginTop: '-20px' }}>
+                  <CardContent
+                    style={{ marginTop: '-20px' }}
+                    onClick={() => {
+                      navigate(`/operator/servise-details/${order?._id}`);
+                    }}
+                  >
                     {`Date: ${order.createdAt
                       .substring(0, 10)
                       .split('-')
