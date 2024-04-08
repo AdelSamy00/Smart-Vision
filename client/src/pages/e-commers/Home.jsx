@@ -23,7 +23,7 @@ const categories = [
 const prices = [
   { low: 5000, imageUrl: "../chair.jpg", name: "Under 5000EGP" },
   { low: 13000, imageUrl: "../sofa.avif", name: "Under 13000EGP" },
-  { low: 33000, imageUrl: "../bed.jpg", name: "Under 5000EGP" },
+  { low: 33000, imageUrl: "../bed.jpg", name: "Under 33000EGP" },
   { low: "", name: "Last", imageUrl: "" },
 ];
 const offers = [
@@ -71,7 +71,7 @@ function Homepage() {
   return (
     <div className="Home">
       <div
-        className="rounded-lg sm:h-60 md:h-full overflow-hidden"
+        className="rounded-lg  md:h-full overflow-hidden"
         style={{ marginBottom: "3.2rem", width: "90%", margin: "auto" }}
       >
         <div className=" ">
@@ -80,7 +80,7 @@ function Homepage() {
               {offers.map((offer) => (
                 <div
                   key={offer.id}
-                  className="offer-item rounded-lg sm:h-60 md:h-full w-full"
+                  className="offer-item rounded-lg  xs:h-full w-full"
                 >
                   <div
                     className="flex flex-col justify-center items-center w-full h-[400px] bg-center"

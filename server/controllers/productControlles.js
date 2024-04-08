@@ -287,7 +287,7 @@ export const getProductsByCategory = async (req, res, next) => {
     const { category } = req.params; 
 
     // Query the database for products based on the category
-    const products = await Products.find({ category: category });
+    const products = await Products.find({ category: category,show:"true" });
 
     res.status(200).json({
       success: true,

@@ -1,17 +1,18 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import Rating from '@mui/material/Rating';
-import { useDispatch, useSelector } from 'react-redux';
-import { SetCustomer } from '../../redux/CustomerSlice';
-import ProgressBar from 'react-bootstrap/ProgressBar';
-import StarIcon from '@mui/icons-material/Star';
-import Reviews from '../../components/e-commers/Reviews';
-import './StyleSheets/ProductDetails.css';
-import AddReview from '../../components/e-commers/AddReview';
-import { setCart } from '../../redux/CartSlice';
-import Loading from '../../components/shared/Loading';
-import LoginMessage from '../../components/e-commers/LoginMessage';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import Rating from "@mui/material/Rating";
+import { useDispatch, useSelector } from "react-redux";
+import { SetCustomer } from "../../redux/CustomerSlice";
+import ProgressBar from "react-bootstrap/ProgressBar";
+import StarIcon from "@mui/icons-material/Star";
+import Reviews from "../../components/e-commers/Reviews";
+import "./StyleSheets/ProductDetails.css";
+import AddReview from "../../components/e-commers/AddReview";
+import { setCart } from "../../redux/CartSlice";
+import Loading from "../../components/shared/Loading";
+import LoginMessage from "../../components/e-commers/LoginMessage";
+import HomeSlider from "../../components/e-commers/HomeSlider";
 
 function ProductDetails() {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ function ProductDetails() {
   const [inCart, setInCart] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showLoginMessage, setshowLoginMessage] = useState(false);
+  const [products, setProducts] = useState([]);
 
   //set valuse to prograss bar
   function setUpPrograssBar(reviews) {
@@ -56,21 +58,21 @@ function ProductDetails() {
     progressBar.map((rating) => {
       totalReviews = totalReviews + rating.numOfRating;
     });
-    if (method === 'add') {
+    if (method === "add") {
       progressBar.map((rating) => {
         if (review?.rating === rating.number) {
           rating.numOfRating++;
           totalReviews++;
         }
       });
-    } else if (method === 'delete') {
+    } else if (method === "delete") {
       progressBar.map((rating) => {
         if (review?.rating === rating.number) {
           rating.numOfRating--;
           totalReviews--;
         }
       });
-    } else if (method === 'edit') {
+    } else if (method === "edit") {
       progressBar.map((rating) => {
         if (review?.rating === rating.number) {
           rating.numOfRating++;
@@ -92,7 +94,7 @@ function ProductDetails() {
   const handelFavorit = async (id, productId) => {
     if (customer._id) {
       await axios
-        .post('/customers/favorite', { id, productId })
+        .post("/customers/favorite", { id, productId })
         .then((res) => {
           const newData = { ...res.data?.newCustomerData };
           dispatch(SetCustomer(newData));
@@ -102,7 +104,7 @@ function ProductDetails() {
           console.log(e);
         });
     } else {
-      setshowLoginMessage(true)
+      setshowLoginMessage(true);
     }
   };
 
@@ -117,37 +119,74 @@ function ProductDetails() {
     }
   }
 
-  async function getProduct(productId) {
-    await axios.get(`/products/${productId}`).then((res) => {
-      setIsLoading(true);
-      setProduct(res?.data?.product);
-      const product = res?.data?.product;
-      setMainImage(product?.images[0]);
-      setReviews(product?.reviews);
-      setTotalRating(product?.totalRating);
-      setProgressBar(setUpPrograssBar(product?.reviews));
-      setInCart(isProductInCart(cart, productId));
-      isFavorite(product);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 200);
-    });
-  }
+  // async function getProduct(productId) {
+  //   await axios.get(`/products/${productId}`).then((res) => {
+  //     setIsLoading(true);
+  //     setProduct(res?.data?.product);
+  //     const product = res?.data?.product;
+  //     setMainImage(product?.images[0]);
+  //     setReviews(product?.reviews);
+  //     setTotalRating(product?.totalRating);
+  //     setProgressBar(setUpPrograssBar(product?.reviews));
+  //     setInCart(isProductInCart(cart, productId));
+  //     isFavorite(product);
+  //     setTimeout(() => {
+  //       setIsLoading(false);
+  //     }, 200);
+  //   });
+  // }
 
   useEffect(() => {
-    getProduct(productId);
+    const fetchData = async () => {
+      try {
+        // Fetch main product details
+        const productResponse = await axios.get(`/products/${productId}`);
+        const productData = productResponse.data.product;
+
+        // Set main product details
+        setProduct(productData);
+        setMainImage(productData.images[0]);
+        setReviews(productData.reviews);
+        setTotalRating(productData.totalRating);
+        setProgressBar(setUpPrograssBar(productData.reviews));
+        setInCart(isProductInCart(cart, productId));
+        isFavorite(productData);
+
+        // Fetch category of main product
+        const productCategory = productData.category;
+
+        // Fetch all products with the same category
+        const categoryResponse = await axios.get(
+          `/products/category/${productCategory}`
+        );
+        // Filter out the product with the given ID
+        const filteredProducts = categoryResponse.data.products.filter(
+          (product) => product._id !== productId
+        );
+
+        setProducts(filteredProducts);
+        console.log(categoryResponse.data.products);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching product details:", error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, [productId]);
+
   //Add review to product
   async function addReview(customerId, rating, comment) {
     await axios
-      .post('/customers/review', { customerId, productId, comment, rating })
+      .post("/customers/review", { customerId, productId, comment, rating })
       .then((res) => {
         // console.log(res.data.review);
         setReviews((prevReviews) => {
           return [...prevReviews, res.data.review];
         });
         setTotalRating(res.data.totalRating);
-        setProgressBar(updatePrograssBar(res.data.review, progressBar, 'add'));
+        setProgressBar(updatePrograssBar(res.data.review, progressBar, "add"));
       })
       .catch((e) => {
         console.log(e);
@@ -157,7 +196,7 @@ function ProductDetails() {
   // Delete review from product
   async function deleteReview(customerId, reviewId) {
     await axios
-      .delete('/customers/review', {
+      .delete("/customers/review", {
         data: { customerId, reviewId, productId },
       })
       .then((res) => {
@@ -166,7 +205,7 @@ function ProductDetails() {
         });
         setTotalRating(res.data.totalRating);
         setProgressBar(
-          updatePrograssBar(res.data.deletedReview, progressBar, 'delete')
+          updatePrograssBar(res.data.deletedReview, progressBar, "delete")
         );
       })
       .catch((e) => {
@@ -177,7 +216,7 @@ function ProductDetails() {
   // Update review in product
   async function editReview(customerId, productId, reviewId, comment, rating) {
     await axios
-      .put('/customers/review', { productId, reviewId, comment, rating })
+      .put("/customers/review", { productId, reviewId, comment, rating })
       .then((res) => {
         // console.log(res.data);
         setReviews((prevReviews) => {
@@ -193,7 +232,7 @@ function ProductDetails() {
           updatePrograssBar(
             res.data.newReview,
             progressBar,
-            'edit',
+            "edit",
             res.data.oldReview
           )
         );
@@ -238,7 +277,6 @@ function ProductDetails() {
       setInCart(!inCart);
     }, 1000);
   };
-
   return (
     <main className="productDetailMain">
       {isLoading ? (
@@ -268,7 +306,7 @@ function ProductDetails() {
                 <h1>{product?.name}</h1>
                 <div className="productDetailCategory">
                   <h2>Category:</h2>
-                  <p>bed</p>
+                  <p>{product?.category}</p>
                 </div>
                 <div className="productDetailRating">
                   <Rating
@@ -279,7 +317,7 @@ function ProductDetails() {
                     sx={{ fontSize: 30 }}
                   />
                   <p>
-                    {totalRating} Based on {reviews?.length} Reviews.{' '}
+                    {totalRating} Based on {reviews?.length} Reviews.{" "}
                   </p>
                 </div>
                 <h3>Description:</h3>
@@ -300,8 +338,8 @@ function ProductDetails() {
                 <button
                   className={
                     !inCart
-                      ? ' productDetailsAddToCart '
-                      : 'productDetailsAddToCart bg-red-700 hover:bg-red-900'
+                      ? " productDetailsAddToCart "
+                      : "productDetailsAddToCart bg-red-700 hover:bg-red-900"
                   }
                   onClick={() =>
                     handelCart(
@@ -313,7 +351,7 @@ function ProductDetails() {
                     )
                   }
                 >
-                  {!inCart ? ' Add to cart ' : 'Remove From cart'}
+                  {!inCart ? " Add to cart " : "Remove From cart"}
                 </button>
                 <button
                   onClick={() => handelFavorit(customer?._id, product?._id)}
@@ -359,7 +397,7 @@ function ProductDetails() {
                   sx={{ fontSize: 25 }}
                 />
                 <p>
-                  {totalRating} Based on {reviews?.length} Reviews{' '}
+                  {totalRating} Based on {reviews?.length} Reviews{" "}
                 </p>
               </div>
               <div className="productDetailRatingAllBars">
@@ -369,7 +407,7 @@ function ProductDetails() {
                       <div className="productDetailRatingBar" key={idx}>
                         <div className="flex">
                           <p className="mr-1">{bar.number}</p>
-                          <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
+                          <StarIcon sx={{ color: "#ffbb00", fontSize: 20 }} />
                         </div>
                         <ProgressBar
                           now={bar.progres}
@@ -410,6 +448,21 @@ function ProductDetails() {
               <AddReview addReview={addReview} />
             </div>
           </div>
+          {products.length > 0 && (
+            <>
+              <h2
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "27px",
+                  marginTop: "3rem",
+                  marginBottom: "3rem",
+                }}
+              >
+                Related Products
+              </h2>
+              <HomeSlider items={products} option="product" />
+            </>
+          )}
         </>
       )}
       <LoginMessage

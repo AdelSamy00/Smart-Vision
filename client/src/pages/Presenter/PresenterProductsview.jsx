@@ -52,7 +52,7 @@ function PresenterProductsView() {
             spacing={3}
             className="presenter-products"
             align="center"
-            justifyContent="center"
+            justifyContent="space-evenly"
           >
             {products.map((product, index) => (
               <Grid key={index} item xs={12} md={6} lg={4}>

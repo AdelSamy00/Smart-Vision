@@ -151,9 +151,9 @@ const Store = ({ selectedCategory, selectedPrice }) => {
 
   const handleCategoryChange = (category) => {
     setSelectedCategories((prevCategories) => {
-      if (!prevCategories || prevCategories.length === 0) {
-        return ['All'];
-      } else {
+      // if (!prevCategories || prevCategories.length === 0) {
+      //   return ['All'];
+      // } else {
         const index = prevCategories.indexOf(category);
 
         if (index === -1) {
@@ -165,8 +165,8 @@ const Store = ({ selectedCategory, selectedPrice }) => {
         } else {
           return prevCategories.filter((cat) => cat !== category);
         }
-      }
-    });
+      });
+    // });
   };
 
   const sortProducts = (a, b) => {
@@ -227,7 +227,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
 
   useEffect(() => {
     if (selectedCategory) {
-      setSelectedCategories([selectedCategory]);
+      setSelectedCategories(selectedCategory);
       setSelectedPriceRanges([]);
     } else {
       setSelectedCategories(['All']);
