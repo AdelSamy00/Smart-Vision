@@ -141,13 +141,18 @@ function EmployeeHeader({ props }) {
       case 'assignEngineerToCustomizationOrder':
         msg = `${notification.user.username} assign you to new customization order`;
         break;
+      case 'getMaterial':
+        msg = `${notification.user.username} add new Material order`;
+        break;
+      case 'newOrderToFactory':
+        msg = `${notification.user.username} add new product to manfacturing`;
+        break;
       default:
         msg = 'wrong';
         break;
     }
     return (
       <span className="notification" key={idx}>
-        {/* {`${notification.user.firstName} ${notification.user.lastName} ${msg}`} */}
         {`${msg}`}
       </span>
     );

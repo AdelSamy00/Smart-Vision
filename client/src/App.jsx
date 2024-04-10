@@ -160,7 +160,9 @@ function App() {
         <Route path="/transactions-history" element={<TransactionHistory />} />
         <Route
           path="/inventory-Order-matrials"
-          element={<InventoryMatrialsOrders />}
+          element={
+            <InventoryMatrialsOrders socket={socket} setSocket={setSocket} />
+          }
         />
         <Route
           path="/inventory-Order-products"
@@ -194,7 +196,7 @@ function App() {
         {/* Private Enginer Routes */}
         <Route
           path="/engineer/send-request/:requestId"
-          element={<CustomOrderForm />}
+          element={<CustomOrderForm socket={socket} setSocket={setSocket} />}
         />
         <Route
           path="/engineer/view-measured-customized-requests"

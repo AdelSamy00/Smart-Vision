@@ -48,3 +48,11 @@ export const getEngineer = (onlineUsers, to) => {
     (User) => User?.jobTitle === 'Engineer' && User?._id === to
   );
 };
+
+export const getFactory = (onlineUsers) => {
+  return onlineUsers.filter((User) => User?.jobTitle === 'Factory Manager');
+};
+
+export const getIventoryManager = (onlineUsers) => {
+  return onlineUsers.filter((User) => User?.jobTitle === 'Inventory Manager');
+};

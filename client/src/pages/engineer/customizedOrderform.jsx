@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Grid,
   TextField,
@@ -8,26 +8,26 @@ import {
   ListItem,
   ListItemText,
   IconButton,
-} from "@mui/material";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { useParams } from "react-router-dom";
-import "./EngineerStyleSheets/CustomizedOrderForm.css";
-import { apiRequest, handleFileUpload } from "../../utils";
-import { useSelector } from "react-redux";
+} from '@mui/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { useParams } from 'react-router-dom';
+import './EngineerStyleSheets/CustomizedOrderForm.css';
+import { apiRequest, handleFileUpload } from '../../utils';
+import { useSelector } from 'react-redux';
 
-const CustomOrderForm = () => {
+const CustomOrderForm = ({ socket, setSocket }) => {
   const { requestId } = useParams();
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const { employee } = useSelector((state) => state.employee);
   const [orderDetails, setOrderDetails] = useState({
-    customerName: "",
-    description: "",
+    customerName: '',
+    description: '',
     materials: [],
-    additionalDetails: "",
-    newMaterialName: "",
-    newMaterialQuantity: "",
+    additionalDetails: '',
+    newMaterialName: '',
+    newMaterialQuantity: '',
   });
-  const [customOrder, setCustomOrder] = useState("");
+  const [customOrder, setCustomOrder] = useState('');
   const newMaterialNameRef = useRef(null);
   const newMaterialQuantityRef = useRef(null);
   console.log(requestId);
@@ -35,13 +35,13 @@ const CustomOrderForm = () => {
     const fetchCustomOrder = async () => {
       try {
         const response = await apiRequest({
-          method: "GET",
+          method: 'GET',
           url: `/employees/services/${requestId}`,
         });
         setCustomOrder(response.data.service[0]);
         console.log(response.data.service[0].customer.username);
       } catch (error) {
-        console.error("Error fetching custom order:", error);
+        console.error('Error fetching custom order:', error);
       }
     };
 
@@ -53,8 +53,8 @@ const CustomOrderForm = () => {
   };
 
   const handleQuantityKeyDown = (e) => {
-    if (e.key === "Enter") {
-      if (orderDetails.newMaterialName.trim() !== "") {
+    if (e.key === 'Enter') {
+      if (orderDetails.newMaterialName.trim() !== '') {
         addMaterial();
       }
     }
@@ -72,12 +72,12 @@ const CustomOrderForm = () => {
             quantity: newMaterialQuantity,
           },
         ],
-        newMaterialName: "",
-        newMaterialQuantity: "",
+        newMaterialName: '',
+        newMaterialQuantity: '',
       });
-      setError("");
-      newMaterialNameRef.current.value = "";
-      newMaterialQuantityRef.current.value = "";
+      setError('');
+      newMaterialNameRef.current.value = '';
+      newMaterialQuantityRef.current.value = '';
       newMaterialNameRef.current.blur();
       newMaterialQuantityRef.current.blur();
     }
@@ -94,7 +94,7 @@ const CustomOrderForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (orderDetails.materials.length === 0) {
-      setError("Please add materials before submitting.");
+      setError('Please add materials before submitting.');
       return;
     }
     try {
@@ -102,8 +102,8 @@ const CustomOrderForm = () => {
         orderDetails.details && (await handleFileUpload(orderDetails.details));
       console.log(file);
       const response = await apiRequest({
-        method: "POST",
-        url: "employees/customizationOrders/",
+        method: 'POST',
+        url: 'employees/customizationOrders/',
         data: {
           serviceId: requestId,
           engineerId: employee._id,
@@ -115,9 +115,15 @@ const CustomOrderForm = () => {
         ...orderDetails,
         materials: [],
       });
-      console.log("Order placed successfully:", response.data);
+      console.log('Order placed successfully:', response.data);
+      socket?.emit('sendDetails', {
+        user: employee,
+        type: ['getMaterial', 'newOrderToFactory'],
+        materialOrder: response.data.materialOrder,
+        service: response.data.service,
+      });
     } catch (error) {
-      console.error("Error placing order:", error.response);
+      console.error('Error placing order:', error.response);
     }
   };
   return (
@@ -150,7 +156,7 @@ const CustomOrderForm = () => {
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h5" style={{ marginBottom: "10px" }}>
+          <Typography variant="h5" style={{ marginBottom: '10px' }}>
             Materials Needed:
           </Typography>
         </Grid>
@@ -164,8 +170,8 @@ const CustomOrderForm = () => {
             value={orderDetails.newMaterialName}
             onChange={handleChange}
             onKeyDown={(e) =>
-              e.key === "Enter" &&
-              orderDetails.newMaterialName.trim() !== "" &&
+              e.key === 'Enter' &&
+              orderDetails.newMaterialName.trim() !== '' &&
               newMaterialQuantityRef.current.focus()
             }
             fullWidth
@@ -184,7 +190,7 @@ const CustomOrderForm = () => {
           />
         </Grid>
         <Grid item xs={2}>
-          <Button fullWidth onClick={addMaterial} style={{ marginTop: "10px" }}>
+          <Button fullWidth onClick={addMaterial} style={{ marginTop: '10px' }}>
             Add
           </Button>
         </Grid>
@@ -192,13 +198,13 @@ const CustomOrderForm = () => {
           <Grid item xs={12}>
             <List
               style={{
-                maxHeight: "200px",
-                overflowY: "auto",
-                paddingTop: "0px",
+                maxHeight: '200px',
+                overflowY: 'auto',
+                paddingTop: '0px',
               }}
             >
               {orderDetails.materials.map((material, index) => (
-                <ListItem key={index} style={{ paddingBottom: "0px" }}>
+                <ListItem key={index} style={{ paddingBottom: '0px' }}>
                   <ListItemText primary={material.material} />
                   <ListItemText secondary={material.quantity} />
                   <IconButton
@@ -206,7 +212,7 @@ const CustomOrderForm = () => {
                     aria-label="delete"
                     onClick={() => removeMaterial(index)}
                   >
-                    <DeleteForeverIcon sx={{ fontSize: "32px" }} />
+                    <DeleteForeverIcon sx={{ fontSize: '32px' }} />
                   </IconButton>
                 </ListItem>
               ))}
@@ -220,10 +226,10 @@ const CustomOrderForm = () => {
           item
           xs={12}
           style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: "-0.5rem",
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: '-0.5rem',
           }}
         >
           <Grid container item xs={8}>
@@ -233,7 +239,7 @@ const CustomOrderForm = () => {
               name="uploadFile"
               className="uploadBtn file:hidden text-black bg-white w-full p-3 rounded-md border border-gray-300"
               onChange={handleFileChange}
-              style={{ boxShadow: "none" }}
+              style={{ boxShadow: 'none' }}
             />
           </Grid>
           <Grid container item xs={4} justify="center">
@@ -241,10 +247,10 @@ const CustomOrderForm = () => {
               htmlFor="uploadFile"
               className="leading-7 text-md text-gray-600 mt-1 w-full h-full cursor-pointer"
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                fontWeight: "bold",
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontWeight: 'bold',
               }}
             >
               Upload File
@@ -256,7 +262,7 @@ const CustomOrderForm = () => {
             type="submit"
             variant="contained"
             color="primary"
-            style={{ marginTop: "10px", textTransform: "capitalize" }}
+            style={{ marginTop: '10px', textTransform: 'capitalize' }}
           >
             Send Request
           </Button>

@@ -17,6 +17,8 @@ import {
   getOperator,
   removeUser,
   getEngineer,
+  getFactory,
+  getIventoryManager,
 } from './utils/index.js';
 
 dotenv.config();
@@ -95,6 +97,32 @@ io.on('connection', (socket) => {
         user,
         type,
         serviceOrder,
+      });
+    }
+  });
+  //Sent customization order to factory and Inventory manager to get needed matarials.
+  socket.on('sendDetails', ({ user, type, materialOrder, service }) => {
+    const factoryManager = getFactory(onlineUsers)[0];
+    const inventoryManager = getIventoryManager(onlineUsers)[0];
+    console.log('--------------------------');
+    console.log(factoryManager);
+    console.log(type[0]);
+    console.log(inventoryManager);
+    console.log('--------------------------');
+    if (inventoryManager) {
+      io.to(inventoryManager?.socketId).emit('notifications', {
+        user,
+        type: type[0],
+        materialOrder,
+        service,
+      });
+    }
+    if (factoryManager) {
+      io.to(factoryManager?.socketId).emit('notifications', {
+        user,
+        type: type[1],
+        materialOrder,
+        service,
       });
     }
   });
