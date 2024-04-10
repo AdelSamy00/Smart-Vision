@@ -4,7 +4,7 @@ const initialState = {
   cart: JSON.parse(window?.localStorage.getItem("card")) || [],
 };
 
-const cartSlice = createSlice({
+const MatrialSlice = createSlice({
   name: "card",
   initialState,
   reducers: {
@@ -38,5 +38,5 @@ const cartSlice = createSlice({
   },
 });
 
-export const { setCart, clearCart, addToCart,removeFromCart ,removeAllFromCart} = cartSlice.actions;
-export default cartSlice.reducer;
+export const { setCart, clearCart, addToCart,removeFromCart ,removeAllFromCart} = MatrialSlice.actions;
+export default MatrialSlice.reducer;

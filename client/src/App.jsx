@@ -65,6 +65,7 @@ import {
   ViewEmployees,
 } from './pages/actorManager/index.js';
 import { OrderDetailsFactory } from './pages/factory/index.js';
+import {FactorView} from './pages/factory/index.js'
 import OrderComponent from './components/e-commers/OrderComponent.jsx';
 import AddProductForm from './components/inventory/AddProductFrom';
 import AddMatrialForm from './components/inventory/AddMatrialForm';
@@ -223,6 +224,10 @@ function App() {
         <Route
           path="/f/order-details/:orderId"
           element={<OrderDetailsFactory />}
+        />
+        <Route
+          path="/f/factor-View"
+          element={<FactorView />}
         />
         {/* Private Operator Routes */}
         <Route

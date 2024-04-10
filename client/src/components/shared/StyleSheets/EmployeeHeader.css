@@ -6,6 +6,7 @@
     align-items: center;
     margin-top: 0;
     padding-inline: 1rem;
+    position: relative;
 }
 
 .employeeHeaderLogo {

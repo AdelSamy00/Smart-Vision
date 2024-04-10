@@ -248,11 +248,11 @@ export const productsTransaction = async (req, res, next) => {
     if (flag) {
       if (method === 'Export') {
         products.map(async (prod) => {
-          await decreseQuantity(prod.product, prod.quantity);
+          await decreseQuantity(prod.product._id, prod.quantity);
         });
       } else if (method === 'Import') {
         products.map(async (prod) => {
-          await increaseQuantity(prod.product, prod.quantity);
+          await increaseQuantity(prod.product._id, prod.quantity);
         });
       }
 

@@ -26,9 +26,9 @@ const FactorView = () => {
   useEffect(() => {
     const fetchCustomizationOrders = async () => {
       try {
-        const response = await axios.get("/employees/customizationOrders");
-        setCustomizationOrders(response.data.customizationOrders);
-        console.log(response.data.customizationOrders);
+        const response = await axios.get("/employees/customizationOrdersDetails");
+        setCustomizationOrders(response.data.customizationOrdersDetails);
+        console.log(response.data);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching materials:", error);
@@ -113,12 +113,6 @@ const FactorView = () => {
                         style={{ marginBottom: "5px", fontSize: "15px" }}
                       >
                         {order.description}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        style={{ marginBottom: "5px", fontSize: "15px" }}
-                      >
-                        Engineer: {order?.assignedEngineer?.username}
                       </Typography>
                       <Typography variant="body2" style={{ fontSize: "15px" }}>
                         State: {order?.state}
