@@ -19,6 +19,184 @@ export const getAllCustomers = async (req, res, next) => {
   });
 };
 
+export const getCustomerById = async (req, res, next) => {
+  const {customerId} = req.params;
+
+  try {
+    const customer = await Customers.findById(customerId);
+    if (!customer) {
+      return res.status(404).json({
+        success: false,
+        message: 'Customer not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Customer data retrieved successfully',
+      customer,
+    });
+  } catch (error) {
+    console.error('Error fetching customer:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+};
+export const deleteCustomer = async (req, res, next) => {
+  try {
+    const { id } = req.body;
+
+    const deletedCustomer = await Customers.findByIdAndDelete(id);
+
+    if (!deletedCustomer) {
+      return res.status(404).json({
+        success: false,
+        message: 'Customer not found',
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: 'Customer deleted successfully',
+      customer: deletedCustomer,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete customer',
+    });
+  }
+};
+export const manageCustomers = async (req, res, next) => {
+  try {
+    const {
+      customerId,
+      username,
+      email,
+      gender,
+      phone,
+      address,
+      password
+    } = req.body;
+    const hashedPassword = await hashString(password);
+
+    const customerData = {
+      customerId,
+      username,
+      email,
+      gender,
+      phone,
+      address,
+      password: hashedPassword 
+    };
+
+    if (
+      !customerId ||
+      !username ||
+      !email ||
+      !gender ||
+      !phone ||
+      !address||
+      !password
+    ) {
+      next('Provide Required Fields!');
+      return;
+    }
+
+    const updatedCustomer = await Customers.findByIdAndUpdate(
+      { _id: customerId },
+      { ...customerData },
+      { new: true,} 
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'Update customer successfully',
+      updatedCustomer,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update customer data',
+    });
+  }
+};
+export const addCustomer = async (req, res, next) => {
+  try {
+    const {
+      username,
+      email,
+      password,
+      gender,
+      phone,
+      address,
+    } = req.body;
+
+    // Check if all required fields are provided
+    if (
+      !username ||
+      !email ||
+      !password ||
+      !gender ||
+      !phone ||
+      !address
+    ) {
+      next('Provide Required Fields!');
+      return;
+    }
+
+    // Check if the email is provided and it's valid
+    if (!email.includes('@')) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid email address',
+      });
+    }
+
+    // Check if the password meets the length requirement
+    if (password.length < 7) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password must be at least 7 characters long',
+      });
+    }
+
+    // Check if the email is already registered
+    const existingCustomer = await Customers.findOne({ email: email });
+    if (existingCustomer) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email is already registered',
+      });
+    }
+    const hashedPassword = await hashString(password);
+    // Create a new customer instance
+    const newCustomer = await Customers.create({
+      username: username,
+      email: email,
+      password: hashedPassword, 
+      gender: gender,
+      phone: phone,
+      address: address,
+      verified:"true"
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Customer added successfully',
+      customer: newCustomer,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to add customer',
+    });
+  }
+};
 export const deleteReview = async (req, res, next) => {
   try {
     const { customerId, reviewId, productId } = req.body;
@@ -344,10 +522,10 @@ export const deleteEmployee = async (req, res, next) => {
 
 export const changePassword = async (req, res, next) => {
   try {
-    const { email, currentPassword, newPassword } = req.body;
+    const { id, newPassword } = req.body;
 
     // Find the employee by email
-    const employee = await Employees.findOne({ email });
+    const employee = await Employees.findById({ _id: id });
 
     // If employee not found
     if (!employee) {
@@ -357,23 +535,15 @@ export const changePassword = async (req, res, next) => {
       });
     }
 
-    // Check if the current password matches
-    const passwordMatch = await bcrypt.compare(currentPassword, employee.password);
-    if (!passwordMatch) {
-      return res.status(401).json({
-        success: false,
-        message: 'Current password is incorrect',
-      });
-    }
-
     // Hash the new password
-    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-
-    // Update the employee's password
-    employee.password = hashedNewPassword;
-
-    // Save the updated employee to the database
-    await employee.save();
+    const hashedNewPassword = await hashString(newPassword);
+    await Employees.findByIdAndUpdate(
+      { _id: id },
+      {
+        password: hashedNewPassword,
+      },
+      { new: true }
+    );
 
     res.status(200).json({
       success: true,

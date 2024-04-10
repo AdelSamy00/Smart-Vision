@@ -55,10 +55,12 @@ import {
   ServiseDetailsOperator,
   AddCustomer,
   EditCustomer,
+  ViewCustomers,
 } from './pages/operator/index.js';
 
 import {
   AddEmployee,
+  ChangeEmpPassword,
   EditEmployee,
   ViewEmployees,
 } from './pages/actorManager/index.js';
@@ -242,12 +244,17 @@ function App() {
           path="/operator/edit-customer/:customerId"
           element={<EditCustomer />}
         />
+        <Route path="/operator/view-customers" element={<ViewCustomers />} />
         {/* Private actor manager Routes */}
         <Route path="/actor/add-employee" element={<AddEmployee />} />
         <Route path="/actor/view-employees" element={<ViewEmployees />} />
         <Route
           path="/actor/edit-employee/:employeeId"
           element={<EditEmployee />}
+        />
+         <Route
+          path="/actor/change-password/:employeeId"
+          element={<ChangeEmpPassword />}
         />
         {/*The path not found.*/}
         <Route path="*" element={<Page404 />} />

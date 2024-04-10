@@ -19,6 +19,7 @@ function EditProduct() {
   const [productName, setProductName] = useState(null);
   const [category, setCategory] = useState(null);
   const [colors, setColors] = useState(null);
+  const [quantity, setQuantity] = useState(null);
   const [price, setPrice] = useState(null);
   const [points, setPoints] = useState(null);
   const [show, setShow] = useState(null);
@@ -50,6 +51,7 @@ function EditProduct() {
     setShow(product?.show);
     setPoints(product?.points);
     setNumberOfImages(product?.images.length);
+    setQuantity(product?.quantity);
     setIsLoading(false);
   }
 
@@ -73,6 +75,7 @@ function EditProduct() {
         price,
         points,
         colors,
+        quantity,
         show,
       })
       .then((res) => {
@@ -276,6 +279,8 @@ function EditProduct() {
                       <option value="">Choose a category</option>
                       <option value="sofa">Sofa</option>
                       <option value="bed">Bed</option>
+                      <option value="chair">Chair</option>
+                      <option value="table">Table</option>
                     </Form.Select>
                   </Form.Group>
                   {/* for Price */}

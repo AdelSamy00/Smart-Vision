@@ -10,7 +10,7 @@ import { Typography, Grid, Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 
-export default function EmployeeCard({ employee }) {
+export default function CustomerCard({ customer }) {
   return (
     <Card sx={{ maxWidth: 310, marginBottom: "2rem", bgcolor: "#f8f9fa" }}>
       <CardHeader
@@ -20,12 +20,7 @@ export default function EmployeeCard({ employee }) {
             aria-label="recipe"
           >
             {/* MW */}
-            { employee?.firstName ? (
-              employee.firstName.charAt(0).toUpperCase() +
-              employee.firstName.charAt(0).toUpperCase()
-            ) : (
-              employee.username.charAt(0).toUpperCase()
-            )}
+            {customer?.username?.charAt(0).toUpperCase() }
           </Avatar>
         }
         title={
@@ -37,12 +32,10 @@ export default function EmployeeCard({ employee }) {
                 fontSize: "19px",
               }}
             >
-              {employee.firstName
-                ? employee.firstName + " "+employee.lastName
-                : employee.username}
+              {customer.username}
             </Typography>
             <Link
-              to={`/actor/edit-employee/${employee._id}`}
+              to={`/operator/edit-customer/${customer._id}`}
               style={{ marginLeft: "auto" }}
             >
               <IconButton aria-label="edit">
@@ -55,7 +48,7 @@ export default function EmployeeCard({ employee }) {
           <Typography
             style={{ textAlign: "start", fontSize: "14px", color: "gray" }}
           >
-            {employee.email}
+            {customer.email}
           </Typography>
         }
       />
@@ -65,90 +58,49 @@ export default function EmployeeCard({ employee }) {
             <Typography
               style={{ fontSize: "19px", textAlign: "center", color: "gray" }}
             >
-              UserName:
+              Phone
             </Typography>
           </Grid>
           <Grid xs={8} item>
             <Typography style={{ fontSize: "18px", textAlign: "center" }}>
-              {employee.username}
+              0{customer?.phone}
             </Typography>
           </Grid>
           <Grid xs={4} item>
             <Typography
               style={{ fontSize: "19px", textAlign: "center", color: "gray" }}
             >
-              <span style={{ fontSize: "19px" }}>jobTitle: </span>{" "}
+              <span style={{ fontSize: "19px" }}>Address: </span>{" "}
             </Typography>
           </Grid>
           <Grid xs={8} item>
             <Typography style={{ fontSize: "18px", textAlign: "center" }}>
-              {employee.jobTitle}
+              {customer?.address||"Undefined"}
             </Typography>
           </Grid>
           <Grid xs={4} item>
             <Typography
               style={{ fontSize: "19px", textAlign: "center", color: "gray" }}
             >
-              Salary:
+              Points:
             </Typography>
           </Grid>
           <Grid xs={8} item>
             <Typography style={{ fontSize: "18px", textAlign: "center" }}>
-              {employee.salary ? employee.salary : 10000}$
-            </Typography>
-          </Grid>
-          <Grid xs={5} item>
-            <Typography style={{ fontSize: "19px", color: "gray" }}>
-              Qualification:
-            </Typography>
-          </Grid>
-          <Grid xs={7} item>
-            <Typography style={{ fontSize: "17px" }}>
-              Bachelor's Degree
+              {customer.points}
             </Typography>
           </Grid>
           <Grid xs={4} item>
-            <Typography style={{ fontSize: "19px", color: "gray" }}>
-              DOB:{" "}
+            <Typography
+              style={{ fontSize: "19px", textAlign: "center", color: "gray" }}
+            >
+              Gender:
             </Typography>
           </Grid>
           <Grid xs={8} item>
-            <Typography style={{ fontSize: "18px" }}>
-              {employee.birthday
-                ? employee.birthday
-                    ?.substring(0, 10)
-                    .split("-")
-                    .reverse()
-                    .join("-")
-                : "Unknown"}
+            <Typography style={{ fontSize: "18px", textAlign: "center" }}>
+              {customer.gender}
             </Typography>
-          </Grid>
-          <Grid
-            xs={12}
-            item
-            style={{ display: "flex", justifyContent: "flex-start" }}
-          >
-            <Link to={`/actor/change-password/${employee?._id}`}>
-              <Button
-                sx={{
-                  backgroundColor: "#f8f9fa",
-                  color: "#48cae4",
-                  textTransform: "capitalize",
-                  fontSize: "17px",
-                  padding: "5px 10px",
-                  borderRadius: "10px",
-                  fontWeight: "bold",
-                  "&:hover": {
-                    backgroundColor: "#f8f9fa",
-                    color: "blue",
-                    outline: "none",
-                  },
-                  "&:active": { backgroundColor: "#f8f9fa" },
-                }}
-              >
-                Change Passwo..
-              </Button>
-            </Link>
           </Grid>
         </Grid>
       </CardContent>

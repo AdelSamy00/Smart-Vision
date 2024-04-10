@@ -16,8 +16,7 @@ const categories = [
   { id: 2, name: "Sofa", imageUrl: "../sofa.jpeg" },
   { id: 3, name: "Chair", imageUrl: "../chair.avif" },
   { id: 4, name: "Kitchen", imageUrl: "../kitchen.avif" },
-  { id: 5, name: "Dining Table", imageUrl: "../TABLE.jpg" },
-  { id: 7, name: "Desk", imageUrl: "../desk.avif" },
+  { id: 5, name: "Table", imageUrl: "../TABLE.jpg" },
   { id: 9, name: "Last", imageUrl: "" },
 ];
 const prices = [
@@ -121,7 +120,7 @@ function Homepage() {
       {(selectedCategory || selectedPrice) && (
         <Store
           key={selectedCategory}
-          selectedCategory={selectedCategory?.toLowerCase()}
+          selectedCategory={selectedCategory? selectedCategory?.toLowerCase():"All"}
           selectedPrice={selectedPrice}
         />
       )}

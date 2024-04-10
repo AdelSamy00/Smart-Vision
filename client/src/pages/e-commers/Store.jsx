@@ -1,23 +1,23 @@
-import { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import './StyleSheets/Store.css';
-import ProductCard from '../../components/e-commers/ProductCard';
-import { useDispatch, useSelector } from 'react-redux';
-import { SetCustomer } from '../../redux/CustomerSlice';
-import { setCart } from '../../redux/CartSlice';
-import { useNavigate } from 'react-router-dom';
-import Loading from '../../components/shared/Loading';
-import PropTypes from 'prop-types';
-import CheckIcon from '@mui/icons-material/Check';
-import { apiRequest } from '../../utils';
-import LoginMessage from '../../components/e-commers/LoginMessage';
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import "./StyleSheets/Store.css";
+import ProductCard from "../../components/e-commers/ProductCard";
+import { useDispatch, useSelector } from "react-redux";
+import { SetCustomer } from "../../redux/CustomerSlice";
+import { setCart } from "../../redux/CartSlice";
+import { useNavigate } from "react-router-dom";
+import Loading from "../../components/shared/Loading";
+import PropTypes from "prop-types";
+import CheckIcon from "@mui/icons-material/Check";
+import { apiRequest } from "../../utils";
+import LoginMessage from "../../components/e-commers/LoginMessage";
 const Store = ({ selectedCategory, selectedPrice }) => {
-  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedColor, setSelectedColor] = useState("");
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [showPriceDropdown, setShowPriceDropdown] = useState(false);
-  const [sortByPriceOption, setSortByPriceOption] = useState('ascending');
-  const [sortByOption, setSortByOption] = useState('name');
+  const [sortByPriceOption, setSortByPriceOption] = useState("ascending");
+  const [sortByOption, setSortByOption] = useState("name");
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [showColorDropdown, setShowColorDropdown] = useState(false);
   const categoryDropdownRef = useRef(null);
@@ -27,12 +27,12 @@ const Store = ({ selectedCategory, selectedPrice }) => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPriceRanges, setSelectedPriceRanges] = useState(
-    selectedPrice ? [{ min: '', max: selectedPrice }] : []
+    selectedPrice ? [{ min: "", max: selectedPrice }] : []
   );
-  const colors = ['Red', 'Blue', 'Green', 'Gray', 'Brown', 'Black'];
-  const categories = ['sofa', 'chair', 'bed', 'Storage'];
+  const colors = ["Red", "Gray", "Black", "Brown", "Off-White"];
+  const categories = ["sofa", "chair", "bed", "table"];
   const [selectedCategories, setSelectedCategories] = useState([
-    selectedCategory ? selectedCategory : 'All',
+    selectedCategory ? selectedCategory : "All",
   ]);
   const prices = [
     { min: 4000, max: 6000 },
@@ -81,8 +81,8 @@ const Store = ({ selectedCategory, selectedPrice }) => {
   };
   async function favorites(id, productId) {
     await apiRequest({
-      method: 'post',
-      url: '/customers/favorite',
+      method: "post",
+      url: "/customers/favorite",
       data: {
         id,
         productId,
@@ -90,7 +90,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
     })
       .then((res) => {
         const newData = {
-          token: localStorage?.getItem('token'),
+          token: localStorage?.getItem("token"),
           ...res.data?.newCustomerData,
         };
         dispatch(SetCustomer(newData));
@@ -121,19 +121,19 @@ const Store = ({ selectedCategory, selectedPrice }) => {
   };
 
   const handleSortByPrice = (option) => {
-    setSortByOption('price');
+    setSortByOption("price");
     setSortByPriceOption(option);
     setShowSortDropdown(false);
   };
 
   const handleSortByName = () => {
-    setSortByOption('name');
+    setSortByOption("name");
     setShowSortDropdown(false);
   };
 
   const handleColorChange = (color) => {
-    console.log('Selected Color:', color);
-    setSelectedColor(color === selectedColor ? '' : color);
+    console.log("Selected Color:", color);
+    setSelectedColor(color === selectedColor ? "" : color);
     setShowColorDropdown(false);
   };
 
@@ -154,29 +154,29 @@ const Store = ({ selectedCategory, selectedPrice }) => {
       // if (!prevCategories || prevCategories.length === 0) {
       //   return ['All'];
       // } else {
-        const index = prevCategories.indexOf(category);
+      const index = prevCategories.indexOf(category);
 
-        if (index === -1) {
-          const updatedCategories = prevCategories.includes('All')
-            ? prevCategories.filter((cat) => cat !== 'All')
-            : prevCategories;
-
-          return [...updatedCategories, category];
-        } else {
-          return prevCategories.filter((cat) => cat !== category);
-        }
-      });
+      if (index === -1) {
+        const updatedCategories = prevCategories.includes("All")
+          ? prevCategories.filter((cat) => cat !== "All")
+          : prevCategories;
+        console.log(selectedCategory);
+        return [...updatedCategories, category];
+      } else {
+        return prevCategories.filter((cat) => cat !== category);
+      }
+    });
     // });
   };
 
   const sortProducts = (a, b) => {
-    if (sortByOption === 'price') {
+    if (sortByOption === "price") {
       const priceA = Number(a.price);
       const priceB = Number(b.price);
-      return sortByPriceOption === 'ascending'
+      return sortByPriceOption === "ascending"
         ? priceA - priceB
         : priceB - priceA;
-    } else if (sortByOption === 'name') {
+    } else if (sortByOption === "name") {
       const nameA = a.name.toUpperCase();
       const nameB = b.name.toUpperCase();
       return nameA.localeCompare(nameB);
@@ -194,9 +194,9 @@ const Store = ({ selectedCategory, selectedPrice }) => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
   useEffect(() => {
@@ -209,16 +209,46 @@ const Store = ({ selectedCategory, selectedPrice }) => {
       }
     };
 
-    document.addEventListener('mousedown', handleCategoryClickOutside);
+    document.addEventListener("mousedown", handleCategoryClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleCategoryClickOutside);
+      document.removeEventListener("mousedown", handleCategoryClickOutside);
+    };
+  }, []);
+  useEffect(() => {
+    const handleSortClickOutside = (event) => {
+      if (
+        sortDropdownRef.current &&
+        !sortDropdownRef.current.contains(event.target)
+      ) {
+        setShowSortDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleSortClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleSortClickOutside);
+    };
+  }, []);
+  useEffect(() => {
+    const handleColorClickOutside = (event) => {
+      if (
+        colorDropdownRef.current &&
+        !colorDropdownRef.current.contains(event.target)
+      ) {
+        setShowColorDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleColorClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleColorClickOutside);
     };
   }, []);
   useEffect(() => {
     if (selectedPrice) {
-      setSelectedPriceRanges([{ min: '', max: selectedPrice }]);
+      setSelectedPriceRanges([{ min: "", max: selectedPrice }]);
       if (selectedCategory) {
-        setSelectedCategories(['All']);
+        setSelectedCategories(["All"]);
       }
     } else {
       setSelectedPriceRanges([]);
@@ -227,17 +257,17 @@ const Store = ({ selectedCategory, selectedPrice }) => {
 
   useEffect(() => {
     if (selectedCategory) {
-      setSelectedCategories(selectedCategory);
+      setSelectedCategories([selectedCategory]);
       setSelectedPriceRanges([]);
     } else {
-      setSelectedCategories(['All']);
+      setSelectedCategories(["All"]);
     }
   }, [selectedCategory]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('/products/');
+        const response = await axios.get("/products/");
         // console.log('API response:', response.data.products);
         setProducts(response.data.products);
         setIsLoading(false);
@@ -253,17 +283,17 @@ const Store = ({ selectedCategory, selectedPrice }) => {
       .filter(
         (product) =>
           (selectedCategories.length === 0 ||
-            selectedCategories.includes('All') ||
+            selectedCategories.includes("All") ||
             selectedCategories.includes(product.category)) &&
           (selectedPriceRanges.length === 0 ||
             selectedPriceRanges.some(
               (selectedRange) =>
-                (selectedRange.min === '' ||
+                (selectedRange.min === "" ||
                   Number(product.price) >= selectedRange.min) &&
-                (selectedRange.max === '' ||
+                (selectedRange.max === "" ||
                   Number(product.price) <= selectedRange.max)
             )) &&
-          (selectedColor === '' || product.colors.includes(selectedColor))
+          (selectedColor === "" || product.colors.includes(selectedColor))
       )
       .sort(sortProducts);
   };
@@ -275,8 +305,8 @@ const Store = ({ selectedCategory, selectedPrice }) => {
         <div
           className="filters-container"
           style={{
-            paddingTop: selectedCategory || selectedPrice ? '3rem' : '0rem',
-            width: selectedCategory || selectedPrice ? '100%' : '90%',
+            paddingTop: selectedCategory || selectedPrice ? "3rem" : "0rem",
+            width: selectedCategory || selectedPrice ? "100%" : "90%",
           }}
         >
           {/* Category filter */}
@@ -287,28 +317,31 @@ const Store = ({ selectedCategory, selectedPrice }) => {
             ref={categoryDropdownRef}
             style={{
               marginLeft:
-                selectedCategory || selectedPrice ? '-1.7rem' : '0rem',
+                selectedCategory || selectedPrice ? "-1.7rem" : "0rem",
             }}
           >
             <h2>
-              {'Category '}
+              {"Category "}
               <span className="arrow">
                 <KeyboardArrowDownIcon />
               </span>
             </h2>
 
             {showCategoryDropdown && (
-              <div className="dropDown categorydropDown">
+              <div
+                className="dropDown categorydropDown"
+                style={{ maxHeight: "220px" }}
+              >
                 {categories.map((category, index) => (
                   <div
                     key={index}
                     className="categoryOption"
                     style={{
-                      padding: '10px',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      textAlign: 'center',
+                      padding: "10px",
+                      cursor: "pointer",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      textAlign: "center",
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -318,14 +351,14 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                     <span>{category}</span>
                     <input
                       style={{
-                        cursor: 'pointer',
-                        width: '17px',
-                        height: '17px',
+                        cursor: "pointer",
+                        width: "17px",
+                        height: "17px",
                       }}
                       type="checkbox"
                       checked={selectedCategories.includes(category)}
                       readOnly
-                    />{' '}
+                    />{" "}
                   </div>
                 ))}
               </div>
@@ -339,11 +372,11 @@ const Store = ({ selectedCategory, selectedPrice }) => {
             ref={priceDropdownRef}
             style={{
               marginLeft:
-                selectedCategory || selectedPrice ? '-1.7rem' : '0rem',
+                selectedCategory || selectedPrice ? "-1.7rem" : "0rem",
             }}
           >
             <h2>
-              {'Price'}
+              {"Price"}
               <span className="arrow">
                 <KeyboardArrowDownIcon />
               </span>
@@ -355,11 +388,11 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                   <div
                     key={index}
                     style={{
-                      padding: '10px',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      textAlign: 'center',
+                      padding: "10px",
+                      cursor: "pointer",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      textAlign: "center",
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -371,9 +404,9 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                     </span>
                     <input
                       style={{
-                        cursor: 'pointer',
-                        width: '17px',
-                        height: '17px',
+                        cursor: "pointer",
+                        width: "17px",
+                        height: "17px",
                       }}
                       type="checkbox"
                       checked={selectedPriceRanges.some(
@@ -382,7 +415,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                           selectedRange.max === price.max
                       )}
                       readOnly
-                    />{' '}
+                    />{" "}
                   </div>
                 ))}
               </div>
@@ -396,11 +429,11 @@ const Store = ({ selectedCategory, selectedPrice }) => {
             ref={sortDropdownRef}
             style={{
               marginLeft:
-                selectedCategory || selectedPrice ? '-1.7rem' : '0rem',
+                selectedCategory || selectedPrice ? "-1.7rem" : "0rem",
             }}
           >
             <h2>
-              {'Sort '}
+              {"Sort "}
               <span className="arrow">
                 <KeyboardArrowDownIcon />
               </span>
@@ -414,43 +447,43 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                     <div className="emptyCircle"></div>
                     <span
                       className={
-                        sortByOption === 'name'
-                          ? 'filledCircle black'
-                          : 'filledCircle gray'
+                        sortByOption === "name"
+                          ? "filledCircle black"
+                          : "filledCircle gray"
                       }
                     ></span>
                   </div>
                 </div>
                 <div
                   className="sortOption"
-                  onClick={() => handleSortByPrice('ascending')}
+                  onClick={() => handleSortByPrice("ascending")}
                 >
                   <span>Price: Low to High</span>
                   <div className="circleContainer">
                     <div className="emptyCircle"></div>
                     <span
                       className={
-                        sortByOption === 'price' &&
-                        sortByPriceOption === 'ascending'
-                          ? 'filledCircle black'
-                          : 'filledCircle gray'
+                        sortByOption === "price" &&
+                        sortByPriceOption === "ascending"
+                          ? "filledCircle black"
+                          : "filledCircle gray"
                       }
                     ></span>
                   </div>
                 </div>
                 <div
                   className="sortOption"
-                  onClick={() => handleSortByPrice('descending')}
+                  onClick={() => handleSortByPrice("descending")}
                 >
                   <span>Price: High to Low</span>
                   <div className="circleContainer">
                     <div className="emptyCircle"></div>
                     <span
                       className={
-                        sortByOption === 'price' &&
-                        sortByPriceOption === 'descending'
-                          ? 'filledCircle black'
-                          : 'filledCircle gray'
+                        sortByOption === "price" &&
+                        sortByPriceOption === "descending"
+                          ? "filledCircle black"
+                          : "filledCircle gray"
                       }
                     ></span>
                   </div>
@@ -468,11 +501,11 @@ const Store = ({ selectedCategory, selectedPrice }) => {
             ref={colorDropdownRef}
             style={{
               marginLeft:
-                selectedCategory || selectedPrice ? '-1.7rem' : '0rem',
+                selectedCategory || selectedPrice ? "-1.7rem" : "0rem",
             }}
           >
             <h2>
-              {'Color '}
+              {"Color "}
               <span className="arrow">
                 <KeyboardArrowDownIcon />
               </span>
@@ -487,7 +520,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                   >
                     <div
                       className="colorCircle"
-                      style={{ backgroundColor: color, position: 'relative' }}
+                      style={{ backgroundColor: color, position: "relative" }}
                     >
                       {selectedColor === color && (
                         <div className="correctSign">
@@ -506,17 +539,31 @@ const Store = ({ selectedCategory, selectedPrice }) => {
       {/* Product display */}
       <div
         className="products-container"
-        style={{ width: selectedCategory || selectedPrice ? '100%' : '89%' }}
+        style={{ width: selectedCategory || selectedPrice ? "100%" : "89%" }}
       >
-        {filterProducts().map((product, index) => (
-          <ProductCard
-            key={index}
-            product={product}
-            favoriteList={favoriteList}
-            handelFavorit={handelFavorit}
-            handelCart={handelCart}
-          />
-        ))}
+        {!(filterProducts().length > 0 ) && !isLoading? (
+          <div
+            style={{
+              textAlign: "center",
+              fontWeight: "bold",
+              fontSize: "25px",
+              margin: "auto",
+              marginBottom: "3rem",
+            }}
+          >
+            No results found
+          </div>
+        ) : (
+          filterProducts().map((product, index) => (
+            <ProductCard
+              key={index}
+              product={product}
+              favoriteList={favoriteList}
+              handelFavorit={handelFavorit}
+              handelCart={handelCart}
+            />
+          ))
+        )}
       </div>
       <LoginMessage
         showLoginMessage={showLoginMessage}

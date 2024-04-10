@@ -5,6 +5,10 @@ import {
   deleteEmployee,
   deleteReview,
   getAllCustomers,
+  getCustomerById,
+  deleteCustomer,
+  manageCustomers,
+  addCustomer,
   getAllEmployees,
   getCustomizationOrders,
   getEmployeeById,
@@ -38,6 +42,12 @@ const router = express.Router();
 //#region Customer
 //get Customers
 router.get('/getCustomers', getAllCustomers);
+//get Customer
+router.get('/getCustomer/:customerId', getCustomerById);
+//delete Customer
+router.delete('/deleteCustomer', deleteCustomer);
+router.post('/customer', addCustomer);
+router.put('/customer', manageCustomers);
 //delete unfavorite Reviews
 router.delete('/delete-review', deleteReview);
 //#endregion

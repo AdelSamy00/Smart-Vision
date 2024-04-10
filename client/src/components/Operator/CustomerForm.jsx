@@ -1,54 +1,109 @@
-import React, { useEffect, useState } from 'react';
-import Form from 'react-bootstrap/Form';
-import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import Loading from '../shared/Loading';
-import './styleSheets/CustomerForm.css';
+import React, { useEffect, useState } from "react";
+import Form from "react-bootstrap/Form";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import Loading from "../shared/Loading";
+import "./styleSheets/CustomerForm.css";
+import toast, { Toaster } from "react-hot-toast";
 
 function CustomerForm() {
   const navigate = useNavigate();
   const { customerId } = useParams();
-  const [firstName, setfirstName] = useState('');
-  const [lastName, setlastName] = useState('');
-  const [phone, setphone] = useState('');
-  const [gender, setgender] = useState('');
-  const [address, setaddress] = useState('');
+  const [userName, setUserName] = useState("");
+  const [phone, setphone] = useState("");
+  const [gender, setgender] = useState("");
+  const [address, setaddress] = useState("");
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
+  const [confirmpassword, setconfirmpassword] = useState("");
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   function setCustomertData(customer) {
-    setfirstName(customer?.firstName);
-    setlastName(customer?.lastName);
+    setUserName(customer?.username);
     setgender(customer?.gender);
+    setemail(customer?.email);
     setaddress(customer?.address);
-    setphone(customer?.phone);
+    setphone(`0${customer?.phone}`);
+    setpassword(customer?.password);
     setIsLoading(false);
   }
-
   async function handleDeleteCustomer() {
-    console.log('handleDeleteEmplyee');
-    // try {
-    //   await axios
-    //     .delete(`/customers/`, {
-    //       data: { id: customerId },
-    //     })
-    //     .then((res) => {
-    //       navigate('/');
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //     });
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    // console.log('handleDeleteEmplyee');
+    try {
+      await axios
+        .delete(`/employees/deleteCustomer/`, {
+          data: { id: customerId },
+        })
+        .then((res) => {
+          toast.dismiss();
+          toast.success(res.data.message);
+          navigate("/operator/view-customers");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  function handleAddCustomer() {
-    console.log('AddCustomer');
+  async function handleAddCustomer() {
+    try {
+      console.log(userName, email, password, gender, phone, address);
+      await axios
+        .post(`/employees/customer/`, {
+          username: userName,
+          email: email,
+          password: password,
+          gender: gender,
+          phone: phone,
+          address: address,
+        })
+        .then((res) => {
+          setUserName("");
+          setaddress("");
+          setphone("");
+          setgender("");
+          setemail("");
+          setpassword("");
+          navigate("/operator/view-customers");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   }
-  function handleUpdateCustomer() {
-    console.log('UpdateCustomer');
+  async function handleUpdateCustomer() {
+    try {
+      await axios
+        .put(`/employees/customer`, {
+          customerId: customerId,
+          username: userName,
+          email: email,
+          gender: gender,
+          phone: phone,
+          address: address,
+          password: password,
+        })
+        .then((res) => {
+          setUserName("");
+          setaddress("");
+          setphone("");
+          setgender("");
+          setemail("");
+          setpassword("");
+          navigate("/operator/view-customers");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const handleSubmit = async (event) => {
@@ -58,22 +113,23 @@ function CustomerForm() {
     if (form.checkValidity() === false) {
       setValidated(true);
     } else {
-      setIsLoading(true);
+      setIsLoading(false);
       customerId ? handleUpdateCustomer() : handleAddCustomer();
     }
   };
 
   async function getCustomer() {
-    console.log('getCustomer function');
-    // await axios
-    //   .get(`/customers/${customerId}`)
-    //   .then((res) => {
-    //     console.log(res?.data?.customer);
-    //     setCustomertData(res?.data?.customer);
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
+    // console.log("getCustomer function");
+    await axios
+      .get(`employees/getCustomer/${customerId}`)
+      .then((res) => {
+        console.log(res?.data?.customer);
+        setCustomertData(res?.data?.customer);
+        // console.log(res?.data?.customer?.password);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
   useEffect(() => {
     //fired only when there is customerId (edit)
@@ -85,7 +141,7 @@ function CustomerForm() {
       {!isLoading ? (
         <main className="customerFormMain">
           <div className="customerFormHeader">
-            <h2>{customerId ? 'Edit' : 'Add'} Customer</h2>
+            <h2>{customerId ? "Edit" : "Add"} Customer</h2>
             {customerId ? (
               <button onClick={handleDeleteCustomer}>
                 Delete
@@ -93,36 +149,60 @@ function CustomerForm() {
               </button>
             ) : null}
           </div>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form
+            noValidate
+            validated={validated}
+            onSubmit={handleSubmit}
+            style={{
+              maxWidth: "700px",
+              margin: "auto",
+            }}
+          >
+            <Toaster
+              toastOptions={{
+                style: {
+                  duration: 3000,
+                  border: "1px solid #6A5ACD",
+                  backgroundColor: "#6A5ACD",
+                  padding: "16px",
+                  color: "white",
+                  fontWeight: "Bold",
+                  marginTop: "65px",
+                  textAlign: "center",
+                },
+              }}
+            />
             <div className="customerFormDivForTowFields">
               <Form.Group className="InputGroup">
-                <Form.Label htmlFor="firstName" className="FormLabel">
-                  First Name
+                <Form.Label htmlFor="username" className="FormLabel">
+                  UserName
                 </Form.Label>
                 <Form.Control
                   required
                   className="InputField"
-                  name="firstName"
-                  id="firstName"
+                  name="username"
+                  id="username"
                   type="text"
-                  placeholder="First Name"
-                  value={firstName}
-                  onChange={(e) => setfirstName(e.target.value)}
+                  placeholder="UserName"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
                 />
+                
               </Form.Group>
+              {console.log(userName)}
               <Form.Group className="InputGroup">
-                <Form.Label htmlFor="lastName" className="FormLabel">
-                  Last Name
+                <Form.Label htmlFor="email" className="FormLabel">
+                  Email
                 </Form.Label>
                 <Form.Control
                   required
                   className="InputField"
-                  name="lastName"
-                  id="lastName"
-                  type="text"
-                  placeholder="last Name"
-                  value={lastName}
-                  onChange={(e) => setlastName(e.target.value)}
+                  name="email"
+                  id="email"
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setemail(e.target.value)}
                 />
               </Form.Group>
             </div>
@@ -174,16 +254,64 @@ function CustomerForm() {
                 value={address}
                 onChange={(e) => setaddress(e.target.value)}
               />
+              <div className="employeeFormDivForTowFields">
+                <Form.Group
+                  className="InputGroup"
+                  style={{ marginLeft: "0px" }}
+                >
+                  <Form.Label htmlFor="password" className="FormLabel">
+                    Password
+                  </Form.Label>
+                  <Form.Control
+                    required
+                    className="InputField"
+                    name="password"
+                    id="password"
+                    type="password"
+                    placeholder="Password"
+                    minLength={"8"}
+                    value={password}
+                    onChange={(e) => setpassword(e.target.value)}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Minimum 8 characters.
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group
+                  className="InputGroup"
+                  style={{ marginRight: "0px" }}
+                >
+                  <Form.Label htmlFor="confirmpassword" className="FormLabel">
+                    confirm Password
+                  </Form.Label>
+                  <Form.Control
+                    className="InputField"
+                    style={{ marginRight: "10px" }}
+                    name="confirmpassword"
+                    id="confirmpassword"
+                    type="password"
+                    minLength={"8"}
+                    placeholder="confirm Password"
+                    value={confirmpassword}
+                    onChange={(e) => setconfirmpassword(e.target.value)}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Password not Conform.
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </div>
             </Form.Group>
             <div className="flex justify-around flex-row-reverse ">
               <button
                 type="submit"
-                className="text-2xl bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-xl mb-4 h-16"
+                style={{ marginLeft: "auto", marginRight: "10px" }}
+                className="text-2xl bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-xl mb-4 h-12"
               >
                 Save
               </button>
               <button
-                className="text-2xl bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded-xl mb-4 h-16"
+                style={{ marginLeft: "10px" }}
+                className="text-2xl bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded-xl mb-4 h-12"
                 onClick={(e) => {
                   e.preventDefault();
                   history.back();

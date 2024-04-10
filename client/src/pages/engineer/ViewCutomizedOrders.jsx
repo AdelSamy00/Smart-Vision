@@ -103,7 +103,7 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                           {request.serviceOrder.customer?.phone}
                         </Typography>
                         <Typography>
-                          <Link to={'/'}>
+                          <Link to={`/e/order-details/${request.serviceOrder?._id}`}>
                             <Button
                               variant="text"
                               sx={{
@@ -186,7 +186,7 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                       Customer Number: 0{request.customer.phone}
                     </Typography>
                     <Typography>
-                      <Link to={'/'}>
+                      <Link to={`/e/order-details/${request._id}`}>
                         <Button
                           variant="text"
                           sx={{

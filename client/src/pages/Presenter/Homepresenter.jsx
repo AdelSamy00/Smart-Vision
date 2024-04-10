@@ -8,6 +8,10 @@ import "./StyleSheets/homePresenter.css";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 // import Loading from "../components/Loading";
 import Card from "../../components/Presenter/Card";
+import InputAdornment from "@mui/material/InputAdornment";
+import SearchIcon from "@mui/icons-material/Search";
+import IconButton from "@mui/material/IconButton";
+import { Grid } from "@mui/material";
 
 const HomePresenter = () => {
   const [products, setProducts] = useState([]);
@@ -21,7 +25,7 @@ const HomePresenter = () => {
   const dispatch = useDispatch();
   const categoryDropdownRef = useRef(null);
   const [selectedCategories, setSelectedCategories] = useState(["All"]);
-  const categories = ["sofa", "chair", "bed", "Storage"];
+  const categories = ["sofa", "chair", "bed", "table"];
 
   function deleteProductFromCart(prevCart, id) {
     return prevCart.filter((t) => t._id !== id);
@@ -114,26 +118,14 @@ const HomePresenter = () => {
     );
   };
   return (
-    <div
-      className="store-container"
-      // style={{ width: "90%", margin: "auto" }}
-    >
-      <div
-        className="filters-container"
-        // style={{
-        //   display: "flex",
-        //   justifyContent: "flex-start",
-        //   width: "100%",
-        //   gap: "5rem",
-        // }}
-      >
+    <div className="store-container">
+      <div className="filters-container">
         {/* Category filter */}
         <div
           onClick={toggleCategoryDropdown}
           className="Filter"
           tabIndex="0"
           ref={categoryDropdownRef}
-
         >
           <h2>
             {"Category "}
@@ -143,7 +135,10 @@ const HomePresenter = () => {
           </h2>
 
           {showCategoryDropdown && (
-            <div className="dropDown categorydropDown">
+            <div
+              className="dropDown categorydropDown "
+              style={{ maxHeight: "200px" }}
+            >
               {categories.map((category, index) => (
                 <div
                   key={index}
@@ -180,6 +175,7 @@ const HomePresenter = () => {
         {/* Name filter */}
         <input
           type="text"
+          className="inline md:hidden"
           value={filters.name}
           onChange={(e) => handleNameChange(e)}
           placeholder="Enter Product Name"
@@ -191,12 +187,48 @@ const HomePresenter = () => {
             // width: "250px",
           }}
         />
+        <div
+          className="hidden md:block"
+          style={{
+            marginTop: "0px",
+            marginLeft: "0px",
+            minWidth: "500px",
+            height: "50px",
+            backgroundColor: "gray",
+            borderRadius: "35px",
+            position: "relative",
+          }}
+        >
+          <IconButton
+            style={{ position: "absolute", top: "6px", left: "10px" }}
+          >
+            <SearchIcon />
+          </IconButton>
+          <input
+            style={{
+              width: "100%",
+              height: "100%",
+              border: "1px solid #ccc",
+              backgroundColor: "#f8f9fa",
+              borderRadius: "30px",
+              fontSize: "20px",
+              padding: "15px 20px",
+              paddingLeft: "50px",
+              outline: "none",
+            }}
+            type="search"
+            value={filters.name}
+            onChange={(e) => handleNameChange(e)}
+            placeholder="Enter Product Name"
+          ></input>
+        </div>
       </div>
       {/* Product display */}
       <div
         className="products-container"
         style={{
-          width:"89%"
+          width: "89%",
+          justifyContent: "space-evenly",
         }}
       >
         {filterProducts().map((product, index) => (
