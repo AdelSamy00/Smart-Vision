@@ -186,7 +186,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                       gutterBottom
                       className="presenter-product-info"
                     >
-                      Customer Name: {request.customer.username}
+                      Customer Name: {request.customer?.username}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -194,7 +194,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                       gutterBottom
                       className="presenter-product-description"
                     >
-                      Customer Number: 0{request.customer.phone}
+                      Customer Number: 0{request.customer?.phone}
                     </Typography>
                     <Typography>
                       <Link to={`/e/order-details/${request?._id}`}>

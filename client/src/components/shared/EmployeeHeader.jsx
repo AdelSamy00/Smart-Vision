@@ -19,7 +19,7 @@ const ENGINEER = [
   },
   {
     path: '/engineer/view-measured-customized-requests',
-    title: 'Measured',
+    title: 'Measuring',
   },
 ];
 const FACTORY = [
@@ -59,7 +59,7 @@ const INVENTORY = [
   },
   {
     path: '/addMatrial',
-    title: 'Add matria',
+    title: 'Add matrial',
   },
   {
     path: '/transactions-history',
@@ -67,11 +67,11 @@ const INVENTORY = [
   },
   {
     path: '/inventory-Order-matrials',
-    title: 'History',
+    title: 'Matrials History',
   },
   {
     path: '/inventory-Order-products',
-    title: 'History',
+    title: 'Products History',
   },
   {
     path: '/Transaction',
@@ -104,7 +104,7 @@ function EmployeeHeader({ props }) {
       setnavLinks(INVENTORY);
     } else if (jobTitle === 'Operator') {
       setnavLinks(OPERATOR);
-    } else if (jobTitle === 'Presenter') {
+    } else if (jobTitle === 'presenter') {
       setnavLinks(PRESENTER);
     }
   }
