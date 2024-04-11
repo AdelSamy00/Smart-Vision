@@ -63,7 +63,7 @@
 
 @media screen and (max-width:564px) {
     .employeeFormMain {
-        padding-inline: 0;
+        padding-inline: .5rem;
     }
 }
 

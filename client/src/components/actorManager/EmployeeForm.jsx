@@ -1,4 +1,4 @@
-import React, { isValidElement, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -108,8 +108,8 @@ function EmployeeForm() {
           image,
         })
         .then((res) => {
-          // navigate('/');
-          console.log(res);
+          navigate('/actor/view-employees');
+          // console.log(res);
         })
         .catch((e) => {
           console.log(e);
@@ -118,6 +118,7 @@ function EmployeeForm() {
       console.log(error);
     }
   }
+
   async function handleUpdateEmployee() {
     try {
       await axios
@@ -138,8 +139,8 @@ function EmployeeForm() {
           image,
         })
         .then((res) => {
-          // navigate('/');
-          console.log(res);
+          navigate('/actor/view-employees');
+          // console.log(res);
         })
         .catch((e) => {
           console.log(e);
@@ -156,8 +157,7 @@ function EmployeeForm() {
     if (form.checkValidity() === false || !PasswordConformed) {
       setValidated(true);
     } else {
-      console.log('first');
-      // setIsLoading(true);
+      setIsLoading(true);
       employeeId ? handleUpdateEmployee() : handleAddEmployee();
       //const picture = image && (await handleFileUpload(image));
     }
@@ -168,11 +168,13 @@ function EmployeeForm() {
       .get(`/employees/${employeeId}`)
       .then((res) => {
         setEmployeetData(res?.data?.employee);
+        console.log(res?.data?.employee);
       })
       .catch((e) => {
         console.log(e);
       });
   }
+  
   useEffect(() => {
     //fired only when there is employeeId (edit)
     employeeId ? getEmployee() : setIsLoading(false);
