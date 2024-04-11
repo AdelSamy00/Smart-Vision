@@ -65,6 +65,13 @@ function TransactionMComponent() {
   };
 
   const handleTransaction = async (method) => {
+    const hasNullQuantity = Matrials.some((material) => material.quantity === null || material.quantity === "");
+
+    if (hasNullQuantity) {
+      toast.error("Please fill in all the quantities before proceeding.");
+      return;
+    }
+  
     try {
       const managerId = employee._id;
       console.log(transactions);

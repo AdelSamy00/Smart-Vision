@@ -62,6 +62,12 @@ function TransactionPComponent() {
 
 
   const handleTransaction = async (method) => {
+    const hasNullQuantity = products.some((product) => product.quantity === null || product.quantity === "");
+
+    if (hasNullQuantity) {
+      toast.error("Please fill in all the quantities before proceeding.");
+      return;
+    }
     try {
       const managerId = employee._id;
       console.log(products);

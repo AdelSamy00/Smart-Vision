@@ -108,6 +108,7 @@ function Favourites() {
                 ? 'favoritesProductes'
                 : 'EmptyfavoriteProducte'
             }
+            style={{display:"flex" ,justifyContent:"center"}}
           >
             {favoritProducts.length > 0 ? (
               favoritProducts.map((product) => {

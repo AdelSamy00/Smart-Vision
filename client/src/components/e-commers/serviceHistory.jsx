@@ -80,8 +80,9 @@ function ServiceHistory() {
         >
           <Grid
             item
-            xs={11}
+            xs={10}
             md={7}
+            // sm={7}
             sx={{
               margin: "auto",
               border: "2px solid #ddd",
@@ -170,7 +171,7 @@ function ServiceHistory() {
                     }}
                   >
                     <Grid container spacing={4}>
-                      <Grid item xs={12} md={4}>
+                      <Grid item xs={12}  sm={5}>
                         {historyEntry.images.length === 0 ? (
                           <p
                             style={{
@@ -203,12 +204,12 @@ function ServiceHistory() {
                           </Slider>
                         )}
                       </Grid>
-                      <Grid item xs={12} md={7}>
+                      <Grid item xs={12} md={7} sm={7}>
                         <Typography
                           variant="body2"
                           style={{ marginTop: "1rem", fontSize: "20px" }}
                         >
-                          <span style={{ fontWeight: "bold" }}>
+                          <span style={{ fontWeight: "bold" }} >
                             Service Name :
                           </span>{" "}
                           {historyEntry.service}
@@ -251,9 +252,9 @@ function ServiceHistory() {
                         <Typography
                           variant="body2"
                           // xs={6}
-                          style={{ fontSize: "20px", paddingTop: "0" }}
+                          style={{ fontSize: "16px", paddingTop: "0" }}
                         >
-                          <span style={{ fontWeight: "bold", color: "#222" }}>
+                          <span style={{  color: "#222" ,fontWeight:"bold"}}>
                             State:
                           </span>{" "}
                           {historyEntry.state}
