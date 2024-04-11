@@ -92,7 +92,7 @@ function ProductDetails() {
 
   //handel add and remove from favorite list
   const handelFavorit = async (id, productId) => {
-    if (customer._id) {
+    if (customer?._id) {
       await axios
         .post("/customers/favorite", { id, productId })
         .then((res) => {

@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Logout } from '../../redux/EmployeeSlice';
 import Badge from '@mui/material/Badge';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import MailIcon from '@mui/icons-material/Mail';
 import { clearNotification } from '../../redux/NotificationSlice';
 
 const ENGINEER = [
@@ -24,14 +23,10 @@ const ENGINEER = [
   },
 ];
 const FACTORY = [
-  // {
-  //   path: '/presenter-home',
-  //   title: 'Home',
-  // },
-  // {
-  //   path: '/presenter-view',
-  //   title: 'New products',
-  // },
+  {
+    path: '/f/factor-View',
+    title: 'Home',
+  },
 ];
 const PRESENTER = [
   {
@@ -57,10 +52,6 @@ const INVENTORY = [
   {
     path: '/inventory',
     title: 'Home',
-  },
-  {
-    path: '/order',
-    title: 'Orders',
   },
   {
     path: '/addProduct',

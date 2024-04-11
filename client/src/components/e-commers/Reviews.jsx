@@ -13,7 +13,7 @@ import './stylesheets/Reviews.css'
 
 function Reviews({ review, deleteReview, editReview }) {
     const { customer } = useSelector((state) => state.customer);
-    const reviewCustomer = review.customer;
+    const reviewCustomer = review?.customer;
     const [comment, setComment] = useState(review?.comment);
     const [rating, setRating] = useState(review?.rating);
     const [validated, setValidated] = useState(false);
@@ -23,8 +23,9 @@ function Reviews({ review, deleteReview, editReview }) {
 
     //make avatar to comment
     function stringAvatar(name) {
+        console.log(review);
         return {
-            children: `${name.split(' ')[0][0]}`,
+            children: `${name?.split(' ')[0][0]}`,
         };
     }
 

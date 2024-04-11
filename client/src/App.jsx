@@ -65,7 +65,7 @@ import {
   ViewEmployees,
 } from './pages/actorManager/index.js';
 import { OrderDetailsFactory } from './pages/factory/index.js';
-import {FactorView} from './pages/factory/index.js'
+import { FactorView } from './pages/factory/index.js';
 import OrderComponent from './components/e-commers/OrderComponent.jsx';
 import AddProductForm from './components/inventory/AddProductFrom';
 import AddMatrialForm from './components/inventory/AddMatrialForm';
@@ -157,10 +157,8 @@ function App() {
         </Route>
         {/* Private Inventory Manager Routes */}
         <Route path="/inventory" element={<InventoryHome />} />
-        <Route path="/order" element={<OrderComponent />} />
         <Route path="/addProduct" element={<AddProductForm />} />
         <Route path="/addMatrial" element={<AddMatrialForm />} />
-        <Route path="/transactions-history" element={<TransactionHistory />} />
         <Route
           path="/inventory-Order-matrials"
           element={
@@ -181,7 +179,7 @@ function App() {
         />
         <Route path="/Transaction" element={<TransactionsPage />} />
         <Route
-          path="/all-transactions"
+          path="/transactions-history"
           element={<InventoryMaterialTransactions />}
         />
         {/* Private Presenter Routes */}
@@ -225,10 +223,7 @@ function App() {
           path="/f/order-details/:orderId"
           element={<OrderDetailsFactory />}
         />
-        <Route
-          path="/f/factor-View"
-          element={<FactorView />}
-        />
+        <Route path="/f/factor-View" element={<FactorView />} />
         {/* Private Operator Routes */}
         <Route
           path="/operator/view-product-orders"
@@ -257,7 +252,7 @@ function App() {
           path="/actor/edit-employee/:employeeId"
           element={<EditEmployee />}
         />
-         <Route
+        <Route
           path="/actor/change-password/:employeeId"
           element={<ChangeEmpPassword />}
         />
