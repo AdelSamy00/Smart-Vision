@@ -17,26 +17,27 @@ function Login() {
   } = useForm();
   const handleSubmitForm = async (data) => {
     try {
-      console.log(data);
-      await apiRequest({
+      const response = await apiRequest({
         url: '/auth/login',
         data: data,
         method: 'POST',
-      })
-        .then((res) => {
-          console.log(res.data);
-          alert(res.data.message);
-          localStorage.setItem('token', res.data.token);
-          const newData = { token: res.data?.token, ...res.data?.customer };
-          dispatch(SetCustomer(newData));
-          navigate('/store');
-        })
-        .catch((error) => {
-          throw error.response.data;
+      });
+      if (response?.status === 200) {
+        localStorage.setItem('token', response.data.token);
+        const newData = {
+          token: response.data.token,
+          ...response.data.customer,
+        };
+        dispatch(SetCustomer(newData));
+        navigate('/store');
+      } else {
+        setError('root', {
+          message: response?.message,
         });
+      }
     } catch (error) {
       setError('root', {
-        message: `${error.message}`,
+        message: 'An unexpected error occurred. Please try again later.',
       });
     }
   };

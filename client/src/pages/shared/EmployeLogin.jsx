@@ -17,13 +17,11 @@ function EmployeLogin() {
     formState: { errors, isSubmitting },
   } = useForm();
 
-
   function rdirectEmployeeAfterLogin(employee) {
     if (employee?.jobTitle === 'Inventory] Manager') {
-      navigate('/order')
-    }
-    else {
-      navigate('/')
+      navigate('/order');
+    } else {
+      navigate('/');
     }
   }
 
@@ -32,12 +30,11 @@ function EmployeLogin() {
       await axios
         .post('/auth/employee-login', { ...data })
         .then((res) => {
-          console.log(res.data);
-          alert(res.data.message);
+          // console.log(res.data);
           localStorage.setItem('token', res.data.token);
           const newData = { token: res.data?.token, ...res.data?.employee };
           dispatch(SetEmployee(newData));
-          rdirectEmployeeAfterLogin(newData)
+          rdirectEmployeeAfterLogin(newData);
         })
         .catch((error) => {
           throw error.response.data;

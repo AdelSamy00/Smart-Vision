@@ -175,6 +175,10 @@ header {
 
 }
 
+.MenuUL li a.active {
+  opacity: .6;
+}
+
 @media (max-width: 400px) {
   .search {
     width: 77vw;
@@ -185,11 +189,12 @@ header {
     font-size: 12px;
     font-weight: 500;
   }
-.searchInputResultsNotFound {
-  font-size: 20px;
-  padding: 1.5rem;
-  padding-inline:1rem ;
-}
+
+  .searchInputResultsNotFound {
+    font-size: 20px;
+    padding: 1.5rem;
+    padding-inline: 1rem;
+  }
 
 }
 
