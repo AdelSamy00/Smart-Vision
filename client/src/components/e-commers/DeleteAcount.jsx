@@ -23,7 +23,8 @@ const DeleteAccount = ({ onDelete }) => {
 
   return (
     <div className="delete-account-container">
-      <a href="./">Account Home</a> <ArrowRightIcon /> <span>Delete Account</span>
+      <a href="./">Account Home</a> <ArrowRightIcon />{' '}
+      <span>Delete Account</span>
       <h2 className="delete-account-heading">Delete Account</h2>
       <p>
         Time to say goodbye? We miss you already! The following happens when you
@@ -39,51 +40,44 @@ const DeleteAccount = ({ onDelete }) => {
       </ul>
       <p className="paragraph">Remember that you are always welcome back!</p>
       <hr />
-      <p className="paragraph">To delete your account, please enter your password:</p>
-      <TextField
-        type={showPassword ? "text" : "password"}
-        value={password}
-        onChange={(e) => {
-          setPassword(e.target.value);
-          setError(""); 
-        }}
-        className="delete-account-input"
-        label="Password"
-        fullWidth
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                onClick={() => setShowPassword((prev) => !prev)}
-                aria-label="toggle password visibility"
-              >
-                {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-      <p style={{ color: "red" }}>{error}</p>
-      <br />
-      <Button
-        onClick={handleDelete}
-        className="delete-account-button"
-        type="submit"
-        fullWidth
-        variant="contained"
-        sx={{
-          mt: 3,
-          mb: 2,
-          textTransform: "capitalize",
-          bgcolor: "black",
-          ":hover": { backgroundColor: "rgba(0,0,0,0.8)" },
-          height: "60px",
-          borderRadius: "30px",
-          fontSize: "19px",
-        }}
-      >
-        Delete Account
-      </Button>
+      <p className="paragraph">
+        To delete your account, please enter your password:
+      </p>
+      <div className="deleteAccountInputAndButtonDiv">
+        <div className="deleteAccountInputDiv">
+          <TextField
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setError('');
+            }}
+            className="delete-account-input"
+            label="Password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    aria-label="toggle password visibility"
+                  >
+                    {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <p style={{ color: 'red' }}>{error}</p>
+        </div>
+        <Button
+          onClick={handleDelete}
+          className="delete-account-button"
+          type="submit"
+          variant="contained"
+        >
+          Delete Account
+        </Button>
+      </div>
     </div>
   );
 };

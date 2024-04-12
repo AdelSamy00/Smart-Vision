@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import DeleteAccount from '../../components/e-commers/DeleteAcount';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import toast, { Toaster } from 'react-hot-toast';
 import { Logout } from '../../redux/CustomerSlice';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
@@ -13,6 +12,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { apiRequest } from '../../utils';
+import { Alert, Snackbar } from '@mui/material';
+
 //to Tranition the message from the end of the page
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -24,7 +25,18 @@ const DeleteAccountPage = () => {
   const [error, setError] = useState('');
   const { customer } = useSelector((state) => state.customer);
   const [showMessage, setShowMessage] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
+  const handleOpenSnackbar = () => {
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = (reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
   //to delete the customer from the redux and navigate the user to landing page
   const handleCancelMessage = () => {
     setShowMessage(false);
@@ -34,41 +46,30 @@ const DeleteAccountPage = () => {
 
   const handleDelete = async (password) => {
     try {
-      const response = await apiRequest({
-        method:"delete",
-        url:`/customers/delete-acount/${customer._id}`,
-        data:{password},
+      await apiRequest({
+        method: 'delete',
+        url: `/customers/delete-acount/${customer._id}`,
+        data: { password },
         headers: {
           'Content-Type': 'application/json',
         },
-      })
-      if (response.status === 200) {
-        setShowMessage(true);
-      } else if (password !== customer.password) {
-        setError('Incorrect password. Please try again.');
-      }
+      }).then((response) => {
+        if (response?.status === 200) {
+          setShowMessage(true);
+        } else if (response?.message === 'Invalid password') {
+          console.log('first');
+          setError('Invalid password.');
+          handleOpenSnackbar();
+        }
+      });
     } catch (error) {
-      toast.dismiss();
-      toast(error.response.data.message);
+      setError(error.response.data.message);
+      handleOpenSnackbar();
     }
   };
 
   return (
     <div className="delete-account-page">
-      <Toaster
-        toastOptions={{
-          style: {
-            duration: 3000,
-            border: '1px solid #6A5ACD',
-            backgroundColor: '#6A5ACD',
-            padding: '16px',
-            color: 'white',
-            fontWeight: 'Bold',
-            marginTop: '65px',
-            textAlign: 'center',
-          },
-        }}
-      />
       <DeleteAccount onDelete={handleDelete} error={error} />
       <div
         className="account-deleted-message"
@@ -97,6 +98,20 @@ const DeleteAccountPage = () => {
           </DialogActions>
         </Dialog>
       </div>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {error}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
