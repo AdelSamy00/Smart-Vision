@@ -2,61 +2,71 @@ import React, { useState, useEffect } from 'react';
 import HomeComponent from '../../components/inventory/HomeComponent';
 import MatrialComponnent from '../../components/inventory/matrialComponnent';
 import Loading from '../../components/shared/Loading';
-import { Button, FormControlLabel, Switch, Typography } from '@mui/material';
 import axios from 'axios';
 
 const InventoryHome = () => {
-  const [products, setProducts] = useState([]);
+  const [showOrder, setshowOrder] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [products, setproducts] = useState([]);
   const [Matrials, setMatrials] = useState([]);
 
-  const [showOrderHistory, setShowOrderHistory] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const [label, setLabel] = useState('Inventory Products');
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(`/products/not-shown`);
-        setProducts(response.data.products);
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  const toggleHistory = () => {
-    setShowOrderHistory((prevShowOrderHistory) => !prevShowOrderHistory);
-    setLabel((prevLabel) =>
-      prevLabel === 'Inventory Products'
-        ? 'Inventory Materials'
-        : 'Inventory Products'
-    );
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(`/products/`);
+      setproducts(response.data.products);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
   };
 
+  const fetchMaterials = async () => {
+    try {
+      const response = await axios.get(`/Materials/`);
+      setMatrials(response.data.materials);
+      setIsLoading(false);
+      console.log(response.data.materials);
+    } catch (error) {
+      console.error('Error fetching materials:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+    fetchMaterials();
+  }, []);
+
+  //console.log(products);
   return (
     <div>
-      <FormControlLabel
-        labelPlacement="start"
-        label={label}
-        control={
-          <Switch
-            checked={showOrderHistory}
-            onChange={toggleHistory}
-            color="primary"
-          />
-        }
-        sx={{ marginBottom: '1rem', marginLeft: '5%' }}
-      />
+      <h2 className="text-center text-3xl font-bold">
+        {showOrder ? 'All Products' : 'All Materials'}
+      </h2>
+      <div className="materialTransactionsFilterNavbarItem ml-4">
+        <label htmlFor="transactionType">Select Type:</label>
+        <select
+          name="transactionType"
+          id="transactionType"
+          onChange={(e) => {
+            e?.target?.value === 'Materila'
+              ? setshowOrder(false)
+              : setshowOrder(true);
+          }}
+        >
+          <option value="Products">Products</option>
+          <option value="Materila">Materila</option>
+        </select>
+      </div>
       {isLoading ? (
         <Loading />
       ) : (
         <ul>
           <li>
-            {showOrderHistory ? <HomeComponent /> : <MatrialComponnent />}
+            {showOrder ? (
+              <HomeComponent Allproducts={products} />
+            ) : (
+              <MatrialComponnent AllMaterials={Matrials} />
+            )}
           </li>
         </ul>
       )}
