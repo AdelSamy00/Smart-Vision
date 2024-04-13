@@ -21,10 +21,10 @@ import { useSelector } from 'react-redux';
 //   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848324/Smart%20Vision/febrian-zakaria-2QTsCoQnoag-unsplash_vjvjwj.jpg',
 //   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848329/Smart%20Vision/kenny-eliason-iAftdIcgpFc-unsplash_l33xyj.jpg',
 // ];
-function CustomizedOrderDetails({ order, employeeType, socket, setSocket }) {
   const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
+function CustomizedOrderDetails({ order, employeeType, socket, setSocket }) {
   console.log(order);
   let current = new Date();
   const images = order?.images;
@@ -96,6 +96,8 @@ function CustomizedOrderDetails({ order, employeeType, socket, setSocket }) {
         });
     }
 
+
+  };
     function getMinMeasuringDateToday() {
       const currentTime = current.toTimeString().substring(0, 5);
       let currentHoure = currentTime.substring(0, 2);
@@ -122,8 +124,6 @@ function CustomizedOrderDetails({ order, employeeType, socket, setSocket }) {
     useEffect(() => {
       CheckMinMesuringTimeToday();
     }, [measuringDate]);
-  };
-
   const handleCancelMessage = () => {
     setShowMessage(false);
   };
