@@ -13,7 +13,6 @@ function Favourites() {
   const { cart } = useSelector((state) => state.cart);
   const [favoritProducts, setFavoritProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [inCart, setInCart] = useState(null);
   const dispatch = useDispatch();
 
   const getFavorits = async (id) => {
@@ -29,38 +28,27 @@ function Favourites() {
       });
   };
 
-  useEffect(() => {
-    getFavorits(customer?._id);
-  }, []);
-
-  async function favorites(id, productId) {
-    console.log(id, productId);
+  async function handelFavorit(productId) {
+    //console.log(id, productId);
     await axios
-      .post('/customers/favorite', { id, productId })
+      .post('/customers/favorite', { id: customer._id, productId })
       .then((res) => {
         const newData = {
           token: localStorage?.getItem('token'),
           ...res.data?.newCustomerData,
         };
         dispatch(SetCustomer(newData));
-        toast.dismiss();
-        toast(res.data.message);
+        setTimeout(() => {
+          setFavoritProducts((prevfavlist) => {
+            return prevfavlist.filter((t) => t._id !== productId);
+          });
+          toast.dismiss();
+          toast('Removed successfully');
+        }, 500);
       })
       .catch((e) => {
         console.log(e);
       });
-  }
-
-  const handelFavorit = (id) => {
-    favorites(customer?._id, id);
-    setFavoritProducts((prevfavlist) => {
-      return prevfavlist.filter((t) => t._id !== id);
-    });
-  };
-
-  //remove product from cart
-  function deleteProductFromCart(prevCart, id) {
-    return prevCart.filter((t) => t._id !== id);
   }
 
   const handelCart = (id, name, price, images, points) => {
@@ -69,8 +57,7 @@ function Favourites() {
     });
     //item all ready in the cart
     if (inCart) {
-      dispatch(setCart(deleteProductFromCart(cart, id)));
-      setInCart(false);
+      dispatch(setCart(cart.filter((t) => t._id !== id)));
     } else {
       dispatch(
         setCart([
@@ -78,9 +65,13 @@ function Favourites() {
           { _id: id, name, price, images, points, quantity: 1 },
         ])
       );
-      setInCart(true);
     }
   };
+
+  useEffect(() => {
+    getFavorits(customer?._id);
+  }, []);
+  
   return (
     <>
       <main className="favoritesMain">
@@ -88,8 +79,7 @@ function Favourites() {
           toastOptions={{
             style: {
               duration: 3000,
-              border: '1px solid #6A5ACD',
-              backgroundColor: '#6A5ACD',
+              backgroundColor: '#65B741',
               padding: '16px',
               color: 'white',
               fontWeight: 'Bold',
@@ -108,7 +98,7 @@ function Favourites() {
                 ? 'favoritesProductes'
                 : 'EmptyfavoriteProducte'
             }
-            style={{display:"flex" ,justifyContent:"center"}}
+            style={{ display: 'flex', justifyContent: 'center' }}
           >
             {favoritProducts.length > 0 ? (
               favoritProducts.map((product) => {

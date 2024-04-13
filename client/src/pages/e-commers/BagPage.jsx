@@ -33,11 +33,12 @@ const Bag = () => {
   const handelFavorit = async (id, productId) => {
     if (customer._id) {
       await apiRequest({
-        method:"post",
-        url:"/customers/favorite",
-        data:{
-          id, productId
-        }
+        method: 'post',
+        url: '/customers/favorite',
+        data: {
+          id,
+          productId,
+        },
       })
         .then((res) => {
           const newData = { ...res.data?.newCustomerData };
@@ -98,270 +99,133 @@ const Bag = () => {
   }, [cart]);
 
   return (
-    <div className="BagContent">
-      <h1
-        style={{
-          fontWeight: 'bold',
-          fontSize: '40px',
-          margin: '25px 80px',
-          color: '#333',
-        }}
-        className="BagHeader"
-      >
-        Your Bag
-      </h1>
-      <p
-        style={{
-          fontSize: '24px',
-          marginBottom: '20px',
-        }}
-      >
-        Total Items: {productsInCart}
-      </p>
-      <hr />
+    <>
       {cart.length === 0 ? (
-        <p
-          style={{
-            fontWeight: 'bold',
-            fontSize: '40px',
-            margin: '35px 0px',
-          }}
-        >
-          Your bag is empty.
-        </p>
+        <div className="BagIsEmptyDiv">
+          <div>
+            <h2>Your bag is empty</h2>
+            <p>Add some Products</p>
+            <Link
+              to="/store"
+              className="btn btn-lg btn-secondary font-bold text-white mt-2"
+            >
+              View Product
+            </Link>
+          </div>
+        </div>
       ) : (
         <>
-          <ul className="BagList">
-            {cart.map((item) => (
-              <li
-                key={item._id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  margin: '20px 0px',
-                }}
-              >
-                {item.images && item.images.length > 0 && (
-                  <img
-                    src={item.images[0]}
-                    alt={item.name}
-                    style={{
-                      width: '270px',
-                      height: '170px',
-                      marginRight: '10px',
-                    }}
-                  />
-                )}
-
-                <div style={{ marginLeft: '20px' }}>
-                  <div style={{ maxWidth: '300px' }}>
-                    <p>{item.name}</p>
-                    <p>Price: {item.price} LE</p>
-                  </div>
-
-                  <div style={{ display: 'flex' }} className="divsContent">
-                    <div
-                      className="quantity-controls"
+          <div className="BagContent">
+            <h1
+              style={{
+                fontWeight: 'bold',
+                marginBottom: '1rem',
+                fontSize: '40px',
+                color: '#333',
+              }}
+              className="BagHeader"
+            >
+              Your Bag
+            </h1>
+            <p
+              style={{
+                fontSize: '24px',
+                marginBottom: '20px',
+              }}
+            >
+              Total Items: {productsInCart}
+            </p>
+            <hr />
+            <ul className="BagList">
+              {cart.map((item) => (
+                <li
+                  key={item._id}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    margin: '20px 0px',
+                  }}
+                >
+                  {item.images && item.images.length > 0 && (
+                    <img
+                      src={item.images[0]}
+                      alt={item.name}
                       style={{
-                        padding: '7px 3px',
-                        borderRadius: '30px',
+                        width: '270px',
+                        height: '170px',
+                        marginRight: '10px',
                       }}
-                    >
-                      <button onClick={() => handleDecreaseQuantity(item._id)}>
-                        -
-                      </button>
-                      <span
-                        style={{
-                          padding: '20px',
-                        }}
-                      >
-                        {item.quantity || 1}
-                      </span>
-                      <button onClick={() => handleIncreaseQuantity(item._id)}>
-                        +
-                      </button>
+                    />
+                  )}
+
+                  <div style={{ marginLeft: '20px' }}>
+                    <div style={{ maxWidth: '300px' }}>
+                      <p>{item.name}</p>
+                      <p>Price: {item.price} LE</p>
                     </div>
-                    <div className="clickButtons">
-                      <button
-                        onClick={() => handleRemoveFromCart(item._id)}
-                        style={{
-                          fontWeight: 'bold',
-                          padding: '10px',
-                          borderRadius: '27px',
-                          margin: '0px 13px',
-                        }}
-                        className="RemoveButton"
-                      >
-                        Remove
-                      </button>
-                      <button
-                        onClick={() => {
-                          handelFavorit(customer?._id, item?._id);
-                        }}
-                        style={{
-                          fontWeight: 'bold',
-                          padding: '10px',
-                          borderRadius: '27px',
-                          marginTop: '20px',
-                        }}
-                        className="FavouriteButton"
-                      >
-                        Save To Favourites
-                      </button>
-                      <div className="menuButton">
-                        <div>
+                    <div>
+                      <div style={{ display: 'flex' }} className="divsContent">
+                        <div
+                          className="quantity-controls"
+                          style={{
+                            padding: '7px 3px',
+                            borderRadius: '30px',
+                          }}
+                        >
                           <button
-                            onClick={handleOpen}
-                            className="btnHover"
+                            onClick={() => handleDecreaseQuantity(item._id)}
+                          >
+                            -
+                          </button>
+                          <span
                             style={{
-                              borderRadius: '50%',
-                              outline: 'none',
+                              padding: '20px',
                             }}
                           >
-                            <PendingIcon
-                              style={{
-                                fontSize: '32px',
-                              }}
-                            ></PendingIcon>
-                          </button>
-                          <Modal
-                            open={open}
-                            onClose={handleClose}
-                            aria-labelledby="left-modal-title"
-                            aria-describedby="left-modal-description"
-                            closeAfterTransition
+                            {item.quantity || 1}
+                          </span>
+                          <button
+                            onClick={() => handleIncreaseQuantity(item._id)}
                           >
-                            <Slide
-                              direction="up"
-                              in={open}
-                              mountOnEnter
-                              unmountOnExit
-                              className="slideBar"
-                            >
-                              <div
-                                style={{
-                                  position: 'fixed',
-                                  left: '0',
-                                  bottom: '0',
-                                  height: '250px',
-                                  width: '100vw',
-                                  backgroundColor: 'white',
-                                  overflow: 'auto',
-                                }}
-                              >
-                                <div
-                                  style={{
-                                    marginBottom: '10px',
-                                    marginLeft: '1rem',
-                                    position: 'relative',
-                                    fontSize: '20px',
-                                  }}
-                                >
-                                  <IconButton onClick={handleClose}>
-                                    <CloseIcon
-                                      style={{
-                                        fontSize: '32px',
-                                        position: 'fixed',
-                                        marginTop: '30px',
-                                      }}
-                                    />
-                                  </IconButton>
-                                  <div
-                                    style={{
-                                      display: 'flex',
-                                      justifyContent: 'center',
-                                      marginRight: '60px',
-                                    }}
-                                  >
-                                    <ArrowForwardSharpIcon
-                                      style={{
-                                        marginTop: '34px',
-                                        marginRight: '20px',
-                                      }}
-                                    ></ArrowForwardSharpIcon>
-                                    <button
-                                      onClick={() => {
-                                        handelFavorit(customer?._id, item?._id);
-                                      }}
-                                      style={{
-                                        fontWeight: 'bold',
-                                        padding: '10px',
-                                        borderRadius: '27px',
-                                        marginTop: '20px',
-                                      }}
-                                    >
-                                      Save To Favourites
-                                    </button>
-                                  </div>
-                                  <div
-                                    style={{
-                                      display: 'flex',
-                                      justifyContent: 'center',
-                                      marginRight: '150px',
-                                    }}
-                                  >
-                                    <DeleteSharpIcon
-                                      style={{
-                                        marginTop: '34px',
-                                        marginRight: '20px',
-                                      }}
-                                    ></DeleteSharpIcon>
-                                    <button
-                                      onClick={() =>
-                                        handleRemoveFromCart(item._id)
-                                      }
-                                      style={{
-                                        fontWeight: 'bold',
-                                        padding: '10px',
-                                        borderRadius: '27px',
-                                        marginTop: '20px',
-                                      }}
-                                      className="RemoveButton2"
-                                    >
-                                      Remove
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </Slide>
-                          </Modal>
+                            +
+                          </button>
                         </div>
+                        <button
+                          onClick={() => handleRemoveFromCart(item._id)}
+
+                          style={{
+                            marginTop: '15px',
+                            marginLeft:'1rem'
+                          }}
+                        >
+                          <DeleteSharpIcon />
+                        </button>
                       </div>
                     </div>
                   </div>
-                </div>
-                <hr></hr>
-              </li>
-            ))}
-          </ul>
-          <p
-            style={{
-              fontWeight: 'bold',
-              fontSize: '30px',
-              marginBottom: '30px',
-            }}
-          >
-            Total Price: {totalPrice} EL
-          </p>
-          <Link to={'/checkout'}>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{
-                textTransform: 'capitalize',
-                height: '60px',
-                borderRadius: '30px',
-                fontSize: '20px',
-              }}
-              className="checkout"
+                  <hr></hr>
+                </li>
+              ))}
+            </ul>
+            <p
+     
+                className='BagTotalPrice'
             >
-              checkout
-            </Button>
-          </Link>
+              Total Price: {totalPrice} EL
+            </p>
+            <Link to={'/checkout'} className="w-full flex justify-center">
+              <Button
+                type="submit"
+                variant="contained"
+                className="checkoutButton"
+              >
+                checkout
+              </Button>
+            </Link>
+          </div>
         </>
       )}
-    </div>
+    </>
   );
 };
 
