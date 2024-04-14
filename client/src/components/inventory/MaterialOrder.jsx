@@ -7,16 +7,45 @@ import toast, { Toaster } from "react-hot-toast";
 function MaterialOrder({ matrial }) {
   const [showOrder, setShowOrder] = useState(false);
   const [formattedDate, setFormattedDate] = useState("");
-
+  const [material ,setMaterial]=useState("")
   const toggleOrder = () => {
     setShowOrder(!showOrder);
   };
+  const handleStateChange = async () => {
+    try {
+      const response = await apiRequest({
+        method: "put",
+        url: "/materials/changetoshipped",
+        data: {
+          orderId: matrial._id,
+        },
+      });
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        setMaterial( response.data.material);
+        matrial.state = "SHIPPED";
+
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error changing material order state:", error);
+      toast.error("Failed to change material order state. Please try again.");
+    }
+  };
+
 
   useEffect(() => {
     const date = new Date(matrial?.createdAt);
     const formatted = date.toLocaleDateString();
     setFormattedDate(formatted);
   }, [matrial?.createdAt]);
+
+  if (matrial.state === "SHIPPED") {
+    return null;
+  }
+
 
   return (
     <Grid container className="order-container" sx={{ marginBottom: "2rem" }}>

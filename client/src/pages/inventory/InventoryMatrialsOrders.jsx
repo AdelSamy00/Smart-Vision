@@ -41,6 +41,17 @@ const InventoryMatrialsOrders = ({ socket, setSocket }) => {
     });
   }, [socket]);
 
+  useEffect(() => {
+    const allShipped = matrials.every(
+      (orderItem) => orderItem.state === "SHIPPED"
+    );
+    if (allShipped) {
+      setNoOrdersMessage(true);
+    } else {
+      setNoOrdersMessage(false);
+    }
+  }, [matrials]);
+
   if (noOrdersMessage) {
     return (
       <Typography

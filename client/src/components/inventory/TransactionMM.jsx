@@ -185,6 +185,7 @@ function TransactionMM() {
         <Autocomplete
           options={AllMatrials}
           getOptionLabel={(option) => option.name}
+          id="combo-box-demo"
           renderInput={(params) => (
             <TextField
               {...params}
