@@ -1,22 +1,39 @@
 import { useEffect, useState } from "react";
 import { Grid, Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import { apiRequest } from "../../utils";
+import toast, { Toaster } from "react-hot-toast";
+
 function MaterialOrder({ matrial }) {
   const [showOrder, setShowOrder] = useState(false);
+  const [formattedDate, setFormattedDate] = useState("");
 
   const toggleOrder = () => {
     setShowOrder(!showOrder);
   };
-
-  const [formattedDate, setFormattedDate] = useState("");
 
   useEffect(() => {
     const date = new Date(matrial?.createdAt);
     const formatted = date.toLocaleDateString();
     setFormattedDate(formatted);
   }, [matrial?.createdAt]);
+
   return (
     <Grid container className="order-container" sx={{ marginBottom: "2rem" }}>
+      <Toaster
+        toastOptions={{
+          style: {
+            duration: 3000,
+            border: "1px solid #6A5ACD",
+            backgroundColor: "#6A5ACD",
+            padding: "16px",
+            color: "white",
+            fontWeight: "Bold",
+            marginTop: "65px",
+            textAlign: "center",
+          },
+        }}
+      />
       <Grid
         item
         xs={11}
@@ -38,7 +55,7 @@ function MaterialOrder({ matrial }) {
           <Grid
             item
             xs={6}
-            md={6}
+            md={4}
             lg={4}
             sx={{ marginBottom: { xs: "1.3rem", md: "0rem" } }}
           >
@@ -54,11 +71,18 @@ function MaterialOrder({ matrial }) {
           <Grid
             item
             xs={6}
-            md={6}
+            md={4}
             lg={4}
             sx={{
               textAlign: { md: "center" },
               marginBottom: { xs: "2.1rem", lg: "0rem", md: "0rem" },
+
+              display: "flex",
+              justifyContent: {
+                xs: "flex-end",
+                md: "center",
+                // lg: "flex-end",
+              },
             }}
           >
             <Typography variant="body1">
@@ -68,16 +92,15 @@ function MaterialOrder({ matrial }) {
           <Grid
             item
             xs={12}
-            md={12}
+            md={4}
             lg={4}
             sx={{
               display: "flex",
               justifyContent: {
-                xs: "flex-end",
-                md: "flex-start",
+                md: "flex-end",
                 lg: "flex-end",
               },
-              marginTop: { md: "1.7rem", lg: "0rem" },
+              marginTop: {  lg: "0rem" },
               marginRight: { xs: "20px", md: "0rem", lg: "0rem" },
             }}
           >
@@ -201,10 +224,42 @@ function MaterialOrder({ matrial }) {
                 </Grid>
               </Grid>
             ))}
-            <Grid item sm={8} xs={6}>
-              <Link to={"/inventory"}>
+            <Grid
+              container
+            >
+              <Grid
+                item
+                sm={8}
+                xs={6}
+                lg={6}
+                style={{ display: "flex", justifyContent: "flex-start" }}
+              >
+                <Link to={"/Transaction"}>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "#009688",
+                      color: "white",
+                      borderRadius: "7px",
+                      ":hover": {
+                        backgroundColor: "#009688",
+                      },
+                    }}
+                  >
+                    Export
+                  </Button>
+                </Link>
+              </Grid>
+              <Grid
+                item
+                sm={4}
+                xs={6}
+                lg={6}
+                style={{ display: "flex", justifyContent: "flex-end" }}
+              >
                 <Button
                   variant="contained"
+                  onClick={() => handleStateChange()}
                   sx={{
                     backgroundColor: "#009688",
                     color: "white",
@@ -214,9 +269,9 @@ function MaterialOrder({ matrial }) {
                     },
                   }}
                 >
-                  View Matrials
+                  Done
                 </Button>
-              </Link>
+              </Grid>
             </Grid>
           </Grid>
         )}

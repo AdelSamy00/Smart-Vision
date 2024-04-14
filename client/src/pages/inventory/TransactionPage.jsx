@@ -3,6 +3,8 @@ import { Grid } from "@mui/material";
 
 import TransactionMComponent from "../../components/inventory/TransactionMComponent";
 import TransactionPComponent from "../../components/inventory/TransactionPComponent";
+import TransactionMM from "../../components/inventory/TransactionMM";
+import '../engineer/EngineerStyleSheets/CustomizedOrderForm.css';
 
 function TransactionsPage() {
   return (
@@ -20,7 +22,7 @@ function TransactionsPage() {
             align="center"
             justifyContent="center"
           >
-            <TransactionMComponent />
+            <TransactionMM />
           </Grid>
           <hr></hr>
           <Grid
@@ -31,7 +33,8 @@ function TransactionsPage() {
             justifyContent="center"
             style={{ marginTop: "10px" }}
           >
-            <TransactionPComponent />
+            {/* <TransactionPComponent /> */}
+            {/* <TransactionMComponent/> */}
           </Grid>
         </Grid>
     </Grid>

@@ -4,10 +4,12 @@ import MaterialOrder from '../../components/inventory/MaterialOrder';
 import { apiRequest } from '../../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNotification } from '../../redux/NotificationSlice';
+import { Typography } from "@mui/material";
 
 const InventoryMatrialsOrders = ({ socket, setSocket }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [matrials, setMatrials] = useState([]);
+  const [noOrdersMessage, setNoOrdersMessage] = useState(false);
   const { notification } = useSelector((state) => state?.notification);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -18,7 +20,7 @@ const InventoryMatrialsOrders = ({ socket, setSocket }) => {
           url: '/Employees/material-order',
           data: {},
         });
-        setMatrials(response.data.materialOrders);
+        setMatrials(response.data.materialOrders.reverse());
         setIsLoading(false);
         console.log(response.data.materialOrders);
       } catch (error) {
@@ -38,34 +40,40 @@ const InventoryMatrialsOrders = ({ socket, setSocket }) => {
       dispatch(setNotification([...notification, data]));
     });
   }, [socket]);
+
+  if (noOrdersMessage) {
+    return (
+      <Typography
+        variant="body1"
+        style={{
+          padding: "20px",
+          backgroundColor: "#f0f0f0",
+          borderRadius: "5px",
+          textAlign: "center",
+          fontWeight: "bold",
+          fontSize: "25px",
+          marginTop: "3rem",
+          width: "80vw",
+          margin: "4rem auto",
+        }}
+      >
+        All Orders Shipped .
+      </Typography>
+    );
+  }
+
   return (
     <div>
-      <h1 style={{ fontSize: '25px', margin: '20px' }}>Order History</h1>
+      <h1 style={{ fontSize: '25px', margin: '20px' }}>Materials Orders</h1>
       {isLoading ? (
         <Loading />
       ) : (
         <ul>
           <li>
-            {matrials.length > 0 ? (
+            {
               matrials?.map((matrial, index) => (
                 <MaterialOrder key={index} matrial={matrial} />
-              ))
-            ) : (
-              <p
-                style={{
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                  fontSize: '18px',
-                  width: '65%',
-                  border: '2px solid',
-                  margin: 'auto',
-                  padding: '20px',
-                  marginBottom: '5rem',
-                }}
-              >
-                Your order history is empty.
-              </p>
-            )}
+              ))}
           </li>
         </ul>
       )}
