@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Grid, Typography, Button } from '@mui/material';
-import Loading from '../shared/Loading';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
-import { useSelector, useDispatch } from 'react-redux';
-import { addToCart } from '../../redux/MatrialCard';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
@@ -19,16 +16,7 @@ import {
 } from '@mui/material';
 function MatrialComponnent({ AllMaterials }) {
   const [Matrials, setMatrials] = useState(AllMaterials);
-  const [displayedOrders, setDisplayedOrders] = useState(1);
-  const [cart, setCart] = useState([]);
-  const cart2 = useSelector((state) => state.matrialCard.cart);
-
-  //console.log(cart2)
-
-  const handleShowMore = () => {
-    setDisplayedOrders(Matrials.length);
-  };
-
+  
   const handleDelete = async (matrialId) => {
     try {
       const response = await axios.delete('/Materials/', {
@@ -44,16 +32,7 @@ function MatrialComponnent({ AllMaterials }) {
       toast.error('Failed to delete matrial. Please try again.');
     }
   };
-  const dispatch = useDispatch();
-  const handleAddToCart = (matrial) => {
-    const isAlreadyInCart = cart.some((item) => item._id === matrial._id);
 
-    if (isAlreadyInCart) {
-      toast.error('Item is already in the cart!');
-    } else {
-      dispatch(addToCart(matrial));
-    }
-  };
   return (
     <Grid
       container
