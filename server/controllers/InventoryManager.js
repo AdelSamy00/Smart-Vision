@@ -195,3 +195,38 @@ export const sendOrderToShipped = async (req, res, next) => {
     });
   }
 };
+export const changeStateToShipped = async (req, res, next) => {
+  try {
+    const { orderId } = req.body; 
+
+    // Find the material order by ID and update its state to "shipped"
+    const updatedOrder = await MaterialOrders.findByIdAndUpdate(
+      orderId,
+      { state: 'SHIPPED' },
+      { new: true } // To return the updated document
+    ).populate({
+      path: 'service',
+      select: 'service', }).select('-engineer')
+
+    // Check if the order exists
+    if (!updatedOrder) {
+      return res.status(404).json({
+        success: false,
+        message: 'Material order not found',
+      });
+    }
+
+    // Send a success response
+    res.status(200).json({
+      success: true,
+      message: 'Material order state changed to "shipped"',
+      order: updatedOrder,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to change material order state',
+    });
+  }
+};

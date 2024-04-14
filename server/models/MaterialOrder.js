@@ -9,6 +9,7 @@ const materialOrderSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       ref: 'ServicesOrders',
     },
+    state: { type: String, default: 'PENDING' },
     materials: [
       {
         quantity: { type: Number },
