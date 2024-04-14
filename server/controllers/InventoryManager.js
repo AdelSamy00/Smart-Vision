@@ -1,9 +1,12 @@
 import MaterialOrders from '../models/MaterialOrder.js';
+import Orders from '../models/OrderModel.js';
 import IventoryTransactions from '../models/inventoryTransaction.js';
 
 export const getMaterialTransactions = async (req, res, next) => {
   try {
-    const transactions = await IventoryTransactions.find({'category': 'Materials'})
+    const transactions = await IventoryTransactions.find({
+      category: 'Materials',
+    })
       .populate({
         path: 'inventoryManager',
         select: '_id username email -password',
@@ -13,7 +16,7 @@ export const getMaterialTransactions = async (req, res, next) => {
         populate: {
           path: 'material',
         },
-      })
+      });
 
     if (!transactions || transactions.length === 0) {
       return res.status(404).json({
@@ -38,7 +41,9 @@ export const getMaterialTransactions = async (req, res, next) => {
 
 export const getProductTransactions = async (req, res, next) => {
   try {
-    const transactions = await IventoryTransactions.find({'category': 'Products'})
+    const transactions = await IventoryTransactions.find({
+      category: 'Products',
+    })
       .populate({
         path: 'inventoryManager',
         select: '_id username email -password',
@@ -93,8 +98,6 @@ export const getMaterialOrders = async (req, res, next) => {
   }
 };
 
-
-
 export const getAllTransactions = async (req, res, next) => {
   try {
     const transactions = await IventoryTransactions.find().populate([
@@ -103,17 +106,17 @@ export const getAllTransactions = async (req, res, next) => {
         select: '_id username email -password',
       },
       {
-        path:'materials',
-        populate:{
-          path:'material'
+        path: 'materials',
+        populate: {
+          path: 'material',
         },
       },
       {
-        path:'products',
-        populate:{
-          path:'product'
+        path: 'products',
+        populate: {
+          path: 'product',
         },
-      }
+      },
     ]);
 
     res.status(200).json({
@@ -130,3 +133,65 @@ export const getAllTransactions = async (req, res, next) => {
   }
 };
 
+export const getConfirmedOrders = async (req, res, next) => {
+  try {
+    const confirmedOrders = await Orders.find({ state: 'Confirmed' }).populate([
+      {
+        path: 'customer',
+        select: '_id username email -password',
+      },
+      {
+        path: 'products',
+        populate: {
+          path: 'product',
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      message: 'Orders retrieved successfully',
+      orders: confirmedOrders,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve orders',
+    });
+  }
+};
+
+export const sendOrderToShipped = async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const ShippedOrder = await Orders.findByIdAndUpdate(
+      { _id: orderId },
+      { state: 'Shipped' },
+      { new: true }
+    ).populate([
+      {
+        path: 'customer',
+        select: '_id username email -password',
+      },
+      {
+        path: 'products',
+        populate: {
+          path: 'product',
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      message: 'Orders retrieved successfully',
+      order: ShippedOrder,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve order',
+    });
+  }
+};

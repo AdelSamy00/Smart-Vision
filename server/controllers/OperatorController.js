@@ -178,13 +178,16 @@ export const getAllServices = async (req, res, next) => {
   try {
     const services = await ServicesOrders.find({
       state: { $ne: 'CANCELED' },
-    }).populate([{
-      path: 'customer',
-      select: '_id username email gender phone verified address -password',
-    },{
-      path: 'assignedEngineer',
-      select: '_id username email -password',
-    },]);
+    }).populate([
+      {
+        path: 'customer',
+        select: '_id username email gender phone verified address -password',
+      },
+      {
+        path: 'assignedEngineer',
+        select: '_id username email -password',
+      },
+    ]);
 
     if (!services || services.length === 0) {
       next('No service orders found');
@@ -220,6 +223,48 @@ export const getAllEngineers = async (req, res, next) => {
     res.status(500).json({
       success: false,
       message: 'Failed to get all engineers',
+    });
+  }
+};
+
+export const sentProductOrderToInventory = async (req, res, next) => {
+  try {
+    const orderId = req.params.orderId;
+    // Find the order by ID and populate customer and products
+    const order = await Orders.findByIdAndUpdate(
+      { _id: orderId },
+      { state: 'Confirmed' },
+      { new: true }
+    ).populate([
+      {
+        path: 'customer',
+        select: '_id username email -password',
+      },
+      {
+        path: 'products',
+        populate: {
+          path: 'product',
+        },
+      },
+    ]);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Order retrieved successfully',
+      order: order,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve the order',
     });
   }
 };

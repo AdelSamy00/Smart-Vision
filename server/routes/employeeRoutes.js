@@ -22,17 +22,23 @@ import {
 } from '../controllers/EngineerControllers.js';
 import {
   getAllTransactions,
+  getConfirmedOrders,
   getMaterialOrders,
   getMaterialTransactions,
   getProductTransactions,
+  sendOrderToShipped,
 } from '../controllers/InventoryManager.js';
-import { getCustomizationOrdersDetails, updateServiceOrderStateToManufactured } from '../controllers/FactoryControllers.js';
+import {
+  getCustomizationOrdersDetails,
+  updateServiceOrderStateToManufactured,
+} from '../controllers/FactoryControllers.js';
 import {
   assignedEnginerToService,
   getAllEngineers,
   getAllOrders,
   getAllServices,
   getOrderById,
+  sentProductOrderToInventory,
   updateOrderStatus,
   updateServiceOrderStatus,
 } from '../controllers/OperatorController.js';
@@ -86,6 +92,7 @@ router.get('/product-transactions', getProductTransactions);
 router.get('/orders', getAllOrders);
 router.get('/orders/:orderId', getOrderById);
 router.put('/orders', updateOrderStatus);
+router.put('/orders/:orderId', sentProductOrderToInventory);
 //#endregion
 
 //#region services
@@ -95,14 +102,19 @@ router.put('/services', updateServiceOrderStatus); // to get services order to o
 
 //#endregion
 
+//#region Inventory Manager
+router.get('/inventory', getConfirmedOrders); // get confirmed order to inventory manager
+router.put('/inventory/shipped/:orderId', sendOrderToShipped);
+//#endregion
+
 //#region Actor & Employees
 router.post('/', addEmployee);
 router.put('/', manageEmployees);
 router.get('/', getAllEmployees);
 router.get('/:id', getEmployeeById);
 router.delete('/', deleteEmployee);
-router.put('/change_password',changePassword)
+router.put('/change_password', changePassword);
 //#end region
 
-router.put('/update_state',updateServiceOrderStateToManufactured)
+router.put('/update_state', updateServiceOrderStateToManufactured);
 export default router;
