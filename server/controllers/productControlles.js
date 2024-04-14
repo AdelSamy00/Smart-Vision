@@ -24,7 +24,7 @@ export const addToStore = async (req, res, next) => {
   try {
     const productData = req.body;
     // validation
-    if (!productData.name || !productData.quantity || !productData.images) {
+    if (!productData.name  || !productData.images) {
       next('Please Provide needed fields');
       return;
     }
@@ -136,7 +136,8 @@ export const updateProduct = async (req, res, next) => {
     const { id } = req.params;
     const { name, description, quantity, category, price, points } = req.body;
     const productData = req.body;
-    if (!name || !quantity || !description || !category || !price || !points) {
+    console.log(name, description, quantity, category, price, points)
+    if (!name  || !description || !category || !price || !points) {
       next('Please Provide needed fields');
       return;
     }

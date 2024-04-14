@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import ProductForm from '../../components/Presenter/ProductForm';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
 import Loading from '../../components/shared/Loading';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
-function EditProduct() {
+function AddProduct() {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,7 +28,7 @@ function EditProduct() {
   return (
     <>
       {!isLoading ? (
-        <ProductForm product={product} method={'EDIT'} />
+        <ProductForm product={product} method={'ADD'} />
       ) : (
         <div className="h-96">
           <Loading />
@@ -38,4 +38,4 @@ function EditProduct() {
   );
 }
 
-export default EditProduct;
+export default AddProduct;

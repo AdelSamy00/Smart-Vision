@@ -52,7 +52,7 @@ const StyledTag = styled(Tag)(
   () => `
   display: flex;
   align-items: center;
-  height: 30px;
+  height: 40px;
   margin: 2px;
   background-color: #fafafa;
   border: 1px solid #e8e8e8;
@@ -114,7 +114,7 @@ const Listbox = styled('ul')(
 );
 
 export default function InputColor({ colors, setColors }) {
-  const allColors = ['Red', 'Gray', 'Black','Brown', 'Off-White'];
+  const allColors = ['Red', 'Gray', 'Black','Brown', 'Off-White','Green'];
   const [initColors, setInitColors] = useState(colors);
   const {
     getInputProps,

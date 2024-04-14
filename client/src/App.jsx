@@ -22,6 +22,7 @@ import {
   // InventoryHome,
 } from './pages/e-commers/index.js';
 import {
+  AddProduct,
   EditProduct,
   HomePresenter,
   PresenterProductsView,
@@ -194,7 +195,7 @@ function App() {
         <Route path="/ed/product/:productId" element={<EditProduct />} />
         <Route
           path="addtoStore/product/:productId"
-          element={<EditProductForm />}
+          element={<AddProduct/>}
         />
         {/* Private Enginer Routes */}
         <Route
