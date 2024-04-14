@@ -121,13 +121,13 @@ const AddProductForm = () => {
         </Grid>
         <Grid container style={{marginTop:"20px"}}>
         <Grid item xs={6}  style={{display:"flex",marginLeft:"15px"}}>
-          <Button type="submit" variant="contained" color="primary">
+          <Button type="submit" variant="contained" style={{backgroundColor: "#edede9", color: "black"}}>
             Add 
           </Button>
         </Grid>
         <Grid item xs={5.6}  style={{display:"flex" ,justifyContent:"flex-end",marginRight:"-30px"}}>
           <Link to="/inventory">
-            <Button variant="contained" color="primary">
+            <Button variant="contained" style={{backgroundColor: "#edede9", color: "black"}}>
               Show
             </Button>
           </Link>

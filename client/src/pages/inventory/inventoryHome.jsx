@@ -31,10 +31,10 @@ const InventoryHome = () => {
   //console.log(products);
   return (
     <div>
-      <h2 className="text-center text-3xl font-bold">
+      <h2 className="text-center text-3xl font-bold" style={{marginTop:"8vh",marginBottom:"4vh"}}>
         All {dataType === 'products' ? 'Products' : 'Materials'}
       </h2>
-      <div className="materialTransactionsFilterNavbarItem ml-4">
+      <div className="materialTransactionsFilterNavbarItem ml-4" style={{marginBottom:"2vh"}}>
         <label htmlFor="transactionType">Select Type:</label>
         <select
           name="transactionType"

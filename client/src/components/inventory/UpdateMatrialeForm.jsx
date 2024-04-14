@@ -97,13 +97,13 @@ const UpdateMatrialForm = () => {
         </Grid>
         <Grid  container >
         <Grid item xs={6}  style={{display:"flex" ,justifyContent:"flex-start"}}>
-          <Button type="submit" variant="contained" color="primary">
+          <Button type="submit" variant="contained"style={{backgroundColor: "#edede9", color: "black"}}>
             Update
           </Button>
         </Grid>
         <Grid item xs={6}  style={{ display:"flex" ,justifyContent:"flex-end"}}>
           <Link to="/inventory">
-            <Button variant="contained" color="primary">
+            <Button variant="contained" style={{backgroundColor: "#edede9", color: "black"}}>
               Show
             </Button>
           </Link>
