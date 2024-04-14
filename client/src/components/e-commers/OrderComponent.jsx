@@ -75,7 +75,7 @@ function OrderComponent({ order }) {
             sx={{
               textAlign: { xs: 'end', md: 'center' },
               marginBottom: { xs: '1.5rem', md: '0rem' },
-              marginTop: { xs: '-1.5rem', md: '0rem' },
+              // marginTop: { xs: '-1.5rem', md: '0rem' },
               // backgroundColor:"red"
             }}
           >
@@ -122,7 +122,7 @@ function OrderComponent({ order }) {
                 },
               }}
             >
-              {showOrder ? 'close' : 'Order Details'}
+              {showOrder ? 'close' : 'Details'}
             </Button>
           </Grid>
         </Grid>

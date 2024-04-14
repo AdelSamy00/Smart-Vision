@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from "react";
 import {
   Grid,
   TextField,
@@ -8,26 +8,26 @@ import {
   ListItem,
   ListItemText,
   IconButton,
-} from '@mui/material';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { useParams } from 'react-router-dom';
-import './EngineerStyleSheets/CustomizedOrderForm.css';
-import { apiRequest, handleFileUpload } from '../../utils';
-import { useSelector } from 'react-redux';
+} from "@mui/material";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { useParams } from "react-router-dom";
+import "./EngineerStyleSheets/CustomizedOrderForm.css";
+import { apiRequest, handleFileUpload } from "../../utils";
+import { useSelector } from "react-redux";
 
 const CustomOrderForm = ({ socket, setSocket }) => {
   const { requestId } = useParams();
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const { employee } = useSelector((state) => state.employee);
   const [orderDetails, setOrderDetails] = useState({
-    customerName: '',
-    description: '',
+    customerName: "",
+    description: "",
     materials: [],
-    additionalDetails: '',
-    newMaterialName: '',
-    newMaterialQuantity: '',
+    additionalDetails: "",
+    newMaterialName: "",
+    newMaterialQuantity: "",
   });
-  const [customOrder, setCustomOrder] = useState('');
+  const [customOrder, setCustomOrder] = useState("");
   const newMaterialNameRef = useRef(null);
   const newMaterialQuantityRef = useRef(null);
   console.log(requestId);
@@ -35,13 +35,13 @@ const CustomOrderForm = ({ socket, setSocket }) => {
     const fetchCustomOrder = async () => {
       try {
         const response = await apiRequest({
-          method: 'GET',
+          method: "GET",
           url: `/employees/services/${requestId}`,
         });
         setCustomOrder(response.data.service[0]);
         console.log(response.data.service[0].customer.username);
       } catch (error) {
-        console.error('Error fetching custom order:', error);
+        console.error("Error fetching custom order:", error);
       }
     };
 
@@ -50,13 +50,13 @@ const CustomOrderForm = ({ socket, setSocket }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setOrderDetails({ ...orderDetails, [name]: value });
+    console.log(orderDetails.newMaterialQuantity);
   };
 
   const handleQuantityKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      if (orderDetails.newMaterialName.trim() !== '') {
-        addMaterial();
-      }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addMaterial();
     }
   };
 
@@ -72,14 +72,19 @@ const CustomOrderForm = ({ socket, setSocket }) => {
             quantity: newMaterialQuantity,
           },
         ],
-        newMaterialName: '',
-        newMaterialQuantity: '',
+        newMaterialName: "",
+        newMaterialQuantity: "",
       });
-      setError('');
-      newMaterialNameRef.current.value = '';
-      newMaterialQuantityRef.current.value = '';
+      setError("");
+      newMaterialNameRef.current.value = "";
+      newMaterialQuantityRef.current.value = "";
       newMaterialNameRef.current.blur();
       newMaterialQuantityRef.current.blur();
+    }
+    if (!newMaterialName) {
+      setError("Material Name can not be empty");
+    } else if (!newMaterialQuantity) {
+      setError("Material Quantity can not be empty");
     }
   };
 
@@ -94,7 +99,7 @@ const CustomOrderForm = ({ socket, setSocket }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (orderDetails.materials.length === 0) {
-      setError('Please add materials before submitting.');
+      setError("Please add materials before submitting.");
       return;
     }
     try {
@@ -102,8 +107,8 @@ const CustomOrderForm = ({ socket, setSocket }) => {
         orderDetails.details && (await handleFileUpload(orderDetails.details));
       console.log(file);
       const response = await apiRequest({
-        method: 'POST',
-        url: 'employees/customizationOrders/',
+        method: "POST",
+        url: "employees/customizationOrders/",
         data: {
           serviceId: requestId,
           engineerId: employee._id,
@@ -115,15 +120,15 @@ const CustomOrderForm = ({ socket, setSocket }) => {
         ...orderDetails,
         materials: [],
       });
-      console.log('Order placed successfully:', response.data);
-      socket?.emit('sendDetails', {
+      console.log("Order placed successfully:", response.data);
+      socket?.emit("sendDetails", {
         user: employee,
-        type: ['getMaterial', 'newOrderToFactory'],
+        type: ["getMaterial", "newOrderToFactory"],
         materialOrder: response.data.materialOrder,
         service: response.data.service,
       });
     } catch (error) {
-      console.error('Error placing order:', error.response);
+      console.error("Error placing order:", error.response);
     }
   };
   return (
@@ -156,12 +161,12 @@ const CustomOrderForm = ({ socket, setSocket }) => {
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h5" style={{ marginBottom: '10px' }}>
+          <Typography variant="h5" style={{ marginBottom: "10px" }}>
             Materials Needed:
           </Typography>
         </Grid>
 
-        <Grid item xs={5}>
+        <Grid item xs={12} sm={5}>
           <TextField
             label="Material Name"
             type="text"
@@ -169,15 +174,18 @@ const CustomOrderForm = ({ socket, setSocket }) => {
             inputRef={newMaterialNameRef}
             value={orderDetails.newMaterialName}
             onChange={handleChange}
-            onKeyDown={(e) =>
-              e.key === 'Enter' &&
-              orderDetails.newMaterialName.trim() !== '' &&
-              newMaterialQuantityRef.current.focus()
-            }
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                if (orderDetails.newMaterialName.trim() !== "")
+                  newMaterialQuantityRef.current.focus();
+                else setError("material name can not be empty");
+              }
+            }}
             fullWidth
           />
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={12} sm={5}>
           <TextField
             type="number"
             label="Quantity"
@@ -189,8 +197,21 @@ const CustomOrderForm = ({ socket, setSocket }) => {
             fullWidth
           />
         </Grid>
-        <Grid item xs={2}>
-          <Button fullWidth onClick={addMaterial} style={{ marginTop: '10px' }}>
+        <Grid
+          item
+          xs={12}
+          sm={2}
+          sx={{
+            textAlign: "center",
+            display: "flex",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Button
+            // fullWidth
+            onClick={addMaterial}
+            style={{ marginLeft: "auto" }}
+          >
             Add
           </Button>
         </Grid>
@@ -198,13 +219,13 @@ const CustomOrderForm = ({ socket, setSocket }) => {
           <Grid item xs={12}>
             <List
               style={{
-                maxHeight: '200px',
-                overflowY: 'auto',
-                paddingTop: '0px',
+                maxHeight: "200px",
+                overflowY: "auto",
+                paddingTop: "0px",
               }}
             >
               {orderDetails.materials.map((material, index) => (
-                <ListItem key={index} style={{ paddingBottom: '0px' }}>
+                <ListItem key={index} style={{ paddingBottom: "0px" }}>
                   <ListItemText primary={material.material} />
                   <ListItemText secondary={material.quantity} />
                   <IconButton
@@ -212,7 +233,7 @@ const CustomOrderForm = ({ socket, setSocket }) => {
                     aria-label="delete"
                     onClick={() => removeMaterial(index)}
                   >
-                    <DeleteForeverIcon sx={{ fontSize: '32px' }} />
+                    <DeleteForeverIcon sx={{ fontSize: "32px" }} />
                   </IconButton>
                 </ListItem>
               ))}
@@ -225,32 +246,32 @@ const CustomOrderForm = ({ socket, setSocket }) => {
         <Grid
           item
           xs={12}
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: '-0.5rem',
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "-0.5rem",
           }}
         >
-          <Grid container item xs={8}>
+          <Grid container item xs={7}>
             <input
               type="file"
               id="uploadFile"
               name="uploadFile"
               className="uploadBtn file:hidden text-black bg-white w-full p-3 rounded-md border border-gray-300"
               onChange={handleFileChange}
-              style={{ boxShadow: 'none' }}
+              style={{ boxShadow: "none" }}
             />
           </Grid>
-          <Grid container item xs={4} justify="center">
+          <Grid container item xs={5} justify="center">
             <label
               htmlFor="uploadFile"
-              className="leading-7 text-md text-gray-600 mt-1 w-full h-full cursor-pointer"
+              className="leading-6  text-md text-gray-500 mt-1 w-full h-full cursor-pointer"
               style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                fontWeight: 'bold',
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                fontWeight: "bold",
               }}
             >
               Upload File
@@ -262,7 +283,7 @@ const CustomOrderForm = ({ socket, setSocket }) => {
             type="submit"
             variant="contained"
             color="primary"
-            style={{ marginTop: '10px', textTransform: 'capitalize' }}
+            style={{ marginTop: "10px", textTransform: "capitalize" }}
           >
             Send Request
           </Button>

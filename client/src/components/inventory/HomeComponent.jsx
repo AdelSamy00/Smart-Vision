@@ -73,7 +73,7 @@ function HomeComponent({ Allproducts }) {
       alignItems="center"
       className="presenter-products-container"
     >
-      {products.length > 0 ? (
+      {products?.length > 0 ? (
         <Grid item xs={12} sm={10} md={10}>
           <Grid
             container

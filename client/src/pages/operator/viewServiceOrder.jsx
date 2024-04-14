@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { apiRequest } from '../../utils';
-import Loading from '../../components/shared/Loading';
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { apiRequest } from "../../utils";
+import Loading from "../../components/shared/Loading";
+import ClearIcon from "@mui/icons-material/Clear";
 import {
   Grid,
   Typography,
@@ -12,16 +12,20 @@ import {
   CardContent,
   IconButton,
   Collapse,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreIcon from '@mui/icons-material/More';
-import { Link, useNavigate } from 'react-router-dom';
-import { setNotification } from '../../redux/NotificationSlice';
-import { useDispatch, useSelector } from 'react-redux';
+  TextField,
+  InputAdornment,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import MoreIcon from "@mui/icons-material/More";
+import { Link, useNavigate } from "react-router-dom";
+import { setNotification } from "../../redux/NotificationSlice";
+import { useDispatch, useSelector } from "react-redux";
 const ExpandMore = ({ expand, ...other }) => <IconButton {...other} />;
 
 const ViewServiceOrders = ({ socket, setSoket }) => {
   const [expandedStates, setExpandedStates] = useState({});
+  const [searchTerm, setSearchTerm] = useState("");
   const [productOrders, setProductOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { notification } = useSelector((state) => state?.notification);
@@ -32,12 +36,21 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
     async function fetchOrderHistory() {
       try {
         const response = await axios.get(`/employees/services`);
-        setProductOrders(response.data.services);
+        const sortedOrders = response.data.services
+          .filter(
+            (order) =>
+              !(order.state === "Delivered")
+          )
+          .sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
+        setProductOrders(sortedOrders);
+        // setProductOrders(response.data.services);
         setIsLoading(false);
         console.log(response.data.services);
       } catch (error) {
         console.error(
-          'Error fetching order history:',
+          "Error fetching order history:",
           error.response.data.message
         );
       }
@@ -46,7 +59,7 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
     fetchOrderHistory();
   }, [notification]);
   useEffect(() => {
-    socket?.on('notifications', (data) => {
+    socket?.on("notifications", (data) => {
       console.log(data);
       //let number = getNumberOfNotifications(notification);
       dispatch(setNotification([...notification, data]));
@@ -61,12 +74,27 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
 
   useEffect(() => {
     const newServiceOrders = notification.filter(
-      (notify) => notify.type === 'addService'
+      (notify) => notify.type === "addService"
     );
     setServiceNotifications(
       newServiceOrders.map((notify) => notify.serviceOrder)
     );
   }, [notification]);
+
+  const filteredOrders = productOrders.filter((order) => {
+    console.log(order);
+    const searchString = searchTerm.toLowerCase();
+    const customerName = `${order?.customer?.username}`.toLowerCase();
+    const customerPhone = `0${order?.customer?.phone}`.toLowerCase();
+    const orderState = order?.state.toLowerCase();
+
+    return (
+      customerName.includes(searchString) ||
+      customerPhone.includes(searchString) ||
+      orderState.includes(searchString)
+    );
+  });
+
   return (
     <Grid
       container
@@ -76,7 +104,7 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
     >
       {isLoading ? (
         <Grid item>
-          <Loading />{' '}
+          <Loading />{" "}
         </Grid>
       ) : productOrders.length > 0 ? (
         <Grid item xs={12} sm={10} md={10}>
@@ -97,22 +125,22 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
                     <Card sx={{ maxWidth: 300 }}>
                       <CardHeader
                         title={order.service}
-                        style={{ marginTop: '10px' }}
+                        style={{ marginTop: "10px" }}
                       />
                       <CardContent
-                        style={{ marginTop: '-20px' }}
+                        style={{ marginTop: "-20px" }}
                         onClick={() => {
                           navigate(`/operator/servise-details/${order?._id}`);
                         }}
                       >
                         {`Date: ${order.createdAt
                           .substring(0, 10)
-                          .split('-')
+                          .split("-")
                           .reverse()
-                          .join('-')}`}
+                          .join("-")}`}
                       </CardContent>
                       <CardActions disableSpacing>
-                        <IconButton style={{ marginTop: '-30px' }}>
+                        <IconButton style={{ marginTop: "-30px" }}>
                           <Link to={`/operator/servise-details/${order._id}`}>
                             <MoreIcon />
                           </Link>
@@ -122,7 +150,7 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
                           onClick={() => handleExpandClick(order._id)}
                           aria-expanded={expandedStates[order._id]}
                           aria-label="show more"
-                          style={{ marginLeft: 'auto', marginTop: '-30px' }}
+                          style={{ marginLeft: "auto", marginTop: "-30px" }}
                         >
                           <ExpandMoreIcon />
                         </ExpandMore>
@@ -132,16 +160,16 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
                         timeout="auto"
                         unmountOnExit
                       >
-                        <CardContent sx={{ marginTop: '-20px' }}>
+                        <CardContent sx={{ marginTop: "-20px" }}>
                           <Typography
                             variant="body2"
-                            style={{ marginBottom: '5px', fontSize: '15px' }}
+                            style={{ marginBottom: "5px", fontSize: "15px" }}
                           >
                             {order.description}
                           </Typography>
                           <Typography
                             variant="body2"
-                            style={{ fontSize: '15px' }}
+                            style={{ fontSize: "15px" }}
                           >
                             State: {order?.state}
                           </Typography>
@@ -157,33 +185,69 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
             Service Orders
           </Typography>
           <Grid
+            sx={{
+              marginBottom: "2rem",
+              marginLeft: { xs: "0rem", md: "-3rem" },
+              width: { xs: "90vw", md: "500px" },
+            }}
+          >
+          <TextField
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              variant="outlined"
+              placeholder="Enter Your search ..."
+              fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon color="action" />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {searchTerm && (
+                      <IconButton
+                        edge="end"
+                        aria-label="clear search"
+                        onClick={(e) => setSearchTerm("")}
+                      >
+                        <ClearIcon color="action" />
+                      </IconButton>
+                    )}
+                  </InputAdornment>
+                ),
+                style: { backgroundColor: "white", borderRadius: "5px" },
+              }}
+            />
+          </Grid>
+          <Grid
             container
             spacing={3}
             className="presenter-products"
             align="center"
             justifyContent="center"
           >
-            {productOrders.map((order, index) => (
+            {filteredOrders.map((order, index) => (
               <Grid key={index} item xs={12} md={6} lg={4}>
                 <Card sx={{ maxWidth: 300 }}>
                   <CardHeader
                     title={order.service}
-                    style={{ marginTop: '10px' }}
+                    style={{ marginTop: "10px" }}
                   />
                   <CardContent
-                    style={{ marginTop: '-20px' }}
+                    style={{ marginTop: "-20px" }}
                     onClick={() => {
                       navigate(`/operator/servise-details/${order?._id}`);
                     }}
                   >
                     {`Date: ${order.createdAt
                       .substring(0, 10)
-                      .split('-')
+                      .split("-")
                       .reverse()
-                      .join('-')}`}
+                      .join("-")}`}
                   </CardContent>
                   <CardActions disableSpacing>
-                    <IconButton style={{ marginTop: '-30px' }}>
+                    <IconButton style={{ marginTop: "-30px" }}>
                       <Link to={`/operator/servise-details/${order._id}`}>
                         <MoreIcon />
                       </Link>
@@ -193,7 +257,7 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
                       onClick={() => handleExpandClick(order._id)}
                       aria-expanded={expandedStates[order._id]}
                       aria-label="show more"
-                      style={{ marginLeft: 'auto', marginTop: '-30px' }}
+                      style={{ marginLeft: "auto", marginTop: "-30px" }}
                     >
                       <ExpandMoreIcon />
                     </ExpandMore>
@@ -203,14 +267,14 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
                     timeout="auto"
                     unmountOnExit
                   >
-                    <CardContent sx={{ marginTop: '-20px' }}>
+                    <CardContent sx={{ marginTop: "-20px" }}>
                       <Typography
                         variant="body2"
-                        style={{ marginBottom: '5px', fontSize: '15px' }}
+                        style={{ marginBottom: "5px", fontSize: "15px" }}
                       >
                         {order.description}
                       </Typography>
-                      <Typography variant="body2" style={{ fontSize: '15px' }}>
+                      <Typography variant="body2" style={{ fontSize: "15px" }}>
                         State: {order?.state}
                       </Typography>
                     </CardContent>

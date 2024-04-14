@@ -24,7 +24,7 @@ import { useSelector } from 'react-redux';
   const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
-function CustomizedOrderDetails({ order, employeeType, socket, setSocket }) {
+function CustomizedOrderDetails({ order, employeeType, socket, setSocket ,from}) {
   console.log(order);
   let current = new Date();
   const images = order?.images;
@@ -41,7 +41,6 @@ function CustomizedOrderDetails({ order, employeeType, socket, setSocket }) {
   const [validated, setValidated] = useState(false);
   const [allEngineers, setallEngineers] = useState(null);
   const [showMessage, setShowMessage] = useState(false);
-
   async function getAllEngineers() {
     await axios
       .get(`/employees/engineer`)
@@ -290,7 +289,7 @@ function CustomizedOrderDetails({ order, employeeType, socket, setSocket }) {
             </Accordion.Item>
           </>
         ) : null}
-        {employeeType === 'OPERATOR' && !engineer ? (
+        {from !== 'Servishistory' &&employeeType === 'OPERATOR' && !engineer ? (
           <Accordion.Item eventKey="5">
             <Accordion.Header>Assign Engineer</Accordion.Header>
             <Accordion.Body>

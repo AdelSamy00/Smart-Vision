@@ -123,7 +123,7 @@ function EditProductForm() {
         <Grid item xs={12}>
           <Typography variant="h4">Add Product To Store</Typography>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
           <TextField
             name="name"
             label="Product Name"
@@ -134,7 +134,7 @@ function EditProductForm() {
             sx={{ marginBottom: "10px" }}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
           <TextField
             name="quantity"
             label="Quantity"
@@ -170,7 +170,7 @@ function EditProductForm() {
             sx={{ marginBottom: "10px" }}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
           <TextField
             name="price"
             label="Price"
@@ -182,7 +182,7 @@ function EditProductForm() {
             sx={{ marginBottom: "10px" }}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
           <TextField
             name="points"
             label="Points"

@@ -178,10 +178,13 @@ export const getAllServices = async (req, res, next) => {
   try {
     const services = await ServicesOrders.find({
       state: { $ne: 'CANCELED' },
-    }).populate({
+    }).populate([{
       path: 'customer',
       select: '_id username email gender phone verified address -password',
-    });
+    },{
+      path: 'assignedEngineer',
+      select: '_id username email -password',
+    },]);
 
     if (!services || services.length === 0) {
       next('No service orders found');

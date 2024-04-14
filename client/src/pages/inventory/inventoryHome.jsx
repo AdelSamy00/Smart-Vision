@@ -6,55 +6,44 @@ import axios from 'axios';
 
 const InventoryHome = () => {
   const [showOrder, setshowOrder] = useState(true);
+  const [dataType, setDataType] = useState('products');
+  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [products, setproducts] = useState([]);
-  const [Matrials, setMatrials] = useState([]);
+  // const [products, setproducts] = useState([]);
+  // const [Matrials, setMatrials] = useState([]);
 
-  const fetchProducts = async () => {
+  const fetchData = async () => {
+    setIsLoading(true);
     try {
-      const response = await axios.get(`/products/`);
-      setproducts(response.data.products);
+      const response = await axios.get(`/${dataType}/`);
+      setData(response.data[dataType]);
       setIsLoading(false);
+      console.log(response.data[dataType]);
     } catch (error) {
-      console.error('Error fetching products:', error);
-    }
-  };
-
-  const fetchMaterials = async () => {
-    try {
-      const response = await axios.get(`/Materials/`);
-      setMatrials(response.data.materials);
-      setIsLoading(false);
-      console.log(response.data.materials);
-    } catch (error) {
-      console.error('Error fetching materials:', error);
+      console.error(`Error fetching ${dataType}:`, error);
     }
   };
 
   useEffect(() => {
-    fetchProducts();
-    fetchMaterials();
-  }, []);
+    fetchData();
+  }, [dataType]);
 
   //console.log(products);
   return (
     <div>
       <h2 className="text-center text-3xl font-bold">
-        {showOrder ? 'All Products' : 'All Materials'}
+        All {dataType === 'products' ? 'Products' : 'Materials'}
       </h2>
       <div className="materialTransactionsFilterNavbarItem ml-4">
         <label htmlFor="transactionType">Select Type:</label>
         <select
           name="transactionType"
           id="transactionType"
-          onChange={(e) => {
-            e?.target?.value === 'Materila'
-              ? setshowOrder(false)
-              : setshowOrder(true);
-          }}
+          onChange={(e) => setDataType(e.target.value)}
+          value={dataType}
         >
-          <option value="Products">Products</option>
-          <option value="Materila">Materila</option>
+          <option value="products">Products</option>
+          <option value="materials">Materials</option>
         </select>
       </div>
       {isLoading ? (
@@ -62,10 +51,10 @@ const InventoryHome = () => {
       ) : (
         <ul>
           <li>
-            {showOrder ? (
-              <HomeComponent Allproducts={products} />
+            {dataType === 'products' ? (
+              <HomeComponent Allproducts={data} />
             ) : (
-              <MatrialComponnent AllMaterials={Matrials} />
+              <MatrialComponnent AllMaterials={data} />
             )}
           </li>
         </ul>

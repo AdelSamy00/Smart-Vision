@@ -80,6 +80,8 @@ import { io } from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import EmployeeHeader from './components/shared/EmployeeHeader.jsx';
 import EditProductForm from './components/Presenter/EditProductPresenter.jsx';
+import ProductOrderHistory from './pages/operator/viewOrderHistory.jsx';
+import ProductOrderDetails from './pages/operator/ProductOrderDetails.jsx';
 
 function App() {
   const location = useLocation();
@@ -230,6 +232,10 @@ function App() {
           element={<ViewProductOrders socket={socket} setSocket={setSocket} />}
         />
         <Route
+          path="/operator/product-orders-history"
+          element={<ProductOrderHistory/>}
+        />
+        <Route
           path="/operator/view-Service-orders"
           element={<ViewServiceOrder socket={socket} setSocket={setSocket} />}
         />
@@ -237,6 +243,12 @@ function App() {
           path="/operator/servise-details/:serviceId"
           element={
             <ServiseDetailsOperator socket={socket} setSocket={setSocket} />
+          }
+        />
+        <Route
+          path="/operator/order-details/:orderId"
+          element={
+            <ProductOrderDetails/>
           }
         />
         <Route path="/operator/add-customer" element={<AddCustomer />} />

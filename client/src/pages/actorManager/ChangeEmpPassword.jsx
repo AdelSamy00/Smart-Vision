@@ -118,7 +118,7 @@ export default function ChangeEmpPassword() {
   }, [accountInfo.newPassword]);
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="md">
+      <Container component="main"  style={{maxWidth:"700px"}}>
         <CssBaseline />
         <Box
           sx={{

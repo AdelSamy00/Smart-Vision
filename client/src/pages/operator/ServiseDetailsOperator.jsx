@@ -1,15 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import Loading from '../../components/shared/Loading';
-import CustomizedOrderDetails from '../../components/shared/CustomizedOrderDetails';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import Loading from "../../components/shared/Loading";
+import CustomizedOrderDetails from "../../components/shared/CustomizedOrderDetails";
+import { useLocation, useParams } from "react-router-dom";
+import axios from "axios";
 
 function ServiseDetailsOperator({ socket, setSocket }) {
   const [order, setorder] = useState();
   const [orderNumber, setorderNumber] = useState();
+  const [from, setfrom] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const { serviceId } = useParams();
+  const location = useLocation();
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const from = params.get("from");
+    setfrom(from);
+    console.log(from);
+  }, [location.search]);
   async function getCustomizedOrderDetail() {
     await axios
       .get(`/employees/services/${serviceId}`)
@@ -38,9 +46,10 @@ function ServiseDetailsOperator({ socket, setSocket }) {
           </h1>
           <CustomizedOrderDetails
             order={order}
-            employeeType={'OPERATOR'}
+            employeeType={"OPERATOR"}
             socket={socket}
             setSocket={setSocket}
+            from={from}
           />
         </main>
       ) : (
