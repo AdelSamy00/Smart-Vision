@@ -16,16 +16,39 @@ import { clearCart } from '../../redux/CartSlice';
 import { apiRequest } from '../../utils';
 
 export default function Checkout({ socket, setSocket }) {
+  const dispatch = useDispatch();
+  const { customer } = useSelector((state) => state.customer);
+  const { cart } = useSelector((state) => state.cart);
   const [activeStep, setActiveStep] = useState(0);
   const [orderNumber, setOrderNumber] = useState(0);
-  const [shippingInfo, setShippingInfo] = useState({
-    firstName: '',
-    lastName: '',
-    phoneNumber: '',
+
+  //to get first name and last name from userName
+  function setFirstAndLastName() {
+    const nameParts = customer?.username.split(' ');
+    const result = {
+      firstName: '',
+      lastName: '',
+    };
+    if (nameParts?.length === 0) {
+    } else if (nameParts?.length === 1) {
+      result.firstName = nameParts[0];
+    } else if (nameParts?.length >= 1) {
+      result.firstName = nameParts[0];
+      result.lastName = nameParts[1];
+    }
+    return result;
+  }
+  const nameParts = setFirstAndLastName();
+
+  const initCustomerData = {
+    firstName: nameParts?.firstName,
+    lastName: nameParts?.lastName,
+    phoneNumber: customer?.phone,
     city: '',
     country: '',
-    address: '',
-  });
+    address: customer?.address,
+  };
+  const [shippingInfo, setShippingInfo] = useState(initCustomerData);
   const [errorMessage, setErrorMessage] = useState({
     firstName: '',
     lastName: '',
@@ -35,9 +58,6 @@ export default function Checkout({ socket, setSocket }) {
     address: '',
   });
   const steps = ['Shipping address', 'Review your order'];
-  const { customer } = useSelector((state) => state.customer);
-  const { cart } = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const formDataString = localStorage.getItem('shippingInfo');

@@ -1,57 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import './StyleSheets/BagPage.css';
-import IconButton from '@mui/material/IconButton';
-import Slide from '@mui/material/Slide';
-import Modal from '@mui/material/Modal';
-import CloseIcon from '@mui/icons-material/Close';
-import PendingIcon from '@mui/icons-material/Pending';
-import ArrowForwardSharpIcon from '@mui/icons-material/ArrowForwardSharp';
 import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
 import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { SetCustomer } from '../../redux/CustomerSlice';
-import axios from 'axios';
 import { setCart } from '../../redux/CartSlice';
-import { apiRequest } from '../../utils';
+import LoginMessage from '../../components/e-commers/LoginMessage';
+
 const Bag = () => {
-  const [productsInCart, setproductsInCart] = useState(null);
-  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { customer } = useSelector((state) => state.customer);
   const { cart } = useSelector((state) => state.cart);
-  const [favorite, setFavorite] = useState(false);
-  const dispatch = useDispatch();
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handelFavorit = async (id, productId) => {
-    if (customer._id) {
-      await apiRequest({
-        method: 'post',
-        url: '/customers/favorite',
-        data: {
-          id,
-          productId,
-        },
-      })
-        .then((res) => {
-          const newData = { ...res.data?.newCustomerData };
-          dispatch(SetCustomer(newData));
-          setFavorite(!favorite);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    } else {
-      navigate('/login');
-    }
-  };
+  const [productsInCart, setproductsInCart] = useState(null);
+  const [showLoginMessage, setshowLoginMessage] = useState(false);
 
   function numOfProductsInCart() {
     let numOfProducts = 0;
@@ -81,6 +43,10 @@ const Bag = () => {
     );
     dispatch(setCart(updatedCart));
   };
+
+  function handleCheckout() {
+    customer._id ? navigate('/checkout') : setshowLoginMessage(true);
+  }
 
   function calculateTotalPrice() {
     if (!cart || cart.length === 0) {
@@ -192,10 +158,9 @@ const Bag = () => {
                         </div>
                         <button
                           onClick={() => handleRemoveFromCart(item._id)}
-
                           style={{
                             marginTop: '15px',
-                            marginLeft:'1rem'
+                            marginLeft: '1rem',
                           }}
                         >
                           <DeleteSharpIcon />
@@ -207,24 +172,24 @@ const Bag = () => {
                 </li>
               ))}
             </ul>
-            <p
-     
-                className='BagTotalPrice'
-            >
-              Total Price: {totalPrice} EL
-            </p>
-            <Link to={'/checkout'} className="w-full flex justify-center">
+            <p className="BagTotalPrice">Total Price: {totalPrice} EL</p>
+            <div className="w-full flex justify-center">
               <Button
                 type="submit"
                 variant="contained"
                 className="checkoutButton"
+                onClick={handleCheckout}
               >
                 checkout
               </Button>
-            </Link>
+            </div>
           </div>
         </>
       )}
+      <LoginMessage
+        showLoginMessage={showLoginMessage}
+        setshowLoginMessage={setshowLoginMessage}
+      />
     </>
   );
 };
