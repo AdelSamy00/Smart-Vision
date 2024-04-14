@@ -29,7 +29,7 @@ function ReviewPresenter({ review, deleteReview }) {
   //make avatar to comment
   function stringAvatar(name) {
     return {
-      children: `${name.split(' ')[0][0]}`,
+      children: `${name?.split(' ')[0][0]}`,
     };
   }
 
