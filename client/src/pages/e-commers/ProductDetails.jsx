@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
 import { useDispatch, useSelector } from 'react-redux';
 import { SetCustomer } from '../../redux/CustomerSlice';
@@ -15,7 +15,6 @@ import LoginMessage from '../../components/e-commers/LoginMessage';
 import HomeSlider from '../../components/e-commers/HomeSlider';
 
 function ProductDetails() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { productId } = useParams();
   const { customer } = useSelector((state) => state.customer);
@@ -30,7 +29,7 @@ function ProductDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const [showLoginMessage, setshowLoginMessage] = useState(false);
   const [products, setProducts] = useState([]);
-
+  console.log(product);
   //set valuse to prograss bar
   function setUpPrograssBar(reviews) {
     const totalRatings = [
@@ -148,7 +147,7 @@ function ProductDetails() {
         );
 
         setProducts(filteredProducts);
-        console.log(categoryResponse.data.products);
+        // console.log(categoryResponse.data.products);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching product details:', error);
@@ -322,24 +321,39 @@ function ProductDetails() {
                 <p className="productDetailsPrice">{product?.price} EL</p>
               </div>
               <div className="productDetailsDataFooter">
-                <button
-                  className={
-                    !inCart
-                      ? ' productDetailsAddToCart '
-                      : 'productDetailsAddToCart bg-red-700 hover:bg-red-900'
-                  }
-                  onClick={() =>
-                    handelCart(
-                      product?._id,
-                      product?.name,
-                      product?.price,
-                      product?.images,
-                      product?.price
-                    )
-                  }
-                >
-                  {!inCart ? ' Add to cart ' : 'Remove From cart'}
-                </button>
+                {product?.quantity === 0 ? (
+                  <h2
+                    style={{
+                      backgroundColor: '#ff6347',
+                      color: 'white',
+                      padding: '5px 10px',
+                      borderRadius: '10px',
+                      fontWeight: 'bold',
+                      fontSize: '20px',
+                    }}
+                  >
+                    Out of Stock
+                  </h2>
+                ) : (
+                  <button
+                    className={
+                      !inCart
+                        ? ' productDetailsAddToCart '
+                        : 'productDetailsAddToCart bg-red-700 hover:bg-red-900'
+                    }
+                    onClick={() =>
+                      handelCart(
+                        product?._id,
+                        product?.name,
+                        product?.price,
+                        product?.images,
+                        product?.price
+                      )
+                    }
+                  >
+                    {!inCart ? ' Add to cart ' : 'Remove From cart'}
+                  </button>
+                )}
                 <button
                   onClick={() => handelFavorit(customer?._id, product?._id)}
                 >
