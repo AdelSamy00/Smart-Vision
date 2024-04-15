@@ -14,6 +14,7 @@ import { useParams } from "react-router-dom";
 import "./EngineerStyleSheets/CustomizedOrderForm.css";
 import { apiRequest, handleFileUpload } from "../../utils";
 import { useSelector } from "react-redux";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const CustomOrderForm = ({ socket, setSocket }) => {
   const { requestId } = useParams();
@@ -274,6 +275,7 @@ const CustomOrderForm = ({ socket, setSocket }) => {
                 fontWeight: "bold",
               }}
             >
+              <CloudUploadIcon className="mr-2" />
               Upload File
             </label>
           </Grid>

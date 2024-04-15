@@ -14,7 +14,7 @@ const InventoryProductOrders = () => {
       try {
         const response = await apiRequest({
           method: "get",
-          url: "/Employees/orders",
+          url: "/Employees/inventory",
           data: {},
         });
         setorders(response.data.orders.reverse());

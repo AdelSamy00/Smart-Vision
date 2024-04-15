@@ -143,7 +143,7 @@ function BookingServiceForm({ socket, setSocket }) {
               <div className="p-2 w-full" style={{ marginTop: "15px" }}>
                 <div className="relative flex justify-items-center gap-2">
                 <label
-                    htmlFor="image"
+                    htmlFor="images"
                     className="leading-7 text-sm text-gray-600 mt-1"
                     style={{fontSize:"20px"}}
                   >
@@ -155,7 +155,7 @@ function BookingServiceForm({ socket, setSocket }) {
                     id="images"
                     name="images"
                     className="uploadBtn file:hidden text-gray-700  w-1/4"
-                    style={{backgroundColor:"#cbeef3"}}
+                    style={{backgroundColor:"#3c6e71",color:"white"}}
                     onChange={(e) => {
                       setImages(e.target.files);
                     }}
@@ -168,7 +168,7 @@ function BookingServiceForm({ socket, setSocket }) {
                 type="submit"
                 variant="contained"
                 className="checkoutButton"
-                style={{width:"80%",backgroundColor:"#cbeef3",color:"black"}}
+                style={{width:"80%",backgroundColor:"#3c6e71",color:"white"}}
               >
                 submit
               </Button>
