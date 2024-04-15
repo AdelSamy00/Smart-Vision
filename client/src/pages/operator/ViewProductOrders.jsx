@@ -7,76 +7,79 @@ import ClearIcon from "@mui/icons-material/Clear";
 import ProductOrderComponent from "../../components/Operator/ProductOrderComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "../../redux/NotificationSlice";
+
 const ViewProductOrders = ({ socket, setSocket }) => {
   const [productOrders, setProductOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const { notification } = useSelector((state) => state?.notification);
   const dispatch = useDispatch();
   const [ordersNotification, setOrdersNotification] = useState([]);
-  useEffect(() => {
-    async function fetchOrderHistory() {
-      try {
-        const response = await axios.get(`/employees/orders`);
-        const sortedOrders = response.data.orders
-          .filter(
-            (order) =>
-              !(order.state === "CANCELED" || order.state === "Delivered")
-          ) 
-          .sort((a, b) => b.orderNumber - a.orderNumber);
-        setProductOrders(sortedOrders);
-        setIsLoading(false);
-        //console.log(response.data.orders);
-      } catch (error) {
-        console.error(
-          "Error fetching order history:",
-          error.response.data.message
-        );
-      }
+  const [updatedState1, setUpdatedState1] = useState("");
+  async function fetchOrderHistory() {
+    // setIsLoading(true);
+    try {
+      const response = await axios.get(`/employees/orders`);
+      const sortedOrders = response.data.orders
+        .filter(
+          (order) =>
+            !(order.state === "CANCELED" || order.state === "Delivered")
+        )
+        .sort((a, b) => b.orderNumber - a.orderNumber);
+      setProductOrders(sortedOrders);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(
+        "Error fetching order history:",
+        error.response.data.message
+      );
     }
-
+  }
+  console.log(updatedState1);
+  useEffect(() => {
     fetchOrderHistory();
-  }, [notification]);
-
-  const filteredOrders = [...productOrders, ...ordersNotification].filter(
-    (order) => {
+  }, [notification, updatedState1]);
+  const onUpdatedState1 = (newState) => {
+    setUpdatedState1(newState);
+  };
+  useEffect(() => {
+    const filteredOrders = productOrders.filter((order) => {
       const searchString = searchTerm.toLowerCase();
       const customerName =
         `${order?.customerData?.firstName} ${order.customerData.lastName}`.toLowerCase();
       const orderNumber = order?.orderNumber.toString().toLowerCase();
       const customerPhone =
         `0${order?.customerData?.phoneNumber}`.toLowerCase();
-      const orderState = order?.state.toLowerCase();
-
+      const orderState = order?.state?.toLowerCase();
       return (
         customerName.includes(searchString) ||
         orderNumber.includes(searchString) ||
         customerPhone.includes(searchString) ||
         orderState.includes(searchString)
       );
-    }
-  );
+    });
+    setFilteredOrders(filteredOrders);
+  }, [productOrders, searchTerm]);
 
   useEffect(() => {
     socket?.on("notifications", (data) => {
-      console.log(data);
-      //let number = getNumberOfNotifications(notification);
       dispatch(setNotification([...notification, data]));
     });
   }, [socket]);
+
   useEffect(() => {
     setOrdersNotification(
       notification.filter((notify) => notify.type === "addOrder")
     );
   }, [notification]);
+
   return (
     <div>
-      {console.log(socket?.id)}
       {isLoading ? (
         <Loading />
       ) : (
         <ul>
-          {console.log(ordersNotification)}
           {ordersNotification?.length >= 1 && (
             <div className="">
               <h2 className=" flex flex-col justify-center items-center text-[#696969] text-3xl p-2">
@@ -122,8 +125,13 @@ const ViewProductOrders = ({ socket, setSocket }) => {
               <li>
                 {ordersNotification?.map((notify, idx) => {
                   let order = notify.order;
-                  console.log(order);
-                  return <ProductOrderComponent key={idx} order={order} />;
+                  return (
+                    <ProductOrderComponent
+                      key={idx}
+                      order={order}
+                      setUpdatedState1={setUpdatedState1}
+                    />
+                  );
                 })}
               </li>
             </div>
@@ -134,9 +142,10 @@ const ViewProductOrders = ({ socket, setSocket }) => {
           {!ordersNotification?.length && (
             <Grid
               sx={{
+                margin: "auto",
                 marginBottom: "2rem",
-                marginLeft: { xs: "0rem", md: "3rem" },
-                width: { xs: "100vw", md: "500px" },
+                marginLeft: { xs: "auto", md: "3rem" },
+                width: { xs: "90vw", md: "500px" },
                 padding: "0px 15px",
               }}
             >
@@ -188,7 +197,11 @@ const ViewProductOrders = ({ socket, setSocket }) => {
               </p>
             ) : filteredOrders.length > 0 ? (
               filteredOrders?.map((order, index) => (
-                <ProductOrderComponent key={index} order={order} />
+                <ProductOrderComponent
+                  key={order?._id}
+                  order1={order}
+                  onUpdatedState1={onUpdatedState1}
+                />
               ))
             ) : (
               <p
@@ -197,7 +210,6 @@ const ViewProductOrders = ({ socket, setSocket }) => {
                   fontWeight: "bold",
                   fontSize: "25px",
                   width: "65%",
-                  // border: "2px solid",
                   margin: "auto",
                   padding: "20px",
                   marginBottom: "5rem",

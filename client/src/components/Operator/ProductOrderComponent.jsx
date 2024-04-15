@@ -1,65 +1,66 @@
 import { useEffect, useState } from "react";
-import {
-  Grid,
-  Button,
-  Typography,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  useMediaQuery,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@mui/material";
-import { apiRequest } from "../../utils";
+import { Grid, Button, Typography } from "@mui/material";
+import axios from "axios";
 
-function ProductOrderComponent({ order }) {
-  const [showOrder, setShowOrder] = useState(false);
-  // const [updatedOrder, setUpdatedOrder] = useState(order);
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-  //console.log(updatedOrder)
+function Productorder1Component({ order1, onUpdatedState1 }) {
+  const [showorder1, setShoworder1] = useState(false);
+  const [showButton, setShowButton] = useState(true);
+  const [showWholeorder1, setShowWholeorder1] = useState(true);
+  const [updatedState, setUpdatedState] = useState(order1?.state);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSmallScreen(window.innerWidth < 900); // Adjust this value as needed
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Initial check
-    handleResize();
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-  const toggleOrder = () => {
-    setShowOrder(!showOrder);
+  console.log(updatedState);
+  const toggleorder1 = () => {
+    setShoworder1(!showorder1);
   };
-  const calculateTotalPrice = () => {
-    let totalPrice = 0;
-    order?.products.forEach((product) => {
-      totalPrice += product?.product?.price * (product?.quantity || 1);
-    });
-    return totalPrice;
+  const handleDoneButtonClick = async () => {
+    onUpdatedState1('');
+    try {
+      const response = await axios.put(`/employees/orders`, {
+        orderId: order1?._id,
+        newStatus: "Delivered",
+      });
+      setShowWholeorder1(false);
+      onUpdatedState1(response.data.order.state);
+      console.log(response);
+    } catch (error) {
+      console.error("Error updating order1 status:", error.message);
+    }
   };
-  return (
-    <Grid container className="order-container" sx={{ marginBottom: "2rem" }}>
+  const sendRequestToInventory = async () => {
+    setShowButton(true);
+    setUpdatedState(order1?.state);
+    onUpdatedState1('');
+    try {
+      const response = await axios.put(`/employees/orders/${order1._id}`);
+      console.log("Request sent to inventory:", response.data);
+      setShowButton(false);
+      onUpdatedState1(response.data.order.state);
+      setUpdatedState(response.data.order.state);
+    } catch (error) {
+      console.error("Error sending request to inventory:", error.message);
+    }
+  };
+
+  return showWholeorder1 ? (
+    <Grid container className="order1-container" sx={{ marginBottom: "2rem" }}>
       <Grid
         item
         xs={11}
         sm={9}
         md={9}
         lg={7}
-        sx={{ margin: "auto", border: "2px solid #ddd", borderRadius: "10px" }}
+        sx={{
+          margin: "auto",
+          border1: "2px solid #ddd",
+          border1Radius: "10px",
+        }}
       >
         <Grid
           container
           sx={{
-            borderBottom: showOrder ? "2px solid #ddd" : "none",
-            borderStartEndRadius: "10px",
-            borderStartStartRadius: "10px",
+            border1Bottom: showorder1 ? "2px solid #ddd" : "none",
+            border1StartEndRadius: "10px",
+            border1StartStartRadius: "10px",
             padding: "20px",
             backgroundColor: "#f2f2f2",
             alignItems: "center",
@@ -74,7 +75,11 @@ function ProductOrderComponent({ order }) {
           >
             <Typography variant="body1">Date Placed</Typography>
             <Typography variant="body2">
-              {order.createdAt.substring(0, 10).split("-").reverse().join("-")}
+              {order1?.createdAt
+                ?.substring(0, 10)
+                .split("-")
+                .reverse()
+                .join("-")}
             </Typography>
           </Grid>
           <Grid
@@ -89,12 +94,12 @@ function ProductOrderComponent({ order }) {
               // backgroundColor:"red"
             }}
           >
-            <Typography variant="body1">Order Number</Typography>
+            <Typography variant="body1">order1 Number</Typography>
             <Typography
               variant="body2"
               sx={{ textAlign: { xs: "end", md: "center" } }}
             >
-              {order?.orderNumber}
+              {order1?.orderNumber}
             </Typography>
           </Grid>
           <Grid
@@ -106,7 +111,7 @@ function ProductOrderComponent({ order }) {
             sx={{ textAlign: { xs: "start", md: "center" } }}
           >
             <Typography variant="body1">Total Price</Typography>
-            <Typography variant="body2">{order.totalPrice}</Typography>
+            <Typography variant="body2">{order1?.totalPrice}</Typography>
           </Grid>
           <Grid
             item
@@ -124,32 +129,32 @@ function ProductOrderComponent({ order }) {
             }}
           >
             <Button
-              onClick={toggleOrder}
+              onClick={toggleorder1}
               variant="contained"
               sx={{
                 backgroundColor: "#009688",
                 color: "white",
-                borderRadius: "5px",
+                border1Radius: "5px",
                 ":hover": {
                   backgroundColor: "#009688",
                 },
               }}
             >
-              {showOrder ? "close" : "Details"}
+              {showorder1 ? "close" : "Details"}
             </Button>
           </Grid>
         </Grid>
-        {showOrder && (
+        {showorder1 && (
           <Grid
             container
             item
             sx={{
-              borderTop: "none",
+              border1Top: "none",
               padding: "20px",
             }}
           >
             {console.log(
-              order?.customerData?.phoneNumber?.toString().length < 11
+              order1?.customerData?.phoneNumber?.toString().length < 11
             )}
             <Grid
               item
@@ -166,18 +171,18 @@ function ProductOrderComponent({ order }) {
                 variant="body1"
                 sx={{
                   marginRight: "1rem",
-                  fontSize: { xs: "16px", md: "20px", fontWeight: "bold" },
+                  fontSize: { xs: "16px", md: "19px", fontWeight: "bold" },
                 }}
               >
                 Customer Name:{" "}
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ fontSize: { xs: "16px", md: "19px", color: "gray" } }}
+                sx={{ fontSize: { xs: "16px", md: "18px", color: "gray" } }}
               >
-                {order?.customerData.firstName +
+                {order1?.customerData.firstName +
                   " " +
-                  order?.customerData.lastName}
+                  order1?.customerData.lastName}
               </Typography>
             </Grid>
             <Grid
@@ -195,29 +200,29 @@ function ProductOrderComponent({ order }) {
                 variant="body1"
                 sx={{
                   marginRight: "1rem",
-                  fontSize: { xs: "16px", md: "20px", fontWeight: "bold" },
+                  fontSize: { xs: "16px", md: "19px", fontWeight: "bold" },
                 }}
               >
                 Phone Number:{" "}
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ fontSize: { xs: "16px", md: "19px", color: "gray" } }}
+                sx={{ fontSize: { xs: "16px", md: "18px", color: "gray" } }}
               >
-                {order?.customerData?.phoneNumber?.toString().length < 11
-                  ? "0" + order?.customerData?.phoneNumber
-                  : order?.customerData?.phoneNumber}
+                {order1?.customerData?.phoneNumber?.toString().length < 11
+                  ? "0" + order1?.customerData?.phoneNumber
+                  : order1?.customerData?.phoneNumber}
               </Typography>
             </Grid>
 
-            {order?.products.map((product, index) => (
+            {order1?.products.map((product, index) => (
               <Grid
                 key={index}
                 item
                 xs={12}
                 sx={{
-                  border: "2px solid #ddd",
-                  borderRadius: "5px",
+                  border1: "2px solid #ddd",
+                  border1Radius: "5px",
                   marginBottom: "20px",
                   padding: "20px",
                 }}
@@ -230,7 +235,7 @@ function ProductOrderComponent({ order }) {
                       style={{
                         width: "100%",
                         height: "150px",
-                        borderRadius: "5px",
+                        border1Radius: "5px",
                       }}
                     />
                   </Grid>
@@ -246,7 +251,7 @@ function ProductOrderComponent({ order }) {
                       }}
                     >
                       <Grid item xs={12} md={8} variant="body1">
-                        <span style={{ color: "" }}>
+                        <span style={{ textTransform: "capitalize" }}>
                           {product?.product?.name}
                         </span>
                       </Grid>
@@ -295,112 +300,100 @@ function ProductOrderComponent({ order }) {
               item
               xs={12}
               container
-              // style={{ justifyContent: "center", alignItems: "center" }}
+              style={{ justifyContent: "center", alignItems: "center" }}
             >
               <Grid
                 item
-                xs={12}
-                md={6}
+                xs={updatedState === "Shipped" ? 6 : 12}
+                md={updatedState === "Confirmed" ? 12 : 6}
                 sx={{
                   display: "flex",
                   justifyContent: { xs: "start", md: "flex-start" },
+                  height: { md: "100%" },
                   alignItems: "center",
-                  marginBottom: "1rem",
+                  // marginBottom: { xs: "1rem",md:"0rem"},
                 }}
               >
                 <Typography
                   variant="body1"
                   sx={{
                     marginRight: "1rem",
-                    fontSize: { xs: "16px", md: "20px", fontWeight: "bold" },
+                    fontSize: { xs: "16px", md: "20px" },
                   }}
                 >
-                  State:{" "}
+                  <span style={{ fontWeight: "bold" }}>State: </span>
                 </Typography>
                 <Typography
                   variant="body1"
                   sx={{ fontSize: { xs: "16px", md: "19px", color: "gray" } }}
                 >
-                  {order?.state}
+                  {updatedState}
                 </Typography>
               </Grid>
-              {/* {isSmallScreen ? ( */}
-              <Grid
-                item
-                xs={12}
-                md={6}
-                sx={{
-                  textAlign: { xs: "start", md: "end" },
-                  justifyContent: "flex-start",
-                }}
-              >
-                <Button
-                  variant="contained"
+              {updatedState === "Pending" && showButton && (
+                <Grid
+                  item
+                  xs={12}
+                  md={6}
                   sx={{
-                    backgroundColor: "#009688",
-                    color: "white",
-                    textTransform: "capitalize",
-                    borderRadius: "5px",
-                    ":hover": {
-                      backgroundColor: "#009688",
-                    },
+                    textAlign: { xs: "start", md: "end" },
+                    // justifyContent: "flex-start",
+                    height: "100%",
+                    alignItems: "center",
                   }}
                 >
-                  Send Request To Inventory
-                </Button>
-                {/* <FormControl fullWidth>
-                    <Select
-                      labelId="order-state-label"
-                      id="order-state"
-                      value={updatedOrder?.state}
-                      onChange={handleStateChange}
-                    >
-                      {console.log(updatedOrder)}
-                      <MenuItem value="PENDING">Pending</MenuItem>
-                      <MenuItem value="In Progress">Processing</MenuItem>
-                      <MenuItem value="Shipped">Shipped</MenuItem>
-                      <MenuItem value="Delivered">Delivered</MenuItem>
-                    </Select>
-                  </FormControl> */}
-              </Grid>
-              {/* ) : ( */}
-              {/* <RadioGroup
-                  row
-                  aria-label="order-state"
-                  name="order-state"
-                  value={updatedOrder?.state}
-                  onChange={handleStateChange}
+                  <Button
+                    variant="contained"
+                    onClick={sendRequestToInventory}
+                    sx={{
+                      backgroundColor: "#009688",
+                      color: "white",
+                      textTransform: "capitalize",
+                      border1Radius: "5px",
+                      ":hover": {
+                        backgroundColor: "#009688",
+                      },
+                    }}
+                  >
+                    Send Request To Inventory
+                  </Button>
+                </Grid>
+              )}
+              {updatedState === "Shipped" && (
+                <Grid
+                  item
+                  xs={6}
+                  md={6}
+                  sx={{
+                    textAlign: { xs: "end" },
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
                 >
-                  {console.log(updatedOrder)}
-                  <FormControlLabel
-                    value="PENDING"
-                    control={<Radio />}
-                    label="Pending"
-                  />
-                  <FormControlLabel
-                    value="In Progress"
-                    control={<Radio />}
-                    label="Processing"
-                  />
-                  <FormControlLabel
-                    value="Shipped"
-                    control={<Radio />}
-                    label="Shipped"
-                  />
-                  <FormControlLabel
-                    value="Delivered"
-                    control={<Radio />}
-                    label="Delivered"
-                  />
-                </RadioGroup>
-              )} */}
-              {/* </Grid> */}
+                  {/* Render done button */}
+                  <Button
+                    variant="contained"
+                    onClick={handleDoneButtonClick}
+                    sx={{
+                      backgroundColor: "#009688",
+                      color: "white",
+                      textTransform: "capitalize",
+                      border1Radius: "5px",
+                      ":hover": {
+                        backgroundColor: "#009688",
+                      },
+                    }}
+                  >
+                    Done
+                  </Button>
+                </Grid>
+              )}
             </Grid>
           </Grid>
         )}
       </Grid>
     </Grid>
-  );
+  ) : null;
 }
 
-export default ProductOrderComponent;
+export default Productorder1Component;

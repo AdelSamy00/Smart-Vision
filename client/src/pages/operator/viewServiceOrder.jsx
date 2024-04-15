@@ -14,6 +14,7 @@ import {
   Collapse,
   TextField,
   InputAdornment,
+  MenuItem,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -28,6 +29,7 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [productOrders, setProductOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [serviceType, setServiceType] = useState("All");
   const { notification } = useSelector((state) => state?.notification);
   const [serviceNotifications, setServiceNotifications] = useState([]);
   const dispatch = useDispatch();
@@ -82,18 +84,24 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
   }, [notification]);
 
   const filteredOrders = productOrders.filter((order) => {
-    console.log(order);
     const searchString = searchTerm.toLowerCase();
     const customerName = `${order?.customer?.username}`.toLowerCase();
     const customerPhone = `0${order?.customer?.phone}`.toLowerCase();
     const orderState = order?.state.toLowerCase();
 
+    // Filter based on search term and selected service type
     return (
-      customerName.includes(searchString) ||
-      customerPhone.includes(searchString) ||
-      orderState.includes(searchString)
+      (serviceType === "All" || order.service.toLowerCase() === serviceType.toLowerCase()) &&
+      (customerName.includes(searchString) ||
+        customerPhone.includes(searchString) ||
+        orderState.includes(searchString))
     );
   });
+
+  // Handler function to update selected service type
+  const handleServiceTypeChange = (event) => {
+    setServiceType(event.target.value);
+  };
 
   return (
     <Grid
@@ -188,9 +196,26 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
             sx={{
               marginBottom: "2rem",
               marginLeft: { xs: "0rem", md: "-3rem" },
-              width: { xs: "90vw", md: "500px" },
+              maxWidth: { xs: "90vw", md: "500px" },
+              display:"flex",
+              gap:"1rem"
             }}
           >
+             <TextField
+                select
+                label="Service Type"
+                value={serviceType}
+                onChange={handleServiceTypeChange}
+                variant="outlined"
+                style={{ minWidth: "150px" }}
+              >
+                <MenuItem value="All">All</MenuItem>
+                <MenuItem value="Delivery services">Delivery services</MenuItem>
+                <MenuItem value="Packing Service">Packing Service</MenuItem>
+                <MenuItem value="Customization Service">Customization Service</MenuItem>
+                <MenuItem value="Assembly service">Assembly service</MenuItem>
+                <MenuItem value="Measuring Service">Measuring Service</MenuItem>
+              </TextField>
           <TextField
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}

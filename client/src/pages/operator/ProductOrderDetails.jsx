@@ -79,21 +79,21 @@ const ProductOrderDetails = () => {
                 }}
               >
                 <Grid container spacing={2} alignItems="center">
-                  <Grid item xs={12} sm={4}>
+                  <Grid item xs={12} sm={3}>
                     <img
                       src={product?.product?.images[0]}
                       alt={product?.product?.name}
                       style={{
                         width: "100%",
-                        maxHeight: "250px",
-                        objectFit: "cover",
+                        maxHeight: "200px",
+                        objectFit: "contain",
                       }}
                     />
                   </Grid>
                   <Grid
                     item
                     xs={12}
-                    sm={8}
+                    sm={9}
                     style={{
                       display: "flex",
                       flexDirection: "column",

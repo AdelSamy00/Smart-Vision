@@ -72,6 +72,7 @@
 .sbProductCardImg {
   width: 100%;
   height: 180px;
+  object-fit: contain;
   border-radius: 1rem 1rem 0rem 0rem;
 }
 

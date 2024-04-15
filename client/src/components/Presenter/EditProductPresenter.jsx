@@ -103,7 +103,7 @@ function EditProductForm() {
     <form
       onSubmit={handleSubmit}
       className="ProductForm"
-      style={{ maxWidth: "600px", margin: "auto", padding: "20px" }}
+      style={{ maxWidth: "750px", margin: "auto", padding: "0px" }}
     >
       <Toaster
         toastOptions={{

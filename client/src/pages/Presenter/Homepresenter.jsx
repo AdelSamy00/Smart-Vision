@@ -51,9 +51,6 @@ const HomePresenter = () => {
   };
   const handleCategoryChange = (category) => {
     setSelectedCategories((prevCategories) => {
-      if (!prevCategories || prevCategories.length === 0) {
-        return ['All'];
-      } else {
         const index = prevCategories.indexOf(category);
 
         if (index === -1) {
@@ -65,7 +62,6 @@ const HomePresenter = () => {
         } else {
           return prevCategories.filter((cat) => cat !== category);
         }
-      }
     });
   };
   useEffect(() => {

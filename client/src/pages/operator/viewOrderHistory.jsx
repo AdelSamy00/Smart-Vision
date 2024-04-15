@@ -69,7 +69,7 @@ function ProductOrderHistory() {
                 id="HistoryType"
                 onChange={(e) => setDataType(e.target.value)}
               >
-                <option value="orders">Orders</option>
+                <option value="orders">Products</option>
                 <option value="services">Services</option>
               </select>
             </div>
@@ -83,8 +83,10 @@ function ProductOrderHistory() {
               >
                 <option value="All">All</option>
                 <option value="Pending">Pending</option>
-                <option value="Canceled">Canceled</option>
+                <option value="Confirmed">Confirmed</option>               
                 <option value="Shipped">Shipped</option>
+                <option value="Delivered">Delivered</option>
+                <option value="Canceled">Canceled</option>
               </select>
             </div>
             <div className="materialTransactionsFilterNavbarItem">
