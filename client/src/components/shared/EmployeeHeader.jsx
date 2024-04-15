@@ -96,13 +96,13 @@ function EmployeeHeader({ props }) {
     navigate('/login/employee');
   }
   function setNavLinksWithEmployeeType() {
-    if (jobTitle === 'Engineer') {
+    if (jobTitle === 'engineer') {
       setnavLinks(ENGINEER);
-    } else if (jobTitle === 'Factory') {
+    } else if (jobTitle === 'factory') {
       setnavLinks(FACTORY);
     } else if (jobTitle === 'Inventory Manager') {
       setnavLinks(INVENTORY);
-    } else if (jobTitle === 'Operator') {
+    } else if (jobTitle === 'operator') {
       setnavLinks(OPERATOR);
     } else if (jobTitle === 'presenter') {
       setnavLinks(PRESENTER);

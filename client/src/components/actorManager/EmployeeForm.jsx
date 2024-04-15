@@ -6,6 +6,16 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Loading from '../../components/shared/Loading';
 import './styleSheets/EmployeeForm.css';
 import { handleFileUpload } from '../../utils';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Slide,
+  Tooltip,
+} from '@mui/material';
 
 let current = new Date();
 
@@ -34,6 +44,11 @@ const qualificationAllTypes = [
   'High School Diploma/GED',
   'Technical Certification',
 ];
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 function EmployeeForm() {
   const navigate = useNavigate();
   const { employeeId } = useParams();
@@ -53,6 +68,7 @@ function EmployeeForm() {
   const [PasswordConformed, setPasswordConformed] = useState(false);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [showDeleteMessage, setshowDeleteMessage] = useState(false);
   const maxEmployeeDateOfBirth = getmaxEmployeeDateOfBirth();
 
   function setEmployeetData(employee) {
@@ -79,7 +95,7 @@ function EmployeeForm() {
           data: { id: employeeId },
         })
         .then((res) => {
-          navigate('/');
+          navigate('/actor/view-employees');
         })
         .catch((e) => {
           console.log(e);
@@ -168,13 +184,21 @@ function EmployeeForm() {
       .get(`/employees/${employeeId}`)
       .then((res) => {
         setEmployeetData(res?.data?.employee);
-        console.log(res?.data?.employee);
+        //console.log(res?.data?.employee);
       })
       .catch((e) => {
         console.log(e);
       });
   }
-  
+
+  const handleAgreeDeleteProductMessage = () => {
+    handleDeleteEmployee();
+  };
+
+  const handleDisagreeDeleteProductMessage = () => {
+    setshowDeleteMessage(false);
+  };
+
   useEffect(() => {
     //fired only when there is employeeId (edit)
     employeeId ? getEmployee() : setIsLoading(false);
@@ -191,7 +215,7 @@ function EmployeeForm() {
           <div className="employeeFormHeader">
             <h2>{employeeId ? 'Edit' : 'Add'} Employee</h2>
             {employeeId ? (
-              <button onClick={handleDeleteEmployee}>
+              <button onClick={() => setshowDeleteMessage(true)}>
                 Delete
                 <DeleteForeverIcon />
               </button>
@@ -396,7 +420,7 @@ function EmployeeForm() {
                 </div>
               </Form.Group>
             </div>
-            {!employeeId? (
+            {!employeeId ? (
               <div className="employeeFormDivForTowFields">
                 <Form.Group className="InputGroup">
                   <Form.Label htmlFor="password" className="FormLabel">
@@ -437,8 +461,7 @@ function EmployeeForm() {
                   </Form.Control.Feedback>
                 </Form.Group>
               </div>
-            ):null}
-
+            ) : null}
             <div className="flex justify-around flex-row-reverse ">
               <button
                 type="submit"
@@ -463,6 +486,35 @@ function EmployeeForm() {
           <Loading />
         </div>
       )}
+      <Dialog
+        open={showDeleteMessage}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleDisagreeDeleteProductMessage}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle sx={{ fontSize: '25px', fontWeight: 'bold' }}>
+          Delete employee
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Are you sure you want to proceed with the deletion of this employee?
+            <br />
+            <br />
+            This action cannot be undone and will permanently remove the
+            employee from the database.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleDisagreeDeleteProductMessage}
+            sx={{ marginRight: 'auto' }}
+          >
+            DISAGREE
+          </Button>
+          <Button onClick={handleAgreeDeleteProductMessage}>AGREE</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
