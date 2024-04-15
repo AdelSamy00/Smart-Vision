@@ -2,10 +2,7 @@ import React from "react";
 import { Grid } from "@mui/material";
 
 import TransactionMComponent from "../../components/inventory/TransactionMComponent";
-import TransactionPComponent from "../../components/inventory/TransactionPComponent";
-import TransactionMM from "../../components/inventory/TransactionMM";
-import '../engineer/EngineerStyleSheets/CustomizedOrderForm.css';
-
+import TransactionPPComponent from "../../components/inventory/TransactionPPComponent";
 function TransactionsPage() {
   return (
     <Grid
@@ -22,7 +19,7 @@ function TransactionsPage() {
             align="center"
             justifyContent="center"
           >
-            <TransactionMM />
+            <TransactionMComponent />
           </Grid>
           <hr></hr>
           <Grid
@@ -33,8 +30,7 @@ function TransactionsPage() {
             justifyContent="center"
             style={{ marginTop: "10px" }}
           >
-            {/* <TransactionPComponent /> */}
-            {/* <TransactionMComponent/> */}
+            <TransactionPPComponent/>
           </Grid>
         </Grid>
     </Grid>

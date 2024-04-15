@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { apiRequest } from "../../utils";
+
 import {
   Grid,
   TextField,
@@ -16,109 +17,115 @@ import {
 import Autocomplete from "@mui/material/Autocomplete";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-function TransactionMM() {
+function TransactionPPComponent() {
   const [transactions, setTransactions] = useState([]);
   const { employee } = useSelector((state) => state.employee);
-  const [Matrials, setMatrials] = useState([{ material: "", quantity: "" }]);
+  const [products, setProducts] = useState([{ product: "", quantity: "" }]);
   const [isLoading, setIsLoading] = useState(true);
-  const newMaterialNameRef = useRef(null);
-  const newMaterialQuantityRef = useRef(null);
-  const [AllMatrials, setAllMatrials] = useState([]);
+  const newProductNameRef = useRef(null);
+  const newProductQuantityRef = useRef(null);
+  const [allProducts, setAllProducts] = useState([]);
   const [orderDetails, setOrderDetails] = useState({
-    materials: [],
-    newMaterialName: "",
-    newMaterialQuantity: "",
+    products: [],
+    newProductName: "",
+    newProductQuantity: "",
   });
 
-  const fetchMaterials = async () => {
+  const fetchProducts = async () => {
     try {
-      const response = await axios.get(`/Materials/`);
-      setAllMatrials(response.data.materials);
+      const response = await axios.get(`/products/`);
+      setAllProducts(response.data.products);
       setIsLoading(false);
-      console.log(response.data.materials);
+      console.log(response.data.products);
     } catch (error) {
-      console.error("Error fetching materials:", error);
+      console.error("Error fetching products:", error);
     }
   };
+
   useEffect(() => {
-    fetchMaterials();
+    fetchProducts();
   }, []);
 
   useEffect(() => {
-    const selectedMaterialsData = orderDetails.materials.map(
-      (selectedMaterial) => {
-        const material = AllMatrials.find(
-          (material) => material.name === selectedMaterial.material
+    const selectedProductsData = orderDetails.products.map(
+      (selectedProduct) => {
+        const product = allProducts.find(
+          (product) => product.name === selectedProduct.product
         );
         return {
-          material,
-          quantity: selectedMaterial.quantity,
+          product,
+          quantity: selectedProduct.quantity,
         };
       }
     );
-    setMatrials(selectedMaterialsData);
-    setTransactions(selectedMaterialsData);
+    setProducts(selectedProductsData);
+    setTransactions(selectedProductsData);
     setIsLoading(false);
-  }, [AllMatrials, orderDetails.materials]);
+  }, [allProducts, orderDetails.products]);
 
-  useEffect(() => {
-    console.log(transactions);
-  }, [transactions]);
-
-  const addMaterial = () => {
-    const { newMaterialName, newMaterialQuantity } = orderDetails;
-    if (newMaterialName && newMaterialQuantity) {
-      const existingMaterialIndex = orderDetails.materials.findIndex(
-        (material) => material.material === newMaterialName
+  const addProduct = () => {
+    const { newProductName, newProductQuantity } = orderDetails;
+    if (newProductName && newProductQuantity) {
+      const existingProductIndex = orderDetails.products.findIndex(
+        (product) => product.product === newProductName
       );
-      if (existingMaterialIndex !== -1) {
-        const updatedMaterials = [...orderDetails.materials];
-        updatedMaterials[existingMaterialIndex].quantity +=
-          parseInt(newMaterialQuantity);
+      if (existingProductIndex !== -1) {
+        const updatedProducts = [...orderDetails.products];
+        updatedProducts[existingProductIndex].quantity +=
+          parseInt(newProductQuantity);
         setOrderDetails({
           ...orderDetails,
-          materials: updatedMaterials,
-          newMaterialName: "",
-          newMaterialQuantity: "",
+          products: updatedProducts,
+          newProductName: "",
+          newProductQuantity: "",
         });
       } else {
         setOrderDetails({
           ...orderDetails,
-          materials: [
-            ...orderDetails.materials,
+          products: [
+            ...orderDetails.products,
             {
-              material: newMaterialName,
-              quantity: parseInt(newMaterialQuantity),
+              product: newProductName,
+              quantity: parseInt(newProductQuantity),
             },
           ],
-          newMaterialName: "",
-          newMaterialQuantity: "",
+          newProductName: "",
+          newProductQuantity: "",
         });
       }
-      newMaterialNameRef.current.value = "";
-      newMaterialQuantityRef.current.value = "";
-      newMaterialNameRef.current.blur();
-      newMaterialQuantityRef.current.blur();
+      newProductNameRef.current.value = "";
+      newProductQuantityRef.current.value = "";
+      newProductNameRef.current.blur();
+      newProductQuantityRef.current.blur();
     }
   };
 
   const handleTransaction = async (method) => {
+    const hasNullQuantity = products.some((product) => product.quantity === null || product.quantity === "");
+
+    if (hasNullQuantity) {
+      toast.error("Please fill in all the quantities before proceeding.");
+      return;
+    }
     try {
       const managerId = employee._id;
       console.log(transactions);
-      const response = await axios.put("/Materials/transaction", {
-        managerId,
-        materials: Matrials,
-        method,
-      });
-
+      const response = await apiRequest({
+        method:"put",
+        url:"/products/transaction",
+        data:{
+          managerId,
+          products: products,
+          method,
+        }
+      })
       if (response.data.success) {
         toast.success(response.data.message);
         setTransactions([]);
         setOrderDetails({
-          materials: [],
-          newMaterialName: "",
-          newMaterialQuantity: "",
+          products: [],
+          newProductName: "",
+          newProductQuantity: "",
         });
       } else {
         toast.error(response.data.message);
@@ -128,6 +135,7 @@ function TransactionMM() {
       toast.error("Failed to make transaction. Please try again.");
     }
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setOrderDetails({ ...orderDetails, [name]: value });
@@ -135,26 +143,26 @@ function TransactionMM() {
 
   const handleQuantityKeyDown = (e) => {
     if (e.key === "Enter") {
-      if (orderDetails.newMaterialName.trim() !== "") {
-        addMaterial();
+      if (orderDetails.newProductName.trim() !== "") {
+        addProduct();
       }
     }
   };
-  const removeMaterial = (index) => {
-    const materials = [...orderDetails.materials];
-    materials.splice(index, 1);
-    setOrderDetails({ ...orderDetails, materials });
+
+  const removeProduct = (index) => {
+    const products = [...orderDetails.products];
+    products.splice(index, 1);
+    setOrderDetails({ ...orderDetails, products });
   };
 
   return (
     <Grid
       container
-      justifyContent="center"
-      alignItems="center"
-      className="presenter-products-container"
+        justifyContent="center"
+        alignItems="center"
+        className="presenter-products-container"
       spacing={2}
     >
-      {" "}
       <Toaster
         toastOptions={{
           style: {
@@ -178,26 +186,26 @@ function TransactionMM() {
             justifyContent: "flex-start",
           }}
         >
-          Materials Transaction :
+          Product Transaction:
         </Typography>
       </Grid>
       <Grid item xs={5}>
         <Autocomplete
-          options={AllMatrials}
+          options={allProducts}
           getOptionLabel={(option) => option.name}
           id="combo-box-demo"
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Material Name"
+              label="Product Name"
               type="text"
-              name="newMaterialName"
-              inputRef={newMaterialNameRef}
-              value={orderDetails.newMaterialName}
+              name="newProductName"
+              inputRef={newProductNameRef}
+              value={orderDetails.newProductName}
               onKeyDown={(e) =>
                 e.key === "Enter" &&
-                orderDetails.newMaterialName.trim() !== "" &&
-                newMaterialQuantityRef.current.focus()
+                orderDetails.newProductName.trim() !== "" &&
+                newProductQuantityRef.current.focus()
               }
             />
           )}
@@ -205,7 +213,7 @@ function TransactionMM() {
             if (newValue) {
               setOrderDetails({
                 ...orderDetails,
-                newMaterialName: newValue.name,
+                newProductName: newValue.name,
               });
             }
           }}
@@ -215,20 +223,20 @@ function TransactionMM() {
         <TextField
           type="number"
           label="Quantity"
-          name="newMaterialQuantity"
-          inputRef={newMaterialQuantityRef}
-          value={orderDetails.newMaterialQuantity}
+          name="newProductQuantity"
+          inputRef={newProductQuantityRef}
+          value={orderDetails.newProductQuantity}
           onChange={handleChange}
           onKeyDown={handleQuantityKeyDown}
           fullWidth
         />
       </Grid>
       <Grid item xs={2}>
-        <Button fullWidth onClick={addMaterial} style={{ marginTop: "10px" }}>
+        <Button fullWidth onClick={addProduct} style={{ marginTop: "10px" }}>
           Add
         </Button>
       </Grid>
-      {orderDetails.materials.length > 0 && (
+      {orderDetails.products.length > 0 && (
         <Grid item xs={12}>
           <List
             style={{
@@ -237,14 +245,14 @@ function TransactionMM() {
               paddingTop: "0px",
             }}
           >
-            {orderDetails.materials.map((material, index) => (
+            {orderDetails.products.map((product, index) => (
               <ListItem key={index} style={{ paddingBottom: "0px" }}>
-                <ListItemText primary={material.material} />
-                <ListItemText secondary={material.quantity} />
+                <ListItemText primary={product.product} />
+                <ListItemText secondary={product.quantity} />
                 <IconButton
                   edge="end"
                   aria-label="delete"
-                  onClick={() => removeMaterial(index)}
+                  onClick={() => removeProduct(index)}
                 >
                   <DeleteForeverIcon
                     sx={{ fontSize: "32px" }}
@@ -256,8 +264,11 @@ function TransactionMM() {
           </List>
         </Grid>
       )}
-      <Grid item xs={12}>
-        <Grid item xs={12} style={{ marginTop: "30px" }}>
+      <Grid
+        item
+        xs={12}
+      >
+        <Grid item xs={12} style={{ marginTop: "30px" ,display: "flex", justifyContent: "flex-start" }}>
           <Button
             variant="contained"
             onClick={() => handleTransaction("Export")}
@@ -282,4 +293,4 @@ function TransactionMM() {
   );
 }
 
-export default TransactionMM;
+export default TransactionPPComponent;
