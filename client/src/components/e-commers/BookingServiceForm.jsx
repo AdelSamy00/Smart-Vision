@@ -1,26 +1,30 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useState } from 'react';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { handleMultipleFilesUpload } from '../../utils';
-import Loading from '../shared/Loading';
-import { TextField, Button, Grid } from '@mui/material';
-import { apiRequest } from '../../utils';
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { handleMultipleFilesUpload } from "../../utils";
+import Loading from "../shared/Loading";
+import { TextField, Button, Grid } from "@mui/material";
+import { apiRequest } from "../../utils";
+import { styled } from "@mui/material/styles";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+
 function BookingServiceForm({ socket, setSocket }) {
   const { state } = useLocation();
   const [images, setImages] = useState([{}]);
   const service = state ? state.service : null;
   const { customer } = useSelector((state) => state.customer);
   const [loading, setLoading] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({
-    ServiceName: '',
+    ServiceName: "",
     phoneNumber: customer?.phone,
     address: customer?.address,
-    description: '',
+    description: "",
     images: [{}],
   });
-  const [formSubmitted, setFormSubmitted] = useState(false);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -38,10 +42,10 @@ function BookingServiceForm({ socket, setSocket }) {
       const uploadedImages =
         images && (await handleMultipleFilesUpload(images));
 
-      console.log('Uploaded Image URL:', uploadedImages);
+      console.log("Uploaded Image URL:", uploadedImages);
       const response = await apiRequest({
-        method: 'post',
-        url: '/customers/service',
+        method: "post",
+        url: "/customers/service",
         data: {
           id: customer._id,
           service: service.title,
@@ -54,16 +58,16 @@ function BookingServiceForm({ socket, setSocket }) {
       if (response.data.success) {
         console.log(response.data);
         setFormSubmitted(true);
-        socket?.emit('setService', {
+        socket?.emit("setService", {
           user: customer,
-          type: 'addService',
+          type: "addService",
           serviceOrder: response?.data.serviceOrder,
         });
       } else {
         console.error(response.data.message);
       }
     } catch (error) {
-      console.error('Failed to submit the form:', error.response.data.message);
+      console.error("Failed to submit the form:", error.response.data.message);
     } finally {
       setLoading(false);
     }
@@ -75,9 +79,9 @@ function BookingServiceForm({ socket, setSocket }) {
           {/* {console.log(socket)} */}
           <h2
             style={{
-              fontSize: '20px',
-              fontWeight: 'bold',
-              paddingBottom: '20px',
+              fontSize: "20px",
+              fontWeight: "bold",
+              paddingBottom: "20px",
             }}
           >
             If You Need To Book This Service Fill This Form .
@@ -136,39 +140,39 @@ function BookingServiceForm({ socket, setSocket }) {
                   />
                 </Grid>
               </Grid>
-              <div className="p-2 w-full" style={{ marginTop: '15px' }}>
+              <div className="p-2 w-full" style={{ marginTop: "15px" }}>
                 <div className="relative flex justify-items-center gap-2">
+                <label
+                    htmlFor="image"
+                    className="leading-7 text-sm text-gray-600 mt-1"
+                    style={{fontSize:"20px"}}
+                  >
+                    <CloudUploadIcon className="mr-2" />
+                    UploadFile
+                  </label>
                   <input
                     type="file"
                     id="images"
                     name="images"
-                    className="uploadBtn file:hidden text-gray-700 bg-gray-300 w-1/4"
+                    className="uploadBtn file:hidden text-gray-700  w-1/4"
+                    style={{backgroundColor:"#cbeef3"}}
                     onChange={(e) => {
                       setImages(e.target.files);
                     }}
-                    multiple
+                    multiple                 
                   />
-                  <label
-                    htmlFor="image"
-                    className="leading-7 text-sm text-gray-600 mt-1"
-                  >
-                    uploadFile
-                  </label>
                 </div>
               </div>
-              <button
+              <div className="w-full flex justify-center" style={{marginTop:"20px" }}>
+              <Button
                 type="submit"
-                style={{
-                  backgroundColor: '#009688',
-                  color: 'white',
-                  padding: '10px 20px',
-                  border: 'none',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                }}
+                variant="contained"
+                className="checkoutButton"
+                style={{width:"80%",backgroundColor:"#cbeef3",color:"black"}}
               >
-                Submit
-              </button>
+                submit
+              </Button>
+            </div>
             </form>
           )}
           {formSubmitted && (
@@ -184,9 +188,9 @@ function BookingServiceForm({ socket, setSocket }) {
           <div className="m-auto text-center">
             <h2
               style={{
-                fontSize: '20px',
-                fontWeight: 'bold',
-                paddingBottom: '20px',
+                fontSize: "20px",
+                fontWeight: "bold",
+                paddingBottom: "20px",
               }}
             >
               For booking this service, you need to log in first.

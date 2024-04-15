@@ -2,13 +2,16 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import BookingServiceForm from '../../components/e-commers/BookingServiceForm';
 import './StyleSheets/servicesdetails.css';
+import { Grid } from '@mui/material';
 function ServicesDetails({ socket, setSocket }) {
   const { state } = useLocation();
   const service = state ? state.service : null;
 
   return (
     <div className="ServicesDetails">
-      <div className="ServicesDetailsContent">
+      <Grid container style={{display:"flex",justifyContent:'space-between'}}>
+        <Grid item lg={5.5} md={5.5} sm={12}>
+        <div className="ServicesDetailsContent">
         <h2 className="text-3xl font-bold mt-5 mb-3">{service.title}</h2>
         <img
           src={service.image_url}
@@ -24,9 +27,16 @@ function ServicesDetails({ socket, setSocket }) {
           {service.description}
         </p>
       </div>
-      <div className="formContent">
+        </Grid>
+        <Grid item lg={5.5} md={5.5} sm={12} >
+        <div className="formContent">
         <BookingServiceForm socket={socket} setSocket={socket} />
       </div>
+        </Grid>
+
+      </Grid>
+
+
     </div>
   );
 }
