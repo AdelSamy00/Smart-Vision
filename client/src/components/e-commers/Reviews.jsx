@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Rating from '@mui/material/Rating';
 import EditIcon from '@mui/icons-material/Edit';
@@ -9,171 +9,206 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Form from 'react-bootstrap/Form';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import './stylesheets/Reviews.css'
+import './stylesheets/Reviews.css';
+import axios from 'axios';
 
-function Reviews({ review, deleteReview, editReview }) {
-    const { customer } = useSelector((state) => state.customer);
-    const reviewCustomer = review?.customer;
-    const [comment, setComment] = useState(review?.comment);
-    const [rating, setRating] = useState(review?.rating);
-    const [validated, setValidated] = useState(false);
-    const [isUserReview, SetIsUserReview] = useState(customer?._id === reviewCustomer?._id)
-    const [inEditMode, setInEditMode] = useState(false);
-    const [anchorEl, setAnchorEl] = useState(null);
+function Reviews({ review, setReviews, setTotalRating }) {
+  const { customer } = useSelector((state) => state.customer);
+  const reviewCustomer = review?.customer;
+  const [comment, setComment] = useState(review?.comment);
+  const [rating, setRating] = useState(review?.rating);
+  const [validated, setValidated] = useState(false);
+  const [isUserReview, SetIsUserReview] = useState(
+    customer?._id === reviewCustomer?._id
+  );
+  const [inEditMode, setInEditMode] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
-    //make avatar to comment
-    function stringAvatar(name) {
-        console.log(review);
-        return {
-            children: `${name?.split(' ')[0][0]}`,
-        };
+  //make avatar to comment
+  function stringAvatar(name) {
+    //console.log(review);
+    return {
+      children: `${name?.split(' ')[0][0]}`,
+    };
+  }
+
+  //handel open menu in review
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  //handel close menu in review
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  //handel Edit Review by the user
+  const handleEditReviewMode = () => {
+    handleMenuClose();
+    if (inEditMode) {
+      setRating(review?.rating);
+      setComment(review?.comment);
     }
+    setInEditMode(!inEditMode);
+  };
+  // Delete review from product
+  async function deleteReview(customerId, reviewId) {
+    await axios
+      .delete('/customers/review', {
+        data: { customerId, reviewId, productId: review?.product },
+      })
+      .then((res) => {
+        setReviews((prevReviews) => {
+          return prevReviews.filter((review) => review._id !== reviewId);
+        });
+        setTotalRating(res.data.totalRating);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
 
-    //handel open menu in review
-    const handleMenuClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+  // Update review in product
+  async function editReview(productId, reviewId, comment, rating) {
+    await axios
+      .put('/customers/review', { productId, reviewId, comment, rating })
+      .then((res) => {
+        // console.log(res.data);
+        setReviews((prevReviews) => {
+          return prevReviews.map((review) => {
+            if (review?._id === reviewId) {
+              return { ...review, comment: comment, rating: rating };
+            } else {
+              return review;
+            }
+          });
+        });
+        setTotalRating(res.data.totalRating);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  //handel Delete Review by the user
+  const handleDeleteReview = () => {
+    handleMenuClose();
+    deleteReview(reviewCustomer?._id, review?._id);
+  };
 
-    //handel close menu in review
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-    };
+  //handel Add Review by the user
+  const handleEditReviewSubmit = async (event) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+      setValidated(true);
+    } else {
+      editReview(review?.product, review?._id, comment, rating);
+      setInEditMode(false);
+    }
+  };
 
-    //handel Edit Review by the user
-    const handleEditReviewMode = () => {
-        handleMenuClose();
-        if (inEditMode) {
-            setRating(review?.rating)
-            setComment(review?.comment)
-        }
-        setInEditMode(!inEditMode)
-    };
-
-    //handel Delete Review by the user
-    const handleDeleteReview = () => {
-        handleMenuClose();
-        deleteReview(reviewCustomer?._id, review?._id);
-    };
-
-    //handel Add Review by the user
-    const handleEditReviewSubmit = async (event) => {
-        const form = event.currentTarget;
-        event.preventDefault();
-        if (form.checkValidity() === false) {
-            event.stopPropagation();
-            setValidated(true);
-        } else {
-            editReview(reviewCustomer?._id, review?.product, review?._id, comment, rating)
-            setInEditMode(false)
-        }
-    };
-
-    return (
-        <>{inEditMode ?
-            (
-                <div className="productDetailUserReview">
-                    <div className="flex items-center mb-3">
-                        <div className="mr-3">
-                            <Avatar {...stringAvatar(reviewCustomer?.username)} />
-                        </div>
-                        <div className="">
-                            <h6>{reviewCustomer?.username}</h6>
-                        </div>
-                    </div>
-                    <Form noValidate validated={validated} onSubmit={handleEditReviewSubmit}>
-                        <Form.Group className="">
-                            <Rating
-                                name="rating"
-                                value={rating}
-                                sx={{ fontSize: 25 }}
-                                onChange={(e) => setRating(Number(e.target.value))}
-                            />
-                            <Form.Control
-                                className="InputField h-auto"
-                                name="comment"
-                                required
-                                as="textarea"
-                                rows={3}
-                                value={comment}
-                                placeholder="Add your Review here......"
-                                onChange={(e) => setComment(e.target.value)}
-                            />
-                        </Form.Group>
-                        <div className="flex justify-center">
-                            <button
-                                type="submit"
-                                className="buttonForReview bg-slate-700 hover:bg-slate-800"
-                            >
-                                submit Edites
-                            </button>
-                            <button
-                                onClick={handleEditReviewMode}
-                                className="buttonForReview bg-red-600 hover:bg-red-700"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </Form>
-                </div>
-            )
-            :
-            (
-                <div className="productDetailUserReview">
-                    <div className="flex items-center ">
-                        <div className="mr-3">
-                            <Avatar {...stringAvatar(reviewCustomer?.username)} />
-                        </div>
-                        <div className="">
-                            <h6>{reviewCustomer?.username}</h6>
-                            <Rating
-                                readOnly
-                                name="half-rating"
-                                value={review?.rating}
-                                precision={0.5}
-                                sx={{ fontSize: 20 }}
-                            />
-                        </div>
-                        {/* for disblay menu item for user review */}
-                        {isUserReview ?
-                            (
-                                <div className='ml-auto'>
-                                    <IconButton onClick={handleMenuClick}>
-                                        <MoreVertIcon />
-                                    </IconButton>
-                                    <Menu
-                                        anchorEl={anchorEl}
-                                        open={Boolean(anchorEl)}
-                                        onClose={handleMenuClose}
-                                    >
-                                        <MenuItem onClick={handleEditReviewMode}>
-                                            <button className='reviewMenuButton'>
-                                                <p className='text-xl'>Edit</p>
-                                                <EditIcon className='ml-2' />
-                                            </button>
-                                        </MenuItem>
-                                        <MenuItem onClick={handleDeleteReview}>
-                                            <button className='reviewMenuButton'>
-                                                <p className='text-xl'>Delete</p>
-                                                <DeleteForeverIcon className='ml-2' />
-                                            </button>
-                                        </MenuItem>
-                                    </Menu>
-                                </div>
-                            )
-                            :
-                            (
-                                <></>
-                            )
-                        }
-                    </div>
-                    <p className='px-12'>
-                        {review?.comment}
-                    </p>
-                </div >
-            )
-        }
-        </>
-    )
+  return (
+    <>
+      {inEditMode ? (
+        <div className="productDetailUserReview">
+          <div className="flex items-center mb-3">
+            <div className="mr-3">
+              <Avatar {...stringAvatar(reviewCustomer?.username)} />
+            </div>
+            <div className="">
+              <h6>{reviewCustomer?.username}</h6>
+            </div>
+          </div>
+          <Form
+            noValidate
+            validated={validated}
+            onSubmit={handleEditReviewSubmit}
+          >
+            <Form.Group className="">
+              <Rating
+                name="rating"
+                value={rating}
+                sx={{ fontSize: 25 }}
+                onChange={(e) => setRating(Number(e.target.value))}
+              />
+              <Form.Control
+                className="InputField h-auto"
+                name="comment"
+                required
+                as="textarea"
+                rows={3}
+                value={comment}
+                placeholder="Add your Review here......"
+                onChange={(e) => setComment(e.target.value)}
+              />
+            </Form.Group>
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                className="buttonForReview bg-slate-700 hover:bg-slate-800"
+              >
+                submit Edites
+              </button>
+              <button
+                onClick={handleEditReviewMode}
+                className="buttonForReview bg-red-600 hover:bg-red-700"
+              >
+                Cancel
+              </button>
+            </div>
+          </Form>
+        </div>
+      ) : (
+        <div className="productDetailUserReview">
+          <div className="flex items-center ">
+            <div className="mr-3">
+              <Avatar {...stringAvatar(reviewCustomer?.username)} />
+            </div>
+            <div className="">
+              <h6>{reviewCustomer?.username}</h6>
+              <Rating
+                readOnly
+                name="half-rating"
+                value={review?.rating}
+                precision={0.5}
+                sx={{ fontSize: 20 }}
+              />
+            </div>
+            {/* for disblay menu item for user review */}
+            {isUserReview ? (
+              <div className="ml-auto">
+                <IconButton onClick={handleMenuClick}>
+                  <MoreVertIcon />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleMenuClose}
+                >
+                  <MenuItem onClick={handleEditReviewMode}>
+                    <button className="reviewMenuButton">
+                      <p className="text-xl">Edit</p>
+                      <EditIcon className="ml-2" />
+                    </button>
+                  </MenuItem>
+                  <MenuItem onClick={handleDeleteReview}>
+                    <button className="reviewMenuButton">
+                      <p className="text-xl">Delete</p>
+                      <DeleteForeverIcon className="ml-2" />
+                    </button>
+                  </MenuItem>
+                </Menu>
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
+          <p className="px-12">{review?.comment}</p>
+        </div>
+      )}
+    </>
+  );
 }
 
-export default Reviews
+export default Reviews;

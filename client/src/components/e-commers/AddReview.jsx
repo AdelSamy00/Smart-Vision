@@ -4,30 +4,40 @@ import Rating from '@mui/material/Rating';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import './stylesheets/Reviews.css';
-import LoginMessage from './LoginMessage';
+import axios from 'axios';
 
-function AddReview({ addReview }) {
-  const navigate = useNavigate();
+function AddReview({productId, setReviews, setTotalRating }) {
   const { customer } = useSelector((state) => state.customer);
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(5);
   const [validated, setValidated] = useState(false);
-  const [showLoginMessage, setshowLoginMessage] = useState(false);
+
+  //Add review to product
+  async function addReview(customerId, rating, comment) {
+    await axios
+      .post('/customers/review', { customerId, productId, comment, rating })
+      .then((res) => {
+        // console.log(res.data.review);
+        setReviews((prevReviews) => {
+          return [...prevReviews, res.data.review];
+        });
+        setTotalRating(res.data.totalRating);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
 
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
-    if (customer?._id) {
-      if (form.checkValidity() === false) {
-        event.stopPropagation();
-        setValidated(true);
-      } else {
-        addReview(customer._id, rating, review);
-        setRating(5);
-        setReview('');
-      }
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+      setValidated(true);
     } else {
-      setshowLoginMessage(true);
+      addReview(customer._id, rating, review);
+      setRating(5);
+      setReview('');
     }
   };
   return (
@@ -61,10 +71,6 @@ function AddReview({ addReview }) {
           </button>
         </div>
       </Form>
-      <LoginMessage
-        showLoginMessage={showLoginMessage}
-        setshowLoginMessage={setshowLoginMessage}
-      />
     </>
   );
 }

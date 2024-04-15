@@ -4,15 +4,13 @@ import { useParams } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
 import { useDispatch, useSelector } from 'react-redux';
 import { SetCustomer } from '../../redux/CustomerSlice';
-import ProgressBar from 'react-bootstrap/ProgressBar';
-import StarIcon from '@mui/icons-material/Star';
-import Reviews from '../../components/e-commers/Reviews';
 import './StyleSheets/ProductDetails.css';
 import AddReview from '../../components/e-commers/AddReview';
 import { setCart } from '../../redux/CartSlice';
 import Loading from '../../components/shared/Loading';
 import LoginMessage from '../../components/e-commers/LoginMessage';
 import HomeSlider from '../../components/e-commers/HomeSlider';
+import ReviewsSection from '../../components/e-commers/ReviewsSection';
 
 function ProductDetails() {
   const dispatch = useDispatch();
@@ -24,70 +22,11 @@ function ProductDetails() {
   const [mainImage, setMainImage] = useState();
   const [reviews, setReviews] = useState(null);
   const [totalRating, setTotalRating] = useState(null);
-  const [progressBar, setProgressBar] = useState(null);
   const [inCart, setInCart] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showLoginMessage, setshowLoginMessage] = useState(false);
   const [products, setProducts] = useState([]);
-  console.log(product);
-  //set valuse to prograss bar
-  function setUpPrograssBar(reviews) {
-    const totalRatings = [
-      { number: 5, numOfRating: 0, progres: 0 },
-      { number: 4, numOfRating: 0, progres: 0 },
-      { number: 3, numOfRating: 0, progres: 0 },
-      { number: 2, numOfRating: 0, progres: 0 },
-      { number: 1, numOfRating: 0, progres: 0 },
-    ];
-    reviews.map((review) => {
-      totalRatings.map((rating) => {
-        if (review?.rating === rating.number) {
-          rating.numOfRating++;
-          rating.progres = Math.floor(
-            (rating.numOfRating / reviews.length) * 100
-          );
-        }
-      });
-    });
-    return totalRatings;
-  }
-  //Update prograss bar after any changes in reviews
-  function updatePrograssBar(review, progressBar, method, oldReview) {
-    let totalReviews = 0;
-    progressBar.map((rating) => {
-      totalReviews = totalReviews + rating.numOfRating;
-    });
-    if (method === 'add') {
-      progressBar.map((rating) => {
-        if (review?.rating === rating.number) {
-          rating.numOfRating++;
-          totalReviews++;
-        }
-      });
-    } else if (method === 'delete') {
-      progressBar.map((rating) => {
-        if (review?.rating === rating.number) {
-          rating.numOfRating--;
-          totalReviews--;
-        }
-      });
-    } else if (method === 'edit') {
-      progressBar.map((rating) => {
-        if (review?.rating === rating.number) {
-          rating.numOfRating++;
-          totalReviews++;
-        }
-        if (oldReview?.rating === rating.number) {
-          rating.numOfRating--;
-          totalReviews--;
-        }
-      });
-    }
-    progressBar.map((rating) => {
-      rating.progres = Math.floor((rating.numOfRating / totalReviews) * 100);
-    });
-    return progressBar;
-  }
+  // console.log(product);
 
   //handel add and remove from favorite list
   const handelFavorit = async (id, productId) => {
@@ -120,6 +59,7 @@ function ProductDetails() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         // Fetch main product details
         const productResponse = await axios.get(`/products/${productId}`);
@@ -130,7 +70,6 @@ function ProductDetails() {
         setMainImage(productData.images[0]);
         setReviews(productData.reviews);
         setTotalRating(productData.totalRating);
-        setProgressBar(setUpPrograssBar(productData.reviews));
         setInCart(isProductInCart(cart, productId));
         isFavorite(productData);
 
@@ -158,72 +97,6 @@ function ProductDetails() {
     fetchData();
   }, [productId]);
 
-  //Add review to product
-  async function addReview(customerId, rating, comment) {
-    await axios
-      .post('/customers/review', { customerId, productId, comment, rating })
-      .then((res) => {
-        // console.log(res.data.review);
-        setReviews((prevReviews) => {
-          return [...prevReviews, res.data.review];
-        });
-        setTotalRating(res.data.totalRating);
-        setProgressBar(updatePrograssBar(res.data.review, progressBar, 'add'));
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
-  // Delete review from product
-  async function deleteReview(customerId, reviewId) {
-    await axios
-      .delete('/customers/review', {
-        data: { customerId, reviewId, productId },
-      })
-      .then((res) => {
-        setReviews((prevReviews) => {
-          return prevReviews.filter((review) => review._id !== reviewId);
-        });
-        setTotalRating(res.data.totalRating);
-        setProgressBar(
-          updatePrograssBar(res.data.deletedReview, progressBar, 'delete')
-        );
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
-  // Update review in product
-  async function editReview(customerId, productId, reviewId, comment, rating) {
-    await axios
-      .put('/customers/review', { productId, reviewId, comment, rating })
-      .then((res) => {
-        // console.log(res.data);
-        setReviews((prevReviews) => {
-          return prevReviews.map((review) => {
-            if (review?._id === reviewId) {
-              return { ...review, comment: comment, rating: rating };
-            } else {
-              return review;
-            }
-          });
-        });
-        setProgressBar(
-          updatePrograssBar(
-            res.data.newReview,
-            progressBar,
-            'edit',
-            res.data.oldReview
-          )
-        );
-        setTotalRating(res.data.totalRating);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
   //check if the product in cart
   function isProductInCart(cart, productId) {
     const res = cart.find((product) => {
@@ -386,71 +259,18 @@ function ProductDetails() {
               </div>
             </div>
           </div>
-          <div className="productDetailReviews">
-            <div className="productDetailReviewsDetails">
-              <h4>Customer Reviews</h4>
-              <div className="productDetailRatingForReviews">
-                <Rating
-                  readOnly
-                  name="half-rating"
-                  value={totalRating}
-                  precision={0.5}
-                  sx={{ fontSize: 25 }}
-                />
-                <p>
-                  {totalRating} Based on {reviews?.length} Reviews{' '}
-                </p>
-              </div>
-              <div className="productDetailRatingAllBars">
-                {progressBar ? (
-                  progressBar.map((bar, idx) => {
-                    return (
-                      <div className="productDetailRatingBar" key={idx}>
-                        <div className="flex">
-                          <p className="mr-1">{bar.number}</p>
-                          <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
-                        </div>
-                        <ProgressBar
-                          now={bar.progres}
-                          className="productDetailProgressBar"
-                          variant="warning"
-                        />
-                        <p className="w-10">{bar.progres}%</p>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <></>
-                )}
-              </div>
-              <div className="productDetailReviewsFooter">
-                <h5>Share your thoughts</h5>
-                <p>
-                  If you have used this product, share your thoughts with other
-                  customers.
-                </p>
-              </div>
-            </div>
-            <div className="productDetailReviewsData">
-              {reviews?.length ? (
-                reviews.map((review) => {
-                  return (
-                    <Reviews
-                      key={review._id}
-                      review={review}
-                      deleteReview={deleteReview}
-                    />
-                  );
-                })
-              ) : (
-                <div className="productDetailNoReviews">
-                  <h5>Currently, there are no reviews available</h5>
-                </div>
-              )}
-              {/* <AddReview addReview={addReview} /> */}
-            </div>
-          </div>
-          {products.length > 0 && (
+          <ReviewsSection
+            reviews={reviews}
+            TotalProductRating={totalRating}
+            setTotalRating={setTotalRating}
+            setReviews={setReviews}
+          />
+          {/* <AddReview
+            productId={productId}
+            setTotalRating={setTotalRating}
+            setReviews={setReviews}
+          /> */}
+          {products?.length > 0 && (
             <>
               <h2
                 style={{
