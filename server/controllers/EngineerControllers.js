@@ -1,3 +1,4 @@
+import AssignedDateTable from '../models/AssignedDate.js';
 import Employees from '../models/Employee.js';
 import MaterialOrders from '../models/MaterialOrder.js';
 import ServicesOrders from '../models/ServiceOrder.js';
@@ -78,6 +79,12 @@ export const sendCustomizationDetails = async (req, res, next) => {
     service.details = details;
     service.state = 'MANFACTURING';
     service.save();
+    if (service.date) {
+      await AssignedDateTable.findOneAndDelete({
+        engineer: engineerId,
+        date: service.date,
+      });
+    }
     const materialOrder = await MaterialOrders.create({
       engineer: engineerId,
       service: serviceId,
