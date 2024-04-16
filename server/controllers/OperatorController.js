@@ -1,3 +1,4 @@
+import AssignedDateTable from '../models/AssignedDate.js';
 import Employees from '../models/Employee.js';
 import Orders from '../models/OrderModel.js';
 import ServicesOrders from '../models/ServiceOrder.js';
@@ -146,14 +147,25 @@ export const assignedEnginerToService = async (req, res, next) => {
     const { engineerId, serviceId, date } = req.body;
     let service;
     if (date) {
-      service = await ServicesOrders.findByIdAndUpdate(
-        { _id: serviceId },
-        { assignedEngineer: engineerId, date: date },
-        { new: true }
-      ).populate({
-        path: 'customer',
-        select: '_id username email gender phone verified address -password',
+      const busyDates = await AssignedDateTable.find({
+        engineer: engineerId,
+        date: date,
       });
+      if (!busyDates) {
+        service = await ServicesOrders.findByIdAndUpdate(
+          { _id: serviceId },
+          { assignedEngineer: engineerId, date: date },
+          { new: true }
+        ).populate({
+          path: 'customer',
+          select: '_id username email gender phone verified address -password',
+        });
+      } else {
+        return res.status(403).json({
+          success: false,
+          message: 'Is already assinged to anthor service in this time',
+        });
+      }
     } else {
       service = await ServicesOrders.findByIdAndUpdate(
         { _id: serviceId },
