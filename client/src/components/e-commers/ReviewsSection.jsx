@@ -12,7 +12,7 @@ function ReviewsSection({
 }) {
   const { productId } = useParams();
   const location = useLocation();
-  const inProductPage = location?.pathname?.includes('product');
+  const inReviewsPage = location?.pathname?.includes('reviews');
   const [progressBar, setProgressBar] = useState([]);
   //set valuse to prograss bar
   function setUpPrograssBar() {
@@ -127,20 +127,7 @@ function ReviewsSection({
         </div>
         <div className="productDetailReviewsData">
           {reviews?.length ? (
-            inProductPage ? (
-              // show last 3 reviews only
-              reviews
-                ?.slice(-3)
-                ?.reverse()
-                ?.map((review) => (
-                  <Reviews
-                    key={review._id}
-                    review={review}
-                    setReviews={setReviews}
-                    setTotalRating={setTotalRating}
-                  />
-                ))
-            ) : (
+            inReviewsPage ? (
               //show all reviews
               reviews
                 ?.slice()
@@ -153,13 +140,26 @@ function ReviewsSection({
                     setTotalRating={setTotalRating}
                   />
                 ))
+            ) : (// show last 3 reviews only
+              reviews
+                ?.slice(-3)
+                ?.reverse()
+                ?.map((review) => (
+                  <Reviews
+                    key={review._id}
+                    review={review}
+                    setReviews={setReviews}
+                    setTotalRating={setTotalRating}
+                  />
+                ))
+              
             )
           ) : (
             <div className="productDetailNoReviews">
               <h5>Currently, there are no reviews available</h5>
             </div>
           )}
-          {reviews?.length > 3 && inProductPage ? (
+          {reviews?.length > 3 && !inReviewsPage ? (
             <Link to={`/product/${productId}/reviews`}>
               <div className="showMoreReviews">View More Reviews</div>
             </Link>

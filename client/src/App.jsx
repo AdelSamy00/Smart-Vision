@@ -19,6 +19,7 @@ import {
   Checkout,
   History,
   ServicesDetails,
+  AllReviews,
   // InventoryHome,
 } from './pages/e-commers/index.js';
 import {
@@ -137,7 +138,8 @@ function App() {
           element={<ServicesDetails socket={socket} setSocket={setSocket} />}
         />
         <Route path="/store" element={<Store />} />
-        <Route path="/product/:productId" element={<ProductDetails />} />{' '}
+        <Route path="/product/:productId" element={<ProductDetails />} />
+        <Route path="/product/:productId/reviews" element={<AllReviews />} />
         <Route path="/bag" element={<Bag />} />
         {/* Private Customer Routes (Logged in) */}
         <Route element={<CustomerLayout />}>

@@ -16,6 +16,7 @@ import Bag from './BagPage';
 import Checkout from './Checkout'
 import History from './History';
 import ServicesDetails from './servicesDetails';
+import AllReviews from './AllReviews';
 export {
   ContactUs,
   Profile,
@@ -32,4 +33,5 @@ export {
   Checkout,
   History,
   ServicesDetails,
+  AllReviews
 };
