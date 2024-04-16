@@ -96,7 +96,7 @@ function EmployeeHeader({ props }) {
     navigate('/login/employee');
   }
   function setNavLinksWithEmployeeType() {
-    if (jobTitle === 'engineer') {
+    if (jobTitle === 'Engineer') {
       setnavLinks(ENGINEER);
     } else if (jobTitle === 'factory') {
       setnavLinks(FACTORY);

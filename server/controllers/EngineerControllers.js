@@ -12,6 +12,7 @@ export const getAssignedServices = async (req, res, nex) => {
       assignedOrders = await ServicesOrders.find({
         assignedEngineer: id,
         service: serviceName,
+        state: 'PENDING',
       }).populate([
         {
           path: 'customer',
@@ -25,6 +26,7 @@ export const getAssignedServices = async (req, res, nex) => {
     } else {
       assignedOrders = await ServicesOrders.find({
         assignedEngineer: id,
+        state: 'PENDING',
       }).populate([
         {
           path: 'customer',

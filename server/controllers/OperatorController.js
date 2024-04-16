@@ -151,7 +151,7 @@ export const assignedEnginerToService = async (req, res, next) => {
         engineer: engineerId,
         date: date,
       });
-      if (!busyDates) {
+      if (busyDates.length < 1) {
         service = await ServicesOrders.findByIdAndUpdate(
           { _id: serviceId },
           { assignedEngineer: engineerId, date: date },
@@ -159,6 +159,10 @@ export const assignedEnginerToService = async (req, res, next) => {
         ).populate({
           path: 'customer',
           select: '_id username email gender phone verified address -password',
+        });
+        await AssignedDateTable.create({
+          engineer: engineerId,
+          date: date,
         });
       } else {
         return res.status(403).json({
