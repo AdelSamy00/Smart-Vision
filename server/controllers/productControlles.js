@@ -24,7 +24,7 @@ export const addToStore = async (req, res, next) => {
   try {
     const productData = req.body;
     // validation
-    if (!productData.name  || !productData.images) {
+    if (!productData.name || !productData.images) {
       next('Please Provide needed fields');
       return;
     }
@@ -136,8 +136,8 @@ export const updateProduct = async (req, res, next) => {
     const { id } = req.params;
     const { name, description, quantity, category, price, points } = req.body;
     const productData = req.body;
-    console.log(name, description, quantity, category, price, points)
-    if (!name  || !description || !category || !price || !points) {
+    console.log(name, description, quantity, category, price, points);
+    if (!name || !description || !category || !price || !points) {
       next('Please Provide needed fields');
       return;
     }
@@ -164,11 +164,14 @@ export const updateProduct = async (req, res, next) => {
 //to help us in funcation deleteReview in customerControllers
 export const calculateTotalRating = async (productReviews) => {
   let total = 0;
-  productReviews.map((review) => {
-    total = total + review.rating;
-  });
-
-  return total / productReviews.length;
+  if (productReviews.length < 1) {
+    return 0;
+  } else {
+    productReviews.map((review) => {
+      total = total + review.rating;
+    });
+    return total / productReviews.length;
+  }
 };
 
 export const getNotShownProducts = async (req, res, next) => {
@@ -285,10 +288,10 @@ export const productsTransaction = async (req, res, next) => {
 
 export const getProductsByCategory = async (req, res, next) => {
   try {
-    const { category } = req.params; 
+    const { category } = req.params;
 
     // Query the database for products based on the category
-    const products = await Products.find({ category: category,show:"true" });
+    const products = await Products.find({ category: category, show: 'true' });
 
     res.status(200).json({
       success: true,
