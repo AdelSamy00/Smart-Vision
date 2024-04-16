@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+import Reviews from './Review.js';
 const productSchema = new mongoose.Schema(
   {
     name: {
@@ -30,5 +31,22 @@ const productSchema = new mongoose.Schema(
 
 /* required: [true, 'Product price is Required!'] */
 /*  default: 200  */
+
+productSchema.pre('findOneAndDelete', async function (next) {
+  //console.log(this.reviews);
+  try {
+    const product = await this.model.findOne(this.getQuery());
+    if (product.reviews.length) {
+      const res = await Reviews.deleteMany({
+        _id: {
+          $in: product.reviews,
+        },
+      });
+      console.log(res);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
 const Products = mongoose.model('Products', productSchema);
 export default Products;
