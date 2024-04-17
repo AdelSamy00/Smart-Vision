@@ -36,6 +36,7 @@ import {
   InventoryMatrialsOrders,
   InventoryProductOrders,
   InventoryMaterialTransactions,
+  AllInventoryOrders
 } from './pages/inventory/index.js';
 import {
   EmployeLogin,
@@ -173,6 +174,10 @@ function App() {
         <Route
           path="/inventory-Order-products"
           element={<InventoryProductOrders />}
+        />
+        <Route
+          path="/inventory-Orders"
+          element={<AllInventoryOrders />}
         />
         <Route
           path="/updateProduct/:productId"

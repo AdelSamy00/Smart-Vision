@@ -65,7 +65,7 @@ const InventoryProductOrders = () => {
 
   return (
     <div>
-      <h1 style={{ fontSize: "25px", margin: "20px" }}>Product Orders </h1>
+      {/* <h1 style={{ fontSize: "25px", margin: "20px" }}>Product Orders </h1> */}
       {isLoading ? (
         <Loading />
       ) : (

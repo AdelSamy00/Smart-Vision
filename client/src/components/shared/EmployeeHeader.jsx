@@ -53,30 +53,35 @@ const INVENTORY = [
     path: '/inventory',
     title: 'Home',
   },
-  {
-    path: '/addProduct',
-    title: 'Add Product',
-  },
-  {
-    path: '/addMatrial',
-    title: 'Add matrial',
-  },
+  // {
+  //   path: '/addProduct',
+  //   title: 'Add Product',
+  // },
+  // {
+  //   path: '/addMatrial',
+  //   title: 'Add matrial',
+  // },
   {
     path: '/transactions-history',
     title: 'History',
   },
-  {
-    path: '/inventory-Order-matrials',
-    title: 'Matrials History',
-  },
-  {
-    path: '/inventory-Order-products',
-    title: 'Products History',
-  },
+  // {
+  //   path: '/inventory-Order-matrials',
+  //   title: 'Matrials Orders',
+  // },
+  // {
+  //   path: '/inventory-Order-products',
+  //   title: 'Products Orders',
+  // },
   {
     path: '/Transaction',
     title: 'Transaction',
   },
+  {
+    path: '/inventory-Orders',
+    title: 'Orders',
+  },
+  
 ];
 
 function EmployeeHeader({ props }) {
