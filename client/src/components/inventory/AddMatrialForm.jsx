@@ -58,7 +58,7 @@ const AddMatrialForm = () => {
         <Grid item xs={12} >
           <TextField
             fullWidth
-            label="Product Name"
+            label="Material Name"
             variant="outlined"
             name="name"
             value={productData.name}

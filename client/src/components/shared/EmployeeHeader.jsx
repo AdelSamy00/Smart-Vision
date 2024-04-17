@@ -85,7 +85,7 @@ function EmployeeHeader({ props }) {
   const { employee } = useSelector((state) => state.employee);
   const { notification } = useSelector((state) => state.notification);
   const [open, setOpen] = useState(false);
-  const jobTitle = employee?.jobTitle;
+  const jobTitle = employee?.jobTitle?.toLowerCase();
   const [navLinks, setnavLinks] = useState(null);
   const [numberOfNotifications, setnumberOfNotifications] = useState(0);
   const [show, setShow] = useState(false);
@@ -96,11 +96,11 @@ function EmployeeHeader({ props }) {
     navigate('/login/employee');
   }
   function setNavLinksWithEmployeeType() {
-    if (jobTitle === 'Engineer') {
+    if (jobTitle === 'engineer') {
       setnavLinks(ENGINEER);
     } else if (jobTitle === 'factory') {
       setnavLinks(FACTORY);
-    } else if (jobTitle === 'Inventory Manager') {
+    } else if (jobTitle === 'inventory manager') {
       setnavLinks(INVENTORY);
     } else if (jobTitle === 'operator') {
       setnavLinks(OPERATOR);

@@ -330,7 +330,7 @@ function Productorder1Component({ order1, onUpdatedState1 }) {
                   {updatedState}
                 </Typography>
               </Grid>
-              {updatedState === "Pending" && showButton && (
+              {updatedState === "PENDING" && showButton && (
                 <Grid
                   item
                   xs={12}
