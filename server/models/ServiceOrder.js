@@ -23,6 +23,7 @@ const serviceOrderSchema = new mongoose.Schema(
       type: String,
     },
     price: { type: Number },
+    measuring: { type: Boolean },
     assignedEngineer: {
       type: Schema.Types.ObjectId,
       ref: 'Employees',
