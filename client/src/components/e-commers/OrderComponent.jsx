@@ -2,23 +2,35 @@ import { useEffect, useState } from 'react';
 import { Grid, Button, Typography } from '@mui/material';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import getTodayDate from '../../utils/dates';
+import AddReview from './AddReview';
+import Reviews from './Reviews';
 
 function OrderComponent({ order }) {
+  console.log(order);
   const [showOrder, setShowOrder] = useState(false);
   const [updatedOrder, setUpdatedOrder] = useState(order);
   const [deleteMessage, setDeletemessage] = useState(null);
   const { customer } = useSelector((state) => state.customer);
-
+  const [showAddReviewToProductId, setshowAddReviewToProductId] =
+    useState(null);
+  const [AllReviews, setAllReviews] = useState([]);
+  useEffect(() => {
+    const reviews = [];
+    const setupReviews = () => {
+      order?.products?.map((product) => {
+        product?.product?.reviews?.map((item) => {
+          reviews.push(item);
+        });
+      });
+      setAllReviews(reviews);
+    };
+    setupReviews();
+  }, []);
   const toggleOrder = () => {
     setShowOrder(!showOrder);
   };
-  const calculateTotalPrice = () => {
-    let totalPrice = 0;
-    order?.products.forEach((product) => {
-      totalPrice += product?.product?.price * (product?.quantity || 1);
-    });
-    return totalPrice;
-  };
+  console.log(AllReviews);
   const cancelOrder = async (orderId) => {
     try {
       const response = await axios.delete(`/customers/order`, {
@@ -33,6 +45,18 @@ function OrderComponent({ order }) {
       setDeletemessage(error.response.data.message);
     }
   };
+
+  function addReviewToProduct(productId, showToProductID) {
+    if (productId === showToProductID) {
+      return true;
+    }
+    return false;
+  }
+
+  function doNothaveReview(productId) {
+    // console.log(AllReviews.some((review) => review?.product === productId));
+    return !AllReviews.some((review) => review?.product === productId);
+  }
 
   return (
     <Grid container className="order-container" sx={{ marginBottom: '2rem' }}>
@@ -95,7 +119,7 @@ function OrderComponent({ order }) {
             sx={{ textAlign: { xs: 'start', md: 'center' } }}
           >
             <Typography variant="body1">Total Amount</Typography>
-            <Typography variant="body2">{calculateTotalPrice()}</Typography>
+            <Typography variant="body2">{order?.totalPrice}</Typography>
           </Grid>
           <Grid
             item
@@ -185,7 +209,6 @@ function OrderComponent({ order }) {
                           marginTop: { xs: '1rem', md: '0rem' },
                           display: 'flex',
                           alignItems: 'end',
-
                           justifyContent: { md: 'end' },
                         }}
                       >
@@ -201,19 +224,67 @@ function OrderComponent({ order }) {
                       </span>{' '}
                       {product?.product?.description}
                     </Typography>
-                    <Typography
-                      variant="body2"
-                      style={{ marginTop: '1rem', fontSize: { xs: '10px' } }}
+                    <div
+                      style={{
+                        marginTop: '1rem',
+                        fontSize: { xs: '10px' },
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
                     >
-                      <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                        Quantity:
-                      </span>{' '}
-                      <span style={{ fontSize: '18px' }}>
-                        {product?.quantity}
-                      </span>
-                    </Typography>
+                      <div>
+                        <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                          Quantity:
+                        </span>{' '}
+                        <span style={{ fontSize: '18px' }}>
+                          {product?.quantity}
+                        </span>
+                      </div>
+                      {order?.state === 'delivered' &&
+                      doNothaveReview(product?.product?._id) ? (
+                        showAddReviewToProductId === product?.product?._id ? (
+                          <button
+                            type="submit"
+                            className=" buttonForReview bg-red-500 hover:bg-red-600"
+                            onClick={() => setshowAddReviewToProductId(null)}
+                          >
+                            cancle
+                          </button>
+                        ) : (
+                          <button
+                            type="submit"
+                            className=" buttonForReview bg-slate-700 hover:bg-slate-800"
+                            onClick={() =>
+                              setshowAddReviewToProductId(product?.product?._id)
+                            }
+                          >
+                            Add Review
+                          </button>
+                        )
+                      ) : null}
+                    </div>
                   </Grid>
-                </Grid>
+                </Grid>{' '}
+                {product?.product?.reviews
+                  ? product?.product?.reviews?.map((review, idx) => (
+                      <Reviews
+                        key={idx}
+                        review={review}
+                        customerReview={customer}
+                        setReviews={setAllReviews}
+                      />
+                    ))
+                  : null}
+                {addReviewToProduct(
+                  product?.product?._id,
+                  showAddReviewToProductId
+                ) && (
+                  <AddReview
+                    productId={showAddReviewToProductId}
+                    setReviews={setAllReviews}
+                  />
+                )}
               </Grid>
             ))}
 
@@ -230,8 +301,11 @@ function OrderComponent({ order }) {
                 <span style={{ fontWeight: 'bold' }}>State: </span>{' '}
                 {updatedOrder?.state}
               </Typography>
+              {console.log()}
               <Typography variant="body1" xs={6}>
-                {updatedOrder.state !== 'CANCELED' && (
+                {updatedOrder.state !== 'CANCELED' &&
+                order?.cancelOrderExpiresAt?.substring(0, 10) >=
+                  getTodayDate() ? ( //to check if can cancel order
                   <Button
                     onClick={() => {
                       // console.log(order?._id);
@@ -249,7 +323,7 @@ function OrderComponent({ order }) {
                   >
                     Cancel Order
                   </Button>
-                )}
+                ) : null}
               </Typography>
             </Grid>
             <Grid

@@ -2,30 +2,31 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Rating from '@mui/material/Rating';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import './stylesheets/Reviews.css';
-import axios from 'axios';
+import { apiRequest } from '../../utils';
 
-function AddReview({productId, setReviews, setTotalRating }) {
+function AddReview({ productId, setReviews }) {
   const { customer } = useSelector((state) => state.customer);
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(5);
   const [validated, setValidated] = useState(false);
+  const [ReviewAdded, setReviewAdded] = useState(false);
 
   //Add review to product
   async function addReview(customerId, rating, comment) {
-    await axios
-      .post('/customers/review', { customerId, productId, comment, rating })
-      .then((res) => {
-        // console.log(res.data.review);
-        setReviews((prevReviews) => {
-          return [...prevReviews, res.data.review];
-        });
-        setTotalRating(res.data.totalRating);
-      })
-      .catch((e) => {
-        console.log(e);
+    try {
+      const res = await apiRequest({
+        url: '/customers/review',
+        method: 'POST',
+        data: { customerId, productId, comment, rating },
       });
+      setReviews((prevReviews) => {
+        return [...prevReviews, res.data.review];
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    setReviewAdded(true);
   }
 
   const handleSubmit = async (event) => {
@@ -40,37 +41,46 @@ function AddReview({productId, setReviews, setTotalRating }) {
       setReview('');
     }
   };
+
   return (
     <>
-      <h6 className="addReviewHeader">Add Review</h6>
-      <Form noValidate validated={validated} onSubmit={handleSubmit}>
-        <Form.Group className="">
-          <Rating
-            name="rating"
-            value={rating}
-            sx={{ fontSize: 25 }}
-            onChange={(e) => setRating(Number(e.target.value))}
-          />
-          <Form.Control
-            className="InputField h-auto"
-            name="comment"
-            required
-            as="textarea"
-            rows={3}
-            value={review}
-            placeholder="Add your Review here......"
-            onChange={(e) => setReview(e.target.value)}
-          />
-        </Form.Group>
-        <div className="flex justify-center">
-          <button
-            type="submit"
-            className="buttonForReview  bg-slate-700 hover:bg-slate-800"
-          >
-            Add Review
-          </button>
+      {ReviewAdded ? (
+        <div className="flex justify-center text-2xl text-gray-400 py-5">
+          Successfully added review.
         </div>
-      </Form>
+      ) : (
+        <>
+          <h6 className="addReviewHeader">Add Review</h6>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form.Group className="">
+              <Rating
+                name="rating"
+                value={rating}
+                sx={{ fontSize: 25 }}
+                onChange={(e) => setRating(Number(e.target.value))}
+              />
+              <Form.Control
+                className="InputField h-auto"
+                name="comment"
+                required
+                as="textarea"
+                rows={3}
+                value={review}
+                placeholder="Add your Review here......"
+                onChange={(e) => setReview(e.target.value)}
+              />
+            </Form.Group>
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                className="buttonForReview mt-3  bg-slate-700 hover:bg-slate-800"
+              >
+                Submit
+              </button>
+            </div>
+          </Form>
+        </>
+      )}
     </>
   );
 }

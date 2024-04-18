@@ -12,9 +12,13 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import './stylesheets/Reviews.css';
 import axios from 'axios';
 
-function Reviews({ review, setReviews, setTotalRating }) {
+function Reviews({ review, setReviews, setTotalRating, customerReview }) {
+  // console.log(customerReview);
   const { customer } = useSelector((state) => state.customer);
-  const reviewCustomer = review?.customer;
+  const reviewCustomer = review?.customer?.username
+    ? review?.customer
+    : customerReview;
+  //console.log(reviewCustomer);
   const [comment, setComment] = useState(review?.comment);
   const [rating, setRating] = useState(review?.rating);
   const [validated, setValidated] = useState(false);
@@ -23,7 +27,8 @@ function Reviews({ review, setReviews, setTotalRating }) {
   );
   const [inEditMode, setInEditMode] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-
+  const [ReviewDeleted, setReviewDeleted] = useState(false);
+  const [ReviewUpdated, setReviewUpdated] = useState(false);
   //make avatar to comment
   function stringAvatar(name) {
     //console.log(review);
@@ -66,6 +71,7 @@ function Reviews({ review, setReviews, setTotalRating }) {
       .catch((e) => {
         console.log(e);
       });
+    setReviewDeleted(true);
   }
 
   // Update review in product
@@ -88,6 +94,7 @@ function Reviews({ review, setReviews, setTotalRating }) {
       .catch((e) => {
         console.log(e);
       });
+    customerReview && setReviewUpdated(true);
   }
   //handel Delete Review by the user
   const handleDeleteReview = () => {
@@ -110,7 +117,11 @@ function Reviews({ review, setReviews, setTotalRating }) {
 
   return (
     <>
-      {inEditMode ? (
+      {ReviewDeleted || ReviewUpdated ? (
+        <div className=" flex justify-center py-5 text-gray-400 text-2xl productDetailUserReview">
+          {ReviewDeleted ? 'Deleted' : 'Updated'}
+        </div>
+      ) : inEditMode ? (
         <div className="productDetailUserReview">
           <div className="flex items-center mb-3">
             <div className="mr-3">
@@ -143,12 +154,12 @@ function Reviews({ review, setReviews, setTotalRating }) {
                 onChange={(e) => setComment(e.target.value)}
               />
             </Form.Group>
-            <div className="flex justify-center">
+            <div className="flex justify-center gap-2 my-3">
               <button
                 type="submit"
                 className="buttonForReview bg-slate-700 hover:bg-slate-800"
               >
-                submit Edites
+                Submit
               </button>
               <button
                 onClick={handleEditReviewMode}
@@ -207,6 +218,7 @@ function Reviews({ review, setReviews, setTotalRating }) {
           <p className="px-12">{review?.comment}</p>
         </div>
       )}
+      {}
     </>
   );
 }
