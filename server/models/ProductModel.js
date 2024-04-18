@@ -23,6 +23,11 @@ const productSchema = new mongoose.Schema(
     show: { type: Boolean, default: false },
     colors: [{ type: String }],
     totalRating: { type: Number, default: 0 },
+    dimensions: {
+      length: { type: Number },
+      weight: { type: Number },
+      height: { type: Number },
+    },
   },
   {
     timestamps: true,

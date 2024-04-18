@@ -396,11 +396,26 @@ export const getOrderHistory = async (req, res, next) => {
           path: 'products',
           populate: {
             path: 'product',
-            select: 'name images description price category',
+            populate: {
+              path: 'reviews',
+            },
+            select: 'name images description price category reviews',
           },
         },
       })
       .exec();
+    customer.orderHistory = customer.orderHistory.map((orders) =>
+      orders.products.map((items) => {
+        console.log(
+          items.product.reviews.filter(
+            (review) => String(review.customer) !== id
+          )
+        );
+        items.product.reviews = items.product.reviews.filter(
+          (review) => String(review.customer) === id
+        );
+      })
+    );
 
     res.status(200).json({
       success: true,
