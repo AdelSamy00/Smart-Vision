@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 
-const defaultEmployeeNavigate = 'e/login';
+const defaultEmployeeNavigate = '/not-found';
 
 export function CustomerLayout() {
   const { customer } = useSelector((state) => state.customer);
@@ -11,7 +11,7 @@ export function CustomerLayout() {
 
 export function InventoryManagerLayout() {
   const { employee } = useSelector((state) => state.employee);
-  if (employee?.jobTitle === 'Inventory Manager') {
+  if (employee?.jobTitle?.toLowerCase() === 'inventory manager') {
     return <Outlet />;
   }
   return <Navigate to={defaultEmployeeNavigate} />;
@@ -19,7 +19,7 @@ export function InventoryManagerLayout() {
 
 export function EngineerLayout() {
   const { employee } = useSelector((state) => state.employee);
-  if (employee?.jobTitle === 'Engineer') {
+  if (employee?.jobTitle?.toLowerCase() === 'engineer') {
     return <Outlet />;
   }
   return <Navigate to={defaultEmployeeNavigate} />;
@@ -27,7 +27,7 @@ export function EngineerLayout() {
 
 export function PresenterLayout() {
   const { employee } = useSelector((state) => state.employee);
-  if (employee?.jobTitle === 'Presenter') {
+  if (employee?.jobTitle?.toLowerCase() === 'presenter') {
     return <Outlet />;
   }
   return <Navigate to={defaultEmployeeNavigate} />;
@@ -35,7 +35,7 @@ export function PresenterLayout() {
 
 export function FactoryLayout() {
   const { employee } = useSelector((state) => state.employee);
-  if (employee?.jobTitle === 'Factory') {
+  if (employee?.jobTitle?.toLowerCase() === 'factory') {
     return <Outlet />;
   }
   return <Navigate to={defaultEmployeeNavigate} />;
@@ -43,7 +43,14 @@ export function FactoryLayout() {
 
 export function OperatorLayout() {
   const { employee } = useSelector((state) => state.employee);
-  if (employee?.jobTitle === 'Operator') {
+  if (employee?.jobTitle?.toLowerCase() === 'operator') {
+    return <Outlet />;
+  }
+  return <Navigate to={defaultEmployeeNavigate} />;
+}
+export function ActorLayout() {
+  const { employee } = useSelector((state) => state.employee);
+  if (employee?.jobTitle?.toLowerCase() === 'actor') {
     return <Outlet />;
   }
   return <Navigate to={defaultEmployeeNavigate} />;

@@ -15,29 +15,34 @@ const eCommersRoutesWithHeaderAndFooter = [
   'checkout',
   'history',
 ];
-const routesWithOutHeader = ['login', 'register', ''];
+
+const routesWithEmployeeHeader = [
+  'inventory',
+  'presenter',
+  'engineer',
+  'factory',
+  'operator',
+  'actor',
+];
 
 export const shouldRenderECommersHeader = (location) => {
   let flag;
-  const routesWithHeader = eCommersRoutesWithHeaderAndFooter;
   const firstPath = location?.pathname.split('/')[1];
-  flag = routesWithHeader.includes(firstPath);
+  flag = eCommersRoutesWithHeaderAndFooter.includes(firstPath);
   return flag ? <Header /> : null;
 };
 
 export const shouldRenderECommersFooter = (location) => {
   let flag;
-  const routesWithHeader = eCommersRoutesWithHeaderAndFooter;
   const firstPath = location?.pathname.split('/')[1];
-  flag = routesWithHeader.includes(firstPath);
+  flag = eCommersRoutesWithHeaderAndFooter.includes(firstPath);
   return flag ? <Footer /> : null;
 };
 
 export const shouldRenderEmployeeHeader = (location, socket, setSocket) => {
   let flag;
-  const routes = [...eCommersRoutesWithHeaderAndFooter, ...routesWithOutHeader];
   const firstPath = location?.pathname.split('/')[1];
-  flag = !routes.includes(firstPath);
-  console.log(socket?.id);
+  flag = routesWithEmployeeHeader.includes(firstPath);
+  // console.log(socket?.id);
   return flag ? <EmployeeHeader soket={socket} setSocket={setSocket} /> : null;
 };

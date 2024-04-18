@@ -1,6 +1,14 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { CustomerLayout } from './utils/Layouts.jsx';
+import {
+  ActorLayout,
+  CustomerLayout,
+  EngineerLayout,
+  FactoryLayout,
+  InventoryManagerLayout,
+  OperatorLayout,
+  PresenterLayout,
+} from './utils/Layouts.jsx';
 import axios from 'axios';
 
 import {
@@ -36,7 +44,7 @@ import {
   InventoryMatrialsOrders,
   InventoryProductOrders,
   InventoryMaterialTransactions,
-  AllInventoryOrders
+  AllInventoryOrders,
 } from './pages/inventory/index.js';
 import {
   EmployeLogin,
@@ -148,7 +156,7 @@ function App() {
             path="/profile"
             element={<Profile socket={socket} setSocket={setSocket} />}
           />
-          <Route path="/profile/profile-details" element={<ProfileDetails />} />
+          <Route path="/profile/details" element={<ProfileDetails />} />
           <Route path="/profile/change-password" element={<ChangePassword />} />
           <Route
             path="/profile/delete-account"
@@ -162,122 +170,125 @@ function App() {
           <Route path="/history" element={<History />} />
         </Route>
         {/* Private Inventory Manager Routes */}
-        <Route path="/inventory" element={<InventoryHome />} />
-        <Route path="/addProduct" element={<AddProductForm />} />
-        <Route path="/addMatrial" element={<AddMatrialForm />} />
-        <Route
-          path="/inventory-Order-matrials"
-          element={
-            <InventoryMatrialsOrders socket={socket} setSocket={setSocket} />
-          }
-        />
-        <Route
-          path="/inventory-Order-products"
-          element={<InventoryProductOrders />}
-        />
-        <Route
-          path="/inventory-Orders"
-          element={<AllInventoryOrders />}
-        />
-        <Route
-          path="/updateProduct/:productId"
-          element={<UpdateProductForm />}
-        />
-        <Route
-          path="/updateMatrial/:matrialId"
-          element={<UpdateMatrialForm />}
-        />
-        <Route path="/Transaction" element={<TransactionsPage />} />
-        <Route
-          path="/transactions-history"
-          element={<InventoryMaterialTransactions />}
-        />
+        <Route element={<InventoryManagerLayout />}>
+          <Route path="/inventory/home" element={<InventoryHome />} />
+          <Route path="/add/product" element={<AddProductForm />} />
+          <Route path="/add/matrial" element={<AddMatrialForm />} />
+          <Route path="/inventory/orders" element={<AllInventoryOrders />} />
+          <Route
+            path="/inventory/update/product/:productId"
+            element={<UpdateProductForm />}
+          />
+          <Route
+            path="/inventory/update/matrial/:matrialId"
+            element={<UpdateMatrialForm />}
+          />
+          <Route path="/inventory/transaction" element={<TransactionsPage />} />
+          <Route
+            path="/inventory/matrial/history"
+            element={<InventoryMaterialTransactions />}
+          />
+        </Route>
         {/* Private Presenter Routes */}
-        <Route
-          path="/p/product/:productId"
-          element={<ProductDetailsPresenter />}
-        />
-        <Route path="/presenter-home" element={<HomePresenter />} />
-        <Route path="/presenter-view" element={<PresenterProductsView />} />
-        <Route path="/ed/product/:productId" element={<EditProduct />} />
-        <Route
-          path="addtoStore/product/:productId"
-          element={<AddProduct/>}
-        />
+        <Route element={<PresenterLayout />}>
+          <Route
+            path="/presenter/product/:productId"
+            element={<ProductDetailsPresenter />}
+          />
+          <Route path="/presenter/home" element={<HomePresenter />} />
+          <Route path="/presenter/view" element={<PresenterProductsView />} />
+          <Route
+            path="/presenter/update/product/:productId"
+            element={<EditProduct />}
+          />
+          <Route
+            path="presenter/add-to-store/product/:productId"
+            element={<AddProduct />}
+          />
+        </Route>
         {/* Private Enginer Routes */}
-        <Route
-          path="/engineer/send-request/:requestId"
-          element={<CustomOrderForm socket={socket} setSocket={setSocket} />}
-        />
-        <Route
-          path="/engineer/view-measured-customized-requests"
-          element={
-            <ViewMeasuredCutomizedOrders
-              socket={socket}
-              setSocket={setSocket}
-            />
-          }
-        />
-        <Route
-          path="/engineer/view-customized-requests"
-          element={
-            <ViewCutomizedOrders socket={socket} setSocket={setSocket} />
-          }
-        />
-        <Route
-          path="/e/order-details/:orderId"
-          element={<OrderDetailsEnginer />}
-        />
+        <Route element={<EngineerLayout />}>
+          <Route
+            path="/engineer/send-order/:requestId"
+            element={<CustomOrderForm socket={socket} setSocket={setSocket} />}
+          />
+          <Route
+            path="/engineer/measuring"
+            element={
+              <ViewMeasuredCutomizedOrders
+                socket={socket}
+                setSocket={setSocket}
+              />
+            }
+          />
+          <Route
+            path="/engineer/orders"
+            element={
+              <ViewCutomizedOrders socket={socket} setSocket={setSocket} />
+            }
+          />
+          <Route
+            path="/engineer/order-details/:orderId"
+            element={<OrderDetailsEnginer />}
+          />
+        </Route>
         {/* Private Factory Routes */}
-        <Route
-          path="/f/order-details/:orderId"
-          element={<OrderDetailsFactory />}
-        />
-        <Route path="/f/factor-View" element={<FactorView />} />
+        <Route element={<FactoryLayout />}>
+          <Route
+            path="/factory/order-details/:orderId"
+            element={<OrderDetailsFactory />}
+          />
+          <Route path="/factory/view" element={<FactorView />} />
+        </Route>
         {/* Private Operator Routes */}
-        <Route
-          path="/operator/view-product-orders"
-          element={<ViewProductOrders socket={socket} setSocket={setSocket} />}
-        />
-        <Route
-          path="/operator/product-orders-history"
-          element={<ProductOrderHistory/>}
-        />
-        <Route
-          path="/operator/view-Service-orders"
-          element={<ViewServiceOrder socket={socket} setSocket={setSocket} />}
-        />
-        <Route
-          path="/operator/servise-details/:serviceId"
-          element={
-            <ServiseDetailsOperator socket={socket} setSocket={setSocket} />
-          }
-        />
-        <Route
-          path="/operator/order-details/:orderId"
-          element={
-            <ProductOrderDetails/>
-          }
-        />
-        <Route path="/operator/add-customer" element={<AddCustomer />} />
-        <Route
-          path="/operator/edit-customer/:customerId"
-          element={<EditCustomer />}
-        />
-        <Route path="/operator/view-customers" element={<ViewCustomers />} />
+        <Route element={<OperatorLayout />}>
+          <Route
+            path="/operator/orders/product"
+            element={
+              <ViewProductOrders socket={socket} setSocket={setSocket} />
+            }
+          />
+          <Route
+            path="/operator/orders/history"
+            element={<ProductOrderHistory />}
+          />
+          <Route
+            path="/operator/orders/service"
+            element={<ViewServiceOrder socket={socket} setSocket={setSocket} />}
+          />
+          <Route
+            path="/operator/servise-details/:serviceId"
+            element={
+              <ServiseDetailsOperator socket={socket} setSocket={setSocket} />
+            }
+          />
+          <Route
+            path="/operator/order-details/:orderId"
+            element={<ProductOrderDetails />}
+          />
+          <Route path="/operator/add-customer" element={<AddCustomer />} />
+          <Route
+            path="/operator/edit-customer/:customerId"
+            element={<EditCustomer />}
+          />
+          <Route path="/operator/customers" element={<ViewCustomers />} />
+        </Route>
         {/* Private actor manager Routes */}
-        <Route path="/actor/add-employee" element={<AddEmployee />} />
-        <Route path="/actor/view-employees" element={<ViewEmployees />} />
-        <Route
-          path="/actor/edit-employee/:employeeId"
-          element={<EditEmployee />}
-        />
-        <Route
-          path="/actor/change-password/:employeeId"
-          element={<ChangeEmpPassword />}
-        />
+        <Route element={<ActorLayout />}>
+          <Route path="/actor/add-employee" element={<AddEmployee />} />
+          <Route path="/actor/employees" element={<ViewEmployees />} />
+          <Route
+            path="/actor/edit-employee/:employeeId"
+            element={<EditEmployee />}
+          />
+          <Route
+            path="/actor/change-password/:employeeId"
+            element={<ChangeEmpPassword />}
+          />
+        </Route>
         {/*The path not found.*/}
         <Route path="*" element={<Page404 />} />
+        <Route path="/not-found" element={<Page404 />} />
       </Routes>
       {shouldRenderECommersFooter(location)}
     </>

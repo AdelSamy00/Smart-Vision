@@ -3,9 +3,9 @@ import './StyleSheets/Login.css';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Loading from '../../components/shared/Loading';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { SetEmployee } from '../../redux/EmployeeSlice';
+import { apiRequest } from '../../utils';
 
 function EmployeLogin() {
   const navigate = useNavigate();
@@ -18,27 +18,49 @@ function EmployeLogin() {
   } = useForm();
 
   function rdirectEmployeeAfterLogin(employee) {
-    if (employee?.jobTitle === 'Inventory] Manager') {
-      navigate('/order');
-    } else {
-      navigate('/');
+    switch (employee?.jobTitle?.toLowerCase()) {
+      case 'operator':
+        navigate('/operator/orders/product');
+        break;
+      case 'engineer':
+        navigate('/engineer/orders');
+        break;
+      case 'factory':
+        navigate('/factory/view');
+        break;
+      case 'inventory manager':
+        navigate('/inventory/home');
+        break;
+      case 'presenter':
+        navigate('/presenter/home');
+        break;
+      case 'actor':
+        navigate('/actor/employees');
+        break;
+      default:
+        break;
     }
   }
 
   const handleSubmitForm = async (data) => {
     try {
-      await axios
-        .post('/auth/employee-login', { ...data })
-        .then((res) => {
-          // console.log(res.data);
-          localStorage.setItem('token', res.data.token);
-          const newData = { token: res.data?.token, ...res.data?.employee };
-          dispatch(SetEmployee(newData));
-          rdirectEmployeeAfterLogin(newData);
-        })
-        .catch((error) => {
-          throw error.response.data;
+      const res = await apiRequest({
+        url: '/auth/employee-login',
+        method: 'POST',
+        data: { ...data },
+      });
+      // .then(() => {
+      // console.log(res.data);
+      if (res?.status !== false) {
+        localStorage.setItem('token', res?.data?.token);
+        const newData = { token: res?.data?.token, ...res?.data?.employee };
+        dispatch(SetEmployee(newData));
+        rdirectEmployeeAfterLogin(newData);
+      } else {
+        setError('root', {
+          message: `${res?.message}`,
         });
+      }
     } catch (error) {
       setError('root', {
         message: `${error.message}`,

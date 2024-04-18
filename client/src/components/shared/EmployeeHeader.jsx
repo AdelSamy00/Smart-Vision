@@ -14,74 +14,66 @@ import { clearNotification } from '../../redux/NotificationSlice';
 
 const ENGINEER = [
   {
-    path: '/engineer/view-customized-requests',
-    title: 'Cutomized Orders',
+    path: '/engineer/orders',
+    title: 'Orders',
   },
   {
-    path: '/engineer/view-measured-customized-requests',
+    path: '/engineer/measuring',
     title: 'Measuring',
   },
 ];
 const FACTORY = [
   {
-    path: '/f/factor-View',
+    path: '/factory/view',
     title: 'Home',
   },
 ];
 const PRESENTER = [
   {
-    path: '/presenter-home',
+    path: '/presenter/home',
     title: 'Home',
   },
   {
-    path: '/presenter-view',
+    path: '/presenter/view',
     title: 'New products',
   },
 ];
 const OPERATOR = [
   {
-    path: '/operator/view-product-orders',
+    path: '/operator/orders/product',
     title: 'Orders',
   },
   {
-    path: '/operator/view-Service-orders',
+    path: '/operator/orders/service',
     title: 'Services',
+  },
+  {
+    path: '/operator/orders/history',
+    title: 'History',
   },
 ];
 const INVENTORY = [
   {
-    path: '/inventory',
+    path: '/inventory/home',
     title: 'Home',
   },
-  // {
-  //   path: '/addProduct',
-  //   title: 'Add Product',
-  // },
-  // {
-  //   path: '/addMatrial',
-  //   title: 'Add matrial',
-  // },
   {
-    path: '/transactions-history',
-    title: 'History',
+    path: '/inventory/orders',
+    title: 'Orders',
   },
-  // {
-  //   path: '/inventory-Order-matrials',
-  //   title: 'Matrials Orders',
-  // },
-  // {
-  //   path: '/inventory-Order-products',
-  //   title: 'Products Orders',
-  // },
+
   {
-    path: '/Transaction',
+    path: '/inventory/transaction',
     title: 'Transaction',
   },
   {
-    path: '/inventory-Orders',
-    title: 'Orders',
+    path: '/inventory/matrial/history',
+    title: 'History',
   },
-  
+];
+const ACTOR = [
+  { path: '/actor/employees', title: 'Home' },
+  { path: '/actor/add-employee', title: 'Add Employee' },
 ];
 
 function EmployeeHeader({ props }) {
@@ -111,6 +103,8 @@ function EmployeeHeader({ props }) {
       setnavLinks(OPERATOR);
     } else if (jobTitle === 'presenter') {
       setnavLinks(PRESENTER);
+    } else if (jobTitle === 'actor') {
+      setnavLinks(ACTOR);
     }
   }
   useEffect(() => {
