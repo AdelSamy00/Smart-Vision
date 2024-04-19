@@ -6,31 +6,19 @@ import getTodayDate from '../../utils/dates';
 import AddReview from './AddReview';
 import Reviews from './Reviews';
 
-function OrderComponent({ order }) {
-  console.log(order);
+function OrderComponent({ order, reviews, setReviews }) {
+  //console.log(order);
   const [showOrder, setShowOrder] = useState(false);
   const [updatedOrder, setUpdatedOrder] = useState(order);
   const [deleteMessage, setDeletemessage] = useState(null);
   const { customer } = useSelector((state) => state.customer);
   const [showAddReviewToProductId, setshowAddReviewToProductId] =
     useState(null);
-  const [AllReviews, setAllReviews] = useState([]);
-  useEffect(() => {
-    const reviews = [];
-    const setupReviews = () => {
-      order?.products?.map((product) => {
-        product?.product?.reviews?.map((item) => {
-          reviews.push(item);
-        });
-      });
-      setAllReviews(reviews);
-    };
-    setupReviews();
-  }, []);
+
   const toggleOrder = () => {
     setShowOrder(!showOrder);
   };
-  console.log(AllReviews);
+
   const cancelOrder = async (orderId) => {
     try {
       const response = await axios.delete(`/customers/order`, {
@@ -55,7 +43,20 @@ function OrderComponent({ order }) {
 
   function doNothaveReview(productId) {
     // console.log(AllReviews.some((review) => review?.product === productId));
-    return !AllReviews.some((review) => review?.product === productId);
+    return !reviews.some((review) => review?.product === productId);
+  }
+
+  function getProductReviews(productId) {
+    return reviews
+      .filter((review) => review?.product === productId)
+      .map((review, idx) => (
+        <Reviews
+          key={idx}
+          review={review}
+          customerReview={customer}
+          setReviews={setReviews}
+        />
+      ));
   }
 
   return (
@@ -241,7 +242,7 @@ function OrderComponent({ order }) {
                           {product?.quantity}
                         </span>
                       </div>
-                      {order?.state === 'delivered' &&
+                      {order?.state === 'PENDING' &&
                       doNothaveReview(product?.product?._id) ? (
                         showAddReviewToProductId === product?.product?._id ? (
                           <button
@@ -265,24 +266,16 @@ function OrderComponent({ order }) {
                       ) : null}
                     </div>
                   </Grid>
-                </Grid>{' '}
-                {product?.product?.reviews
-                  ? product?.product?.reviews?.map((review, idx) => (
-                      <Reviews
-                        key={idx}
-                        review={review}
-                        customerReview={customer}
-                        setReviews={setAllReviews}
-                      />
-                    ))
-                  : null}
+                </Grid>
+                {product?.product?.reviews &&
+                  getProductReviews(product?.product?._id)}
                 {addReviewToProduct(
                   product?.product?._id,
                   showAddReviewToProductId
                 ) && (
                   <AddReview
                     productId={showAddReviewToProductId}
-                    setReviews={setAllReviews}
+                    setReviews={setReviews}
                   />
                 )}
               </Grid>

@@ -10,7 +10,6 @@ function AddReview({ productId, setReviews }) {
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(5);
   const [validated, setValidated] = useState(false);
-  const [ReviewAdded, setReviewAdded] = useState(false);
 
   //Add review to product
   async function addReview(customerId, rating, comment) {
@@ -26,7 +25,6 @@ function AddReview({ productId, setReviews }) {
     } catch (error) {
       console.log(error);
     }
-    setReviewAdded(true);
   }
 
   const handleSubmit = async (event) => {
@@ -44,43 +42,35 @@ function AddReview({ productId, setReviews }) {
 
   return (
     <>
-      {ReviewAdded ? (
-        <div className="flex justify-center text-2xl text-gray-400 py-5">
-          Successfully added review.
+      <h6 className="addReviewHeader">Add Review</h6>
+      <Form noValidate validated={validated} onSubmit={handleSubmit}>
+        <Form.Group className="">
+          <Rating
+            name="rating"
+            value={rating}
+            sx={{ fontSize: 25 }}
+            onChange={(e) => setRating(Number(e.target.value))}
+          />
+          <Form.Control
+            className="InputField h-auto"
+            name="comment"
+            required
+            as="textarea"
+            rows={3}
+            value={review}
+            placeholder="Add your Review here......"
+            onChange={(e) => setReview(e.target.value)}
+          />
+        </Form.Group>
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            className="buttonForReview mt-3  bg-slate-700 hover:bg-slate-800"
+          >
+            Submit
+          </button>
         </div>
-      ) : (
-        <>
-          <h6 className="addReviewHeader">Add Review</h6>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
-            <Form.Group className="">
-              <Rating
-                name="rating"
-                value={rating}
-                sx={{ fontSize: 25 }}
-                onChange={(e) => setRating(Number(e.target.value))}
-              />
-              <Form.Control
-                className="InputField h-auto"
-                name="comment"
-                required
-                as="textarea"
-                rows={3}
-                value={review}
-                placeholder="Add your Review here......"
-                onChange={(e) => setReview(e.target.value)}
-              />
-            </Form.Group>
-            <div className="flex justify-center">
-              <button
-                type="submit"
-                className="buttonForReview mt-3  bg-slate-700 hover:bg-slate-800"
-              >
-                Submit
-              </button>
-            </div>
-          </Form>
-        </>
-      )}
+      </Form>
     </>
   );
 }

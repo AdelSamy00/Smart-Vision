@@ -14,12 +14,31 @@ const History = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [AllReviews, setAllReviews] = useState([]);
 
+const setupReviews = (orderHistory) => {
+  const reviewSet = new Set();
+
+  orderHistory?.forEach((order) => {
+    order?.products?.forEach((product) => {
+      product?.product?.reviews?.forEach((review) => {
+        reviewSet.add(JSON.stringify(review));
+      });
+    });
+  });
+
+  const uniqueReviews = Array.from(reviewSet).map((review) =>
+    JSON.parse(review)
+  );
+
+  setAllReviews(uniqueReviews);
+  };
+  
+  //console.log(AllReviews)
   const handleOpenSnackbar = () => {
     setOpenSnackbar(true);
   };
 
- 
   const handleCloseSnackbar = (reason) => {
     if (reason === 'clickaway') {
       return;
@@ -30,9 +49,12 @@ const History = () => {
   async function fetchData(dataType) {
     setIsLoading(true);
     try {
-      const response = await axios.get(`/customers/${dataType}/${customer._id}`);
+      const response = await axios.get(
+        `/customers/${dataType}/${customer._id}`
+      );
       if (dataType === 'order') {
         setOrderHistory(response.data.history);
+        setupReviews(response?.data?.history);
       } else {
         setOrderServiceHistory(response.data.history);
       }
@@ -44,7 +66,9 @@ const History = () => {
 
   const cancelService = async (serviceId) => {
     try {
-      const response = await axios.delete('/customers/service', { data: { id: customer._id, serviceId } });
+      const response = await axios.delete('/customers/service', {
+        data: { id: customer._id, serviceId },
+      });
       if (response?.data?.success) {
         setOrderServiceHistory((prevOrderServiceHistory) =>
           prevOrderServiceHistory.map((entry) =>
@@ -59,14 +83,17 @@ const History = () => {
       console.error('Error cancelling service:', error.response.data.message);
     }
   };
-  
+
   useEffect(() => {
     fetchData(showOrderHistory ? 'order' : 'service');
   }, [showOrderHistory]);
 
   return (
     <div>
-      <div className="ml-4 materialTransactionsFilterNavbarItem" style={{marginBottom:"2rem"}}>
+      <div
+        className="ml-4 materialTransactionsFilterNavbarItem"
+        style={{ marginBottom: '2rem' }}
+      >
         <label htmlFor="transactionType">Select History Type:</label>
         <select
           name="transactionType"
@@ -85,23 +112,64 @@ const History = () => {
             {showOrderHistory ? (
               orderHistory.length > 0 ? (
                 orderHistory.map((order, index) => (
-                  <OrderComponent key={index} order={order} />
+                  <OrderComponent
+                    key={index}
+                    order={order}
+                    reviews={AllReviews}
+                    setReviews={setAllReviews}
+                  />
                 ))
               ) : (
-                <p style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '18px', width: '65%', border: '2px solid', margin: 'auto', padding: '20px', marginBottom: '5rem' }}>Your order history is empty.</p>
+                <p
+                  style={{
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    fontSize: '18px',
+                    width: '65%',
+                    border: '2px solid',
+                    margin: 'auto',
+                    padding: '20px',
+                    marginBottom: '5rem',
+                  }}
+                >
+                  Your order history is empty.
+                </p>
               )
+            ) : orderServiceHistory.length > 0 ? (
+              <ServiceHistory
+                orderServiceHistory={orderServiceHistory}
+                cancelService={cancelService}
+              />
             ) : (
-              orderServiceHistory.length > 0 ? (
-                <ServiceHistory orderServiceHistory={orderServiceHistory} cancelService={cancelService} />
-              ) : (
-                <p style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '18px', width: '65%', border: '2px solid', margin: 'auto', padding: '20px', marginBottom: '5rem' }}>Your services history is empty.</p>
-              )
+              <p
+                style={{
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  fontSize: '18px',
+                  width: '65%',
+                  border: '2px solid',
+                  margin: 'auto',
+                  padding: '20px',
+                  marginBottom: '5rem',
+                }}
+              >
+                Your services history is empty.
+              </p>
             )}
           </li>
         </ul>
       )}
-      <Snackbar open={openSnackbar} autoHideDuration={5000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar} severity="error" variant="filled" sx={{ width: '100%' }}>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
           {error}
         </Alert>
       </Snackbar>

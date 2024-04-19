@@ -27,8 +27,6 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
   );
   const [inEditMode, setInEditMode] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [ReviewDeleted, setReviewDeleted] = useState(false);
-  const [ReviewUpdated, setReviewUpdated] = useState(false);
   //make avatar to comment
   function stringAvatar(name) {
     //console.log(review);
@@ -71,7 +69,6 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
       .catch((e) => {
         console.log(e);
       });
-    setReviewDeleted(true);
   }
 
   // Update review in product
@@ -94,7 +91,6 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
       .catch((e) => {
         console.log(e);
       });
-    customerReview && setReviewUpdated(true);
   }
   //handel Delete Review by the user
   const handleDeleteReview = () => {
@@ -117,11 +113,7 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
 
   return (
     <>
-      {ReviewDeleted || ReviewUpdated ? (
-        <div className=" flex justify-center py-5 text-gray-400 text-2xl productDetailUserReview">
-          {ReviewDeleted ? 'Deleted' : 'Updated'}
-        </div>
-      ) : inEditMode ? (
+      { inEditMode ? (
         <div className="productDetailUserReview">
           <div className="flex items-center mb-3">
             <div className="mr-3">
