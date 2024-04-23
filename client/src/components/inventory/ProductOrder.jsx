@@ -1,24 +1,24 @@
-import { useEffect, useState } from "react";
-import { Grid, Button, Typography } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
-import { apiRequest } from "../../utils";
-import toast, { Toaster } from "react-hot-toast";
+import { useEffect, useState } from 'react';
+import { Grid, Button, Typography } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import { apiRequest } from '../../utils';
+import toast, { Toaster } from 'react-hot-toast';
 
 function ProductOrder({ order }) {
   const { employee } = useSelector((state) => state.employee);
   const [showOrder, setShowOrder] = useState(false);
-  const [products, setProducts] = useState([{ product: "", quantity: "" }]);
+  const [products, setProducts] = useState([{ product: '', quantity: '' }]);
   const [transactions, setTransactions] = useState([]);
   const [updatedOrder, setUpdatedOrder] = useState(order);
-  const [formattedDate, setFormattedDate] = useState("");
+  const [formattedDate, setFormattedDate] = useState('');
 
   useEffect(() => {
     const productData = order.products;
     console.log(productData);
     setTransactions(productData);
     const formattedProducts = productData.map((product) => ({
-      product: product,
+      productName: product.product.name,
       quantity: product.quantity,
     }));
 
@@ -37,65 +37,67 @@ function ProductOrder({ order }) {
   const handleStateChange = async () => {
     try {
       const response = await apiRequest({
-        method: "PUT",
+        method: 'PUT',
         url: `/employees/orders`,
         data: {
           orderId: order._id,
-          newStatus: "Shipped",
+          newStatus: 'Shipped',
         },
       });
       console.log(response.data.order);
       setUpdatedOrder(response.data.order);
-      console.log("Updated order state:", response.data.order.state);
+      console.log('Updated order state:', response.data.order.state);
     } catch (error) {
-      console.error("Error updating order status:", error);
+      console.error('Error updating order status:', error);
     }
   };
 
   const handleTransaction = async (method) => {
     try {
       const managerId = employee._id;
-      console.log(order);
-
-      console.log(transactions);
-      const response = await axios.put("/products/transaction", {
-        managerId,
-        products: products,
-        method,
+      const response = await apiRequest({
+        method: 'PUT',
+        url: `/employees/inventory/shipped/${order._id}`,
+        data: {
+          managerId: managerId,
+          products: products,
+        },
       });
-
+      console.log(response.data.order);
+      setUpdatedOrder(response.data.order);
+      console.log('Updated order state:', response.data.order.state);
       if (response.data.success) {
-        toast.success("The Product Exported Successfully");
-        handleStateChange();
-        order.state = "Shipped";
-
+        toast.success('The Product Exported Successfully');
+        order.state = 'Shipped';
         setTransactions([]);
       } else {
+        console.log(response.data.message);
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error("Error making transaction:", error);
-      toast.error("There Is No Enough Quantity In The In The Inventory");
+      console.error('Error updating order status:', error);
+      console.error('Error making transaction:', error);
+      toast.error('There Is No Enough Quantity In The In The Inventory');
     }
   };
 
-  if (order.state === "Shipped") {
+  if (order.state === 'Shipped') {
     return null;
   }
 
   return (
-    <Grid container className="order-container" sx={{ marginBottom: "2rem" }}>
-            <Toaster
+    <Grid container className="order-container" sx={{ marginBottom: '2rem' }}>
+      <Toaster
         toastOptions={{
           style: {
             duration: 3000,
-            border: "1px solid #6A5ACD",
-            backgroundColor: "#6A5ACD",
-            padding: "16px",
-            color: "white",
-            fontWeight: "Bold",
-            marginTop: "65px",
-            textAlign: "center",
+            border: '1px solid #6A5ACD',
+            backgroundColor: '#6A5ACD',
+            padding: '16px',
+            color: 'white',
+            fontWeight: 'Bold',
+            marginTop: '65px',
+            textAlign: 'center',
           },
         }}
       />
@@ -104,17 +106,17 @@ function ProductOrder({ order }) {
         xs={11}
         sm={8}
         md={7}
-        sx={{ margin: "auto", border: "2px solid #ddd", borderRadius: "10px" }}
+        sx={{ margin: 'auto', border: '2px solid #ddd', borderRadius: '10px' }}
       >
         <Grid
           container
           sx={{
-            borderBottom: showOrder ? "2px solid #ddd" : "none",
-            borderStartEndRadius: "10px",
-            borderStartStartRadius: "10px",
-            padding: "20px",
-            backgroundColor: "#f2f2f2",
-            alignItems: "center",
+            borderBottom: showOrder ? '2px solid #ddd' : 'none',
+            borderStartEndRadius: '10px',
+            borderStartStartRadius: '10px',
+            padding: '20px',
+            backgroundColor: '#f2f2f2',
+            alignItems: 'center',
           }}
         >
           <Grid
@@ -122,15 +124,11 @@ function ProductOrder({ order }) {
             xs={6}
             md={4}
             lg={4}
-            sx={{ marginBottom: { xs: "1.3rem", md: "0rem" } }}
+            sx={{ marginBottom: { xs: '1.3rem', md: '0rem' } }}
           >
             <Typography variant="body1">Date Placed</Typography>
             <Typography variant="body2">
-              {order.createdAt
-                .substring(0, 10)
-                .split("-")
-                .reverse()
-                .join("-")}
+              {order.createdAt.substring(0, 10).split('-').reverse().join('-')}
             </Typography>
           </Grid>
           <Grid
@@ -139,13 +137,13 @@ function ProductOrder({ order }) {
             md={4}
             lg={4}
             sx={{
-              textAlign: { md: "center" },
-              marginBottom: { xs: "2.1rem", lg: "0rem", md: "0rem" },
+              textAlign: { md: 'center' },
+              marginBottom: { xs: '2.1rem', lg: '0rem', md: '0rem' },
 
-              display: "flex",
+              display: 'flex',
               justifyContent: {
-                xs: "flex-end",
-                md: "center",
+                xs: 'flex-end',
+                md: 'center',
                 // lg: "flex-end",
               },
             }}
@@ -160,29 +158,29 @@ function ProductOrder({ order }) {
             md={4}
             lg={4}
             sx={{
-              display: "flex",
+              display: 'flex',
               justifyContent: {
                 // xs: "flex-start",
-                md: "flex-end",
-                lg: "flex-end",
+                md: 'flex-end',
+                lg: 'flex-end',
               },
-              marginTop: {  lg: "0rem" },
-              marginRight: { xs: "20px", md: "0rem", lg: "0rem" },
+              marginTop: { lg: '0rem' },
+              marginRight: { xs: '20px', md: '0rem', lg: '0rem' },
             }}
           >
             <Button
               onClick={toggleOrder}
               variant="contained"
               sx={{
-                backgroundColor: "#009688",
-                color: "white",
-                borderRadius: "5px",
-                ":hover": {
-                  backgroundColor: "#009688",
+                backgroundColor: '#009688',
+                color: 'white',
+                borderRadius: '5px',
+                ':hover': {
+                  backgroundColor: '#009688',
                 },
               }}
             >
-              {showOrder ? "close" : "Details"}
+              {showOrder ? 'close' : 'Details'}
             </Button>
           </Grid>
         </Grid>
@@ -191,8 +189,8 @@ function ProductOrder({ order }) {
             container
             item
             sx={{
-              borderTop: "none",
-              padding: "20px",
+              borderTop: 'none',
+              padding: '20px',
             }}
           >
             {order?.products?.map((product, index) => (
@@ -201,10 +199,10 @@ function ProductOrder({ order }) {
                 item
                 xs={12}
                 sx={{
-                  border: "2px solid #ddd",
-                  borderRadius: "5px",
-                  marginBottom: "20px",
-                  padding: "20px",
+                  border: '2px solid #ddd',
+                  borderRadius: '5px',
+                  marginBottom: '20px',
+                  padding: '20px',
                 }}
               >
                 <Grid container spacing={2}>
@@ -213,9 +211,9 @@ function ProductOrder({ order }) {
                       item
                       container
                       sx={{
-                        fontSize: "18px",
-                        fontWeight: "bold",
-                        color: "gray",
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                        color: 'gray',
                       }}
                     >
                       <Grid
@@ -224,15 +222,15 @@ function ProductOrder({ order }) {
                         md={6}
                         variant="body1"
                         sx={{
-                          display: "flex",
-                          justifyContent: { xs: "center", md: "flex-start" },
-                          color: "black",
-                          marginBottom: "1rem",
+                          display: 'flex',
+                          justifyContent: { xs: 'center', md: 'flex-start' },
+                          color: 'black',
+                          marginBottom: '1rem',
                         }}
                       >
                         <Typography
                           variant="body2"
-                          sx={{ fontSize: { xs: "16px", md: "20px" } }}
+                          sx={{ fontSize: { xs: '16px', md: '20px' } }}
                         >
                           {product?.product?.name}
                         </Typography>
@@ -243,18 +241,18 @@ function ProductOrder({ order }) {
                         md={6}
                         variant="body1"
                         sx={{
-                          display: "flex",
-                          justifyContent: { xs: "center", md: "flex-end" },
-                          marginBottom: "1rem",
+                          display: 'flex',
+                          justifyContent: { xs: 'center', md: 'flex-end' },
+                          marginBottom: '1rem',
                         }}
                       >
                         <Typography
                           variant="body1"
                           sx={{
                             fontSize: {
-                              xs: "16px",
-                              md: "20px",
-                              color: "black",
+                              xs: '16px',
+                              md: '20px',
+                              color: 'black',
                             },
                           }}
                         >
@@ -264,9 +262,9 @@ function ProductOrder({ order }) {
                           variant="body2"
                           sx={{
                             fontSize: {
-                              xs: "16px",
-                              md: "22px",
-                              color: "black",
+                              xs: '16px',
+                              md: '22px',
+                              color: 'black',
                             },
                           }}
                         >
@@ -280,14 +278,14 @@ function ProductOrder({ order }) {
             ))}
             <Grid item sm={8} xs={6}>
               <Button
-                onClick={() => handleTransaction("Export")}
+                onClick={() => handleTransaction('Export')}
                 variant="contained"
                 sx={{
-                  backgroundColor: "#009688",
-                  color: "white",
-                  borderRadius: "7px",
-                  ":hover": {
-                    backgroundColor: "#009688",
+                  backgroundColor: '#009688',
+                  color: 'white',
+                  borderRadius: '7px',
+                  ':hover': {
+                    backgroundColor: '#009688',
                   },
                 }}
               >

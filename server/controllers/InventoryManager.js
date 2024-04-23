@@ -165,6 +165,9 @@ export const getConfirmedOrders = async (req, res, next) => {
 export const sendOrderToShipped = async (req, res, next) => {
   try {
     const { orderId } = req.params;
+    console.log(orderId);
+    const { managerId, products } = req.body;
+    console.log(managerId, products);
     const ShippedOrder = await Orders.findByIdAndUpdate(
       { _id: orderId },
       { state: 'Shipped' },
@@ -181,32 +184,44 @@ export const sendOrderToShipped = async (req, res, next) => {
         },
       },
     ]);
-
+    if (!managerId || !products.length) {
+      next('Provide Required Fields!');
+      return;
+    }
+    await IventoryTransactions.create({
+      category: 'Products',
+      inventoryManager: managerId,
+      transaction: 'Export',
+      products: products,
+    });
     res.status(200).json({
       success: true,
-      message: 'Orders retrieved successfully',
+      message: 'Order shipped and export successfully',
       order: ShippedOrder,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       success: false,
-      message: 'Failed to retrieve order',
+      message: 'Failed to ship and export order',
     });
   }
 };
 export const changeStateToShipped = async (req, res, next) => {
   try {
-    const { orderId } = req.body; 
+    const { orderId } = req.body;
 
     // Find the material order by ID and update its state to "shipped"
     const updatedOrder = await MaterialOrders.findByIdAndUpdate(
       orderId,
       { state: 'SHIPPED' },
       { new: true } // To return the updated document
-    ).populate({
-      path: 'service',
-      select: 'service', }).select('-engineer')
+    )
+      .populate({
+        path: 'service',
+        select: 'service',
+      })
+      .select('-engineer');
 
     // Check if the order exists
     if (!updatedOrder) {

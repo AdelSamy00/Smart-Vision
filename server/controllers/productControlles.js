@@ -131,6 +131,34 @@ export const increaseQuantity = async (id, quantity) => {
   }
 };
 
+export const decreseQuantityUsingProductName = async (name, quantity) => {
+  try {
+    const product = await Products.findOne({ name: name });
+    product.quantity -= quantity;
+    const updatedpProduct = await Products.findByIdAndUpdate(
+      { _id: id },
+      product,
+      { new: true }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const increaseQuantityUsingProductName = async (name, quantity) => {
+  try {
+    const product = await Products.findOne({ name: name });
+    product.quantity += quantity;
+    const updatedpProduct = await Products.findByIdAndUpdate(
+      { _id: id },
+      product,
+      { new: true }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const updateProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -236,6 +264,7 @@ export const productsTransaction = async (req, res, next) => {
   try {
     let flag = true;
     const { managerId, products, method } = req.body;
+    console.log(products);
     if (!managerId || !products.length || !method) {
       next('Provide Required Fields!');
       return;
@@ -252,11 +281,17 @@ export const productsTransaction = async (req, res, next) => {
     if (flag) {
       if (method === 'Export') {
         products.map(async (prod) => {
-          await decreseQuantity(prod.product._id, prod.quantity);
+          await decreseQuantityUsingProductName(
+            prod.productName,
+            prod.quantity
+          );
         });
       } else if (method === 'Import') {
         products.map(async (prod) => {
-          await increaseQuantity(prod.product._id, prod.quantity);
+          await increaseQuantityUsingProductName(
+            prod.productName,
+            prod.quantity
+          );
         });
       }
 

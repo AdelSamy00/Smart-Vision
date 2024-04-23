@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
-import { useSelector } from "react-redux";
-import { apiRequest } from "../../utils";
+import React, { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
+import { useSelector } from 'react-redux';
+import { apiRequest } from '../../utils';
 
 import {
   Grid,
@@ -13,22 +13,22 @@ import {
   ListItem,
   ListItemText,
   IconButton,
-} from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+} from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 function TransactionPPComponent() {
   const [transactions, setTransactions] = useState([]);
   const { employee } = useSelector((state) => state.employee);
-  const [products, setProducts] = useState([{ product: "", quantity: "" }]);
+  const [products, setProducts] = useState([{ product: '', quantity: '' }]);
   const [isLoading, setIsLoading] = useState(true);
   const newProductNameRef = useRef(null);
   const newProductQuantityRef = useRef(null);
   const [allProducts, setAllProducts] = useState([]);
   const [orderDetails, setOrderDetails] = useState({
     products: [],
-    newProductName: "",
-    newProductQuantity: "",
+    newProductName: '',
+    newProductQuantity: '',
   });
 
   const fetchProducts = async () => {
@@ -38,7 +38,7 @@ function TransactionPPComponent() {
       setIsLoading(false);
       console.log(response.data.products);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error('Error fetching products:', error);
     }
   };
 
@@ -53,7 +53,7 @@ function TransactionPPComponent() {
           (product) => product.name === selectedProduct.product
         );
         return {
-          product,
+          productName: product?.name,
           quantity: selectedProduct.quantity,
         };
       }
@@ -67,7 +67,7 @@ function TransactionPPComponent() {
     const { newProductName, newProductQuantity } = orderDetails;
     if (newProductName && newProductQuantity) {
       const existingProductIndex = orderDetails.products.findIndex(
-        (product) => product.product === newProductName
+        (product) => product.materialName === newProductName
       );
       if (existingProductIndex !== -1) {
         const updatedProducts = [...orderDetails.products];
@@ -76,8 +76,8 @@ function TransactionPPComponent() {
         setOrderDetails({
           ...orderDetails,
           products: updatedProducts,
-          newProductName: "",
-          newProductQuantity: "",
+          newProductName: '',
+          newProductQuantity: '',
         });
       } else {
         setOrderDetails({
@@ -89,50 +89,52 @@ function TransactionPPComponent() {
               quantity: parseInt(newProductQuantity),
             },
           ],
-          newProductName: "",
-          newProductQuantity: "",
+          newProductName: '',
+          newProductQuantity: '',
         });
       }
-      newProductNameRef.current.value = "";
-      newProductQuantityRef.current.value = "";
+      newProductNameRef.current.value = '';
+      newProductQuantityRef.current.value = '';
       newProductNameRef.current.blur();
       newProductQuantityRef.current.blur();
     }
   };
 
   const handleTransaction = async (method) => {
-    const hasNullQuantity = products.some((product) => product.quantity === null || product.quantity === "");
+    const hasNullQuantity = products.some(
+      (product) => product.quantity === null || product.quantity === ''
+    );
 
     if (hasNullQuantity) {
-      toast.error("Please fill in all the quantities before proceeding.");
+      toast.error('Please fill in all the quantities before proceeding.');
       return;
     }
     try {
       const managerId = employee._id;
       console.log(transactions);
       const response = await apiRequest({
-        method:"put",
-        url:"/products/transaction",
-        data:{
+        method: 'put',
+        url: '/products/transaction',
+        data: {
           managerId,
           products: products,
           method,
-        }
-      })
+        },
+      });
       if (response.data.success) {
         toast.success(response.data.message);
         setTransactions([]);
         setOrderDetails({
           products: [],
-          newProductName: "",
-          newProductQuantity: "",
+          newProductName: '',
+          newProductQuantity: '',
         });
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error("Error making transaction:", error);
-      toast.error("Failed to make transaction. Please try again.");
+      console.error('Error making transaction:', error);
+      toast.error('Failed to make transaction. Please try again.');
     }
   };
 
@@ -142,8 +144,8 @@ function TransactionPPComponent() {
   };
 
   const handleQuantityKeyDown = (e) => {
-    if (e.key === "Enter") {
-      if (orderDetails.newProductName.trim() !== "") {
+    if (e.key === 'Enter') {
+      if (orderDetails.newProductName.trim() !== '') {
         addProduct();
       }
     }
@@ -158,22 +160,22 @@ function TransactionPPComponent() {
   return (
     <Grid
       container
-        justifyContent="center"
-        alignItems="center"
-        className="presenter-products-container"
+      justifyContent="center"
+      alignItems="center"
+      className="presenter-products-container"
       spacing={2}
     >
       <Toaster
         toastOptions={{
           style: {
             duration: 3000,
-            border: "1px solid #6A5ACD",
-            backgroundColor: "#6A5ACD",
-            padding: "16px",
-            color: "white",
-            fontWeight: "Bold",
-            marginTop: "65px",
-            textAlign: "center",
+            border: '1px solid #6A5ACD',
+            backgroundColor: '#6A5ACD',
+            padding: '16px',
+            color: 'white',
+            fontWeight: 'Bold',
+            marginTop: '65px',
+            textAlign: 'center',
           },
         }}
       />
@@ -181,9 +183,9 @@ function TransactionPPComponent() {
         <Typography
           variant="h5"
           style={{
-            padding: "20px 0px",
-            display: "flex",
-            justifyContent: "flex-start",
+            padding: '20px 0px',
+            display: 'flex',
+            justifyContent: 'flex-start',
           }}
         >
           Product Transaction:
@@ -203,8 +205,8 @@ function TransactionPPComponent() {
               inputRef={newProductNameRef}
               value={orderDetails.newProductName}
               onKeyDown={(e) =>
-                e.key === "Enter" &&
-                orderDetails.newProductName.trim() !== "" &&
+                e.key === 'Enter' &&
+                orderDetails.newProductName.trim() !== '' &&
                 newProductQuantityRef.current.focus()
               }
             />
@@ -232,7 +234,7 @@ function TransactionPPComponent() {
         />
       </Grid>
       <Grid item xs={2}>
-        <Button fullWidth onClick={addProduct} style={{ marginTop: "10px" }}>
+        <Button fullWidth onClick={addProduct} style={{ marginTop: '10px' }}>
           Add
         </Button>
       </Grid>
@@ -240,13 +242,13 @@ function TransactionPPComponent() {
         <Grid item xs={12}>
           <List
             style={{
-              maxHeight: "200px",
-              overflowY: "auto",
-              paddingTop: "0px",
+              maxHeight: '200px',
+              overflowY: 'auto',
+              paddingTop: '0px',
             }}
           >
             {orderDetails.products.map((product, index) => (
-              <ListItem key={index} style={{ paddingBottom: "0px" }}>
+              <ListItem key={index} style={{ paddingBottom: '0px' }}>
                 <ListItemText primary={product.product} />
                 <ListItemText secondary={product.quantity} />
                 <IconButton
@@ -255,8 +257,8 @@ function TransactionPPComponent() {
                   onClick={() => removeProduct(index)}
                 >
                   <DeleteForeverIcon
-                    sx={{ fontSize: "32px" }}
-                    style={{ marginRight: "3vw" }}
+                    sx={{ fontSize: '32px' }}
+                    style={{ marginRight: '3vw' }}
                   />
                 </IconButton>
               </ListItem>
@@ -264,25 +266,30 @@ function TransactionPPComponent() {
           </List>
         </Grid>
       )}
-      <Grid
-        item
-        xs={12}
-      >
-        <Grid item xs={12} style={{ marginTop: "30px" ,display: "flex", justifyContent: "flex-start" }}>
+      <Grid item xs={12}>
+        <Grid
+          item
+          xs={12}
+          style={{
+            marginTop: '30px',
+            display: 'flex',
+            justifyContent: 'flex-start',
+          }}
+        >
           <Button
             variant="contained"
-            onClick={() => handleTransaction("Export")}
-            style={{ backgroundColor: "#edede9", color: "black" }}
+            onClick={() => handleTransaction('Export')}
+            style={{ backgroundColor: '#edede9', color: 'black' }}
           >
             Export
           </Button>
           <Button
             variant="contained"
-            onClick={() => handleTransaction("Import")}
+            onClick={() => handleTransaction('Import')}
             style={{
-              marginLeft: "70px",
-              backgroundColor: "#edede9",
-              color: "black",
+              marginLeft: '70px',
+              backgroundColor: '#edede9',
+              color: 'black',
             }}
           >
             Import
