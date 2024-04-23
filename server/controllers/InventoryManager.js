@@ -100,25 +100,10 @@ export const getMaterialOrders = async (req, res, next) => {
 
 export const getAllTransactions = async (req, res, next) => {
   try {
-    const transactions = await IventoryTransactions.find().populate([
-      {
-        path: 'inventoryManager',
-        select: '_id username email -password',
-      },
-      {
-        path: 'materials',
-        populate: {
-          path: 'material',
-        },
-      },
-      {
-        path: 'products',
-        populate: {
-          path: 'product',
-        },
-      },
-    ]);
-
+    const transactions = await IventoryTransactions.find().populate({
+      path: 'inventoryManager',
+      select: '_id username email -password',
+    });
     res.status(200).json({
       success: true,
       message: 'Transactions retrieved successfully',

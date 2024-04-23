@@ -40,10 +40,7 @@ import {
 import {
   InventoryHome,
   TransactionsPage,
-  TransactionHistory,
-  InventoryMatrialsOrders,
-  InventoryProductOrders,
-  InventoryMaterialTransactions,
+  InventoryTransactions,
   AllInventoryOrders,
 } from './pages/inventory/index.js';
 import {
@@ -186,7 +183,7 @@ function App() {
           <Route path="/inventory/transaction" element={<TransactionsPage />} />
           <Route
             path="/inventory/matrial/history"
-            element={<InventoryMaterialTransactions />}
+            element={<InventoryTransactions />}
           />
         </Route>
         {/* Private Presenter Routes */}

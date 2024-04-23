@@ -5,11 +5,12 @@ import Table from 'react-bootstrap/Table';
 import './styleSheets/InventoryMaterialTransactions.css';
 import getTodayDate from '../../utils/dates';
 
-function InventoryMaterialTransactions() {
+function InventoryTransactions() {
   const todayDate = getTodayDate();
   const [allTransactions, setallTransactions] = useState(null);
   const [filteredTransactions, setfilteredTransactions] = useState(null);
-  const [transactionType, settransactionType] = useState('All');
+  const [transactionMethod, settransactionMethod] = useState('All');
+  const [type, setType] = useState('Materials');
   const [startDate, setstartDate] = useState('');
   const [endtDate, setendDate] = useState('');
   const [foundTransactions, setfoundTransactions] = useState(false);
@@ -18,7 +19,7 @@ function InventoryMaterialTransactions() {
   async function fetchOrderHistory() {
     try {
       await axios
-        .get(`/employees/material-transactions`)
+        .get(`/employees/transaction`)
         .then((res) => {
           setallTransactions(res?.data?.transactions);
           setfilteredTransactions(res?.data?.transactions);
@@ -38,9 +39,10 @@ function InventoryMaterialTransactions() {
 
   useEffect(() => {
     const filtered = allTransactions?.filter((transaction) => {
+      console.log(transaction);
       const isTransactionTypeMatch =
-        transactionType === 'All' ||
-        transaction.transaction === transactionType;
+        transactionMethod === 'All' ||
+        transaction.transaction === transactionMethod;
 
       if (startDate && endtDate) {
         const isDateRangeMatch =
@@ -54,7 +56,7 @@ function InventoryMaterialTransactions() {
       ? setfoundTransactions(true)
       : setfoundTransactions(false);
     setfilteredTransactions(filtered);
-  }, [transactionType, startDate, endtDate]);
+  }, [transactionMethod, startDate, endtDate]);
 
   console.log(foundTransactions);
 
@@ -62,14 +64,31 @@ function InventoryMaterialTransactions() {
     <>
       {!isLoading ? (
         <main className="materialTransactionsMain">
-          <h2>Material Transactions</h2>
+          {console.log(allTransactions)}
+          <div
+            className="materialTransactionsFilterNavbarItem mt-4"
+            style={{ marginBottom: '1.5rem' }}
+          >
+            <label htmlFor="transactionType">Select Type:</label>
+            <select
+              name="transactionType"
+              id="transactionType"
+              onChange={(e) => setType(e.target.value)}
+              value={type}
+            >
+              <option value={'Products'}>Products</option>
+              <option value={'Materials'}>Materials</option>
+            </select>
+          </div>
+          <h2>{type} Transactions</h2>
+          {console.log(type)}
           <div className="materialTransactionsFilterNavbar">
             <div className="materialTransactionsFilterNavbarItem">
-              <label htmlFor="transactionType">Transaction Type:</label>
+              <label htmlFor="transactionMethod">Transaction Type:</label>
               <select
-                name="transactionType"
-                id="transactionType"
-                onChange={(e) => settransactionType(e.target.value)}
+                name="transactionMethod"
+                id="transactionMethod"
+                onChange={(e) => settransactionMethod(e.target.value)}
               >
                 <option value="All">All</option>
                 <option value="Export">Export</option>
@@ -102,7 +121,7 @@ function InventoryMaterialTransactions() {
                 type="submit"
                 className="text-xl bg-slate-700 hover:bg-slate-800 text-white py-1 px-2 rounded-xl "
                 onClick={() => {
-                  settransactionType('All');
+                  settransactionMethod('All');
                   setendDate(todayDate);
                   setstartDate(todayDate);
                 }}
@@ -113,7 +132,7 @@ function InventoryMaterialTransactions() {
                 type="submit"
                 className="text-xl ml-3 bg-slate-700 hover:bg-slate-800 text-white py-1 px-2 rounded-xl "
                 onClick={() => {
-                  settransactionType('All');
+                  settransactionMethod('All');
                   setendDate('');
                   setstartDate('');
                 }}
@@ -130,24 +149,34 @@ function InventoryMaterialTransactions() {
                   <th>Name</th>
                   <th>Export</th>
                   <th>Import</th>
-                  <th className="text-nowrap w-52">Remain Quantities</th>
                 </tr>
               </thead>
               <tbody className="materialTransactionsTableBody">
                 {filteredTransactions?.map((transaction) => {
-                  console.log(filteredTransactions.length > 0);
-                  const materials = transaction?.materials;
+                  //console.log(filteredTransactions.length > 0);
+                  let transactionType;
+                  {
+                    type === 'Materials'
+                      ? (transactionType = transaction?.materials)
+                      : (transactionType = transaction?.products);
+                  }
                   const isExport = transaction?.transaction === 'Export';
-                  return materials?.map((element, idx) => {
+                  return transactionType?.map((element, idx) => {
+                    {
+                      console.log(element);
+                    }
                     return (
                       <tr key={idx}>
                         <td className="text-nowrap">
                           {transaction?.createdAt?.substring(0, 10)}
                         </td>
-                        <td>{element?.material?.name}</td>
+                        <td>
+                          {element?.materialName
+                            ? element?.materialName
+                            : element?.productName}
+                        </td>
                         <td>{isExport ? element?.quantity : ''}</td>
                         <td>{!isExport ? element?.quantity : ''}</td>
-                        <td>{element?.material?.quantity}</td>
                       </tr>
                     );
                   });
@@ -168,4 +197,4 @@ function InventoryMaterialTransactions() {
   );
 }
 
-export default InventoryMaterialTransactions;
+export default InventoryTransactions;
