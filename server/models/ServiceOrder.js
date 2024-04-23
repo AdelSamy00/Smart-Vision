@@ -33,6 +33,14 @@ const serviceOrderSchema = new mongoose.Schema(
       time: { type: String },
     },
     cancelServiceOrderExpiresAt: { type: Date },
+    requiredMaterials: [
+      {
+        quantity: { type: Number },
+        material: {
+          type: String,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

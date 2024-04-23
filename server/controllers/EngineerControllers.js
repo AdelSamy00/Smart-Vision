@@ -80,6 +80,7 @@ export const sendCustomizationDetails = async (req, res, next) => {
     const engineer = await Employees.findById({ _id: engineerId });
     service.details = details;
     service.state = 'MANFACTURING';
+    service.requiredMaterials = materials;
     service.save();
     if (service.date) {
       await AssignedDateTable.findOneAndDelete({
