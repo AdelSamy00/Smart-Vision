@@ -102,7 +102,9 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                           {request.serviceOrder.customer?.phone}
                         </Typography>
                         <Typography>
-                          <Link to={`/e/order-details/${request.serviceOrder?._id}`}>
+                          <Link
+                            to={`/engineer/order-details/${request.serviceOrder?._id}`}
+                          >
                             <Button
                               variant="text"
                               sx={{
@@ -135,7 +137,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                         <div className="button-container">
                           {' '}
                           <Link
-                            to={`/engineer/send-request/${request.serviceOrder?._id}`}
+                            to={`/engineer/send-order/${request.serviceOrder?._id}`}
                             className="link-style"
                           >
                             <Button
@@ -197,7 +199,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                       Customer Number: 0{request.customer?.phone}
                     </Typography>
                     <Typography>
-                      <Link to={`/e/order-details/${request?._id}`}>
+                      <Link to={`/engineer/order-details/${request?._id}`}>
                         <Button
                           variant="text"
                           sx={{
@@ -230,7 +232,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                     <div className="button-container">
                       {' '}
                       <Link
-                        to={`/engineer/send-request/${request?._id}`}
+                        to={`/engineer/send-order/${request?._id}`}
                         className="link-style"
                       >
                         <Button
