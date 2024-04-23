@@ -63,7 +63,7 @@ function ProductCard({
   };
 
   return (
-    <div className="productCard mb-12">
+    <div className="productCard ">
       <Link className="productCardLink" to={`/product/${product?._id}`}>
         {product.images.length === 1 ? (
           <div className="sbProductCardDivImg">

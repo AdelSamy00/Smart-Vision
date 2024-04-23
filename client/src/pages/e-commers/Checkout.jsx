@@ -1,33 +1,60 @@
-import React, { useEffect, useState } from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Paper from '@mui/material/Paper';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import AddressForm from './AddressForm';
-import Review from './Review';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { clearCart } from '../../redux/CartSlice';
-import { apiRequest } from '../../utils';
+import React, { useEffect, useState } from "react";
+import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import Paper from "@mui/material/Paper";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import AddressForm from "./AddressForm";
+import Review from "./Review";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { clearCart } from "../../redux/CartSlice";
+import { apiRequest } from "../../utils";
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  OutlinedInput,
+  RadioGroup,
+} from "@mui/material";
+import CreditCardRoundedIcon from "@mui/icons-material/CreditCardRounded";
+import AccountBalanceRoundedIcon from "@mui/icons-material/AccountBalanceRounded";
+import SimCardRoundedIcon from "@mui/icons-material/SimCardRounded";
+import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
+import MoneyIcon from "@mui/icons-material/Money";
+import { styled } from "@mui/system";
+import AlertDialog from "../../components/e-commers/Dialog";
+import { useNavigate } from "react-router-dom";
 
+const FormGrid = styled("div")(() => ({
+  display: "flex",
+  flexDirection: "column",
+}));
 export default function Checkout({ socket, setSocket }) {
   const dispatch = useDispatch();
   const { customer } = useSelector((state) => state.customer);
   const { cart } = useSelector((state) => state.cart);
   const [activeStep, setActiveStep] = useState(0);
   const [orderNumber, setOrderNumber] = useState(0);
-
+  const [paymentType, setPaymentType] = useState("default");
+  const [error, setError] = useState(null);
+  const [unavailableProductsDialogOpen, setUnavailableProductsDialogOpen] = useState(false);
+  const [unavailableProductsList, setUnavailableProductsList] = useState([]);
+  const navigate = useNavigate();
   //to get first name and last name from userName
   function setFirstAndLastName() {
-    const nameParts = customer?.username.split(' ');
+    const nameParts = customer?.username.split(" ");
     const result = {
-      firstName: '',
-      lastName: '',
+      firstName: "",
+      lastName: "",
     };
     if (nameParts?.length === 0) {
     } else if (nameParts?.length === 1) {
@@ -44,23 +71,23 @@ export default function Checkout({ socket, setSocket }) {
     firstName: nameParts?.firstName,
     lastName: nameParts?.lastName,
     phoneNumber: customer?.phone,
-    city: '',
-    country: '',
+    city: "",
+    country: "",
     address: customer?.address,
   };
   const [shippingInfo, setShippingInfo] = useState(initCustomerData);
   const [errorMessage, setErrorMessage] = useState({
-    firstName: '',
-    lastName: '',
-    phoneNumber: '',
-    city: '',
-    country: '',
-    address: '',
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    city: "",
+    country: "",
+    address: "",
   });
-  const steps = ['Shipping address', 'Review your order'];
+  const steps = ["Shipping address", "Payment options", "Review your order"];
 
   useEffect(() => {
-    const formDataString = localStorage.getItem('shippingInfo');
+    const formDataString = localStorage.getItem("shippingInfo");
     if (formDataString) {
       setShippingInfo(JSON.parse(formDataString));
     }
@@ -68,40 +95,23 @@ export default function Checkout({ socket, setSocket }) {
 
   const handleFormChange = (formData) => {
     setShippingInfo(formData);
-    localStorage.setItem('shippingInfo', JSON.stringify(formData));
+    localStorage.setItem("shippingInfo", JSON.stringify(formData));
   };
-
-  function getStepContent(step) {
-    switch (step) {
-      case 0:
-        return (
-          <AddressForm
-            formData={shippingInfo}
-            onChange={handleFormChange}
-            errorMessage={errorMessage}
-          />
-        );
-      case 1:
-        return <Review />;
-      default:
-        throw new Error('Unknown step');
-    }
-  }
 
   function validateFormData(formData) {
     const errors = {};
     if (!formData.firstName) {
-      errors.firstName = 'First Name is required';
+      errors.firstName = "First Name is required";
     } else if (!formData.lastName) {
-      errors.lastName = 'Last Name is required';
+      errors.lastName = "Last Name is required";
     } else if (!formData.phoneNumber) {
-      errors.phoneNumber = 'Phone Number is required';
+      errors.phoneNumber = "Phone Number is required";
     } else if (!formData.address) {
-      errors.address = 'Address is required';
+      errors.address = "Address is required";
     } else if (!formData.city) {
-      errors.city = 'City is required';
+      errors.city = "City is required";
     } else if (!formData.country) {
-      errors.country = 'Country is required';
+      errors.country = "Country is required";
     }
     return errors;
   }
@@ -119,8 +129,10 @@ export default function Checkout({ socket, setSocket }) {
   };
 
   const handleBack = () => {
+    setPaymentType("default");
     setActiveStep(activeStep - 1);
   };
+
   function calculateTotalPrice() {
     if (!cart || cart.length === 0) {
       return 0;
@@ -131,28 +143,51 @@ export default function Checkout({ socket, setSocket }) {
     return totalPrice;
   }
   const totalPrice = calculateTotalPrice();
-  // console.log(totalPrice);
+
   function calculateTotalPoints() {
     if (!cart || cart.length === 0) {
       return 0;
     }
     const totalPoints = cart.reduce((total, item) => {
-      const points = typeof item.points === 'number' ? item.points : 0;
+      const points = typeof item.points === "number" ? item.points : 0;
       return total + points;
     }, 0);
     return totalPoints;
   }
   const totalPoints = calculateTotalPoints();
-  // console.log(totalPoints);
+
   const handlePlaceOrder = async () => {
     try {
+      // Fetch all products from the inventory
+      const response = await axios.get("/products/");
+      // console.log(response);
+      const allProducts = response.data.products;
+
+      // Check quantity availability for each product in the cart
+      const unavailableProducts = cart.filter((cartProduct) => {
+        const inventoryProduct = allProducts.find(
+          (product) => product._id === cartProduct._id
+        );
+        console.log(cartProduct.quantity, inventoryProduct.quantity);
+        return (
+          !inventoryProduct || cartProduct.quantity > inventoryProduct.quantity
+        );
+      });
+      console.log(unavailableProducts);
+      if (unavailableProducts.length > 0) {
+        setUnavailableProductsList(unavailableProducts);
+        setUnavailableProductsDialogOpen(true);
+        return;
+      }
+
+      // If all products are available, proceed with placing the order
       const productsWithDetails = cart.map((product) => ({
         product: product?._id,
         quantity: product?.quantity,
       }));
-      const response = await apiRequest({
-        method: 'POST',
-        url: '/customers/order',
+      const res = await apiRequest({
+        method: "POST",
+        url: "/customers/order",
         data: {
           id: customer._id,
           cart: productsWithDetails,
@@ -162,33 +197,81 @@ export default function Checkout({ socket, setSocket }) {
         },
         token: customer?.token,
       });
-      console.log('Order placed successfully:', response.data);
-      socket?.emit('setOrder', {
+      console.log("Order placed successfully:", response.data);
+      socket?.emit("setOrder", {
         user: shippingInfo,
         products: productsWithDetails,
-        type: 'addOrder',
+        type: "addOrder",
         order: response.data.order,
       });
       dispatch(clearCart());
-      setOrderNumber(response.data.order.orderNumber);
+      setOrderNumber(res.data.order.orderNumber);
       setActiveStep(activeStep + 1);
     } catch (error) {
-      console.error('Error placing order:', error.response.data.message);
+      console.error("Error placing order:", error.response.data.message);
     }
   };
 
+  const handleCashPayment = () => {
+    setPaymentType("Cash");
+    setActiveStep(activeStep + 1);
+  };
+  const [cardNumber, setCardNumber] = React.useState("");
+  const [cvv, setCvv] = React.useState("");
+  const [expirationDate, setExpirationDate] = React.useState("");
+
+  const handlePaymentTypeChange = (event) => {
+    setPaymentType(event.target.value);
+  };
+
+  const handleCardNumberChange = (event) => {
+    const value = event.target.value.replace(/\D/g, "");
+    const formattedValue = value.replace(/(\d{4})(?=\d)/g, "$1 ");
+    if (value.length <= 16) {
+      setCardNumber(formattedValue);
+    }
+  };
+
+  const handleCvvChange = (event) => {
+    const value = event.target.value.replace(/\D/g, "");
+    if (value.length <= 3) {
+      setCvv(value);
+    }
+  };
+  const handleExpirationDateChange = (event) => {
+    const value = event.target.value.replace(/\D/g, "");
+    const formattedValue = value.replace(/(\d{2})(?=\d{2})/, "$1/");
+    if (value.length <= 4) {
+      setExpirationDate(formattedValue);
+    }
+  };
   return (
     <React.Fragment>
       <CssBaseline />
       <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
+      <AlertDialog
+        open={unavailableProductsDialogOpen}
+        onClose={() => {setUnavailableProductsDialogOpen(false);
+          navigate("/bag");
+        }}
+        products={unavailableProductsList}
+        msg="Some products are not available in the required"
+      />
         <Paper
           variant="outlined"
-          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+          sx={{
+            my: { xs: 3, md: 6 },
+            p: { xs: 2, md: 3 },
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
           <Typography component="h1" variant="h4" align="center">
             Checkout
           </Typography>
-          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5, width: "100%" }}>
             {steps.map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
@@ -208,36 +291,223 @@ export default function Checkout({ socket, setSocket }) {
             </React.Fragment>
           ) : (
             <React.Fragment>
-              {getStepContent(activeStep)}
+              {activeStep === 0 && (
+                <AddressForm
+                  formData={shippingInfo}
+                  onChange={handleFormChange}
+                  errorMessage={errorMessage}
+                />
+              )}
+              {activeStep === 1 && (
+                <FormControl component="fieldset" sx={{ width: "100%" }}>
+                  <RadioGroup
+                    aria-label="Payment options"
+                    name="paymentType"
+                    sx={{
+                      flexDirection:
+                        paymentType === "default" || paymentType === "Cash"
+                          ? "column"
+                          : "row",
+                      marginBottom: "1rem",
+                      gap: 2,
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                    value={paymentType}
+                    onChange={handlePaymentTypeChange}
+                  >
+                    <Card
+                      raised={paymentType === "Cash"}
+                      sx={{
+                        minWidth: { xs: "100%", sm: "49%" },
+                        outline: "1px solid",
+                        // marginBottom: "1rem",
+                        outlineColor:
+                          paymentType === "Cash" ? "primary.main" : "divider",
+                        backgroundColor:
+                          paymentType === "Cash" ? "background.default" : "",
+                      }}
+                    >
+                      <CardActionArea onClick={handleCashPayment}>
+                        <CardContent
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                        >
+                          <MoneyIcon color="primary" fontSize="small" />
+                          <Typography fontWeight="medium">
+                            Cash On Delivery
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                    <Card
+                      raised={paymentType === "creditCard"}
+                      sx={{
+                        minWidth: { xs: "100%", sm: "49%" },
+                        outline: "1px solid",
+                        // marginBottom: "1rem",
+                        outlineColor:
+                          paymentType === "creditCard"
+                            ? "primary.main"
+                            : "divider",
+                        backgroundColor:
+                          paymentType === "creditCard"
+                            ? "background.default"
+                            : "",
+                      }}
+                    >
+                      <CardActionArea
+                        onClick={() => setPaymentType("creditCard")}
+                      >
+                        <CardContent
+                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                        >
+                          <CreditCardRoundedIcon
+                            color="primary"
+                            fontSize="small"
+                          />
+                          <Typography fontWeight="medium">
+                            Credit Card
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                  </RadioGroup>
+                  {paymentType === "creditCard" && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 2,
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "space-between",
+                          p: 3,
+                          height: { xs: 300, sm: 350, md: 375 },
+                          width: "100%",
+                          margin: "auto",
+                          backgroundColor: "background.paper",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Typography variant="subtitle2">
+                            Credit card
+                          </Typography>
+                          <CreditCardRoundedIcon
+                            sx={{ color: "text.secondary" }}
+                          />
+                        </Box>
+                        <SimCardRoundedIcon
+                          sx={{
+                            fontSize: { xs: 48, sm: 56 },
+                            transform: "rotate(90deg)",
+                            color: "text.secondary",
+                          }}
+                        />
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            width: "100%",
+                            gap: 2,
+                          }}
+                        >
+                          <FormGrid sx={{ flexGrow: 1 }}>
+                            <FormLabel htmlFor="card-number" required>
+                              Card number
+                            </FormLabel>
+                            <OutlinedInput
+                              id="card-number"
+                              autoComplete="card-number"
+                              placeholder="0000 0000 0000 0000"
+                              required
+                              value={cardNumber}
+                              onChange={handleCardNumberChange}
+                            />
+                          </FormGrid>
+                          <FormGrid sx={{ maxWidth: "20%" }}>
+                            <FormLabel htmlFor="cvv" required>
+                              CVV
+                            </FormLabel>
+                            <OutlinedInput
+                              id="cvv"
+                              autoComplete="CVV"
+                              placeholder="123"
+                              required
+                              value={cvv}
+                              onChange={handleCvvChange}
+                            />
+                          </FormGrid>
+                        </Box>
+                        <Box sx={{ display: "flex", gap: 2 }}>
+                          <FormGrid sx={{ flexGrow: 1 }}>
+                            <FormLabel htmlFor="card-name" required>
+                              Name
+                            </FormLabel>
+                            <OutlinedInput
+                              id="card-name"
+                              autoComplete="card-name"
+                              placeholder="John Smith"
+                              required
+                            />
+                          </FormGrid>
+                          <FormGrid sx={{ flexGrow: 1 }}>
+                            <FormLabel htmlFor="card-expiration" required>
+                              Expiration date
+                            </FormLabel>
+                            <OutlinedInput
+                              id="card-expiration"
+                              autoComplete="card-expiration"
+                              placeholder="MM/YY"
+                              required
+                              value={expirationDate}
+                              onChange={handleExpirationDateChange}
+                            />
+                          </FormGrid>
+                        </Box>
+                        <Typography variant="body1" color="error">
+                          Sorry, Online payment is not available right now.
+                        </Typography>
+                      </Box>
+                    </Box>
+                  )}
+                </FormControl>
+              )}
+              {activeStep === 2 && <Review />}
               <Box
                 sx={{
-                  display: 'flex',
+                  display: "flex",
                   justifyContent:
-                    activeStep === 0 ? 'flex-end' : 'space-between',
+                    activeStep === 0 ? "flex-end" : "space-between",
+                  width: "100%",
+                  marginTop: "2rem",
                 }}
               >
                 {activeStep !== 0 && (
-                  <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
+                  <Button onClick={handleBack} sx={{}}>
                     Back
                   </Button>
                 )}
                 {activeStep === 0 && (
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 3, ml: 1 }}
-                  >
+                  <Button variant="contained" onClick={handleNext}>
                     Next
                   </Button>
                 )}
-                {activeStep === 1 && (
-                  <Button
-                    variant="contained"
-                    onClick={handlePlaceOrder}
-                    sx={{ mt: 3, ml: 1 }}
-                  >
-                    Place order
-                  </Button>
+                {activeStep === 2 && (
+                  <>
+                    {error && <Typography color="error">{error}</Typography>}
+                    <Button variant="contained" onClick={handlePlaceOrder}>
+                      Place order
+                    </Button>
+                  </>
                 )}
               </Box>
             </React.Fragment>

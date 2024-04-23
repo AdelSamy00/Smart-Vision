@@ -50,7 +50,7 @@ export function OperatorLayout() {
 }
 export function ActorLayout() {
   const { employee } = useSelector((state) => state.employee);
-  if (employee?.jobTitle?.toLowerCase() === 'actor') {
+  if (employee?.jobTitle?.toLowerCase() === 'actor manager') {
     return <Outlet />;
   }
   return <Navigate to={defaultEmployeeNavigate} />;

@@ -39,7 +39,7 @@ function CustomerForm() {
         .then((res) => {
           toast.dismiss();
           toast.success(res.data.message);
-          navigate("/operator/view-customers");
+          navigate("/operator/customers");
         })
         .catch((e) => {
           console.log(e);

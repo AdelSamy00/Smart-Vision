@@ -34,7 +34,7 @@ export default function Review() {
       <Typography variant="h6" gutterBottom>
         Order summary
       </Typography>
-      <List disablePadding>
+      <List disablePadding style={{width:"100%"}}>
         {products.map((product) => (
           <ListItem
             key={product._id}

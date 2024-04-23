@@ -70,12 +70,13 @@ export default function ChangeEmpPassword() {
     e.preventDefault();
     setIsFormSubmitted(true);
     if (
-      (!accountInfo.newPassword.trim() ||
-        !accountInfo.confirmPassword.trim()) &&
-      !newPassErrorMessage
+      (!accountInfo.newPassword.trim())
     ) {
-      setErrorMessage("All fields are required");
-    } else if (!isPasswordValid && !newPassErrorMessage) {
+      setNewPassErrorMessage("The new password field cannot be left empty");
+    } else if(!accountInfo.confirmPassword.trim()){
+      setErrorMessage("The confirm new password field cannot be left empty");
+    }
+    else if (!isPasswordValid && !newPassErrorMessage) {
       setErrorMessage("The password is not valid");
     } else if (
       accountInfo.newPassword !== accountInfo.confirmPassword &&

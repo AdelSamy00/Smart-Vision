@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 
 export default function EmployeeCard({ employee }) {
   return (
-    <Card sx={{ maxWidth: 310, marginBottom: "2rem", bgcolor: "#f8f9fa" }}>
+    <Card sx={{ maxWidth: 320, marginBottom: "2rem", bgcolor: "#f8f9fa" }}>
       <CardHeader
         avatar={
           <Avatar
@@ -60,54 +60,54 @@ export default function EmployeeCard({ employee }) {
         }
       />
       <CardContent>
-        <Grid container spacing={2} textAlign={"center"}>
+        <Grid container spacing={2} textAlign={"center"} style={{justifyContent:"center"}}>
           <Grid xs={4} item>
             <Typography
-              style={{ fontSize: "19px", textAlign: "center", color: "gray" }}
+              style={{ fontSize: "19px", textAlign: "start", color: "gray" }}
             >
               UserName:
             </Typography>
           </Grid>
-          <Grid xs={8} item>
-            <Typography style={{ fontSize: "18px", textAlign: "center" }}>
-              {employee.username}
+          <Grid xs={7} item>
+            <Typography style={{ fontSize: "18px", textAlign: "center" ,textTransform:"capitalize"}}>
+              {employee?.username}
             </Typography>
           </Grid>
           <Grid xs={4} item>
             <Typography
-              style={{ fontSize: "19px", textAlign: "center", color: "gray" }}
+              style={{ fontSize: "19px", textAlign: "start", color: "gray" }}
             >
-              <span style={{ fontSize: "19px" }}>jobTitle: </span>{" "}
+              <span style={{ fontSize: "19px" }}>JobTitle: </span>{" "}
             </Typography>
           </Grid>
-          <Grid xs={8} item>
-            <Typography style={{ fontSize: "18px", textAlign: "center" }}>
-              {employee.jobTitle}
+          <Grid xs={7} item>
+            <Typography style={{ fontSize: "18px", textAlign: "center",textTransform:"capitalize" }}>
+              {employee?.jobTitle}
             </Typography>
           </Grid>
           <Grid xs={4} item>
             <Typography
-              style={{ fontSize: "19px", textAlign: "center", color: "gray" }}
+              style={{ fontSize: "19px", textAlign: "start", color: "gray" }}
             >
               Salary:
             </Typography>
           </Grid>
-          <Grid xs={8} item>
-            <Typography style={{ fontSize: "18px", textAlign: "center" }}>
-              {employee.salary ? employee.salary : 10000}$
-            </Typography>
-          </Grid>
-          <Grid xs={5} item>
-            <Typography style={{ fontSize: "19px", color: "gray" }}>
-              Qualification:
-            </Typography>
-          </Grid>
           <Grid xs={7} item>
-            <Typography style={{ fontSize: "17px" }}>
-              Bachelor's Degree
+            <Typography style={{ fontSize: "18px", textAlign: "center" }}>
+              {employee?.salary ? employee?.salary : 10000}$
             </Typography>
           </Grid>
           <Grid xs={4} item>
+            <Typography style={{ fontSize: "19px", textAlign: "start", color: "gray" }}>
+              Phone:
+            </Typography>
+          </Grid>
+          <Grid xs={7} item>
+            <Typography style={{ fontSize: "18px", textAlign: "center"}}>
+             {employee?.phone?"0"+employee?.phone:"Undefined"}
+            </Typography>
+          </Grid>
+          {/* <Grid xs={4} item>
             <Typography style={{ fontSize: "19px", color: "gray" }}>
               DOB:{" "}
             </Typography>
@@ -122,7 +122,7 @@ export default function EmployeeCard({ employee }) {
                     .join("-")
                 : "Unknown"}
             </Typography>
-          </Grid>
+          </Grid> */}
           <Grid
             xs={12}
             item

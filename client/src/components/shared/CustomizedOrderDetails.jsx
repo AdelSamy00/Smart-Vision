@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import './StyleSheets/CustomizedOrderDetails.css';
-import Accordion from 'react-bootstrap/Accordion';
-import Table from 'react-bootstrap/Table';
-import Form from 'react-bootstrap/Form';
-import axios from 'axios';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import Slide from '@mui/material/Slide';
-import CloseIcon from '@mui/icons-material/Close';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import "./StyleSheets/CustomizedOrderDetails.css";
+import Accordion from "react-bootstrap/Accordion";
+import Table from "react-bootstrap/Table";
+import Form from "react-bootstrap/Form";
+import axios from "axios";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import Slide from "@mui/material/Slide";
+import CloseIcon from "@mui/icons-material/Close";
+import { useSelector } from "react-redux";
+import AlertDialog from "../e-commers/Dialog";
 
 // const tempImages = [
 //   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848315/Smart%20Vision/vojtech-bruzek-Yrxr3bsPdS0-unsplash_ekmimc.jpg',
@@ -21,10 +22,16 @@ import { useSelector } from 'react-redux';
 //   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848324/Smart%20Vision/febrian-zakaria-2QTsCoQnoag-unsplash_vjvjwj.jpg',
 //   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848329/Smart%20Vision/kenny-eliason-iAftdIcgpFc-unsplash_l33xyj.jpg',
 // ];
-  const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
-function CustomizedOrderDetails({ order, employeeType, socket, setSocket ,from}) {
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+function CustomizedOrderDetails({
+  order,
+  employeeType,
+  socket,
+  setSocket,
+  from,
+}) {
   console.log(order);
   let current = new Date();
   const images = order?.images;
@@ -37,10 +44,12 @@ function CustomizedOrderDetails({ order, employeeType, socket, setSocket ,from})
   const [assignedEngineer, setassignedEngineer] = useState(null);
   const [measuringDate, setmeasuringDate] = useState(null);
   const [measuringTime, setmeasuringTime] = useState(null);
-  const [minMeasuringTime, setminMeasuringTime] = useState('10:00');
+  const [msg, setMsg] = useState("");
+  const [minMeasuringTime, setminMeasuringTime] = useState("10:00");
   const [validated, setValidated] = useState(false);
   const [allEngineers, setallEngineers] = useState(null);
   const [showMessage, setShowMessage] = useState(false);
+  const [DialogOpen, setDialogOpen] = useState(false);
   async function getAllEngineers() {
     await axios
       .get(`/employees/engineer`)
@@ -83,56 +92,64 @@ function CustomizedOrderDetails({ order, employeeType, socket, setSocket ,from})
         .then((res) => {
           console.log(res.data);
           console.log({ assignedEngineer });
-          socket?.emit('assignEngineer', {
+          socket?.emit("assignEngineer", {
             user: employee,
             to: assignedEngineer,
-            type: 'assignEngineerToCustomizationOrder',
+            type: "assignEngineerToCustomizationOrder",
             serviceOrder: res.data.service,
           });
         })
         .catch((error) => {
           console.log(error);
+          setMsg("engineer " + error.response.data.message);
+          setDialogOpen(true);
         });
     }
-
-
   };
-    function getMinMeasuringDateToday() {
-      const currentTime = current.toTimeString().substring(0, 5);
-      let currentHoure = currentTime.substring(0, 2);
-      let currentMineates = currentTime.substring(3);
-      let minHoure = +currentHoure + 1;
-      if (minHoure === 24) {
-        minHoure = '00';
-      }
-      if (minHoure < 10) {
-        minHoure = `0${minHoure}`;
-      }
-      return `${minHoure}:${currentMineates}`;
+  function getMinMeasuringDateToday() {
+    const currentTime = current.toTimeString().substring(0, 5);
+    let currentHoure = currentTime.substring(0, 2);
+    let currentMineates = currentTime.substring(3);
+    let minHoure = +currentHoure + 1;
+    if (minHoure === 24) {
+      minHoure = "00";
     }
-
-    function CheckMinMesuringTimeToday() {
-      if (measuringDate === current.toISOString().substring(0, 10)) {
-        //to set with the current time
-        setminMeasuringTime(getMinMeasuringDateToday());
-      } else {
-        setminMeasuringTime('10:00');
-      }
+    if (minHoure < 10) {
+      minHoure = `0${minHoure}`;
     }
+    return `${minHoure}:${currentMineates}`;
+  }
 
-    useEffect(() => {
-      CheckMinMesuringTimeToday();
-    }, [measuringDate]);
+  function CheckMinMesuringTimeToday() {
+    if (measuringDate === current.toISOString().substring(0, 10)) {
+      //to set with the current time
+      setminMeasuringTime(getMinMeasuringDateToday());
+    } else {
+      setminMeasuringTime("10:00");
+    }
+  }
+
+  useEffect(() => {
+    CheckMinMesuringTimeToday();
+  }, [measuringDate]);
   const handleCancelMessage = () => {
     setShowMessage(false);
   };
   return (
     <>
       <Accordion
-        defaultActiveKey={['0', '1']}
+        defaultActiveKey={["0", "1"]}
         alwaysOpen
         className="CustomizedOrderAccordion"
       >
+        <AlertDialog
+          open={DialogOpen}
+          onClose={() => {
+            setDialogOpen(false);
+            // navigate("/bag");
+          }}
+          msg={msg}
+        />
         <Accordion.Item eventKey="0">
           <Accordion.Header>Details</Accordion.Header>
           <Accordion.Body>
@@ -161,18 +178,18 @@ function CustomizedOrderDetails({ order, employeeType, socket, setSocket ,from})
                     onClose={handleCancelMessage}
                     aria-describedby="alert-dialog-slide-description"
                   >
-                    <DialogContent sx={{ position: 'relative', padding: '0' }}>
+                    <DialogContent sx={{ position: "relative", padding: "0" }}>
                       <CloseIcon
                         onClick={handleCancelMessage}
                         sx={{
-                          fontSize: '30px',
-                          color: 'black',
-                          cursor: 'pointer',
-                          marginLeft: 'auto',
-                          position: 'absolute',
-                          top: '0',
-                          right: '0',
-                          margin: '.5rem',
+                          fontSize: "30px",
+                          color: "black",
+                          cursor: "pointer",
+                          marginLeft: "auto",
+                          position: "absolute",
+                          top: "0",
+                          right: "0",
+                          margin: ".5rem",
                         }}
                       />
                       <img width={550} className="h-96" src={mainImage} />
@@ -199,7 +216,7 @@ function CustomizedOrderDetails({ order, employeeType, socket, setSocket ,from})
                   No photos are attached
                 </div>
               )}
-              {employeeType === 'FACTORY' ? (
+              {employeeType === "FACTORY" ? (
                 <div className="customizedOrderDetailsPdfButton flex ">
                   <Link to={pdf}>Download PDF</Link>
                 </div>
@@ -207,9 +224,9 @@ function CustomizedOrderDetails({ order, employeeType, socket, setSocket ,from})
             </div>
           </Accordion.Body>
         </Accordion.Item>
-        {employeeType === 'FACTORY' ? (
+        {employeeType === "FACTORY" ? (
           <>
-            {' '}
+            {" "}
             <Accordion.Item eventKey="2" className="TapleDiv">
               <Accordion.Header>Materials</Accordion.Header>
               <Accordion.Body className="CustomizedOrderAccordion AccordionMaterialTaple">
@@ -253,7 +270,7 @@ function CustomizedOrderDetails({ order, employeeType, socket, setSocket ,from})
             <p>
               <span>Name: </span> {customer?.username}
             </p>
-            {employeeType !== 'FACTORY' ? (
+            {employeeType !== "FACTORY" ? (
               <>
                 <p>
                   <span>Email: </span> {customer?.email}
@@ -266,7 +283,7 @@ function CustomizedOrderDetails({ order, employeeType, socket, setSocket ,from})
                 </p>
               </>
             ) : null}
-            {employeeType !== 'FACTORY' && order?.date ? (
+            {employeeType !== "FACTORY" && order?.date ? (
               <p>
                 <span>Measuring Date: </span>
                 {order?.date?.day} - {order?.date?.time}
@@ -274,7 +291,7 @@ function CustomizedOrderDetails({ order, employeeType, socket, setSocket ,from})
             ) : null}
           </Accordion.Body>
         </Accordion.Item>
-        {employeeType !== 'ENGINEER' && engineer ? (
+        {employeeType !== "ENGINEER" && engineer ? (
           <>
             <Accordion.Item eventKey="3">
               <Accordion.Header>Engineer Data</Accordion.Header>
@@ -289,7 +306,9 @@ function CustomizedOrderDetails({ order, employeeType, socket, setSocket ,from})
             </Accordion.Item>
           </>
         ) : null}
-        {from !== 'Servishistory' &&employeeType === 'OPERATOR' && !engineer ? (
+        {from !== "Servishistory" &&
+        employeeType === "OPERATOR" &&
+        !engineer ? (
           <Accordion.Item eventKey="5">
             <Accordion.Header>Assign Engineer</Accordion.Header>
             <Accordion.Body>

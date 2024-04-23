@@ -1,4 +1,12 @@
-import { Grid, IconButton, Tooltip, Typography } from "@mui/material";
+import {
+  Grid,
+  IconButton,
+  InputAdornment,
+  MenuItem,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Loading from "../../components/shared/Loading";
@@ -8,10 +16,13 @@ import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
 function ViewEmployees() {
   const [employees, setEmployees] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [jobTitle, setJobTitle] = useState("All");
   const [Display, setDisplay] = useState("none");
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -27,7 +38,24 @@ function ViewEmployees() {
 
     fetchEmployees();
   }, []);
+  const filteredEmployees = employees.filter((employee) => {
+    const searchString = searchTerm.toLowerCase();
+    const customerName = `${employee?.username}`.toLowerCase();
+    const customerPhone = `0${employee?.phone}`.toLowerCase();
 
+    // Filter based on search term and selected service type
+    return (
+      (jobTitle === "All" ||
+        employee.jobTitle.toLowerCase() === jobTitle.toLowerCase()) &&
+      (customerName.includes(searchString) ||
+        customerPhone.includes(searchString))
+    );
+  });
+
+  // Handler function to update selected service type
+  const handleJobTitleChange = (event) => {
+    setJobTitle(event.target.value);
+  };
   return (
     <Grid container justifyContent="center" alignItems="center">
       {" "}
@@ -50,55 +78,109 @@ function ViewEmployees() {
             </Typography>
           </Grid>
           <Grid
+            sx={{
+              margin:"auto",
+              marginBottom: "2rem",
+              marginLeft: { xs: "auto", sm: "0rem",md:"-2rem" },
+              maxWidth: { xs: "90vw", sm: "500px" },
+              display: "flex",
+              gap: "1rem",
+            }}
+          >
+            <TextField
+              select
+              label="Job Title"
+              value={jobTitle}
+              onChange={handleJobTitleChange}
+              variant="outlined"
+              style={{ minWidth: "150px" }}
+            >
+              <MenuItem value="All">All</MenuItem>
+              <MenuItem value="Operator">Operator</MenuItem>
+              <MenuItem value="Engineer">Engineer</MenuItem>
+              <MenuItem value="Inventory manager">Inventory manager</MenuItem>
+              <MenuItem value="Actor manager">Actor Manager</MenuItem>
+              <MenuItem value="Presenter">Presenter</MenuItem>
+            </TextField>
+            <TextField
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              variant="outlined"
+              placeholder="Enter Your search ..."
+              fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon color="action" />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {searchTerm && (
+                      <IconButton
+                        edge="end"
+                        aria-label="clear search"
+                        onClick={(e) => setSearchTerm("")}
+                      >
+                        <ClearIcon color="action" />
+                      </IconButton>
+                    )}
+                  </InputAdornment>
+                ),
+                style: { backgroundColor: "white", borderRadius: "5px" },
+              }}
+            />
+          </Grid>
+          <Grid
             container
             spacing={3}
             align="center"
             sx={{ justifyContent: { xs: "center", md: "space-evenly" } }}
           >
-            {employees.map((employee, index) => (
+            {filteredEmployees.map((employee, index) => (
               <Grid item key={index}>
                 <EmployeeCard employee={employee} />
               </Grid>
             ))}
           </Grid>
           <Box
-        sx={{
-          height: 50,
-          transform: "translateZ(0px)",
-          flexGrow: 1,
-          position: "fixed",
-          bottom: 40,
-          right: 20,
-        }}
-      >
-        <span
-          style={{
-            position: "relative",
-            right: 85,
-            bottom: 7,
-            display: Display,
-            color: "white",
-            padding: "5px 10px",
-            borderRadius: "5px",
-            fontSize: "12px",
-            backgroundColor: "rgba(0, 0, 0,0.6)",
-          }}
-        >
-          {" "}
-          Add New Employee
-        </span>
-        <Link to={"/actor/add-employee"}>
-          <SpeedDial
-            ariaLabel="SpeedDial basic example"
-            sx={{ position: "fixed", bottom: 16, right: 16 }}
-            icon={<SpeedDialIcon />}
-            direction="up"
-            open={false}
-            onMouseOver={() => setDisplay("inline")}
-            onMouseLeave={() => setDisplay("none")}
-          ></SpeedDial>
-        </Link>
-      </Box>
+            sx={{
+              height: 50,
+              transform: "translateZ(0px)",
+              flexGrow: 1,
+              position: "fixed",
+              bottom: 40,
+              right: 20,
+            }}
+          >
+            <span
+              style={{
+                position: "relative",
+                right: 85,
+                bottom: 7,
+                display: Display,
+                color: "white",
+                padding: "5px 10px",
+                borderRadius: "5px",
+                fontSize: "12px",
+                backgroundColor: "rgba(0, 0, 0,0.6)",
+              }}
+            >
+              {" "}
+              Add New Employee
+            </span>
+            <Link to={"/actor/add-employee"}>
+              <SpeedDial
+                ariaLabel="SpeedDial basic example"
+                sx={{ position: "fixed", bottom: 16, right: 16 }}
+                icon={<SpeedDialIcon />}
+                direction="up"
+                open={false}
+                onMouseOver={() => setDisplay("inline")}
+                onMouseLeave={() => setDisplay("none")}
+              ></SpeedDial>
+            </Link>
+          </Box>
         </Grid>
       ) : (
         <Grid item xs={12} sm={8}>
@@ -107,7 +189,6 @@ function ViewEmployees() {
           </Typography>
         </Grid>
       )}
-    
     </Grid>
   );
 }

@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
 import { Grid, Button, Typography } from "@mui/material";
 import axios from "axios";
+import NewReleasesIcon from "@mui/icons-material/NewReleases";
 
-function Productorder1Component({ order1, onUpdatedState1 }) {
+function Productorder1Component({ order1, onUpdatedState1, isNew }) {
   const [showorder1, setShoworder1] = useState(false);
   const [showButton, setShowButton] = useState(true);
+  const [isnew, setIsNew] = useState(isNew);
   const [showWholeorder1, setShowWholeorder1] = useState(true);
   const [updatedState, setUpdatedState] = useState(order1?.state);
 
+  // console.log(isnew);
   console.log(updatedState);
   const toggleorder1 = () => {
     setShoworder1(!showorder1);
+    setIsNew(false);
   };
   const handleDoneButtonClick = async () => {
-    onUpdatedState1('');
+    onUpdatedState1("");
     try {
       const response = await axios.put(`/employees/orders`, {
         orderId: order1?._id,
@@ -29,7 +33,7 @@ function Productorder1Component({ order1, onUpdatedState1 }) {
   const sendRequestToInventory = async () => {
     setShowButton(true);
     setUpdatedState(order1?.state);
-    onUpdatedState1('');
+    onUpdatedState1("");
     try {
       const response = await axios.put(`/employees/orders/${order1._id}`);
       console.log("Request sent to inventory:", response.data);
@@ -64,11 +68,23 @@ function Productorder1Component({ order1, onUpdatedState1 }) {
             padding: "20px",
             backgroundColor: "#f2f2f2",
             alignItems: "center",
+            position: "relative",
           }}
         >
+          {isnew && (
+            <NewReleasesIcon
+              sx={{
+                position: "absolute",
+                top: -8,
+                right: -10,
+                color: "#009688",
+              }}
+            />
+          )}
           <Grid
             item
             xs={6}
+            sm={4}
             md={3}
             lg={3}
             sx={{ marginBottom: { xs: "1.5rem", md: "0rem" } }}
@@ -85,19 +101,20 @@ function Productorder1Component({ order1, onUpdatedState1 }) {
           <Grid
             item
             xs={6}
+            sm={4}
             md={3}
             lg={3}
             sx={{
-              textAlign: { xs: "end", md: "center" },
+              textAlign: { xs: "end", sm: "center" },
               marginBottom: { xs: "1.5rem", md: "0rem" },
               // marginTop: { xs: "-1.5rem", md: "0rem" },
               // backgroundColor:"red"
             }}
           >
-            <Typography variant="body1">order1 Number</Typography>
+            <Typography variant="body1">Order Number</Typography>
             <Typography
               variant="body2"
-              sx={{ textAlign: { xs: "end", md: "center" } }}
+              sx={{ textAlign: { xs: "end", sm: "center" } }}
             >
               {order1?.orderNumber}
             </Typography>
@@ -105,10 +122,13 @@ function Productorder1Component({ order1, onUpdatedState1 }) {
           <Grid
             item
             xs={6}
-            // sm={6}
+            sm={4}
             md={3}
             lg={3}
-            sx={{ textAlign: { xs: "start", md: "center" } }}
+            sx={{
+              textAlign: { xs: "start", sm: "end", md: "center" },
+              marginBottom: { xs: "1.5rem", md: "0rem" },
+            }}
           >
             <Typography variant="body1">Total Price</Typography>
             <Typography variant="body2">{order1?.totalPrice}</Typography>
@@ -116,6 +136,7 @@ function Productorder1Component({ order1, onUpdatedState1 }) {
           <Grid
             item
             xs={6}
+            sm={12}
             md={3}
             lg={3}
             sx={{

@@ -34,7 +34,7 @@ function EmployeLogin() {
       case 'presenter':
         navigate('/presenter/home');
         break;
-      case 'actor':
+      case 'actor manager':
         navigate('/actor/employees');
         break;
       default:

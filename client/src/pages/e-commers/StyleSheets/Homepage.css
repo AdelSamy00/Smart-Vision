@@ -19,10 +19,10 @@
 .category-cards {
   display: flex;
   width: 97%;
-  overflow-x: scroll;
+  overflow-x: auto;
   margin: auto;
   gap: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 30px;
 }
 /* Style for the scrollbar */
 .category-cards::-webkit-scrollbar {

@@ -194,9 +194,10 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
           </Typography>
           <Grid
             sx={{
+              margin:"auto",
               marginBottom: "2rem",
-              marginLeft: { xs: "0rem", md: "-3rem" },
-              maxWidth: { xs: "90vw", md: "500px" },
+              marginLeft: { xs: "auto", sm: "0rem",md:"-2rem" },
+              maxWidth: { xs: "90vw", sm: "500px" },
               display:"flex",
               gap:"1rem"
             }}
