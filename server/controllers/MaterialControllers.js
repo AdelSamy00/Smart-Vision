@@ -113,10 +113,10 @@ export const existMaterials = async (id) => {
   }
 };
 
-export const decreaseMaterialQuantity = async (id, quantity, next) => {
+export const decreaseMaterialQuantity = async (name, quantity, next) => {
   try {
     // Find the material by ID
-    const material = await Materials.findOne({ _id: id });
+    const material = await Materials.findOne({ name: name });
     // Check if the requested quantity to decrease is negative or exceeds the current quantity
     if (quantity <= 0 || quantity > material.quantity) {
       next('Sorry, not enough quantity available to decrease');
@@ -135,10 +135,10 @@ export const decreaseMaterialQuantity = async (id, quantity, next) => {
   }
 };
 
-export const increaseMaterialQuantity = async (id, quantity, next) => {
+export const increaseMaterialQuantity = async (name, quantity, next) => {
   try {
     // Find the material by ID
-    const material = await Materials.findOne({ _id: id });
+    const material = await Materials.findOne({ name: name });
     // Increase the quantity by the specified amount
     material.quantity += quantity;
     await material.save();
@@ -172,11 +172,17 @@ export const materialsTransaction = async (req, res, next) => {
     if (flag) {
       if (method === 'Export') {
         materials.map(async (material) => {
-          await decreaseMaterialQuantity(material.material, material.quantity);
+          await decreaseMaterialQuantity(
+            material.materialName,
+            material.quantity
+          );
         });
       } else if (method === 'Import') {
         materials.map(async (material) => {
-          await increaseMaterialQuantity(material.material, material.quantity);
+          await increaseMaterialQuantity(
+            material.materialName,
+            material.quantity
+          );
         });
       }
 
@@ -205,4 +211,3 @@ export const materialsTransaction = async (req, res, next) => {
     });
   }
 };
-

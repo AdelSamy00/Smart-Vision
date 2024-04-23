@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
-import { useSelector, useDispatch } from "react-redux";
-import { apiRequest } from "../../utils";
+import React, { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
+import { useSelector, useDispatch } from 'react-redux';
+import { apiRequest } from '../../utils';
 import {
   Grid,
   TextField,
@@ -12,22 +12,22 @@ import {
   ListItem,
   ListItemText,
   IconButton,
-} from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+} from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 function TransactionMComponent() {
   const [transactions, setTransactions] = useState([]);
   const { employee } = useSelector((state) => state.employee);
-  const [Matrials, setMatrials] = useState([{ material: "", quantity: "" }]);
+  const [Matrials, setMatrials] = useState([{ material: '', quantity: '' }]);
   const [isLoading, setIsLoading] = useState(true);
   const newMaterialNameRef = useRef(null);
   const newMaterialQuantityRef = useRef(null);
   const [AllMatrials, setAllMatrials] = useState([]);
   const [orderDetails, setOrderDetails] = useState({
     materials: [],
-    newMaterialName: "",
-    newMaterialQuantity: "",
+    newMaterialName: '',
+    newMaterialQuantity: '',
   });
 
   const fetchMaterials = async () => {
@@ -37,7 +37,7 @@ function TransactionMComponent() {
       setIsLoading(false);
       console.log(response.data.materials);
     } catch (error) {
-      console.error("Error fetching materials:", error);
+      console.error('Error fetching materials:', error);
     }
   };
   useEffect(() => {
@@ -51,7 +51,7 @@ function TransactionMComponent() {
           (material) => material.name === selectedMaterial.material
         );
         return {
-          material,
+          materialName: material?.name,
           quantity: selectedMaterial.quantity,
         };
       }
@@ -69,7 +69,7 @@ function TransactionMComponent() {
     const { newMaterialName, newMaterialQuantity } = orderDetails;
     if (newMaterialName && newMaterialQuantity) {
       const existingMaterialIndex = orderDetails.materials.findIndex(
-        (material) => material.material === newMaterialName
+        (material) => material.materialName === newMaterialName
       );
       if (existingMaterialIndex !== -1) {
         const updatedMaterials = [...orderDetails.materials];
@@ -78,8 +78,8 @@ function TransactionMComponent() {
         setOrderDetails({
           ...orderDetails,
           materials: updatedMaterials,
-          newMaterialName: "",
-          newMaterialQuantity: "",
+          newMaterialName: '',
+          newMaterialQuantity: '',
         });
       } else {
         setOrderDetails({
@@ -91,50 +91,52 @@ function TransactionMComponent() {
               quantity: parseInt(newMaterialQuantity),
             },
           ],
-          newMaterialName: "",
-          newMaterialQuantity: "",
+          newMaterialName: '',
+          newMaterialQuantity: '',
         });
       }
-      newMaterialNameRef.current.value = "";
-      newMaterialQuantityRef.current.value = "";
+      newMaterialNameRef.current.value = '';
+      newMaterialQuantityRef.current.value = '';
       newMaterialNameRef.current.blur();
       newMaterialQuantityRef.current.blur();
     }
   };
 
   const handleTransaction = async (method) => {
-    const hasNullQuantity = Matrials.some((material) => material.quantity === null || material.quantity === "");
+    const hasNullQuantity = Matrials.some(
+      (material) => material.quantity === null || material.quantity === ''
+    );
 
     if (hasNullQuantity) {
-      toast.error("Please fill in all the quantities before proceeding.");
+      toast.error('Please fill in all the quantities before proceeding.');
       return;
     }
     try {
       const managerId = employee._id;
       console.log(transactions);
       const response = await apiRequest({
-        method:"put",
-        url:"/Materials/transaction",
-        data:{
+        method: 'put',
+        url: '/Materials/transaction',
+        data: {
           managerId,
           materials: Matrials,
           method,
-        }
-      })
+        },
+      });
       if (response.data.success) {
         toast.success(response.data.message);
         setTransactions([]);
         setOrderDetails({
           materials: [],
-          newMaterialName: "",
-          newMaterialQuantity: "",
+          newMaterialName: '',
+          newMaterialQuantity: '',
         });
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error("Error making transaction:", error);
-      toast.error("Failed to make transaction. Please try again.");
+      console.error('Error making transaction:', error);
+      toast.error('Failed to make transaction. Please try again.');
     }
   };
   const handleChange = (e) => {
@@ -143,8 +145,8 @@ function TransactionMComponent() {
   };
 
   const handleQuantityKeyDown = (e) => {
-    if (e.key === "Enter") {
-      if (orderDetails.newMaterialName.trim() !== "") {
+    if (e.key === 'Enter') {
+      if (orderDetails.newMaterialName.trim() !== '') {
         addMaterial();
       }
     }
@@ -163,18 +165,18 @@ function TransactionMComponent() {
       className="presenter-products-container"
       spacing={2}
     >
-      {" "}
+      {' '}
       <Toaster
         toastOptions={{
           style: {
             duration: 3000,
-            border: "1px solid #6A5ACD",
-            backgroundColor: "#6A5ACD",
-            padding: "16px",
-            color: "white",
-            fontWeight: "Bold",
-            marginTop: "65px",
-            textAlign: "center",
+            border: '1px solid #6A5ACD',
+            backgroundColor: '#6A5ACD',
+            padding: '16px',
+            color: 'white',
+            fontWeight: 'Bold',
+            marginTop: '65px',
+            textAlign: 'center',
           },
         }}
       />
@@ -182,15 +184,16 @@ function TransactionMComponent() {
         <Typography
           variant="h5"
           style={{
-            padding: "20px 0px",
-            display: "flex",
-            justifyContent: "flex-start",
+            padding: '20px 0px',
+            display: 'flex',
+            justifyContent: 'flex-start',
           }}
         >
           Materials Transaction :
         </Typography>
       </Grid>
       <Grid item xs={5}>
+        {console.log(AllMatrials)}
         <Autocomplete
           options={AllMatrials}
           getOptionLabel={(option) => option.name}
@@ -204,8 +207,8 @@ function TransactionMComponent() {
               inputRef={newMaterialNameRef}
               value={orderDetails.newMaterialName}
               onKeyDown={(e) =>
-                e.key === "Enter" &&
-                orderDetails.newMaterialName.trim() !== "" &&
+                e.key === 'Enter' &&
+                orderDetails.newMaterialName.trim() !== '' &&
                 newMaterialQuantityRef.current.focus()
               }
             />
@@ -233,7 +236,7 @@ function TransactionMComponent() {
         />
       </Grid>
       <Grid item xs={2}>
-        <Button fullWidth onClick={addMaterial} style={{ marginTop: "10px" }}>
+        <Button fullWidth onClick={addMaterial} style={{ marginTop: '10px' }}>
           Add
         </Button>
       </Grid>
@@ -241,13 +244,13 @@ function TransactionMComponent() {
         <Grid item xs={12}>
           <List
             style={{
-              maxHeight: "200px",
-              overflowY: "auto",
-              paddingTop: "0px",
+              maxHeight: '200px',
+              overflowY: 'auto',
+              paddingTop: '0px',
             }}
           >
             {orderDetails.materials.map((material, index) => (
-              <ListItem key={index} style={{ paddingBottom: "0px" }}>
+              <ListItem key={index} style={{ paddingBottom: '0px' }}>
                 <ListItemText primary={material.material} />
                 <ListItemText secondary={material.quantity} />
                 <IconButton
@@ -256,8 +259,8 @@ function TransactionMComponent() {
                   onClick={() => removeMaterial(index)}
                 >
                   <DeleteForeverIcon
-                    sx={{ fontSize: "32px" }}
-                    style={{ marginRight: "3vw" }}
+                    sx={{ fontSize: '32px' }}
+                    style={{ marginRight: '3vw' }}
                   />
                 </IconButton>
               </ListItem>
@@ -266,21 +269,29 @@ function TransactionMComponent() {
         </Grid>
       )}
       <Grid item xs={12}>
-        <Grid item xs={12} style={{ marginTop: "30px" ,display: "flex", justifyContent: "flex-start"}}>
+        <Grid
+          item
+          xs={12}
+          style={{
+            marginTop: '30px',
+            display: 'flex',
+            justifyContent: 'flex-start',
+          }}
+        >
           <Button
             variant="contained"
-            onClick={() => handleTransaction("Export")}
-            style={{ backgroundColor: "#edede9", color: "black" }}
+            onClick={() => handleTransaction('Export')}
+            style={{ backgroundColor: '#edede9', color: 'black' }}
           >
             Export
           </Button>
           <Button
             variant="contained"
-            onClick={() => handleTransaction("Import")}
+            onClick={() => handleTransaction('Import')}
             style={{
-              marginLeft: "70px",
-              backgroundColor: "#edede9",
-              color: "black",
+              marginLeft: '70px',
+              backgroundColor: '#edede9',
+              color: 'black',
             }}
           >
             Import

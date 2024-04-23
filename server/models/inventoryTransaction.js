@@ -11,20 +11,14 @@ const inventoryTransactionSchema = new mongoose.Schema(
     category: { type: String },
     materials: [
       {
+        materialName: { type: String },
         quantity: { type: Number },
-        material: {
-          type: Schema.Types.ObjectId,
-          ref: 'Materials',
-        },
       },
     ],
     products: [
       {
+        productName: { type: String },
         quantity: { type: Number },
-        product: {
-          type: Schema.Types.ObjectId,
-          ref: 'Products',
-        },
       },
     ],
   },
