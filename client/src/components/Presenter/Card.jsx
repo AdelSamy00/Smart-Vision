@@ -68,7 +68,7 @@ function Card({ product, handelDelete }) {
       <div className="sbProductCardFooter h-16">
         <Link
           className="flex items-center text-xl bg-slate-700 hover:bg-slate-800 text-white py-1 px-2 rounded-xl"
-          to={`/ed/product/${product?._id}`}
+          to={`/presenter/update/product/${product?._id}`}
         >
           Edit
           <EditIcon sx={{ fontSize: '20px', marginLeft: '5px' }} />

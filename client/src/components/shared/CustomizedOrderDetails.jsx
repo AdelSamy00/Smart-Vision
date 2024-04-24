@@ -235,36 +235,24 @@ function CustomizedOrderDetails({
             <Accordion.Item eventKey="2" className="TapleDiv">
               <Accordion.Header>Materials</Accordion.Header>
               <Accordion.Body className="CustomizedOrderAccordion AccordionMaterialTaple">
-                <Table striped bordered responsive>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                      <th>Username</th>
+              <Table striped bordered responsive>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Material Name</th>
+                    <th>Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {order.requiredMaterials.map((order, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{order?.material}</td>
+                      <td>{order?.quantity}</td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Mark</td>
-                      <td>Otto</td>
-                      <td>@mdo</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Jacob</td>
-                      <td>Thornton</td>
-                      <td>@fat</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Larry the Bird</td>
-                      <td>Larry the Bird</td>
-                      <td>@twitter</td>
-                    </tr>
-                  </tbody>
-                </Table>
+                  ))}
+                </tbody>
+              </Table>
               </Accordion.Body>
             </Accordion.Item>
           </>

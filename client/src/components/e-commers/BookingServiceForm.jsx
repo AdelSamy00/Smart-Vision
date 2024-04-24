@@ -9,6 +9,8 @@ import { TextField, Button, Grid } from "@mui/material";
 import { apiRequest } from "../../utils";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import Checkbox from "@mui/material/Checkbox";
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 function BookingServiceForm({ socket, setSocket }) {
   const { state } = useLocation();
@@ -23,14 +25,20 @@ function BookingServiceForm({ socket, setSocket }) {
     address: customer?.address,
     description: "",
     images: [{}],
+    measuring: false,
   });
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+  };
+  const handleCheckboxChange = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      measuring: e.target.checked,
     }));
   };
 
@@ -53,6 +61,7 @@ function BookingServiceForm({ socket, setSocket }) {
           images: uploadedImages,
           phone: formData.phoneNumber,
           address: formData.address,
+          measuring: formData.measuring,
         },
       });
       if (response.data.success) {
@@ -140,39 +149,65 @@ function BookingServiceForm({ socket, setSocket }) {
                   />
                 </Grid>
               </Grid>
-              <div className="p-2 w-full" style={{ marginTop: "15px" }}>
-                <div className="relative flex justify-items-center gap-2">
-                <label
-                    htmlFor="images"
-                    className="leading-7 text-sm text-gray-600 mt-1"
-                    style={{fontSize:"20px"}}
-                  >
-                    <CloudUploadIcon className="mr-2" />
-                    UploadFile
-                  </label>
-                  <input
-                    type="file"
-                    id="images"
-                    name="images"
-                    className="uploadBtn file:hidden text-gray-700  w-1/4"
-                    style={{backgroundColor:"#3c6e71",color:"white"}}
-                    onChange={(e) => {
-                      setImages(e.target.files);
-                    }}
-                    multiple                 
+              {/* Need Measuring ?  <Checkbox {...label} /> */}
+              <Grid container>
+                <Grid item xs={12}>
+                  <div className="p-2 w-full" style={{ marginTop: "15px" }}>
+                    <div className="relative flex justify-items-center gap-2">
+                      <label
+                        htmlFor="images"
+                        className="leading-7 text-sm text-gray-600 mt-1"
+                        style={{ fontSize: "20px" }}
+                      >
+                        <CloudUploadIcon className="mr-2" />
+                        UploadFile
+                      </label>
+                      <input
+                        type="file"
+                        id="images"
+                        name="images"
+                        className="uploadBtn file:hidden text-gray-700  w-1/4"
+                        style={{ backgroundColor: "#3c6e71", color: "white" }}
+                        onChange={(e) => {
+                          setImages(e.target.files);
+                        }}
+                        multiple
+                      />
+                    </div>
+                  </div>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  style={{ marginTop: "20px", marginLeft: "10px" ,fontSize:"20px"}}
+                >
+                  Need Measuring ?
+                  <Checkbox
+                    checked={formData.measuring}
+                    onChange={handleCheckboxChange}
+                    inputProps={{ "aria-label": "controlled" }}
+                    style={{ color: "#3c6e71" }}
                   />
-                </div>
-              </div>
-              <div className="w-full flex justify-center" style={{marginTop:"20px" }}>
-              <Button
-                type="submit"
-                variant="contained"
-                className="checkoutButton"
-                style={{width:"80%",backgroundColor:"#3c6e71",color:"white"}}
+                </Grid>
+              </Grid>
+
+              <div
+                className="w-full flex justify-center"
+                style={{ marginTop: "20px" }}
               >
-                submit
-              </Button>
-            </div>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  className="checkoutButton"
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#3c6e71",
+                    color: "white",
+                  }}
+                >
+                  submit
+                </Button>
+              </div>
             </form>
           )}
           {formSubmitted && (

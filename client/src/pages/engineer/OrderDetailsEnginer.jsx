@@ -41,7 +41,7 @@ function OrderDetailsEnginer() {
               Order ID: <span>{orderNumber}</span>
             </h1>
             <Link
-              to={`/engineer/send-request/${order?._id}`}
+              to={`/engineer/send-order/${order?._id}`}
               className="link-style  "
             >
               <Button
