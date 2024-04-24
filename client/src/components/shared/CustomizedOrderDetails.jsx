@@ -41,7 +41,7 @@ function CustomizedOrderDetails({
   const orderDate = order?.updatedAt?.substring(0, 10); // to take date only
   const { employee } = useSelector((state) => state?.employee);
   const [mainImage, setmainImage] = useState(images ? images[0] : null);
-  const [assignedEngineer, setassignedEngineer] = useState(null);
+  const [assignedEngineer, setassignedEngineer] = useState('');
   const [measuringDate, setmeasuringDate] = useState(null);
   const [measuringTime, setmeasuringTime] = useState(null);
   const [msg, setMsg] = useState("");
@@ -49,6 +49,7 @@ function CustomizedOrderDetails({
   const [validated, setValidated] = useState(false);
   const [allEngineers, setallEngineers] = useState(null);
   const [showMessage, setShowMessage] = useState(false);
+  const [isAssigned, setIsAssigned] = useState(false);
   const [DialogOpen, setDialogOpen] = useState(false);
   async function getAllEngineers() {
     await axios
@@ -91,10 +92,14 @@ function CustomizedOrderDetails({
         )
         .then((res) => {
           console.log(res.data);
-          console.log({ assignedEngineer });
+          // console.log({ assignedEngineer });
+          console.log(res?.data?.service?.assignedEngineer);
+          console.log(res.data.service);
+          setassignedEngineer(res?.data?.service?.assignedEngineer);
+          setIsAssigned(true);
           socket?.emit("assignEngineer", {
             user: employee,
-            to: assignedEngineer,
+            to: res?.data?.sercice?.assignedEngineer._id,
             type: "assignEngineerToCustomizationOrder",
             serviceOrder: res.data.service,
           });
@@ -291,16 +296,16 @@ function CustomizedOrderDetails({
             ) : null}
           </Accordion.Body>
         </Accordion.Item>
-        {employeeType !== "ENGINEER" && engineer ? (
+        {(employeeType !== "ENGINEER" && engineer) || isAssigned ? (
           <>
             <Accordion.Item eventKey="3">
               <Accordion.Header>Engineer Data</Accordion.Header>
               <Accordion.Body>
                 <p>
-                  <span>Name: </span> {engineer?.username}
+                  <span>Name: </span> {isAssigned?assignedEngineer?.username:engineer?.username}
                 </p>
                 <p>
-                  <span>Email: </span> {engineer?.email}
+                  <span>Email: </span> {isAssigned?assignedEngineer?.email:engineer?.email}
                 </p>
               </Accordion.Body>
             </Accordion.Item>
@@ -308,7 +313,8 @@ function CustomizedOrderDetails({
         ) : null}
         {from !== "Servishistory" &&
         employeeType === "OPERATOR" &&
-        !engineer ? (
+        !engineer &&
+        !isAssigned ? (
           <Accordion.Item eventKey="5">
             <Accordion.Header>Assign Engineer</Accordion.Header>
             <Accordion.Body>

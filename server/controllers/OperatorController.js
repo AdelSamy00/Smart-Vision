@@ -156,10 +156,13 @@ export const assignedEnginerToService = async (req, res, next) => {
           { _id: serviceId },
           { assignedEngineer: engineerId, date: date },
           { new: true }
-        ).populate({
+        ).populate([{
           path: 'customer',
           select: '_id username email gender phone verified address -password',
-        });
+        },{
+          path: 'assignedEngineer',
+          select: '_id username email -password',
+        },]);
         await AssignedDateTable.create({
           engineer: engineerId,
           date: date,
@@ -175,10 +178,13 @@ export const assignedEnginerToService = async (req, res, next) => {
         { _id: serviceId },
         { assignedEngineer: engineerId },
         { new: true }
-      ).populate({
+      ).populate([{
         path: 'customer',
         select: '_id username email gender phone verified address -password',
-      });
+      },{
+        path: 'assignedEngineer',
+        select: '_id username email -password',
+      },]);
     }
     res.status(200).json({
       success: true,

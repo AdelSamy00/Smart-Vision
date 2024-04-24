@@ -46,7 +46,8 @@ export default function Checkout({ socket, setSocket }) {
   const [orderNumber, setOrderNumber] = useState(0);
   const [paymentType, setPaymentType] = useState("default");
   const [error, setError] = useState(null);
-  const [unavailableProductsDialogOpen, setUnavailableProductsDialogOpen] = useState(false);
+  const [unavailableProductsDialogOpen, setUnavailableProductsDialogOpen] =
+    useState(false);
   const [unavailableProductsList, setUnavailableProductsList] = useState([]);
   const navigate = useNavigate();
   //to get first name and last name from userName
@@ -160,7 +161,6 @@ export default function Checkout({ socket, setSocket }) {
     try {
       // Fetch all products from the inventory
       const response = await axios.get("/products/");
-      // console.log(response);
       const allProducts = response.data.products;
 
       // Check quantity availability for each product in the cart
@@ -174,8 +174,23 @@ export default function Checkout({ socket, setSocket }) {
         );
       });
       console.log(unavailableProducts);
+      // Fetch the actual product details for unavailable products
+      const productsWithDetails1 = await Promise.all(
+        unavailableProducts.map(async (product) => {
+          try {
+            const productResponse = await axios.get(`/products/${product._id}`);
+            const actualQuantity = productResponse.data.product.quantity;
+            return { ...product, actualQuantity };
+          } catch (error) {
+            console.error("Error fetching product details:", error);
+            return { ...product, actualQuantity: 0 }; 
+          }
+        })
+      );
+
+      console.log(productsWithDetails1);
       if (unavailableProducts.length > 0) {
-        setUnavailableProductsList(unavailableProducts);
+        setUnavailableProductsList(productsWithDetails1);
         setUnavailableProductsDialogOpen(true);
         return;
       }
@@ -249,14 +264,25 @@ export default function Checkout({ socket, setSocket }) {
     <React.Fragment>
       <CssBaseline />
       <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
-      <AlertDialog
-        open={unavailableProductsDialogOpen}
-        onClose={() => {setUnavailableProductsDialogOpen(false);
-          navigate("/bag");
-        }}
-        products={unavailableProductsList}
-        msg="Some products are not available in the required"
-      />
+        <AlertDialog
+          open={unavailableProductsDialogOpen}
+          onClose={() => {
+            setUnavailableProductsDialogOpen(false);
+            navigate("/bag");
+          }}
+          products={unavailableProductsList}
+          msg={unavailableProductsList
+            .map((product) => {
+              console.log(product);
+              if (product.actualQuantity === 0) {
+                return `${product.name} is out of stock.`;
+              } else {
+                return `The quantity you entered for ${product.name} is not available right now.`;
+              }
+            })
+            .join(" ")}
+        />
+
         <Paper
           variant="outlined"
           sx={{
