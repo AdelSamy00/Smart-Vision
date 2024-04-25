@@ -1,0 +1,23 @@
+{
+    "Undefined":"Undefined",
+    "edit": "Edit",
+    "add": "Add",
+    "employee": "Employee",
+    "delete": "Delete",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "gender": "Gender",
+    "dateOfBirth": "Date of Birth",
+    "address": "Address",
+    "qualification": "Qualification",
+    "employeeType": "Employee Type",
+    "salary": "Salary",
+    "photo": "Photo",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "disagree": "DISAGREE",
+    "agree": "AGREE",
+    "deleteConfirmationMessage": "Are you sure you want to proceed with the deletion of this employee? This action cannot be undone and will permanently remove the employee from the database."
+}

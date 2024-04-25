@@ -21,7 +21,7 @@ export default function ChangeEmpPassword() {
   const { t } = useTranslation();
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [newPassErrorMessage, setNewPassErrorMessage] = useState("");
+  const [newPassErrorMessage, setNewPassErrorMessage] = useState(null);
   const [submitMessage, setSubmitMessage] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -110,12 +110,9 @@ export default function ChangeEmpPassword() {
       }
     }
   };
-  const { i18n } = useTranslation();
+  
 
-  const toggleLanguage = () => {
-    const newLanguage = i18n.language === 'en' ? 'ar' : 'en';
-    i18n.changeLanguage(newLanguage);
-  };
+
   useEffect(() => {
     const validatePassword = () => {
       const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -129,9 +126,7 @@ export default function ChangeEmpPassword() {
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" style={{ maxWidth: "700px" }}>
         <CssBaseline />
-        <button onClick={toggleLanguage}>
-        {i18n.language === 'en' ? 'العربية' : 'English'}
-      </button>
+       
         <Box
           sx={{
             display: "flex",

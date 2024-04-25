@@ -19,7 +19,7 @@ import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useTranslation } from "react-i18next"; // Import the useTranslation hook
-
+import i18n from "../../../Language/translate";
 function ViewEmployees() {
   const { t } = useTranslation(); // Initialize the useTranslation hook
 
@@ -68,7 +68,7 @@ function ViewEmployees() {
           <Loading />
         </Grid>
       ) : employees.length > 0 ? (
-        <Grid container xs={12} sm={10} md={10}>
+        <Grid item container xs={12} sm={10} md={10}>
           <Grid item xs={12}>
             <Typography
               variant="h4"
@@ -78,14 +78,19 @@ function ViewEmployees() {
                 marginBottom: "3rem",
               }}
             >
-              {t("EmployeesOfTheCompany")} {/* Translate the text */}
+              {t("EmployeesOfTheCompany")}
             </Typography>
           </Grid>
           <Grid
+            item
             sx={{
               margin: "auto",
               marginBottom: "2rem",
-              marginLeft: { xs: "auto", sm: "0rem", md: "-2rem" },
+              marginLeft: {
+                xs: "auto",
+                sm: i18n.language === "ar" ? "100vw" : "0rem",
+                md: i18n.language === "ar" ? "100vw" : "-2rem",
+              },
               maxWidth: { xs: "90vw", sm: "500px" },
               display: "flex",
               gap: "1rem",
@@ -113,6 +118,7 @@ function ViewEmployees() {
               onChange={(e) => setSearchTerm(e.target.value)}
               variant="outlined"
               placeholder={t("EnterYourSearch")}
+              sx={{ minWidth: {xs:"50%",sm:i18n.language === "ar" ?"100%":"50%"} }}
               fullWidth
               InputProps={{
                 startAdornment: (
@@ -145,7 +151,7 @@ function ViewEmployees() {
           >
             {filteredEmployees.map((employee, index) => (
               <Grid item key={index}>
-                <EmployeeCard employee={employee} t={t}/>
+                <EmployeeCard employee={employee} t={t} />
               </Grid>
             ))}
           </Grid>
@@ -190,7 +196,7 @@ function ViewEmployees() {
       ) : (
         <Grid item xs={12} sm={8}>
           <Typography variant="h5" align="center" gutterBottom>
-            {t("There'sNoEmployees")} 
+            {t("There'sNoEmployees")}
           </Typography>
         </Grid>
       )}

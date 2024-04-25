@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import Form from 'react-bootstrap/Form';
-import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import Loading from '../../components/shared/Loading';
-import './styleSheets/EmployeeForm.css';
-import { handleFileUpload } from '../../utils';
+import React, { useEffect, useState } from "react";
+import Form from "react-bootstrap/Form";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import Loading from "../../components/shared/Loading";
+import "./styleSheets/EmployeeForm.css";
+import { handleFileUpload } from "../../utils";
 import {
   Button,
   Dialog,
@@ -15,8 +15,9 @@ import {
   DialogTitle,
   Slide,
   Tooltip,
-} from '@mui/material';
-
+} from "@mui/material";
+import { useTranslation } from "react-i18next";
+import i18n from "../../../Language/translate";
 let current = new Date();
 
 function getmaxEmployeeDateOfBirth() {
@@ -27,22 +28,22 @@ function getmaxEmployeeDateOfBirth() {
 }
 
 const employeeAllTypes = [
-  'engineer',
-  'inventory manager',
-  'factory',
-  'presenter',
-  'actor manager',
-  'operator',
+  "engineer",
+  "inventory manager",
+  "factory",
+  "presenter",
+  "actor manager",
+  "operator",
 ];
 const qualificationAllTypes = [
   "Bachelor's Degree",
   "Master's Degree",
-  'Doctor of Philosophy',
-  'Professional Certification (e.g., CPA, CFA)',
-  'Diploma',
-  'Associate Degree',
-  'High School Diploma/GED',
-  'Technical Certification',
+  "Doctor of Philosophy",
+  "Professional Certification (e.g., CPA, CFA)",
+  "Diploma",
+  "Associate Degree",
+  "High School Diploma/GED",
+  "Technical Certification",
 ];
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -51,20 +52,21 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function EmployeeForm() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { employeeId } = useParams();
-  const [firstName, setfirstName] = useState('');
-  const [lastName, setlastName] = useState('');
-  const [email, setemail] = useState('');
-  const [phone, setphone] = useState('');
-  const [gender, setgender] = useState('');
-  const [dateOfBirth, setdateOfBirth] = useState('');
-  const [address, setaddress] = useState('');
-  const [qualification, setqualification] = useState('');
-  const [employeeType, setemployeeType] = useState('');
-  const [salary, setsalary] = useState('');
-  const [image, setimage] = useState('');
-  const [password, setpassword] = useState('');
-  const [confirmpassword, setconfirmpassword] = useState('');
+  const [firstName, setfirstName] = useState("");
+  const [lastName, setlastName] = useState("");
+  const [email, setemail] = useState("");
+  const [phone, setphone] = useState("");
+  const [gender, setgender] = useState("");
+  const [dateOfBirth, setdateOfBirth] = useState("");
+  const [address, setaddress] = useState("");
+  const [qualification, setqualification] = useState("");
+  const [employeeType, setemployeeType] = useState("");
+  const [salary, setsalary] = useState("");
+  const [image, setimage] = useState("");
+  const [password, setpassword] = useState("");
+  const [confirmpassword, setconfirmpassword] = useState("");
   const [PasswordConformed, setPasswordConformed] = useState(false);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -95,7 +97,7 @@ function EmployeeForm() {
           data: { id: employeeId },
         })
         .then((res) => {
-          navigate('/actor/view-employees');
+          navigate("/actor/view-employees");
         })
         .catch((e) => {
           console.log(e);
@@ -124,7 +126,7 @@ function EmployeeForm() {
           image,
         })
         .then((res) => {
-          navigate('/actor/view-employees');
+          navigate("/actor/view-employees");
           // console.log(res);
         })
         .catch((e) => {
@@ -155,7 +157,7 @@ function EmployeeForm() {
           image,
         })
         .then((res) => {
-          navigate('/actor/view-employees');
+          navigate("/actor/view-employees");
           // console.log(res);
         })
         .catch((e) => {
@@ -212,11 +214,25 @@ function EmployeeForm() {
     <>
       {!isLoading ? (
         <main className="employeeFormMain">
-          <div className="employeeFormHeader">
-            <h2>{employeeId ? 'Edit' : 'Add'} Employee</h2>
+          <div className="employeeFormHeader" style={{position:"relative"}}>
+            <h2>
+              {employeeId ? t("edit") : t("add")} {t("employee")}
+            </h2>
             {employeeId ? (
-              <button onClick={() => setshowDeleteMessage(true)}>
-                Delete
+              <button
+                onClick={() => setshowDeleteMessage(true)}
+                style={
+                  i18n.language === "ar"
+                    ? {
+                        position: "absolute",
+                        left: 0,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                      }
+                    : {}
+                }
+              >
+                {t("delete")}
                 <DeleteForeverIcon />
               </button>
             ) : null}
@@ -225,7 +241,7 @@ function EmployeeForm() {
             <div className="employeeFormDivForTowFields">
               <Form.Group className="InputGroup">
                 <Form.Label htmlFor="firstName" className="FormLabel">
-                  First Name
+                  {t("firstName")}
                 </Form.Label>
                 <Form.Control
                   required
@@ -240,7 +256,7 @@ function EmployeeForm() {
               </Form.Group>
               <Form.Group className="InputGroup">
                 <Form.Label htmlFor="lastName" className="FormLabel">
-                  Last Name
+                  {t("lastName")}
                 </Form.Label>
                 <Form.Control
                   required
@@ -257,7 +273,7 @@ function EmployeeForm() {
             <div className="employeeFormDivForTowFields">
               <Form.Group className="InputGroup">
                 <Form.Label htmlFor="email" className="FormLabel">
-                  Email
+                  {t("email")}
                 </Form.Label>
                 <Form.Control
                   required
@@ -272,7 +288,7 @@ function EmployeeForm() {
               </Form.Group>
               <Form.Group className=" InputGroup ">
                 <Form.Label htmlFor="phone" className="FormLabel">
-                  Phone
+                  {t("phone")}
                 </Form.Label>
                 <Form.Control
                   required
@@ -289,7 +305,7 @@ function EmployeeForm() {
             <div className="employeeFormDivForTowFields">
               <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv ">
                 <Form.Label className="FormLabel" htmlFor="gender">
-                  Gender
+                  {t("gender")}
                 </Form.Label>
                 <Form.Select
                   required
@@ -306,7 +322,7 @@ function EmployeeForm() {
               </Form.Group>
               <Form.Group className="InputGroup">
                 <Form.Label htmlFor="dateOfBirth" className="FormLabel">
-                  Date of birth
+                  {t("dateOfBirth")}
                 </Form.Label>
                 <Form.Control
                   required
@@ -322,7 +338,7 @@ function EmployeeForm() {
             </div>
             <Form.Group className="InputGroup">
               <Form.Label htmlFor="address" className="FormLabel">
-                Address
+                {t("address")}
               </Form.Label>
               <Form.Control
                 required
@@ -339,7 +355,7 @@ function EmployeeForm() {
             <div className="employeeFormDivForTowFields">
               <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv ">
                 <Form.Label className="FormLabel" htmlFor="qualification">
-                  Qualification
+                  {t("qualification")}
                 </Form.Label>
                 <Form.Select
                   required
@@ -361,7 +377,7 @@ function EmployeeForm() {
               </Form.Group>
               <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv ">
                 <Form.Label className="FormLabel" htmlFor="employeeType">
-                  Employee Type
+                  {t("employeeType")}
                 </Form.Label>
                 <Form.Select
                   required
@@ -385,7 +401,7 @@ function EmployeeForm() {
             <div className="employeeFormDivForTowFields">
               <Form.Group className="InputGroup">
                 <Form.Label className="FormLabel" htmlFor="salary">
-                  Salary
+                  {t("Salary")}
                 </Form.Label>
                 <Form.Control
                   required
@@ -412,7 +428,7 @@ function EmployeeForm() {
                     id="uploadFile"
                     name="uploadFile"
                     className="uploadBtn file:hidden text-gray-700 bg-gray-300"
-                    style={{ width: '145px' }}
+                    style={{ width: "145px" }}
                     onChange={(e) => {
                       setimage(e.target.files[0]);
                     }}
@@ -433,7 +449,7 @@ function EmployeeForm() {
                     id="password"
                     type="password"
                     placeholder="Password"
-                    minLength={'8'}
+                    minLength={"8"}
                     value={password}
                     onChange={(e) => setpassword(e.target.value)}
                   />
@@ -451,7 +467,7 @@ function EmployeeForm() {
                     name="confirmpassword"
                     id="confirmpassword"
                     type="password"
-                    minLength={'8'}
+                    minLength={"8"}
                     placeholder="confirm Password"
                     value={confirmpassword}
                     onChange={(e) => setconfirmpassword(e.target.value)}
@@ -465,18 +481,20 @@ function EmployeeForm() {
             <div className="flex justify-around flex-row-reverse ">
               <button
                 type="submit"
+                style={{ order: i18n.language === "ar" ? "2" : "1" }}
                 className="text-2xl bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-xl mb-4 h-16"
               >
-                Save
+                {t("save")}
               </button>
               <button
+                style={{ order: i18n.language === "ar" ? "1" : "2" }}
                 className="text-2xl bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded-xl mb-4 h-16"
                 onClick={(e) => {
                   e.preventDefault();
                   history.back();
                 }}
               >
-                Cancel
+                {t("cancel")}
               </button>
             </div>
           </Form>
@@ -493,26 +511,29 @@ function EmployeeForm() {
         onClose={handleDisagreeDeleteProductMessage}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle sx={{ fontSize: '25px', fontWeight: 'bold' }}>
-          Delete employee
+        <DialogTitle sx={{ fontSize: "25px", fontWeight: "bold" }}>
+          {t("delete")} {t("employee")}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            Are you sure you want to proceed with the deletion of this employee?
+            {/* Are you sure you want to proceed with the deletion of this employee?
             <br />
             <br />
             This action cannot be undone and will permanently remove the
-            employee from the database.
+            employee from the database. */}
+            {t("deleteConfirmationMessage")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={handleDisagreeDeleteProductMessage}
-            sx={{ marginRight: 'auto' }}
+            sx={{ marginRight: "auto" }}
           >
-            DISAGREE
+            {t("disagree")}
           </Button>
-          <Button onClick={handleAgreeDeleteProductMessage}>AGREE</Button>
+          <Button onClick={handleAgreeDeleteProductMessage}>
+            {t("agree")}
+          </Button>
         </DialogActions>
       </Dialog>
     </>

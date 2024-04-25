@@ -8,8 +8,10 @@ import { store } from './redux/Store.js';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../Language/translate.jsx';
 
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
 const renderApp = () => {
-  ReactDOM.createRoot(document.getElementById('root')).render(
+  root.render(
     <React.StrictMode>
       <Provider store={store}>
         <BrowserRouter>

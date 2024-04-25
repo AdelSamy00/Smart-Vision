@@ -11,7 +11,7 @@ import { Logout } from '../../redux/EmployeeSlice';
 import Badge from '@mui/material/Badge';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { clearNotification } from '../../redux/NotificationSlice';
-
+import { useTranslation } from 'react-i18next';
 const ENGINEER = [
   {
     path: '/engineer/orders',
@@ -77,6 +77,7 @@ const ACTOR = [
 ];
 
 function EmployeeHeader({ props }) {
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { employee } = useSelector((state) => state.employee);
@@ -152,6 +153,10 @@ function EmployeeHeader({ props }) {
     setnumberOfNotifications(0);
     setOpen(!open);
   };
+  const toggleLanguage = () => {
+    const newLanguage = i18n.language === 'en' ? 'ar' : 'en';
+    i18n.changeLanguage(newLanguage);
+  };
   return (
     <>
       <header className="employeeHeaderMain">
@@ -167,6 +172,9 @@ function EmployeeHeader({ props }) {
               </NavLink>
             );
           })}
+           <button onClick={toggleLanguage}>
+            {i18n.language === 'en' ? 'العربية' : 'English'}
+          </button>
         </div>
         <button
           className="ml-auto mr-4"

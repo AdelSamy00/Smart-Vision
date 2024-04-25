@@ -10,10 +10,9 @@ import { Typography, Grid, Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 import i18n from "../../../Language/translate";
-
 export default function EmployeeCard({ employee, t }) {
   return (
-    <Card sx={{ maxWidth: 320, marginBottom: "2rem", bgcolor: "#f8f9fa" }}>
+    <Card sx={{ maxWidth: 310, marginBottom: "2rem", bgcolor: "#f8f9fa" }}>
       <CardHeader
         avatar={
           <Avatar
@@ -111,7 +110,7 @@ export default function EmployeeCard({ employee, t }) {
               }}
             >
               {/* {employee?.username} */}
-              {t(employee?.username?.toLowerCase())}
+              {employee?.username?.toLowerCase()}
             </Typography>
           </Grid>
           <Grid xs={5} item>
@@ -153,7 +152,7 @@ export default function EmployeeCard({ employee, t }) {
           </Grid>
           <Grid xs={7} item>
             <Typography style={{ fontSize: "18px", textAlign: "center" }}>
-              {employee?.phone ? "0" + employee?.phone : "Undefined"}
+              {employee?.phone ? "0" + employee?.phone : t("Undefined")}
             </Typography>
           </Grid>
           <Grid

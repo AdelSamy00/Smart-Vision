@@ -13,7 +13,7 @@
     "passwordMismatchError": "The passwords do not match",
     "changePasswordButton": "Change Password",
     "EmployeesOfTheCompany": "Employees Of The Company",
-   "JobTitle": "Job Title",
+    "JobTitle": "Job Title",
     "All": "All",
     "Operator": "Operator",
     "Engineer": "Engineer",
@@ -28,8 +28,6 @@
     "UserName": "User Name",
     "Salary": "Salary",
     "Phone": "Phone",
-    "ChangePasswo..": "Change Password"
-  
-  
+    "ChangePasswo..": "Change Passwo.."
   }
   
