@@ -18,6 +18,7 @@ function AddReview({ productId, setReviews }) {
         url: '/customers/review',
         method: 'POST',
         data: { customerId, productId, comment, rating },
+        token: customer?.token,
       });
       setReviews((prevReviews) => {
         return [...prevReviews, res.data.review];

@@ -303,7 +303,6 @@ function OrderComponent({ order, reviews, setReviews }) {
                 <span style={{ fontWeight: 'bold' }}>State: </span>{' '}
                 {updatedOrder?.state}
               </Typography>
-              {console.log()}
               <Typography variant="body1" xs={6}>
                 {updatedOrder.state !== 'CANCELED' &&
                 order?.cancelOrderExpiresAt?.substring(0, 10) >=

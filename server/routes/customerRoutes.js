@@ -51,9 +51,9 @@ router.delete('/order', customerAuth, cancelOrder);
 router.get('/order/:id', getOrderHistory);
 
 //review
-router.post('/review', addreview);
-router.delete('/review', deleteReview);
-router.put('/review', updateReview);
+router.post('/review', customerAuth, addreview);
+router.delete('/review', customerAuth, deleteReview);
+router.put('/review', customerAuth, updateReview);
 
 //Services
 router.post('/service', makeService);
