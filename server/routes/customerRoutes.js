@@ -39,15 +39,15 @@ router.post('/contactUs', saveContactMesseage);
 router.delete('/delete-acount/:id', customerAuth, deleteAccount);
 
 //Change password
-router.put('/changePassword', changePassword);
+router.put('/changePassword', customerAuth, changePassword);
 
 //add or remove favorite product
 router.post('/favorite', customerAuth, makeFavorite);
 router.get('/favorite/:id', getFavoriteList);
 
 //order
-router.post('/order', makeOrder);
-router.delete('/order', cancelOrder);
+router.post('/order', customerAuth, makeOrder);
+router.delete('/order', customerAuth, cancelOrder);
 router.get('/order/:id', getOrderHistory);
 
 //review

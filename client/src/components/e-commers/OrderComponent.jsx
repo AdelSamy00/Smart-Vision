@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import getTodayDate from '../../utils/dates';
 import AddReview from './AddReview';
 import Reviews from './Reviews';
+import { apiRequest } from '../../utils';
 
 function OrderComponent({ order, reviews, setReviews }) {
   //console.log(order);
@@ -21,12 +22,20 @@ function OrderComponent({ order, reviews, setReviews }) {
 
   const cancelOrder = async (orderId) => {
     try {
-      const response = await axios.delete(`/customers/order`, {
-        data: { id: customer?._id, orderId: orderId },
+      const response = await apiRequest({
+        method: 'DELETE',
+        url: '/customers/order',
+        data: {
+          id: customer._id,
+          orderId: orderId,
+        },
+        token: customer?.token,
       });
       if (response.status === 200) {
         setUpdatedOrder(response.data.order);
         // console.log(response.data);
+      } else {
+        setDeletemessage(response?.message);
       }
     } catch (error) {
       // console.error("Error cancelling order:", error.response.data.message);

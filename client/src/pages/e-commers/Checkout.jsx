@@ -1,42 +1,39 @@
-import React, { useEffect, useState } from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Paper from "@mui/material/Paper";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import AddressForm from "./AddressForm";
-import Review from "./Review";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { clearCart } from "../../redux/CartSlice";
-import { apiRequest } from "../../utils";
+import React, { useEffect, useState } from 'react';
+import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Paper from '@mui/material/Paper';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import AddressForm from './AddressForm';
+import Review from './Review';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearCart } from '../../redux/CartSlice';
+import { apiRequest } from '../../utils';
 import {
   Card,
   CardActionArea,
   CardContent,
-  Checkbox,
   FormControl,
-  FormControlLabel,
   FormLabel,
   OutlinedInput,
   RadioGroup,
-} from "@mui/material";
-import CreditCardRoundedIcon from "@mui/icons-material/CreditCardRounded";
-import AccountBalanceRoundedIcon from "@mui/icons-material/AccountBalanceRounded";
-import SimCardRoundedIcon from "@mui/icons-material/SimCardRounded";
-import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
-import MoneyIcon from "@mui/icons-material/Money";
-import { styled } from "@mui/system";
-import AlertDialog from "../../components/e-commers/Dialog";
-import { useNavigate } from "react-router-dom";
+} from '@mui/material';
+import CreditCardRoundedIcon from '@mui/icons-material/CreditCardRounded';
+import SimCardRoundedIcon from '@mui/icons-material/SimCardRounded';
+import MoneyIcon from '@mui/icons-material/Money';
+import { styled } from '@mui/system';
+import AlertDialog from '../../components/e-commers/Dialog';
+import { useNavigate } from 'react-router-dom';
+import { SetCustomer } from '../../redux/CustomerSlice';
 
-const FormGrid = styled("div")(() => ({
-  display: "flex",
-  flexDirection: "column",
+const FormGrid = styled('div')(() => ({
+  display: 'flex',
+  flexDirection: 'column',
 }));
 export default function Checkout({ socket, setSocket }) {
   const dispatch = useDispatch();
@@ -44,7 +41,7 @@ export default function Checkout({ socket, setSocket }) {
   const { cart } = useSelector((state) => state.cart);
   const [activeStep, setActiveStep] = useState(0);
   const [orderNumber, setOrderNumber] = useState(0);
-  const [paymentType, setPaymentType] = useState("default");
+  const [paymentType, setPaymentType] = useState('default');
   const [error, setError] = useState(null);
   const [unavailableProductsDialogOpen, setUnavailableProductsDialogOpen] =
     useState(false);
@@ -52,10 +49,10 @@ export default function Checkout({ socket, setSocket }) {
   const navigate = useNavigate();
   //to get first name and last name from userName
   function setFirstAndLastName() {
-    const nameParts = customer?.username.split(" ");
+    const nameParts = customer?.username.split(' ');
     const result = {
-      firstName: "",
-      lastName: "",
+      firstName: '',
+      lastName: '',
     };
     if (nameParts?.length === 0) {
     } else if (nameParts?.length === 1) {
@@ -72,23 +69,23 @@ export default function Checkout({ socket, setSocket }) {
     firstName: nameParts?.firstName,
     lastName: nameParts?.lastName,
     phoneNumber: customer?.phone,
-    city: "",
-    country: "",
+    city: '',
+    country: '',
     address: customer?.address,
   };
   const [shippingInfo, setShippingInfo] = useState(initCustomerData);
   const [errorMessage, setErrorMessage] = useState({
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-    city: "",
-    country: "",
-    address: "",
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    city: '',
+    country: '',
+    address: '',
   });
-  const steps = ["Shipping address", "Payment options", "Review your order"];
+  const steps = ['Shipping address', 'Payment options', 'Review your order'];
 
   useEffect(() => {
-    const formDataString = localStorage.getItem("shippingInfo");
+    const formDataString = localStorage.getItem('shippingInfo');
     if (formDataString) {
       setShippingInfo(JSON.parse(formDataString));
     }
@@ -96,23 +93,23 @@ export default function Checkout({ socket, setSocket }) {
 
   const handleFormChange = (formData) => {
     setShippingInfo(formData);
-    localStorage.setItem("shippingInfo", JSON.stringify(formData));
+    localStorage.setItem('shippingInfo', JSON.stringify(formData));
   };
 
   function validateFormData(formData) {
     const errors = {};
     if (!formData.firstName) {
-      errors.firstName = "First Name is required";
+      errors.firstName = 'First Name is required';
     } else if (!formData.lastName) {
-      errors.lastName = "Last Name is required";
+      errors.lastName = 'Last Name is required';
     } else if (!formData.phoneNumber) {
-      errors.phoneNumber = "Phone Number is required";
+      errors.phoneNumber = 'Phone Number is required';
     } else if (!formData.address) {
-      errors.address = "Address is required";
+      errors.address = 'Address is required';
     } else if (!formData.city) {
-      errors.city = "City is required";
+      errors.city = 'City is required';
     } else if (!formData.country) {
-      errors.country = "Country is required";
+      errors.country = 'Country is required';
     }
     return errors;
   }
@@ -130,7 +127,7 @@ export default function Checkout({ socket, setSocket }) {
   };
 
   const handleBack = () => {
-    setPaymentType("default");
+    setPaymentType('default');
     setActiveStep(activeStep - 1);
   };
 
@@ -150,7 +147,7 @@ export default function Checkout({ socket, setSocket }) {
       return 0;
     }
     const totalPoints = cart.reduce((total, item) => {
-      const points = typeof item.points === "number" ? item.points : 0;
+      const points = typeof item.points === 'number' ? item.points : 0;
       return total + points;
     }, 0);
     return totalPoints;
@@ -160,7 +157,7 @@ export default function Checkout({ socket, setSocket }) {
   const handlePlaceOrder = async () => {
     try {
       // Fetch all products from the inventory
-      const response = await axios.get("/products/");
+      const response = await axios.get('/products/');
       const allProducts = response.data.products;
 
       // Check quantity availability for each product in the cart
@@ -182,8 +179,8 @@ export default function Checkout({ socket, setSocket }) {
             const actualQuantity = productResponse.data.product.quantity;
             return { ...product, actualQuantity };
           } catch (error) {
-            console.error("Error fetching product details:", error);
-            return { ...product, actualQuantity: 0 }; 
+            console.error('Error fetching product details:', error);
+            return { ...product, actualQuantity: 0 };
           }
         })
       );
@@ -201,8 +198,8 @@ export default function Checkout({ socket, setSocket }) {
         quantity: product?.quantity,
       }));
       const res = await apiRequest({
-        method: "POST",
-        url: "/customers/order",
+        method: 'POST',
+        url: '/customers/order',
         data: {
           id: customer._id,
           cart: productsWithDetails,
@@ -212,50 +209,55 @@ export default function Checkout({ socket, setSocket }) {
         },
         token: customer?.token,
       });
-      console.log("Order placed successfully:", response.data);
-      socket?.emit("setOrder", {
+      console.log('Order placed successfully:', response.data);
+      const newData = {
+        token: localStorage?.getItem('token'),
+        ...res.data?.customer,
+      };
+      dispatch(SetCustomer(newData));
+      socket?.emit('setOrder', {
         user: shippingInfo,
         products: productsWithDetails,
-        type: "addOrder",
+        type: 'addOrder',
         order: response.data.order,
       });
       dispatch(clearCart());
       setOrderNumber(res.data.order.orderNumber);
       setActiveStep(activeStep + 1);
     } catch (error) {
-      console.error("Error placing order:", error.response.data.message);
+      console.error('Error placing order:', error.response.data.message);
     }
   };
 
   const handleCashPayment = () => {
-    setPaymentType("Cash");
+    setPaymentType('Cash');
     setActiveStep(activeStep + 1);
   };
-  const [cardNumber, setCardNumber] = React.useState("");
-  const [cvv, setCvv] = React.useState("");
-  const [expirationDate, setExpirationDate] = React.useState("");
+  const [cardNumber, setCardNumber] = React.useState('');
+  const [cvv, setCvv] = React.useState('');
+  const [expirationDate, setExpirationDate] = React.useState('');
 
   const handlePaymentTypeChange = (event) => {
     setPaymentType(event.target.value);
   };
 
   const handleCardNumberChange = (event) => {
-    const value = event.target.value.replace(/\D/g, "");
-    const formattedValue = value.replace(/(\d{4})(?=\d)/g, "$1 ");
+    const value = event.target.value.replace(/\D/g, '');
+    const formattedValue = value.replace(/(\d{4})(?=\d)/g, '$1 ');
     if (value.length <= 16) {
       setCardNumber(formattedValue);
     }
   };
 
   const handleCvvChange = (event) => {
-    const value = event.target.value.replace(/\D/g, "");
+    const value = event.target.value.replace(/\D/g, '');
     if (value.length <= 3) {
       setCvv(value);
     }
   };
   const handleExpirationDateChange = (event) => {
-    const value = event.target.value.replace(/\D/g, "");
-    const formattedValue = value.replace(/(\d{2})(?=\d{2})/, "$1/");
+    const value = event.target.value.replace(/\D/g, '');
+    const formattedValue = value.replace(/(\d{2})(?=\d{2})/, '$1/');
     if (value.length <= 4) {
       setExpirationDate(formattedValue);
     }
@@ -268,7 +270,7 @@ export default function Checkout({ socket, setSocket }) {
           open={unavailableProductsDialogOpen}
           onClose={() => {
             setUnavailableProductsDialogOpen(false);
-            navigate("/bag");
+            navigate('/bag');
           }}
           products={unavailableProductsList}
           msg={unavailableProductsList
@@ -280,7 +282,7 @@ export default function Checkout({ socket, setSocket }) {
                 return `The quantity you entered for ${product.name} is not available right now.`;
               }
             })
-            .join(" ")}
+            .join(' ')}
         />
 
         <Paper
@@ -288,16 +290,16 @@ export default function Checkout({ socket, setSocket }) {
           sx={{
             my: { xs: 3, md: 6 },
             p: { xs: 2, md: 3 },
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <Typography component="h1" variant="h4" align="center">
             Checkout
           </Typography>
-          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5, width: "100%" }}>
+          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5, width: '100%' }}>
             {steps.map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
@@ -325,38 +327,38 @@ export default function Checkout({ socket, setSocket }) {
                 />
               )}
               {activeStep === 1 && (
-                <FormControl component="fieldset" sx={{ width: "100%" }}>
+                <FormControl component="fieldset" sx={{ width: '100%' }}>
                   <RadioGroup
                     aria-label="Payment options"
                     name="paymentType"
                     sx={{
                       flexDirection:
-                        paymentType === "default" || paymentType === "Cash"
-                          ? "column"
-                          : "row",
-                      marginBottom: "1rem",
+                        paymentType === 'default' || paymentType === 'Cash'
+                          ? 'column'
+                          : 'row',
+                      marginBottom: '1rem',
                       gap: 2,
-                      justifyContent: "space-between",
-                      alignItems: "center",
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
                     }}
                     value={paymentType}
                     onChange={handlePaymentTypeChange}
                   >
                     <Card
-                      raised={paymentType === "Cash"}
+                      raised={paymentType === 'Cash'}
                       sx={{
-                        minWidth: { xs: "100%", sm: "49%" },
-                        outline: "1px solid",
+                        minWidth: { xs: '100%', sm: '49%' },
+                        outline: '1px solid',
                         // marginBottom: "1rem",
                         outlineColor:
-                          paymentType === "Cash" ? "primary.main" : "divider",
+                          paymentType === 'Cash' ? 'primary.main' : 'divider',
                         backgroundColor:
-                          paymentType === "Cash" ? "background.default" : "",
+                          paymentType === 'Cash' ? 'background.default' : '',
                       }}
                     >
                       <CardActionArea onClick={handleCashPayment}>
                         <CardContent
-                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                          sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                         >
                           <MoneyIcon color="primary" fontSize="small" />
                           <Typography fontWeight="medium">
@@ -366,26 +368,26 @@ export default function Checkout({ socket, setSocket }) {
                       </CardActionArea>
                     </Card>
                     <Card
-                      raised={paymentType === "creditCard"}
+                      raised={paymentType === 'creditCard'}
                       sx={{
-                        minWidth: { xs: "100%", sm: "49%" },
-                        outline: "1px solid",
+                        minWidth: { xs: '100%', sm: '49%' },
+                        outline: '1px solid',
                         // marginBottom: "1rem",
                         outlineColor:
-                          paymentType === "creditCard"
-                            ? "primary.main"
-                            : "divider",
+                          paymentType === 'creditCard'
+                            ? 'primary.main'
+                            : 'divider',
                         backgroundColor:
-                          paymentType === "creditCard"
-                            ? "background.default"
-                            : "",
+                          paymentType === 'creditCard'
+                            ? 'background.default'
+                            : '',
                       }}
                     >
                       <CardActionArea
-                        onClick={() => setPaymentType("creditCard")}
+                        onClick={() => setPaymentType('creditCard')}
                       >
                         <CardContent
-                          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                          sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                         >
                           <CreditCardRoundedIcon
                             color="primary"
@@ -398,51 +400,51 @@ export default function Checkout({ socket, setSocket }) {
                       </CardActionArea>
                     </Card>
                   </RadioGroup>
-                  {paymentType === "creditCard" && (
+                  {paymentType === 'creditCard' && (
                     <Box
                       sx={{
-                        display: "flex",
-                        flexDirection: "column",
+                        display: 'flex',
+                        flexDirection: 'column',
                         gap: 2,
                       }}
                     >
                       <Box
                         sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
                           p: 3,
                           height: { xs: 300, sm: 350, md: 375 },
-                          width: "100%",
-                          margin: "auto",
-                          backgroundColor: "background.paper",
+                          width: '100%',
+                          margin: 'auto',
+                          backgroundColor: 'background.paper',
                         }}
                       >
                         <Box
                           sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
+                            display: 'flex',
+                            justifyContent: 'space-between',
                           }}
                         >
                           <Typography variant="subtitle2">
                             Credit card
                           </Typography>
                           <CreditCardRoundedIcon
-                            sx={{ color: "text.secondary" }}
+                            sx={{ color: 'text.secondary' }}
                           />
                         </Box>
                         <SimCardRoundedIcon
                           sx={{
                             fontSize: { xs: 48, sm: 56 },
-                            transform: "rotate(90deg)",
-                            color: "text.secondary",
+                            transform: 'rotate(90deg)',
+                            color: 'text.secondary',
                           }}
                         />
                         <Box
                           sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            width: "100%",
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            width: '100%',
                             gap: 2,
                           }}
                         >
@@ -459,7 +461,7 @@ export default function Checkout({ socket, setSocket }) {
                               onChange={handleCardNumberChange}
                             />
                           </FormGrid>
-                          <FormGrid sx={{ maxWidth: "20%" }}>
+                          <FormGrid sx={{ maxWidth: '20%' }}>
                             <FormLabel htmlFor="cvv" required>
                               CVV
                             </FormLabel>
@@ -473,7 +475,7 @@ export default function Checkout({ socket, setSocket }) {
                             />
                           </FormGrid>
                         </Box>
-                        <Box sx={{ display: "flex", gap: 2 }}>
+                        <Box sx={{ display: 'flex', gap: 2 }}>
                           <FormGrid sx={{ flexGrow: 1 }}>
                             <FormLabel htmlFor="card-name" required>
                               Name
@@ -510,11 +512,11 @@ export default function Checkout({ socket, setSocket }) {
               {activeStep === 2 && <Review />}
               <Box
                 sx={{
-                  display: "flex",
+                  display: 'flex',
                   justifyContent:
-                    activeStep === 0 ? "flex-end" : "space-between",
-                  width: "100%",
-                  marginTop: "2rem",
+                    activeStep === 0 ? 'flex-end' : 'space-between',
+                  width: '100%',
+                  marginTop: '2rem',
                 }}
               >
                 {activeStep !== 0 && (
