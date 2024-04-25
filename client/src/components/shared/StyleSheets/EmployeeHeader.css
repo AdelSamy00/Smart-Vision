@@ -7,6 +7,7 @@
     margin-top: 0;
     padding-inline: 1rem;
     position: relative;
+    direction: ltr ;
 }
 
 .employeeHeaderLogo {
@@ -27,7 +28,7 @@
 }
 
 .employeeHeaderLinks {
-    width: calc(100% - 350px);
+    width: calc(100% - 360px);
     display: flex;
     gap: 1rem;
 }

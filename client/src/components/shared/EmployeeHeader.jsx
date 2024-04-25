@@ -103,7 +103,7 @@ function EmployeeHeader({ props }) {
       setnavLinks(OPERATOR);
     } else if (jobTitle === 'presenter') {
       setnavLinks(PRESENTER);
-    } else if (jobTitle === 'actor') {
+    } else if (jobTitle === 'actor manager') {
       setnavLinks(ACTOR);
     }
   }
