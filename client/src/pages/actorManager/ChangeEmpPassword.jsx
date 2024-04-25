@@ -14,13 +14,15 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { useTranslation } from 'react-i18next';
 const defaultTheme = createTheme();
 
 export default function ChangeEmpPassword() {
+  const { t } = useTranslation();
   const [isPasswordValid, setIsPasswordValid] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false);
-  const [newPassErrorMessage, setNewPassErrorMessage] = useState(false);
-  const [submitMessage, setSubmitMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [newPassErrorMessage, setNewPassErrorMessage] = useState("");
+  const [submitMessage, setSubmitMessage] = useState("");
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -41,10 +43,11 @@ export default function ChangeEmpPassword() {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
   const confirmNewPasswordHandle = (event) => {
     setAccountInfo({ ...accountInfo, confirmPassword: event.target.value });
     if (!event.target.value.trim() && !newPassErrorMessage) {
-      setErrorMessage("The confirm new password field cannot be left empty");
+      setErrorMessage(t("confirmPasswordEmptyError"));
     } else {
       setIsFormSubmitted(false);
       setErrorMessage("");
@@ -58,7 +61,7 @@ export default function ChangeEmpPassword() {
       //   !currentPassErrorMessage &&
       !errorMessage
     ) {
-      setNewPassErrorMessage("The new password field cannot be left empty");
+      setNewPassErrorMessage(t("newPasswordEmptyError"));
     } else {
       setIsNewPasswordChanged(true);
       setIsFormSubmitted(false);
@@ -70,19 +73,18 @@ export default function ChangeEmpPassword() {
     e.preventDefault();
     setIsFormSubmitted(true);
     if (
-      (!accountInfo.newPassword.trim())
+      !accountInfo.newPassword.trim()
     ) {
-      setNewPassErrorMessage("The new password field cannot be left empty");
-    } else if(!accountInfo.confirmPassword.trim()){
-      setErrorMessage("The confirm new password field cannot be left empty");
-    }
-    else if (!isPasswordValid && !newPassErrorMessage) {
-      setErrorMessage("The password is not valid");
+      setNewPassErrorMessage(t("newPasswordEmptyError"));
+    } else if (!accountInfo.confirmPassword.trim()) {
+      setErrorMessage(t("confirmPasswordEmptyError"));
+    } else if (!isPasswordValid && !newPassErrorMessage) {
+      setErrorMessage(t("passwordInvalidError"));
     } else if (
       accountInfo.newPassword !== accountInfo.confirmPassword &&
       !newPassErrorMessage
     ) {
-      setErrorMessage("The passwords do not match");
+      setErrorMessage(t("passwordMismatchError"));
     } else {
       try {
         const response = await apiRequest({
@@ -92,7 +94,6 @@ export default function ChangeEmpPassword() {
             id: employeeId,
             newPassword: accountInfo.newPassword,
           },
-          //   token: customer?.token,
         });
         console.log("API Response:", response.data.message);
         setAccountInfo({
@@ -109,6 +110,12 @@ export default function ChangeEmpPassword() {
       }
     }
   };
+  const { i18n } = useTranslation();
+
+  const toggleLanguage = () => {
+    const newLanguage = i18n.language === 'en' ? 'ar' : 'en';
+    i18n.changeLanguage(newLanguage);
+  };
   useEffect(() => {
     const validatePassword = () => {
       const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -117,10 +124,14 @@ export default function ChangeEmpPassword() {
 
     setIsPasswordValid(validatePassword());
   }, [accountInfo.newPassword]);
+
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main"  style={{maxWidth:"700px"}}>
+      <Container component="main" style={{ maxWidth: "700px" }}>
         <CssBaseline />
+        <button onClick={toggleLanguage}>
+        {i18n.language === 'en' ? 'العربية' : 'English'}
+      </button>
         <Box
           sx={{
             display: "flex",
@@ -151,14 +162,13 @@ export default function ChangeEmpPassword() {
               fontSize: "32px",
             }}
           >
-            Change Password
+            {t("changePasswordTitle")}
           </h1>
           <p style={{ width: "100%", marginBottom: "50px", fontSize: "19px" }}>
-            It&apos;s a good idea to update your password regularly and to make
-            sure it&apos;s unique from other passwords you use.
+            {t("passwordUpdateNote")}
           </p>
           <Box component="form" noValidate sx={{ mt: 1, width: "100%" }}>
-            <label htmlFor="NewPassword">New Password</label>
+            <label htmlFor="NewPassword">{t("newPasswordLabel")}</label>
             <TextField
               margin="normal"
               required
@@ -193,7 +203,7 @@ export default function ChangeEmpPassword() {
                       ) : (
                         <CloseIcon style={{ color: "red" }} />
                       )}{" "}
-                      A lowercase letter (a-z)
+                      {t("passwordCriteriaLowercase")}
                     </li>
                     <li>
                       {/[A-Z]/.test(accountInfo.newPassword) ? (
@@ -201,7 +211,7 @@ export default function ChangeEmpPassword() {
                       ) : (
                         <CloseIcon style={{ color: "red" }} />
                       )}{" "}
-                      An uppercase letter (A-Z)
+                      {t("passwordCriteriaUppercase")}
                     </li>
                     <li>
                       {/\d/.test(accountInfo.newPassword) ? (
@@ -209,7 +219,7 @@ export default function ChangeEmpPassword() {
                       ) : (
                         <CloseIcon style={{ color: "red" }} />
                       )}{" "}
-                      A number
+                      {t("passwordCriteriaNumber")}
                     </li>
                     <li>
                       {accountInfo.newPassword.length >= 8 &&
@@ -218,7 +228,7 @@ export default function ChangeEmpPassword() {
                       ) : (
                         <CloseIcon style={{ color: "red" }} />
                       )}{" "}
-                      8-20 characters
+                      {t("passwordCriteriaLength")}
                     </li>
                   </ul>
                 )
@@ -227,9 +237,7 @@ export default function ChangeEmpPassword() {
                 if (e.key === "Enter") {
                   e.preventDefault();
                   if (!accountInfo.newPassword.trim() && !errorMessage) {
-                    setNewPassErrorMessage(
-                      "The new password field cannot be left empty"
-                    );
+                    setNewPassErrorMessage(t("newPasswordEmptyError"));
                   } else {
                     if (isPasswordValid) {
                       e.preventDefault();
@@ -266,7 +274,7 @@ export default function ChangeEmpPassword() {
                 {newPassErrorMessage}
               </p>
             )}
-            <label htmlFor="Confirm New Password">Confirm New Password</label>
+            <label htmlFor="Confirm New Password">{t("confirmPasswordLabel")}</label>
             <TextField
               margin="normal"
               required
@@ -283,7 +291,7 @@ export default function ChangeEmpPassword() {
                     !newPassErrorMessage
                   ) {
                     setErrorMessage(
-                      "The confirm new password field cannot be left empty"
+                      t("confirmPasswordEmptyError")
                     );
                   } else {
                     setErrorMessage("");
@@ -294,7 +302,7 @@ export default function ChangeEmpPassword() {
               error={
                 !accountInfo.confirmPassword.trim() &&
                 errorMessage ===
-                  "The confirm new password field cannot be left empty"
+                  t("confirmPasswordEmptyError")
               }
               inputRef={confirmNewPasswordRef}
               value={accountInfo.confirmPassword}
@@ -351,7 +359,7 @@ export default function ChangeEmpPassword() {
                 fontSize: "19px",
               }}
             >
-              Change Password
+              {t("changePasswordButton")}
             </Button>
           </Box>
         </Box>

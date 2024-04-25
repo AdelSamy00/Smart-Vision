@@ -18,7 +18,11 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
+import { useTranslation } from "react-i18next"; // Import the useTranslation hook
+
 function ViewEmployees() {
+  const { t } = useTranslation(); // Initialize the useTranslation hook
+
   const [employees, setEmployees] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -74,14 +78,14 @@ function ViewEmployees() {
                 marginBottom: "3rem",
               }}
             >
-              Employees Of The Company
+              {t("EmployeesOfTheCompany")} {/* Translate the text */}
             </Typography>
           </Grid>
           <Grid
             sx={{
-              margin:"auto",
+              margin: "auto",
               marginBottom: "2rem",
-              marginLeft: { xs: "auto", sm: "0rem",md:"-2rem" },
+              marginLeft: { xs: "auto", sm: "0rem", md: "-2rem" },
               maxWidth: { xs: "90vw", sm: "500px" },
               display: "flex",
               gap: "1rem",
@@ -89,24 +93,26 @@ function ViewEmployees() {
           >
             <TextField
               select
-              label="Job Title"
+              label={t("JobTitle")}
               value={jobTitle}
               onChange={handleJobTitleChange}
               variant="outlined"
               style={{ minWidth: "150px" }}
             >
-              <MenuItem value="All">All</MenuItem>
-              <MenuItem value="Operator">Operator</MenuItem>
-              <MenuItem value="Engineer">Engineer</MenuItem>
-              <MenuItem value="Inventory manager">Inventory manager</MenuItem>
-              <MenuItem value="Actor manager">Actor Manager</MenuItem>
-              <MenuItem value="Presenter">Presenter</MenuItem>
+              <MenuItem value="All">{t("All")}</MenuItem>
+              <MenuItem value="Operator">{t("Operator")}</MenuItem>
+              <MenuItem value="Engineer">{t("Engineer")}</MenuItem>
+              <MenuItem value="Inventory manager">
+                {t("InventoryManager")}
+              </MenuItem>
+              <MenuItem value="Actor manager">{t("ActorManager")}</MenuItem>
+              <MenuItem value="Presenter">{t("Presenter")}</MenuItem>
             </TextField>
             <TextField
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               variant="outlined"
-              placeholder="Enter Your search ..."
+              placeholder={t("EnterYourSearch")}
               fullWidth
               InputProps={{
                 startAdornment: (
@@ -119,7 +125,7 @@ function ViewEmployees() {
                     {searchTerm && (
                       <IconButton
                         edge="end"
-                        aria-label="clear search"
+                        aria-label={t("ClearSearch")}
                         onClick={(e) => setSearchTerm("")}
                       >
                         <ClearIcon color="action" />
@@ -139,7 +145,7 @@ function ViewEmployees() {
           >
             {filteredEmployees.map((employee, index) => (
               <Grid item key={index}>
-                <EmployeeCard employee={employee} />
+                <EmployeeCard employee={employee} t={t}/>
               </Grid>
             ))}
           </Grid>
@@ -166,12 +172,11 @@ function ViewEmployees() {
                 backgroundColor: "rgba(0, 0, 0,0.6)",
               }}
             >
-              {" "}
-              Add New Employee
+              {t("AddNewEmployee")}
             </span>
             <Link to={"/actor/add-employee"}>
               <SpeedDial
-                ariaLabel="SpeedDial basic example"
+                ariaLabel={t("SpeedDialBasicExample")}
                 sx={{ position: "fixed", bottom: 16, right: 16 }}
                 icon={<SpeedDialIcon />}
                 direction="up"
@@ -185,7 +190,7 @@ function ViewEmployees() {
       ) : (
         <Grid item xs={12} sm={8}>
           <Typography variant="h5" align="center" gutterBottom>
-            There's No Employees
+            {t("There'sNoEmployees")} 
           </Typography>
         </Grid>
       )}

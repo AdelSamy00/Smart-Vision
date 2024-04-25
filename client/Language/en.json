@@ -1,0 +1,35 @@
+{
+    "changePasswordTitle": "Change Password",
+    "passwordUpdateNote": "It's a good idea to update your password regularly and to make sure it's unique from other passwords you use.",
+    "newPasswordLabel": "New Password",
+    "confirmPasswordLabel": "Confirm New Password",
+    "passwordCriteriaLowercase": "A lowercase letter (a-z)",
+    "passwordCriteriaUppercase": "An uppercase letter (A-Z)",
+    "passwordCriteriaNumber": "A number",
+    "passwordCriteriaLength": "8-20 characters",
+    "newPasswordEmptyError": "The new password field cannot be left empty",
+    "confirmPasswordEmptyError": "The confirm new password field cannot be left empty",
+    "passwordInvalidError": "The password is not valid",
+    "passwordMismatchError": "The passwords do not match",
+    "changePasswordButton": "Change Password",
+    "EmployeesOfTheCompany": "Employees Of The Company",
+   "JobTitle": "Job Title",
+    "All": "All",
+    "Operator": "Operator",
+    "Engineer": "Engineer",
+    "InventoryManager": "Inventory manager",
+    "ActorManager": "Actor Manager",
+    "Presenter": "Presenter",
+    "EnterYourSearch": "Enter Your search",
+    "ClearSearch": "Clear search",
+    "AddNewEmployee": "Add New Employee",
+    "SpeedDialBasicExample": "SpeedDial basic example",
+    "There'sNoEmployees": "There's No Employees", 
+    "UserName": "User Name",
+    "Salary": "Salary",
+    "Phone": "Phone",
+    "ChangePasswo..": "Change Password"
+  
+  
+  }
+  

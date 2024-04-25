@@ -1,0 +1,36 @@
+{
+    "changePasswordTitle": "تغيير كلمة المرور",
+    "passwordUpdateNote": "من الجيد تحديث كلمة المرور بانتظام والتأكد من أنها فريدة من كلمات المرور الأخرى التي تستخدمها.",
+    "newPasswordLabel": "كلمة المرور الجديدة",
+    "confirmPasswordLabel": "تأكيد كلمة المرور الجديدة",
+    "passwordCriteriaLowercase": "حرف صغير (a-z)",
+    "passwordCriteriaUppercase": "حرف كبير (A-Z)",
+    "passwordCriteriaNumber": "رقم",
+    "passwordCriteriaLength": "8-20 حرف",
+    "newPasswordEmptyError": "لا يمكن ترك حقل كلمة المرور الجديدة فارغًا",
+    "confirmPasswordEmptyError": "لا يمكن ترك حقل تأكيد كلمة المرور الجديدة فارغًا",
+    "passwordInvalidError": "كلمة المرور غير صالحة",
+    "passwordMismatchError": "كلمات المرور غير متطابقة",
+    "changePasswordButton": "تغيير كلمة المرور",
+      "EmployeesOfTheCompany": "موظفي الشركة",
+      "All": "الكل",
+      "Operator": "المشغل",
+      "Engineer": "المهندس",
+      "InventoryManager": "مدير المخزون",
+      "ActorManager": "مدير الممثل",
+      "Presenter": "المقدم",
+      "EnterYourSearch": "أدخل بحثك",
+      "ClearSearch": "مسح البحث",
+      "AddNewEmployee": "إضافة موظف جديد",
+      "SpeedDialBasicExample": "مثال أساسي للسرعة",
+      "There'sNoEmployees": "لا يوجد موظفون",
+        "UserName": "اسم المستخدم",
+        "JobTitle": "المسمى الوظيفي",
+        "Salary": "الراتب",
+        "Phone": "الهاتف",
+        "ChangePasswo..": "تغيير كلمة المرور",
+    "adel samy":"عادل سامى"
+      
+    
+  }
+  
