@@ -145,7 +145,7 @@ export const employeeLogin = async (req, res, next) => {
     return;
   }
   employee.password = undefined;
-  const token = createJWT(employee._id);
+  const token = createJWT(employee?.jobTitle);
   res.cookie('token', token, {
     httpOnly: true,
     //secure: true,
