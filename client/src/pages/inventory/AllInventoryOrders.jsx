@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import HomeComponent from '../../components/inventory/HomeComponent';
-import MatrialComponnent from '../../components/inventory/matrialComponnent';
 import InventoryMatrialsOrders from './InventoryMatrialsOrders';
 import InventoryProductOrders from './InventoryProductOrders';
 import Loading from '../../components/shared/Loading';
@@ -11,8 +9,6 @@ const AllInventoryOrders = () => {
   const [dataType, setDataType] = useState('products');
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  // const [products, setproducts] = useState([]);
-  // const [Matrials, setMatrials] = useState([]);
 
   const fetchData = async () => {
     setIsLoading(true);

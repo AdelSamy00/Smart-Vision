@@ -88,7 +88,7 @@ const FactorView = () => {
                   </CardContent>
                   <CardActions disableSpacing>
                     <IconButton style={{ marginTop: '-30px' }}>
-                      <Link to={`/f/order-details/${order._id}`}>
+                      <Link to={`/factory/order-details/${order._id}`}>
                         <MoreIcon />
                       </Link>
                       {/* details */}
