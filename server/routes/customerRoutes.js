@@ -5,7 +5,7 @@ import {
   cancelOrder,
   cancelService,
   changePassword,
-  deleteAcount,
+  deleteAccount,
   deleteReview,
   getFavoriteList,
   getOrderHistory,
@@ -29,20 +29,20 @@ router.get('/verified', (req, res) => {
 });
 
 // update customer data
-router.put('/', updateCustomer);
+router.put('/', customerAuth, updateCustomer);
 
 // sent feedback or problem from ContactUs page
 router.post('/contactUs', saveContactMesseage);
 
 //delete his account
 //need middleware
-router.delete('/delete-acount/:id', deleteAcount);
+router.delete('/delete-acount/:id', customerAuth, deleteAccount);
 
 //Change password
 router.put('/changePassword', changePassword);
 
 //add or remove favorite product
-router.post('/favorite', makeFavorite);
+router.post('/favorite', customerAuth, makeFavorite);
 router.get('/favorite/:id', getFavoriteList);
 
 //order

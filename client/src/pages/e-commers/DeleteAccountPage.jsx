@@ -50,12 +50,14 @@ const DeleteAccountPage = () => {
         method: 'delete',
         url: `/customers/delete-acount/${customer._id}`,
         data: { password },
+        token: customer?.token,
         headers: {
           'Content-Type': 'application/json',
         },
       }).then((response) => {
         if (response?.status === 200) {
           setShowMessage(true);
+          localStorage.clear();
         } else if (response?.message === 'Invalid password') {
           console.log('first');
           setError('Invalid password.');

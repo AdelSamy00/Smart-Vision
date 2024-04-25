@@ -3,8 +3,7 @@ import Customers from '../models/CustomerModel.js';
 import Verifications from '../models/EmailVerification.js';
 import Orders from '../models/OrderModel.js';
 import Products from '../models/ProductModel.js';
-import { compareString, createJWT, hashString } from '../utils/index.js';
-import JWT from 'jsonwebtoken';
+import { compareString, hashString } from '../utils/index.js';
 import {
   calculateTotalRating,
   decreseQuantity,
@@ -99,7 +98,7 @@ export const updateCustomer = async (req, res, next) => {
       {
         new: true,
       }
-    );
+    ).select('-password');
     res.status(200).json({
       success: true,
       message: 'update customer data successfully',
@@ -130,7 +129,7 @@ export const saveContactMesseage = async (req, res, next) => {
   }
 };
 
-export const deleteAcount = async (req, res, next) => {
+export const deleteAccount = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { password } = req.body;
