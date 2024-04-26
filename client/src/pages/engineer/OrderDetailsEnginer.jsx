@@ -5,8 +5,10 @@ import Loading from '../../components/shared/Loading';
 import '../factory/StyleSheets/OrderDetailsFactory.css';
 import { Button } from '@mui/material';
 import { Link, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function OrderDetailsEnginer() {
+    const { t } = useTranslation();
   const [order, setorder] = useState();
   const [orderNumber, setorderNumber] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -37,8 +39,8 @@ function OrderDetailsEnginer() {
       {!isLoading ? (
         <main className="OrderDetailsFactoryMain">
           <div className="flex flex-wrap justify-between my-4">
-            <h1 className="m-0o">
-              Order ID: <span>{orderNumber}</span>
+            <h1>
+              {t('orderId')}: <span>{orderNumber}</span>
             </h1>
             <Link
               to={`/engineer/send-order/${order?._id}`}
@@ -58,8 +60,7 @@ function OrderDetailsEnginer() {
                   fontWeight: '600',
                 }}
               >
-                {' '}
-                Send Order To Factory
+                {t('sendOrderToFactory')}
               </Button>
             </Link>
           </div>

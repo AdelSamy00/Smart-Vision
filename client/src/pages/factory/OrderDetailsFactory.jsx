@@ -4,8 +4,10 @@ import axios from 'axios';
 import Loading from '../../components/shared/Loading';
 import './StyleSheets/OrderDetailsFactory.css';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function OrderDetailsFactory() {
+    const { t } = useTranslation();
   const [order, setorder] = useState();
   const [orderNumber, setorderNumber] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -34,7 +36,7 @@ function OrderDetailsFactory() {
       {!isLoading ? (
         <main className="OrderDetailsFactoryMain">
           <h1>
-            Order ID: <span>{orderNumber}</span>
+            {t('orderId')}: <span>{orderNumber}</span>
           </h1>
           <CustomizedOrderDetails order={order} employeeType={'FACTORY'} />
         </main>

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
-import Loading from "../../components/shared/Loading";
-import CustomizedOrderDetails from "../../components/shared/CustomizedOrderDetails";
-import { useLocation, useParams } from "react-router-dom";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import Loading from '../../components/shared/Loading';
+import CustomizedOrderDetails from '../../components/shared/CustomizedOrderDetails';
+import { useLocation, useParams } from 'react-router-dom';
+import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 function ServiseDetailsOperator({ socket, setSocket }) {
+  const { t } = useTranslation();
   const [order, setorder] = useState();
   const [orderNumber, setorderNumber] = useState();
   const [from, setfrom] = useState();
@@ -14,7 +16,7 @@ function ServiseDetailsOperator({ socket, setSocket }) {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const from = params.get("from");
+    const from = params.get('from');
     setfrom(from);
     console.log(from);
   }, [location.search]);
@@ -42,11 +44,11 @@ function ServiseDetailsOperator({ socket, setSocket }) {
       {!isLoading ? (
         <main className="OrderDetailsFactoryMain">
           <h1>
-            Order ID: <span>{orderNumber}</span>
+            {t('orderId')}: <span>{orderNumber}</span>
           </h1>
           <CustomizedOrderDetails
             order={order}
-            employeeType={"OPERATOR"}
+            employeeType={'OPERATOR'}
             socket={socket}
             setSocket={setSocket}
             from={from}

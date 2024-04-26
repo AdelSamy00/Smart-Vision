@@ -1,8 +1,3 @@
-.CustomizedOrderAccordion {
-    width: 100%;
-
-}
-
 .CustomizedOrderAccordion .accordion-collapse {
     padding-block: 1rem;
     font-size: 20px;
@@ -79,6 +74,11 @@
 
 .assignEnginterButtonDiv {
     display: flex;
+}
+
+:dir(rtl) .accordion-button::after {
+    margin-left: 0;
+    margin-right: auto;
 }
 
 @media screen and (max-width:1222px) {

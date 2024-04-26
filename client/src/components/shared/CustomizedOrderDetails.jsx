@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import "./StyleSheets/CustomizedOrderDetails.css";
-import Accordion from "react-bootstrap/Accordion";
-import Table from "react-bootstrap/Table";
-import Form from "react-bootstrap/Form";
-import axios from "axios";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import Slide from "@mui/material/Slide";
-import CloseIcon from "@mui/icons-material/Close";
-import { useSelector } from "react-redux";
-import AlertDialog from "../e-commers/Dialog";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import './StyleSheets/CustomizedOrderDetails.css';
+import Accordion from 'react-bootstrap/Accordion';
+import Table from 'react-bootstrap/Table';
+import Form from 'react-bootstrap/Form';
+import axios from 'axios';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import Slide from '@mui/material/Slide';
+import CloseIcon from '@mui/icons-material/Close';
+import { useSelector } from 'react-redux';
+import AlertDialog from '../e-commers/Dialog';
+import { useTranslation } from 'react-i18next';
 
 // const tempImages = [
 //   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848315/Smart%20Vision/vojtech-bruzek-Yrxr3bsPdS0-unsplash_ekmimc.jpg',
@@ -32,7 +33,8 @@ function CustomizedOrderDetails({
   setSocket,
   from,
 }) {
-  console.log(order);
+  //console.log(order);
+  const { t } = useTranslation();
   let current = new Date();
   const images = order?.images;
   const customer = order?.customer;
@@ -44,25 +46,26 @@ function CustomizedOrderDetails({
   const [assignedEngineer, setassignedEngineer] = useState('');
   const [measuringDate, setmeasuringDate] = useState(null);
   const [measuringTime, setmeasuringTime] = useState(null);
-  const [msg, setMsg] = useState("");
-  const [minMeasuringTime, setminMeasuringTime] = useState("10:00");
+  const [msg, setMsg] = useState('');
+  const [minMeasuringTime, setminMeasuringTime] = useState('10:00');
   const [validated, setValidated] = useState(false);
   const [allEngineers, setallEngineers] = useState(null);
   const [showMessage, setShowMessage] = useState(false);
   const [isAssigned, setIsAssigned] = useState(false);
   const [DialogOpen, setDialogOpen] = useState(false);
-  async function getAllEngineers() {
-    await axios
-      .get(`/employees/engineer`)
-      .then((res) => {
-        setallEngineers(res?.data?.engineers);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
 
   useEffect(() => {
+    async function getAllEngineers() {
+      await axios
+        .get(`/employees/engineer`)
+        .then((res) => {
+          setallEngineers(res?.data?.engineers);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
     getAllEngineers();
   }, []);
 
@@ -97,27 +100,28 @@ function CustomizedOrderDetails({
           console.log(res.data.service);
           setassignedEngineer(res?.data?.service?.assignedEngineer);
           setIsAssigned(true);
-          socket?.emit("assignEngineer", {
+          socket?.emit('assignEngineer', {
             user: employee,
             to: res?.data?.sercice?.assignedEngineer._id,
-            type: "assignEngineerToCustomizationOrder",
+            type: 'assignEngineerToCustomizationOrder',
             serviceOrder: res.data.service,
           });
         })
         .catch((error) => {
           console.log(error);
-          setMsg("engineer " + error.response.data.message);
+          setMsg('engineer ' + error.response.data.message);
           setDialogOpen(true);
         });
     }
   };
+
   function getMinMeasuringDateToday() {
     const currentTime = current.toTimeString().substring(0, 5);
     let currentHoure = currentTime.substring(0, 2);
     let currentMineates = currentTime.substring(3);
     let minHoure = +currentHoure + 1;
     if (minHoure === 24) {
-      minHoure = "00";
+      minHoure = '00';
     }
     if (minHoure < 10) {
       minHoure = `0${minHoure}`;
@@ -130,20 +134,22 @@ function CustomizedOrderDetails({
       //to set with the current time
       setminMeasuringTime(getMinMeasuringDateToday());
     } else {
-      setminMeasuringTime("10:00");
+      setminMeasuringTime('10:00');
     }
   }
 
   useEffect(() => {
     CheckMinMesuringTimeToday();
   }, [measuringDate]);
+
   const handleCancelMessage = () => {
     setShowMessage(false);
   };
+
   return (
     <>
       <Accordion
-        defaultActiveKey={["0", "1"]}
+        defaultActiveKey={['0', '1']}
         alwaysOpen
         className="CustomizedOrderAccordion"
       >
@@ -156,22 +162,22 @@ function CustomizedOrderDetails({
           msg={msg}
         />
         <Accordion.Item eventKey="0">
-          <Accordion.Header>Details</Accordion.Header>
+          <Accordion.Header>{t('details')}</Accordion.Header>
           <Accordion.Body>
             <p className="mb-6">
-              <span className="block">Description: </span>
+              <span className="block">{t('description')}: </span>
               {order?.description}
             </p>
             <p>
-              <span>Date:</span> {orderDate}
+              <span>{t('date')}:</span> {orderDate}
             </p>
             <p>
-              <span>State:</span> {order?.state.toLowerCase()}.
+              <span>{t('state')}:</span> {order?.state.toLowerCase()}.
             </p>
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="1">
-          <Accordion.Header>Atachments</Accordion.Header>
+          <Accordion.Header>{t('attachments')}</Accordion.Header>
           <Accordion.Body>
             <div className="customizedOrderDetailsAtachments">
               {images?.length ? (
@@ -183,18 +189,18 @@ function CustomizedOrderDetails({
                     onClose={handleCancelMessage}
                     aria-describedby="alert-dialog-slide-description"
                   >
-                    <DialogContent sx={{ position: "relative", padding: "0" }}>
+                    <DialogContent sx={{ position: 'relative', padding: '0' }}>
                       <CloseIcon
                         onClick={handleCancelMessage}
                         sx={{
-                          fontSize: "30px",
-                          color: "black",
-                          cursor: "pointer",
-                          marginLeft: "auto",
-                          position: "absolute",
-                          top: "0",
-                          right: "0",
-                          margin: ".5rem",
+                          fontSize: '30px',
+                          color: 'black',
+                          cursor: 'pointer',
+                          marginLeft: 'auto',
+                          position: 'absolute',
+                          top: '0',
+                          right: '0',
+                          margin: '.5rem',
                         }}
                       />
                       <img width={550} className="h-96" src={mainImage} />
@@ -218,33 +224,31 @@ function CustomizedOrderDetails({
                 </>
               ) : (
                 <div className="customizedOrderDetailsNoImages">
-                  No photos are attached
+                  {t('noPhotoAttacked')}
                 </div>
               )}
-              {employeeType === "FACTORY" ? (
+              {employeeType === 'FACTORY' ? (
                 <div className="customizedOrderDetailsPdfButton flex ">
-                  <Link to={pdf}>Download PDF</Link>
+                  <Link to={pdf}>{t('downLoad')} PDF</Link>
                 </div>
               ) : null}
             </div>
           </Accordion.Body>
         </Accordion.Item>
-        {employeeType === "FACTORY" ? (
-          <>
-            {" "}
-            <Accordion.Item eventKey="2" className="TapleDiv">
-              <Accordion.Header>Materials</Accordion.Header>
-              <Accordion.Body className="CustomizedOrderAccordion AccordionMaterialTaple">
+        {employeeType === 'FACTORY' ? (
+          <Accordion.Item eventKey="2" className="TapleDiv">
+            <Accordion.Header>{t('materials')}</Accordion.Header>
+            <Accordion.Body className="CustomizedOrderAccordion AccordionMaterialTaple">
               <Table striped bordered responsive>
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Material Name</th>
-                    <th>Quantity</th>
+                    <th>{t('name')}</th>
+                    <th>{t('quantity')}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {order.requiredMaterials.map((order, index) => (
+                  {order?.requiredMaterials?.map((order, index) => (
                     <tr key={index}>
                       <td>{index + 1}</td>
                       <td>{order?.material}</td>
@@ -253,58 +257,56 @@ function CustomizedOrderDetails({
                   ))}
                 </tbody>
               </Table>
-              </Accordion.Body>
-            </Accordion.Item>
-          </>
+            </Accordion.Body>
+          </Accordion.Item>
         ) : null}
         <Accordion.Item eventKey="4">
-          <Accordion.Header>customer Data</Accordion.Header>
+          <Accordion.Header>{t('customerData')}</Accordion.Header>
           <Accordion.Body>
             <p>
-              <span>Name: </span> {customer?.username}
+              <span>{t('name')}: </span> {customer?.username}
             </p>
-            {employeeType !== "FACTORY" ? (
+            {employeeType !== 'FACTORY' ? (
               <>
                 <p>
-                  <span>Email: </span> {customer?.email}
+                  <span>{t('email')}: </span> {customer?.email}
                 </p>
                 <p>
-                  <span>phone:</span> 0{customer?.phone} - 0{order?.phone}
+                  <span>{t('phone')}:</span> 0{customer?.phone} - 0
+                  {order?.phone}
                 </p>
                 <p>
-                  <span>Address:</span> {order?.address}
+                  <span>{t('address')}:</span> {order?.address}
                 </p>
               </>
             ) : null}
-            {employeeType !== "FACTORY" && order?.date ? (
+            {employeeType !== 'FACTORY' && order?.date ? (
               <p>
-                <span>Measuring Date: </span>
+                <span>{t('measuringDate')}: </span>
                 {order?.date?.day} - {order?.date?.time}
               </p>
             ) : null}
           </Accordion.Body>
         </Accordion.Item>
-        {(employeeType !== "ENGINEER" && engineer) || isAssigned ? (
-          <>
-            <Accordion.Item eventKey="3">
-              <Accordion.Header>Engineer Data</Accordion.Header>
-              <Accordion.Body>
-                <p>
-                  <span>Name: </span> {isAssigned?assignedEngineer?.username:engineer?.username}
-                </p>
-                <p>
-                  <span>Email: </span> {isAssigned?assignedEngineer?.email:engineer?.email}
-                </p>
-              </Accordion.Body>
-            </Accordion.Item>
-          </>
+        {(employeeType !== 'ENGINEER' && engineer) || isAssigned ? (
+          <Accordion.Item eventKey="3">
+            <Accordion.Header>{t('engineerData')}</Accordion.Header>
+            <Accordion.Body>
+              <p>
+                <span>{t('name')}: </span> {engineer?.username}
+              </p>
+              <p>
+                <span>{t('email')}: </span> {engineer?.email}
+              </p>
+            </Accordion.Body>
+          </Accordion.Item>
         ) : null}
-        {from !== "Servishistory" &&
-        employeeType === "OPERATOR" &&
+        {from !== 'Servishistory' &&
+        employeeType === 'OPERATOR' &&
         !engineer &&
         !isAssigned ? (
           <Accordion.Item eventKey="5">
-            <Accordion.Header>Assign Engineer</Accordion.Header>
+            <Accordion.Header>{t('assignEngineer')}</Accordion.Header>
             <Accordion.Body>
               <Form
                 noValidate
@@ -317,7 +319,7 @@ function CustomizedOrderDetails({
                     className="FormLabel text-2xl font-bold"
                     htmlFor="assignedEngineer"
                   >
-                    Choose Engineer
+                    {t('choose')} {t('Engineer')}
                   </Form.Label>
                   <Form.Select
                     required
@@ -326,7 +328,9 @@ function CustomizedOrderDetails({
                     id="assignedEngineer"
                     onChange={(e) => setassignedEngineer(e.target.value)}
                   >
-                    <option value="">Choose an Engineer</option>
+                    <option value="">
+                      {t('choose')} {t('Engineer')}
+                    </option>
                     {allEngineers?.map((engineer, idx) => {
                       return (
                         <option key={idx} value={engineer?._id}>
@@ -337,55 +341,56 @@ function CustomizedOrderDetails({
                   </Form.Select>
                 </Form.Group>
                 {/* only show when the coustomer need measuring */}
-                {/* {1 > 2 ? (
-                  <> */}
-                <Form.Group className="InputGroup">
-                  <Form.Label
-                    className="FormLabel text-2xl font-bold"
-                    htmlFor="measuringDate"
-                  >
-                    Date for measuring
-                  </Form.Label>
-                  <Form.Control
-                    required
-                    className="InputField"
-                    name="measuringDate"
-                    id="measuringDate"
-                    type="date"
-                    //The current date is the minimum date.
-                    min={current.toISOString().substring(0, 10)}
-                    onChange={(e) => setmeasuringDate(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="InputGroup">
-                  <Form.Label
-                    className="FormLabel text-2xl font-bold"
-                    htmlFor="measuringTime"
-                  >
-                    Time <span className="text-base">(10:00AM - 22:00PM)</span>
-                  </Form.Label>
-                  <Form.Control
-                    required
-                    className="InputField"
-                    name="measuringTime"
-                    id="measuringTime"
-                    type="time"
-                    min={minMeasuringTime}
-                    max="22:00"
-                    onChange={(e) => setmeasuringTime(e.target.value)}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    Choose a valid time and after one hour.
-                  </Form.Control.Feedback>
-                </Form.Group>
-                {/* </>
-                ) : null} */}
+                {order?.measuring ? (
+                  <>
+                    <Form.Group className="InputGroup">
+                      <Form.Label
+                        className="FormLabel text-2xl font-bold"
+                        htmlFor="measuringDate"
+                      >
+                        {t('measuringDate')}
+                      </Form.Label>
+                      <Form.Control
+                        required
+                        className="InputField"
+                        name="measuringDate"
+                        id="measuringDate"
+                        type="date"
+                        //The current date is the minimum date.
+                        min={current.toISOString().substring(0, 10)}
+                        onChange={(e) => setmeasuringDate(e.target.value)}
+                      />
+                    </Form.Group>
+                    <Form.Group className="InputGroup">
+                      <Form.Label
+                        className="FormLabel text-2xl font-bold"
+                        htmlFor="measuringTime"
+                      >
+                        {t('time')}{' '}
+                        <span className="text-base">(10:00AM - 22:00PM)</span>
+                      </Form.Label>
+                      <Form.Control
+                        required
+                        className="InputField"
+                        name="measuringTime"
+                        id="measuringTime"
+                        type="time"
+                        min={minMeasuringTime}
+                        max="22:00"
+                        onChange={(e) => setmeasuringTime(e.target.value)}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {t('ChooseAValidTime')}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </>
+                ) : null}
                 <div className=" assignEnginterButtonDiv">
                   <button
                     type="submit"
-                    className="text-2xl bg-gray-900 hover:bg-black text-white font-bold rounded-xl h-fit px-4 py-3 m-auto"
+                    className="text-2xl bg-gray-900 hover:bg-black text-white  rounded-xl h-fit px-3 py-2 m-auto"
                   >
-                    Assign
+                    {t('assign')}
                   </button>
                 </div>
               </Form>
