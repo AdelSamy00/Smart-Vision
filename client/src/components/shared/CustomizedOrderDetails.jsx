@@ -293,10 +293,12 @@ function CustomizedOrderDetails({
             <Accordion.Header>{t('engineerData')}</Accordion.Header>
             <Accordion.Body>
               <p>
-                <span>{t('name')}: </span> {engineer?.username}
+                <span>{t('name')}: </span>{' '}
+                {isAssigned ? assignedEngineer?.username : engineer?.username}
               </p>
               <p>
-                <span>{t('email')}: </span> {engineer?.email}
+                <span>{t('email')}: </span>{' '}
+                {isAssigned ? assignedEngineer?.email : engineer?.email}
               </p>
             </Accordion.Body>
           </Accordion.Item>

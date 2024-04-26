@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Typography, Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../Presenter/StyleSheets/PresenterProductsView.css';
 import { apiRequest } from '../../utils';
 import Loading from '../../components/shared/Loading';
 import { setNotification } from '../../redux/NotificationSlice';
+import { useTranslation } from 'react-i18next';
 
 function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
+  const { t } = useTranslation();
   const [requests, setRequests] = useState([]);
   const [newAssignOrders, setNewAssignOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +23,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
           method: 'GET',
           url: `/employees/engineer/${employee._id}`,
         });
-        console.log('API response:', response.data);
+        //console.log('API response:', response.data);
         const filteredRequests = response.data.services.filter(
           (request) => request.date
         );
@@ -37,7 +39,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
   }, [notification]);
   useEffect(() => {
     socket?.on('notifications', (data) => {
-      console.log(data);
+      //console.log(data);
       //let number = getNumberOfNotifications(notification);
       dispatch(setNotification([...notification, data]));
     });
@@ -51,7 +53,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
       )
     );
   }, [notification]);
-  console.log(requests);
+  // console.log(requests);
   return (
     <Grid
       container
@@ -70,9 +72,8 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
             {newAssignOrders?.length >= 1 && (
               <Grid item xs={12} sm={10} md={10}>
                 <Typography variant="h4" align="center" gutterBottom>
-                  New Sevice Requests Needs Measuring
+                  {t('newServiceRequestsMeasuring')}
                 </Typography>
-
                 <Grid
                   container
                   spacing={3}
@@ -89,7 +90,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                           gutterBottom
                           className="presenter-product-info"
                         >
-                          Customer Name:{' '}
+                          {t('customerName')}:{' '}
                           {request.serviceOrder.customer?.username}
                         </Typography>
                         <Typography
@@ -98,7 +99,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                           gutterBottom
                           className="presenter-product-description"
                         >
-                          Customer Number: 0
+                          {t('customerNumber')}:{' 0'}
                           {request.serviceOrder.customer?.phone}
                         </Typography>
                         <Typography>
@@ -119,7 +120,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                                 },
                               }}
                             >
-                              Service Details
+                              {t('serviceDetails')}
                             </Button>
                           </Link>
                         </Typography>
@@ -129,9 +130,9 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                           gutterBottom
                           className="presenter-product-description"
                         >
-                          Day: {request.serviceOrder?.date?.day}
-                          <span style={{ marginLeft: '1.5rem' }}>
-                            Hour :{request.serviceOrder?.date?.time}
+                          {t('day')}: {request.serviceOrder?.date?.day}
+                          <span style={{ marginInline: '1.5rem' }}>
+                            {t('hour')}: {request.serviceOrder?.date?.time}
                           </span>
                         </Typography>
                         <div className="button-container">
@@ -152,8 +153,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                                 padding: '0px 15px',
                               }}
                             >
-                              {' '}
-                              Send Order
+                              {t('sendOrderToFactory')}
                             </Button>
                           </Link>
                         </div>
@@ -167,9 +167,8 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
           {/* Old Services */}
           <Grid item xs={12} sm={10} md={10}>
             <Typography variant="h4" align="center" gutterBottom>
-              Needs Measuring Sevice Requests
+              {t('serviceRequestsMeasuring')}
             </Typography>
-
             <Grid
               container
               spacing={3}
@@ -180,15 +179,13 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
               {requests.map((request, index) => (
                 <Grid key={index} item xs={12} md={6} lg={4}>
                   <div className={`presenter-product-card`}>
-                    {' '}
-                    {console.log(request)}
                     <Typography
                       variant="body2"
                       align="center"
                       gutterBottom
                       className="presenter-product-info"
                     >
-                      Customer Name: {request.customer?.username}
+                      {t('customerName')}: {request.customer?.username}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -196,7 +193,8 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                       gutterBottom
                       className="presenter-product-description"
                     >
-                      Customer Number: 0{request.customer?.phone}
+                      {t('customerNumber')}:{' 0'}
+                      {request.customer?.phone}
                     </Typography>
                     <Typography>
                       <Link to={`/engineer/order-details/${request?._id}`}>
@@ -214,7 +212,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                             },
                           }}
                         >
-                          Service Details
+                          {t('serviceDetails')}
                         </Button>
                       </Link>
                     </Typography>
@@ -224,9 +222,9 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                       gutterBottom
                       className="presenter-product-description"
                     >
-                      Day: {request?.date?.day}
-                      <span style={{ marginLeft: '1.5rem' }}>
-                        Hour :{request?.date?.time}
+                      {t('day')}: {request?.date?.day}
+                      <span style={{ marginInline: '1.5rem' }}>
+                        {t('hour')}: {request?.date?.time}
                       </span>
                     </Typography>
                     <div className="button-container">
@@ -247,8 +245,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                             padding: '0px 15px',
                           }}
                         >
-                          {' '}
-                          Send Order
+                          {t('sendOrderToFactory')}
                         </Button>
                       </Link>
                     </div>
@@ -261,7 +258,9 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
       ) : (
         <Grid item xs={12} sm={8}>
           <Typography variant="h5" align="center" gutterBottom>
-            There's no requests at the moment.
+            <div className="text-gray-400 mt-20">
+              {t('noRequestsAtTheMoment')}
+            </div>
           </Typography>
         </Grid>
       )}

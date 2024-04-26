@@ -230,7 +230,7 @@ export const getAllServices = async (req, res, next) => {
 
 export const getAllEngineers = async (req, res, next) => {
   try {
-    const engineers = await Employees.find({ jobTitle: 'Engineer' });
+    const engineers = await Employees.find({ jobTitle: 'engineer' });
 
     if (!engineers || engineers.length === 0) {
       next('No engineers found');

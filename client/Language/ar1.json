@@ -39,5 +39,18 @@
     "time": "الوقت",
     "ChooseAValidTime": "اختر وقتًا صالحًا",
     "orderId": "رقم الطلب",
-    "sendOrderToFactory": "إرسال الطلب إلى المصنع"
+    "sendOrderToFactory": "إرسال الطلب إلى المصنع",
+    "serviceRequests": "طلبات الخدمة",
+    "newServiceRequests": "طلبات خدمة جديدة",
+    "customerName": "اسم العميل",
+    "customerNumber": "رقم العميل",
+    "serviceDetails": "تفاصيل الخدمة",
+    "noRequestsAtTheMoment": "لا توجد طلبات في الوقت الحالي",
+    "serviceRequestsMeasuring": "طلبات الخدمة تحتاج إلى قياس",
+    "newServiceRequestsMeasuring": "طلبات الخدمة الجديدة تحتاج إلى قياس",
+    "day": "يوم",
+    "hour": "ساعة",
+    "materialNameEmpty": "اسم المادة لا يمكن أن يكون فارغًا",
+    "materialQuantityEmpty": "كمية المادة لا يمكن أن تكون فارغة",
+    "uploadFile": "تحميل الملف"
 }

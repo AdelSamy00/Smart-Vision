@@ -6,8 +6,10 @@ import '../Presenter/StyleSheets/PresenterProductsView.css';
 import { apiRequest } from '../../utils';
 import Loading from '../../components/shared/Loading';
 import { setNotification } from '../../redux/NotificationSlice';
+import { useTranslation } from 'react-i18next';
 
 function ViewCutomizedOrders({ socket, setSocket }) {
+  const { t } = useTranslation();
   const [requests, setRequests] = useState([]);
   const [newAssignOrders, setNewAssignOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -21,11 +23,11 @@ function ViewCutomizedOrders({ socket, setSocket }) {
           method: 'GET',
           url: `/employees/engineer/${employee._id}`,
         });
-        console.log('API response:', response.data);
+        //console.log('API response:', response.data);
         const filteredRequests = response.data.services.filter(
           (request) => !request.date
         );
-        console.log(filteredRequests);
+       // console.log(filteredRequests);
         setRequests(filteredRequests);
 
         setIsLoading(false);
@@ -36,13 +38,15 @@ function ViewCutomizedOrders({ socket, setSocket }) {
 
     fetchProducts();
   }, [notification]);
+
   useEffect(() => {
     socket?.on('notifications', (data) => {
-      console.log(data);
+      //console.log(data);
       //let number = getNumberOfNotifications(notification);
       dispatch(setNotification([...notification, data]));
     });
   }, [socket]);
+
   useEffect(() => {
     setNewAssignOrders(
       notification.filter(
@@ -52,6 +56,7 @@ function ViewCutomizedOrders({ socket, setSocket }) {
       )
     );
   }, [notification]);
+
   return (
     <Grid
       container
@@ -60,9 +65,9 @@ function ViewCutomizedOrders({ socket, setSocket }) {
       className="presenter-products-container"
     >
       {isLoading ? (
-        <Grid item>
+        <div className="h-96">
           <Loading />
-        </Grid>
+        </div>
       ) : requests.length > 0 ? (
         <>
           {/* New Services */}
@@ -70,9 +75,8 @@ function ViewCutomizedOrders({ socket, setSocket }) {
             {newAssignOrders?.length >= 1 && (
               <Grid item xs={12} sm={10} md={10}>
                 <Typography variant="h4" align="center" gutterBottom>
-                  New Sevice Requests
+                  {t('newServiceRequests')}
                 </Typography>
-
                 <Grid
                   container
                   spacing={3}
@@ -90,7 +94,7 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                           gutterBottom
                           className="presenter-product-info"
                         >
-                          Customer Name:{' '}
+                          {t('customerName')}:{' '}
                           {request.serviceOrder.customer?.username}
                         </Typography>
                         <Typography
@@ -99,11 +103,13 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                           gutterBottom
                           className="presenter-product-description"
                         >
-                          Customer Number: 0
+                          {t('customerNumber')}:{' 0'}
                           {request.serviceOrder.customer?.phone}
                         </Typography>
                         <Typography>
-                          <Link to={`/e/order-details/${request.serviceOrder?._id}`}>
+                          <Link
+                            to={`/engineer/order-details/${request.serviceOrder?._id}`}
+                          >
                             <Button
                               variant="text"
                               sx={{
@@ -118,14 +124,14 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                                 },
                               }}
                             >
-                              Service Details
+                              {t('serviceDetails')}
                             </Button>
                           </Link>
                         </Typography>
                         <div className="button-container">
                           {' '}
                           <Link
-                            to={`/engineer/send-request/${request.serviceOrder?._id}`}
+                            to={`/engineer/send/request/${request.serviceOrder?._id}`}
                             className="link-style"
                           >
                             <Button
@@ -140,8 +146,7 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                                 padding: '0px 15px',
                               }}
                             >
-                              {' '}
-                              Send Order
+                              {t('sendOrderToFactory')}
                             </Button>
                           </Link>
                         </div>
@@ -155,9 +160,8 @@ function ViewCutomizedOrders({ socket, setSocket }) {
           {/* Old Services */}
           <Grid item xs={12} sm={10} md={10}>
             <Typography variant="h4" align="center" gutterBottom>
-              Sevice Requests
+              {t('serviceRequests')}
             </Typography>
-
             <Grid
               container
               spacing={3}
@@ -175,7 +179,7 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                       gutterBottom
                       className="presenter-product-info"
                     >
-                      Customer Name: {request.customer.username}
+                      {t('customerName')}: {request.customer.username}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -183,10 +187,11 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                       gutterBottom
                       className="presenter-product-description"
                     >
-                      Customer Number: 0{request.customer.phone}
+                      {t('customerNumber')}:{' 0'}
+                      {request.customer.phone}
                     </Typography>
                     <Typography>
-                      <Link to={`/e/order-details/${request._id}`}>
+                      <Link to={`/engineer/order-details/${request._id}`}>
                         <Button
                           variant="text"
                           sx={{
@@ -201,14 +206,13 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                             },
                           }}
                         >
-                          Service Details
+                          {t('serviceDetails')}
                         </Button>
                       </Link>
                     </Typography>
                     <div className="button-container">
-                      {' '}
                       <Link
-                        to={`/engineer/send-request/${request._id}`}
+                        to={`/engineer/send-order/${request._id}`}
                         className="link-style"
                       >
                         <Button
@@ -223,8 +227,7 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                             padding: '0px 15px',
                           }}
                         >
-                          {' '}
-                          Send Order
+                          {t('sendOrderToFactory')}
                         </Button>
                       </Link>
                     </div>
@@ -237,7 +240,9 @@ function ViewCutomizedOrders({ socket, setSocket }) {
       ) : (
         <Grid item xs={12} sm={8}>
           <Typography variant="h5" align="center" gutterBottom>
-            There's no requests at the moment.
+            <div className="text-gray-400 mt-20">
+              {t('noRequestsAtTheMoment')}
+            </div>
           </Typography>
         </Grid>
       )}

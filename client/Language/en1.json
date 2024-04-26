@@ -30,7 +30,6 @@
     "materials": "Materials",
     "name": "Name",
     "quantity": "Quantity",
-    "customer": "Customer",
     "data": "Data",
     "customerData": "Customer Data",
     "engineerData": "Engineer Data",
@@ -41,5 +40,18 @@
     "time": "Time",
     "ChooseAValidTime": "Choose a valid time.",
     "orderId": "Order ID",
-    "sendOrderToFactory":"Send order to factory"
+    "sendOrderToFactory": "Send order to factory",
+    "serviceRequests": "Sevice Requests",
+    "newServiceRequests": "New Sevice Requests",
+    "serviceRequestsMeasuring": "Needs Measuring Sevice Requests",
+    "newServiceRequestsMeasuring": "New Sevice Requests Needs Measuring",
+    "customerName":"Customer Name",
+    "customerNumber":"Customer Number",
+    "serviceDetails":"Service Details",
+    "noRequestsAtTheMoment":"There's no requests at the moment",
+    "day":"Day",
+    "hour":"Hour",
+    "materialNameEmpty": "Material name can not be empty",
+    "materialQuantityEmpty": "Material Quantity can not be empty",
+    "uploadFile": "Upload File"
 }
