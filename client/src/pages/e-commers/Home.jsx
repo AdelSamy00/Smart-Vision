@@ -9,44 +9,60 @@ import axios from "axios";
 import "react-slideshow-image/dist/styles.css";
 import { Fade, Zoom, Slide } from "react-slideshow-image";
 import Loading from "../../components/shared/Loading";
+import { useTranslation } from "react-i18next";
+import i18n from "../../../Language/translate";
 
-const categories = [
-  { id: 1, name: "Bed", imageUrl: "../beds.avif" },
-  { id: 6, name: "Closet", imageUrl: "../closet.avif" },
-  { id: 2, name: "Sofa", imageUrl: "../sofa.jpeg" },
-  { id: 3, name: "Chair", imageUrl: "../chair.avif" },
-  { id: 4, name: "Kitchen", imageUrl: "../kitchen.avif" },
-  { id: 5, name: "Table", imageUrl: "../TABLE.jpg" },
-  { id: 9, name: "Last", imageUrl: "" },
-];
-const prices = [
-  { low: 5000, imageUrl: "../chair.jpg", name: "Under 5000EGP" },
-  { low: 13000, imageUrl: "../sofa.avif", name: "Under 13000EGP" },
-  { low: 33000, imageUrl: "../bed.jpg", name: "Under 33000EGP" },
-  { low: "", name: "Last", imageUrl: "" },
-];
-const offers = [
-  {
-    id: 1,
-    title: "50% Off",
-    description: "Get 50% off on selected items",
-    imageUrl: "../50%.avif",
-  },
-  {
-    id: 2,
-    title: "Flash Sale",
-    description: "Limited time offer! Flash sale on all products",
-    imageUrl: "../flash-sale-3d.jpg",
-  },
-  {
-    id: 3,
-    title: "Free Shipping",
-    description: "Enjoy free shipping on all orders over $50",
-    imageUrl: "../free_delivery.jpg",
-  },
-  // Add more offers as needed
-];
 function Homepage() {
+  const { t } = useTranslation();
+
+  const categories = [
+    { id: 1, name: t("bed"), imageUrl: "../beds.avif" },
+    { id: 6, name: t("closet"), imageUrl: "../closet.avif" },
+    { id: 2, name: t("sofa"), imageUrl: "../sofa.jpeg" },
+    { id: 3, name: t("chair"), imageUrl: "../chair.avif" },
+    { id: 4, name: t("kitchen"), imageUrl: "../kitchen.avif" },
+    { id: 5, name: t("table"), imageUrl: "../TABLE.jpg" },
+    { id: 9, name: "Last", imageUrl: "" },
+  ];
+  const prices = [
+    {
+      low: 5000,
+      imageUrl: "../chair.jpg",
+      name: ` ${t("Under")} 5000 ${t("EGP")}`,
+    },
+    {
+      low: 13000,
+      imageUrl: "../sofa.avif",
+      name: ` ${t("Under")} 13000 ${t("EGP")}`,
+    },
+    {
+      low: 33000,
+      imageUrl: "../bed.jpg",
+      name: ` ${t("Under")} 33000 ${t("EGP")}`,
+    },
+    { low: "", name: "Last", imageUrl: "" },
+  ];
+  const offers = [
+    {
+      id: 1,
+      title: "50% Off",
+      description: "Get 50% off on selected items",
+      imageUrl: "../50%.avif",
+    },
+    {
+      id: 2,
+      title: "Flash Sale",
+      description: "Limited time offer! Flash sale on all products",
+      imageUrl: "../flash-sale-3d.jpg",
+    },
+    {
+      id: 3,
+      title: "Free Shipping",
+      description: "Enjoy free shipping on all orders over $50",
+      imageUrl: "../free_delivery.jpg",
+    },
+    // Add more offers as needed
+  ];
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedPrice, setSelectedPrice] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -96,14 +112,16 @@ function Homepage() {
         </div>
       </div>
       <h2 style={{ fontWeight: "bold", fontSize: "27px" }}>
-        Browse furniture sale
+        {t("Browse furniture sale")}
       </h2>
       <HomeSlider
         items={categories}
         option="category"
         setSelectedOption={setSelectedCategory}
       />
-      <h2 style={{ fontWeight: "bold", fontSize: "27px" }}>Shop BY Price</h2>
+      <h2 style={{ fontWeight: "bold", fontSize: "27px" }}>
+        {t("Shop BY Price")}
+      </h2>
       <HomeSlider
         items={prices}
         option="price"
@@ -113,14 +131,18 @@ function Homepage() {
         <Loading />
       ) : (
         <>
-          <h2 style={{ fontWeight: "bold", fontSize: "27px" }}>Our Products</h2>
+          <h2 style={{ fontWeight: "bold", fontSize: "27px" }}>
+            {t("Our Products")}
+          </h2>
           <HomeSlider items={products} option="product" />
         </>
       )}
       {(selectedCategory || selectedPrice) && (
         <Store
           key={selectedCategory}
-          selectedCategory={selectedCategory? selectedCategory?.toLowerCase():"All"}
+          selectedCategory={
+            selectedCategory ? selectedCategory?.toLowerCase() : "All"
+          }
           selectedPrice={selectedPrice}
         />
       )}
@@ -137,11 +159,13 @@ function Homepage() {
             height={60}
             className="self-center"
           />
-          <h2 className="text-3xl text-blue-500 text-center ">Our Vision</h2>
+          <h2 className="text-3xl text-blue-500 text-center ">
+            {t("OurVision")}
+          </h2>
           <p className="text-black">
-            Smart Vision seeks to provide the best services with high quality to
-            its customers while achieving the equation between (commitment -
-            price - quality)
+            {t(
+              "SmartVisionMessage"
+            )}
           </p>
         </div>
         <div className="md:w-1/3 flex flex-col p-10 hover:bg-slate-100 transition ease-in duration-800">
@@ -152,11 +176,11 @@ function Homepage() {
             height={60}
             className="self-center"
           />
-          <h2 className="text-3xl text-blue-500 text-center">Mission</h2>
+          <h2 className="text-3xl text-blue-500 text-center">{t("Mission")}</h2>
           <p className="text-black">
-            We affirm our keenness to work continuously to obtain excellent
-            results by forming a partnership between us and our customers in
-            achieving the vision of Smart Vision.
+          {t(
+              "SmartVisionMessage1"
+            )}
           </p>
         </div>
         <div className="md:w-1/3 flex flex-col  bg-slate-300  p-10 hover:bg-slate-100 transition ease-in duration-800">
@@ -167,11 +191,11 @@ function Homepage() {
             height={60}
             className="self-center"
           />
-          <h2 className="text-3xl text-blue-500 text-center">Commitment</h2>
+          <h2 className="text-3xl text-blue-500 text-center">{t("Commitment")}</h2>
           <p className="text-black">
-            We are committed to hard and continuous work and learning to provide
-            our services to our customers without discrimination, and to work to
-            develop our products to reach the highest levels of quality
+          {t(
+              "SmartVisionMessage2"
+            )}
           </p>
         </div>
       </div>

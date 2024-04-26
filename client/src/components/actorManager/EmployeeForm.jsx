@@ -27,25 +27,6 @@ function getmaxEmployeeDateOfBirth() {
   return `${maxYear}${currentDayAndMonth}`;
 }
 
-const employeeAllTypes = [
-  "engineer",
-  "inventory manager",
-  "factory",
-  "presenter",
-  "actor manager",
-  "operator",
-];
-const qualificationAllTypes = [
-  "Bachelor's Degree",
-  "Master's Degree",
-  "Doctor of Philosophy",
-  "Professional Certification (e.g., CPA, CFA)",
-  "Diploma",
-  "Associate Degree",
-  "High School Diploma/GED",
-  "Technical Certification",
-];
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -53,6 +34,24 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 function EmployeeForm() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const employeeAllTypes = [
+    t("Engineer"),
+    t("InventoryManager"),
+    t("FactotyManager"),
+    t("Presenter"),
+    t("ActorManager"),
+    t("Operator"),
+  ];
+  const qualificationAllTypes = [
+    t("Bachelor's Degree"),
+    t("Master's Degree"),
+    t("Doctor of Philosophy"),
+    t("Professional Certification (e.g., CPA, CFA)"),
+    t("Diploma"),
+    t("Associate Degree"),
+    t("High School Diploma/GED"),
+    t("Technical Certification"),
+  ];
   const { employeeId } = useParams();
   const [firstName, setfirstName] = useState("");
   const [lastName, setlastName] = useState("");
@@ -214,10 +213,8 @@ function EmployeeForm() {
     <>
       {!isLoading ? (
         <main className="employeeFormMain">
-          <div className="employeeFormHeader" style={{position:"relative"}}>
-            <h2>
-              {employeeId ? t("edit") : t("add")} {t("employee")}
-            </h2>
+          <div className="employeeFormHeader" style={{ position: "relative" }}>
+            <h2>{employeeId ? t("EditEmployee") : t("AddNewEmployee")}</h2>
             {employeeId ? (
               <button
                 onClick={() => setshowDeleteMessage(true)}
@@ -249,7 +246,7 @@ function EmployeeForm() {
                   name="firstName"
                   id="firstName"
                   type="text"
-                  placeholder="First Name"
+                  placeholder={t("firstName")}
                   value={firstName}
                   onChange={(e) => setfirstName(e.target.value)}
                 />
@@ -264,7 +261,7 @@ function EmployeeForm() {
                   name="lastName"
                   id="lastName"
                   type="text"
-                  placeholder="last Name"
+                  placeholder={t("lastName")}
                   value={lastName}
                   onChange={(e) => setlastName(e.target.value)}
                 />
@@ -281,7 +278,7 @@ function EmployeeForm() {
                   name="email"
                   id="email"
                   type="email"
-                  placeholder="Email"
+                  placeholder={t("email")}
                   value={email}
                   onChange={(e) => setemail(e.target.value)}
                 />
@@ -296,7 +293,7 @@ function EmployeeForm() {
                   name="phone"
                   id="phone"
                   type="number"
-                  placeholder="Phone"
+                  placeholder={t("phone")}
                   value={phone}
                   onChange={(e) => setphone(e.target.value)}
                 />
@@ -315,9 +312,9 @@ function EmployeeForm() {
                   value={gender}
                   onChange={(e) => setgender(e.target.value)}
                 >
-                  <option value="">Choose a option</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
+                  <option value="">{t("ChooseOption")}</option>
+                  <option value="Male">{t("Male")}</option>
+                  <option value="Female">{t("Female")}</option>
                 </Form.Select>
               </Form.Group>
               <Form.Group className="InputGroup">
@@ -346,7 +343,7 @@ function EmployeeForm() {
                 name="address"
                 id="address"
                 type="text"
-                placeholder="Address"
+                placeholder={t("address")}
                 value={address}
                 onChange={(e) => setaddress(e.target.value)}
               />
@@ -365,7 +362,7 @@ function EmployeeForm() {
                   value={qualification}
                   onChange={(e) => setqualification(e.target.value)}
                 >
-                  <option value="">Choose a option</option>
+                  <option value="">{t("ChooseOption")}</option>
                   {qualificationAllTypes.map((type, idx) => {
                     return (
                       <option key={idx} value={type}>
@@ -387,7 +384,7 @@ function EmployeeForm() {
                   value={employeeType}
                   onChange={(e) => setemployeeType(e.target.value)}
                 >
-                  <option value="">Choose a option</option>
+                  <option value="">{t("ChooseOption")}</option>
                   {employeeAllTypes.map((type, idx) => {
                     return (
                       <option key={idx} value={type}>
@@ -409,7 +406,7 @@ function EmployeeForm() {
                   name="salary"
                   id="salary"
                   type="number"
-                  placeholder="Salary"
+                  placeholder={t("Salary")}
                   value={salary}
                   min={0}
                   onChange={(e) => setsalary(e.target.value)}
@@ -417,18 +414,25 @@ function EmployeeForm() {
               </Form.Group>
               <Form.Group className="InputGroup ">
                 <Form.Label className="FormLabel" htmlFor="uploadFile">
-                  Photo
+                  {t("photo")}
                 </Form.Label>
                 <div className="flex justify-items-center gap-2 mt-2">
-                  <label htmlFor="uploadFile" className="text-gray-600 mt-2">
-                    Upload File
+                  <label
+                    htmlFor="uploadFile"
+                    className="text-gray-600 mt-2"
+                    style={{ order: i18n.language === "ar" ? "2" : "1" }}
+                  >
+                    {t("UploadFile")}
                   </label>
                   <input
                     type="file"
                     id="uploadFile"
                     name="uploadFile"
                     className="uploadBtn file:hidden text-gray-700 bg-gray-300"
-                    style={{ width: "145px" }}
+                    style={{
+                      width: "145px",
+                      order: i18n.language === "ar" ? "1" : "2",
+                    }}
                     onChange={(e) => {
                       setimage(e.target.files[0]);
                     }}
@@ -440,7 +444,7 @@ function EmployeeForm() {
               <div className="employeeFormDivForTowFields">
                 <Form.Group className="InputGroup">
                   <Form.Label htmlFor="password" className="FormLabel">
-                    Password
+                    {t("password")}
                   </Form.Label>
                   <Form.Control
                     required
@@ -448,18 +452,18 @@ function EmployeeForm() {
                     name="password"
                     id="password"
                     type="password"
-                    placeholder="Password"
+                    placeholder={t("password")}
                     minLength={"8"}
                     value={password}
                     onChange={(e) => setpassword(e.target.value)}
                   />
                   <Form.Control.Feedback type="invalid">
-                    Minimum 8 characters.
+                    {t("Minimum 8 characters")}.
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="InputGroup">
                   <Form.Label htmlFor="confirmpassword" className="FormLabel">
-                    confirm Password
+                    {t("confirmPassword")}
                   </Form.Label>
                   <Form.Control
                     isInvalid={!PasswordConformed}
@@ -468,12 +472,12 @@ function EmployeeForm() {
                     id="confirmpassword"
                     type="password"
                     minLength={"8"}
-                    placeholder="confirm Password"
+                    placeholder={t("confirmPassword")}
                     value={confirmpassword}
                     onChange={(e) => setconfirmpassword(e.target.value)}
                   />
                   <Form.Control.Feedback type="invalid">
-                    Password not Conform.
+                    {t("notConfirmedoassword")}
                   </Form.Control.Feedback>
                 </Form.Group>
               </div>

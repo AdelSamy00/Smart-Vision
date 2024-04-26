@@ -13,9 +13,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import Badge from '@mui/material/Badge';
 import axios from 'axios';
 import LoginMessage from '../e-commers/LoginMessage';
-
+import { useTranslation } from 'react-i18next';
 const Header = () => {
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
   const { customer } = useSelector((state) => state.customer);
   const { cart } = useSelector((state) => state.cart);
   const [productsInCart, setproductsInCart] = useState(null);
@@ -82,8 +83,12 @@ const Header = () => {
     setfilteredProducts(filtered);
   }, [searchValue]);
 
+  const toggleLanguage = () => {
+    const newLanguage = i18n.language === 'en' ? 'ar' : 'en';
+    i18n.changeLanguage(newLanguage);
+  };
   return (
-    <header style={{ display: 'flex' }}>
+    <header style={{ display: 'flex' ,direction:"ltr"}}>
       <div className="menu">
         <Menu></Menu>
         <p>Menu</p>
@@ -241,9 +246,10 @@ const Header = () => {
           </ul>
           <button
             className="btnHover lang"
+            onClick={toggleLanguage}
             style={{ fontSize: '19px', outline: 'none' }}
           >
-            العربية
+            {i18n.language === 'en' ? 'العربية' : 'English'}
           </button>
         </Toolbar>
       </div>
