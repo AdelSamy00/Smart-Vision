@@ -169,8 +169,8 @@ function App() {
         {/* Private Inventory Manager Routes */}
         <Route element={<InventoryManagerLayout />}>
           <Route path="/inventory/home" element={<InventoryHome />} />
-          <Route path="/add/product" element={<AddProductForm />} />
-          <Route path="/add/matrial" element={<AddMatrialForm />} />
+          <Route path="/inventory/add/product" element={<AddProductForm />} />
+          <Route path="/inventory/add/matrial" element={<AddMatrialForm />} />
           <Route path="/inventory/orders" element={<AllInventoryOrders />} />
           <Route
             path="/inventory/update/product/:productId"
@@ -182,7 +182,7 @@ function App() {
           />
           <Route path="/inventory/transaction" element={<TransactionsPage />} />
           <Route
-            path="/inventory/matrial/history"
+            path="/inventory/history"
             element={<InventoryTransactions />}
           />
         </Route>
@@ -263,12 +263,12 @@ function App() {
             path="/operator/order-details/:orderId"
             element={<ProductOrderDetails />}
           />
-          <Route path="/operator/add-customer" element={<AddCustomer />} />
+          {/* <Route path="/operator/add-customer" element={<AddCustomer />} />
           <Route
             path="/operator/edit-customer/:customerId"
             element={<EditCustomer />}
           />
-          <Route path="/operator/customers" element={<ViewCustomers />} />
+          <Route path="/operator/customers" element={<ViewCustomers />} /> */}
         </Route>
         {/* Private actor manager Routes */}
         <Route element={<ActorLayout />}>

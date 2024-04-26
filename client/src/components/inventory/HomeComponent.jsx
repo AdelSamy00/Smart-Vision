@@ -67,26 +67,28 @@ function HomeComponent({ Allproducts }) {
           >
             {products.map((product, index) => (
               <Grid key={index} item xs={12} md={6} lg={4}>
-                <Card sx={{ maxWidth: 300 }} style={{backgroundColor:"#eaf4f4"}}>
+                <Card
+                  sx={{ maxWidth: 300 }}
+                  style={{ backgroundColor: '#eaf4f4' }}
+                >
                   <CardHeader />
                   <CardContent
                     style={{
                       marginTop: '-20px',
                       fontWeight: 'bold',
                       fontSize: '18px',
-                    }} 
-
+                    }}
                   >
                     Name : {product.name}
                   </CardContent>
                   <CardContent style={{ marginTop: '-20px' }}>
-                    Quantity : {product.quantity}
+                    Quantity : {product?.quantity}
                   </CardContent>
                   <CardActions
                     style={{ display: 'flex', justifyContent: 'space-between' }}
                   >
                     <IconButton style={{ marginTop: '-20px' }}>
-                      <Link to={`/updateProduct/${product._id}`}>
+                      <Link to={`/inventory/update/product/${product._id}`}>
                         <EditIcon />
                       </Link>
                     </IconButton>
@@ -116,7 +118,8 @@ function HomeComponent({ Allproducts }) {
                         variant="body2"
                         style={{ marginBottom: '5px', fontSize: '15px' }}
                       >
-                        colors : {product.colors ? product.colors.join(' , ') : ''}
+                        colors :{' '}
+                        {product.colors ? product.colors.join(' , ') : ''}
                       </Typography>
                       <Typography
                         variant="body2"
@@ -128,7 +131,7 @@ function HomeComponent({ Allproducts }) {
                         variant="body2"
                         onClick={() => handleDelete(product._id)}
                       >
-                        <DeleteIcon style={{ color: '#495057' }}/>
+                        <DeleteIcon style={{ color: '#495057' }} />
                       </Typography>
                     </CardContent>
                   </Collapse>

@@ -7,10 +7,6 @@ import Box from "@mui/material/Box";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
-import FileCopyIcon from "@mui/icons-material/FileCopyOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import PrintIcon from "@mui/icons-material/Print";
-import ShareIcon from "@mui/icons-material/Share";
 import { Link } from "react-router-dom";
 
 const InventoryHome = () => {
@@ -20,8 +16,22 @@ const InventoryHome = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const actions = [
-    { icon: <Link to={"/addMatrial"}><SpeedDialIcon /></Link>, name: 'Add Material' },
-    { icon:  <Link to={"/addProduct"}><SpeedDialIcon /></Link>, name: 'Add Product' },
+    {
+      icon: (
+        <Link to={'/inventory/add/matrial'}>
+          <SpeedDialIcon />
+        </Link>
+      ),
+      name: 'Add Material',
+    },
+    {
+      icon: (
+        <Link to={'/inventory/add/product'}>
+          <SpeedDialIcon />
+        </Link>
+      ),
+      name: 'Add Product',
+    },
   ];
 
   const fetchData = async () => {

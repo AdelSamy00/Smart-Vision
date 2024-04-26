@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Grid, Typography, Button } from '@mui/material';
+import { useState } from 'react';
+import { Grid, Button } from '@mui/material';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 function MatrialComponnent({ AllMaterials }) {
   const [Matrials, setMatrials] = useState(AllMaterials);
-  
+
   const handleDelete = async (matrialId) => {
     try {
       const response = await axios.delete('/Materials/', {
@@ -40,7 +40,7 @@ function MatrialComponnent({ AllMaterials }) {
       alignItems="center"
       className="presenter-products-container"
     >
-      {Matrials.length > 0 ? (
+      {Matrials?.length > 0 ? (
         <Grid item xs={12} sm={10} md={10}>
           <Grid
             container
@@ -49,28 +49,30 @@ function MatrialComponnent({ AllMaterials }) {
             align="center"
             justifyContent="center"
           >
-            {Matrials.map((matrial, index) => (
+            {Matrials?.map((matrial, index) => (
               <Grid key={index} item xs={12} md={6} lg={4}>
-                <Card sx={{ maxWidth: 300 }} style={{backgroundColor:"#eaf4f4"}}>
+                <Card
+                  sx={{ maxWidth: 300 }}
+                  style={{ backgroundColor: '#eaf4f4' }}
+                >
                   <CardHeader
-                    title={matrial.name}
+                    title={matrial?.name}
                     style={{ marginTop: '10px' }}
                   />
                   <CardContent style={{ marginTop: '-20px' }}>
-                    Quantity : {matrial.quantity}
+                    Quantity : {matrial?.quantity}
                   </CardContent>
                   <CardActions
                     style={{ display: 'flex', justifyContent: 'space-between' }}
                   >
-                    <IconButton style={{color:"#cce3de"}}>
-                      <Link to={`/updateMatrial/${matrial._id}`}>
+                    <IconButton style={{ color: '#cce3de' }}>
+                      <Link to={`/inventory/update/matrial/${matrial?._id}`}>
                         <EditIcon style={{ color: '#495057' }} />
                       </Link>
                     </IconButton>
-                    <IconButton onClick={() => handleDelete(matrial._id)}>
+                    <IconButton onClick={() => handleDelete(matrial?._id)}>
                       <DeleteIcon style={{ color: '#495057' }} />
                     </IconButton>
-   
                   </CardActions>
                 </Card>
               </Grid>

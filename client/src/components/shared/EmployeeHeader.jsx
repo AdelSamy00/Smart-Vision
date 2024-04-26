@@ -67,7 +67,7 @@ const INVENTORY = [
     title: 'Transaction',
   },
   {
-    path: '/inventory/matrial/history',
+    path: '/inventory/history',
     title: 'History',
   },
 ];
