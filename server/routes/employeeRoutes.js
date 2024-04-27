@@ -57,8 +57,7 @@ router.put('/customer', manageCustomers);
 //#endregion */
 
 router.use(`/presenter`, presenterRoute);
-//delete unfavorite Reviews
-router.delete('/delete-review', deleteReview);
+
 //#region Engineer
 router.get('/engineer', getAllEngineers); //help operator to get all engineer.
 //get Assigned Customization Orders to Engineer

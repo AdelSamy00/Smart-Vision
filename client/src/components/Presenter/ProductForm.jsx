@@ -69,8 +69,10 @@ function ProductForm({ product, method }) {
   }
   async function editProduct(imagesUrl) {
     try {
-      await axios
-        .put(`/products/${product?._id}`, {
+      const res = await apiRequest({
+        url: `/products/${product?._id}`,
+        method: 'PUT',
+        data: {
           name: productName,
           description,
           images: [...images, ...imagesUrl],
@@ -79,14 +81,16 @@ function ProductForm({ product, method }) {
           points,
           colors,
           show,
-        })
-        .then((res) => {
-          console.log(res.data);
-          navigate('/presenter-home');
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        },
+        token: employee?.token,
+      });
+      if (res?.data?.success) {
+        console.log(res.data);
+        navigate('/presenter/home');
+      } else {
+        console.log(res?.message);
+        isLoading(false);
+      }
     } catch (error) {
       console.log(error);
     }

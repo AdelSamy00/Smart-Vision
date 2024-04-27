@@ -7,8 +7,7 @@ import Reviews from '../models/Review.js';
 import ServicesOrders from '../models/ServiceOrder.js';
 import Employees from '../models/Employee.js';
 import { hashString } from '../utils/index.js';
-import bcrypt from 'bcrypt';
-
+import { calculateTotalRating } from './productControlles.js';
 
 export const getAllCustomers = async (req, res, next) => {
   const customers = await Customers.find({}).select('-password');
@@ -20,7 +19,7 @@ export const getAllCustomers = async (req, res, next) => {
 };
 
 export const getCustomerById = async (req, res, next) => {
-  const {customerId} = req.params;
+  const { customerId } = req.params;
 
   try {
     const customer = await Customers.findById(customerId);
@@ -71,15 +70,8 @@ export const deleteCustomer = async (req, res, next) => {
 };
 export const manageCustomers = async (req, res, next) => {
   try {
-    const {
-      customerId,
-      username,
-      email,
-      gender,
-      phone,
-      address,
-      password
-    } = req.body;
+    const { customerId, username, email, gender, phone, address, password } =
+      req.body;
     const hashedPassword = await hashString(password);
 
     const customerData = {
@@ -89,7 +81,7 @@ export const manageCustomers = async (req, res, next) => {
       gender,
       phone,
       address,
-      password: hashedPassword 
+      password: hashedPassword,
     };
 
     if (
@@ -98,7 +90,7 @@ export const manageCustomers = async (req, res, next) => {
       !email ||
       !gender ||
       !phone ||
-      !address||
+      !address ||
       !password
     ) {
       next('Provide Required Fields!');
@@ -108,7 +100,7 @@ export const manageCustomers = async (req, res, next) => {
     const updatedCustomer = await Customers.findByIdAndUpdate(
       { _id: customerId },
       { ...customerData },
-      { new: true,} 
+      { new: true }
     );
 
     res.status(200).json({
@@ -126,24 +118,10 @@ export const manageCustomers = async (req, res, next) => {
 };
 export const addCustomer = async (req, res, next) => {
   try {
-    const {
-      username,
-      email,
-      password,
-      gender,
-      phone,
-      address,
-    } = req.body;
+    const { username, email, password, gender, phone, address } = req.body;
 
     // Check if all required fields are provided
-    if (
-      !username ||
-      !email ||
-      !password ||
-      !gender ||
-      !phone ||
-      !address
-    ) {
+    if (!username || !email || !password || !gender || !phone || !address) {
       next('Provide Required Fields!');
       return;
     }
@@ -177,11 +155,11 @@ export const addCustomer = async (req, res, next) => {
     const newCustomer = await Customers.create({
       username: username,
       email: email,
-      password: hashedPassword, 
+      password: hashedPassword,
       gender: gender,
       phone: phone,
       address: address,
-      verified:"true"
+      verified: 'true',
     });
 
     res.status(201).json({
@@ -320,7 +298,9 @@ export const addEmployee = async (req, res, next) => {
       !jobTitle ||
       !qualification ||
       !birthday ||
-      !salary || !phone ||!address
+      !salary ||
+      !phone ||
+      !address
     ) {
       next('Provide Required Fields!');
       return;
@@ -364,8 +344,8 @@ export const addEmployee = async (req, res, next) => {
       qualification: qualification,
       birthday: birthday,
       salary: salary,
-      phone:phone,
-      address:address,
+      phone: phone,
+      address: address,
     });
 
     res.status(201).json({
@@ -443,7 +423,6 @@ export const manageEmployees = async (req, res, next) => {
     });
   }
 };
-
 
 export const getAllEmployees = async (req, res, next) => {
   try {

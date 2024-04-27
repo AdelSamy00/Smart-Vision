@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Rating from '@mui/material/Rating';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import StarIcon from '@mui/icons-material/Star';
@@ -19,11 +20,13 @@ import {
 import '../e-commers/StyleSheets/ProductDetails.css';
 import ReviewPresenter from '../../components/Presenter/ReviewsPresenter';
 import Loading from '../../components/shared/Loading';
+import { apiRequest } from '../../utils';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 function ProductDetailsPresenter() {
+  const { employee } = useSelector((state) => state?.employee);
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState();
@@ -75,15 +78,18 @@ function ProductDetailsPresenter() {
 
   //handel remove product
   const handelDeleteProduct = async (productId) => {
-    await axios
-      .delete('/products/', { data: { productId } })
-      .then((res) => {
-        console.log(res.data);
-        history.back();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    const res = await apiRequest({
+      url: '/products/',
+      method: 'DELETE',
+      data: { productId: productId },
+      token: employee?.token,
+    });
+    if (res?.data?.success) {
+      console.log(res.data);
+      history.back();
+    } else {
+      console.log(res?.message);
+    }
   };
 
   async function getProduct(productId) {
@@ -109,21 +115,22 @@ function ProductDetailsPresenter() {
 
   // Delete review from product
   async function deleteReview(customerId, reviewId) {
-    await axios
-      .delete('/customers/review', {
-        data: { customerId, reviewId, productId },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setReviews((prevReviews) => {
-          return prevReviews.filter((review) => review._id !== reviewId);
-        });
-        setTotalRating(res.data.totalRating);
-        setProgressBar(updatePrograssBar(res.data.deletedReview, progressBar));
-      })
-      .catch((e) => {
-        console.log(e);
+    const res = await apiRequest({
+      url: '/employees/presenter/delete-review',
+      method: 'DELETE',
+      data: { customerId, reviewId, productId },
+      token: employee?.token,
+    });
+    if (res?.data?.success) {
+      console.log(res.data);
+      setReviews((prevReviews) => {
+        return prevReviews.filter((review) => review._id !== reviewId);
       });
+      setTotalRating(res.data.totalRating);
+      setProgressBar(updatePrograssBar(res.data.deletedReview, progressBar));
+    } else {
+      console.log(res?.message);
+    }
   }
 
   const handleAgreeDeleteProductMessage = () => {
@@ -198,7 +205,7 @@ function ProductDetailsPresenter() {
               <div className="productDetailsDataFooter">
                 <Link
                   className="flex items-center text-xl bg-slate-700 hover:bg-slate-800 text-white py-2 px-3 rounded-xl"
-                  to={`/ed/product/${product?._id}`}
+                  to={`/presenter/update/product/${product?._id}`}
                 >
                   Edit
                   <EditIcon sx={{ fontSize: '20px', marginLeft: '5px' }} />

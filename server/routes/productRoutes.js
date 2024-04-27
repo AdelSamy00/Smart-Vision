@@ -11,7 +11,7 @@ import {
   updateProduct,
   updateProductDetails,
 } from '../controllers/productControlles.js';
-import presenterAuth from '../middlewares/presenterMiddleware.js';
+import AbilityToChangeProductDetails from '../middlewares/ProductMiddleware.js';
 const router = express.Router();
 
 //to help inventory manager
@@ -22,8 +22,8 @@ router.put('/transaction', productsTransaction);
 router.get('/', getShowProducts);
 router.post('/', addProduct);
 router.get('/:id', getProductById);
-router.put('/:id', presenterAuth, updateProduct);
-router.delete('/', presenterAuth, deleteProduct);
+router.put('/:id', AbilityToChangeProductDetails, updateProduct);
+router.delete('/', AbilityToChangeProductDetails, deleteProduct);
 router.get('/category/:category', getProductsByCategory);
 
 export default router;
