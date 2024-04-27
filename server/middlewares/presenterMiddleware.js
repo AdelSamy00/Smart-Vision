@@ -7,9 +7,9 @@ const presenterAuth = async (req, res, next) => {
   }
   const token = authHeader?.split(' ')[1];
   try {
-    const employeeJobTitle = JWT.verify(token, process.env.JWT_SECRET_KEY);
-    console.log(employeeJobTitle);
-    if (employeeJobTitle.jobTitle.toLowerCase() === 'presenter') {
+    const { jobTitle } = JWT.verify(token, process.env.JWT_SECRET_KEY);
+    console.log(jobTitle);
+    if (jobTitle.toLowerCase() === 'presenter') {
       next();
     } else {
       next('you are not presenter');

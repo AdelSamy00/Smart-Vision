@@ -7,8 +7,8 @@ const factoryAuth = async (req, res, next) => {
   }
   const token = authHeader?.split(' ')[1];
   try {
-    const employeeJobTitle = JWT.verify(token, process.env.JWT_SECRET_KEY);
-    if (employeeJobTitle.toLowerCase() === 'factory') {
+    const { jobTitle } = JWT.verify(token, process.env.JWT_SECRET_KEY);
+    if (jobTitle.toLowerCase() === 'factory') {
       next();
     } else {
       next('you are not factory');

@@ -7,8 +7,8 @@ const actorManagerAuth = async (req, res, next) => {
   }
   const token = authHeader?.split(' ')[1];
   try {
-    const employeeJobTitle = JWT.verify(token, process.env.JWT_SECRET_KEY);
-    if (employeeJobTitle.toLowerCase() === 'actor manager') {
+    const { jobTitle } = JWT.verify(token, process.env.JWT_SECRET_KEY);
+    if (jobTitle.toLowerCase() === 'actor manager') {
       next();
     } else {
       next('you are not actor manager');
