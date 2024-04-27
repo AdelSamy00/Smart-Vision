@@ -6,37 +6,49 @@ import {
   TextField,
   Tooltip,
   Typography,
-} from "@mui/material";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import Loading from "../../components/shared/Loading";
-import { useEffect, useState } from "react";
-import EmployeeCard from "../../components/actorManager/EmployeeCard";
-import AddIcon from "@mui/icons-material/Add";
-import Box from "@mui/material/Box";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SearchIcon from "@mui/icons-material/Search";
-import ClearIcon from "@mui/icons-material/Clear";
-import { useTranslation } from "react-i18next"; // Import the useTranslation hook
-import i18n from "../../../Language/translate";
+} from '@mui/material';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import Loading from '../../components/shared/Loading';
+import { useEffect, useState } from 'react';
+import EmployeeCard from '../../components/actorManager/EmployeeCard';
+import AddIcon from '@mui/icons-material/Add';
+import Box from '@mui/material/Box';
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
+import { useTranslation } from 'react-i18next'; // Import the useTranslation hook
+import i18n from '../../../Language/translate';
+import { apiRequest } from '../../utils';
+import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 function ViewEmployees() {
   const { t } = useTranslation(); // Initialize the useTranslation hook
 
   const [employees, setEmployees] = useState([]);
+  const { employee } = useSelector((state) => state?.employee);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [jobTitle, setJobTitle] = useState("All");
-  const [Display, setDisplay] = useState("none");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [jobTitle, setJobTitle] = useState('All');
+  const [Display, setDisplay] = useState('none');
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get("/employees/");
-        console.log("API response:", response.data.employees);
-        setEmployees(response.data.employees);
-        setIsLoading(false);
+        const response = await apiRequest({
+          url: '/employees/actor/',
+          method: 'GET',
+          token: employee?.token,
+        });
+        if (response?.data.success) {
+          console.log('API response:', response?.data?.employees);
+          setEmployees(response.data.employees);
+          setIsLoading(false);
+        } else {
+          toast.error('Error fetching products:', response?.message);
+        }
       } catch (error) {
-        console.error("Error fetching products:", error.response.data.message);
+        console.error('Error fetching products:', error.response.data.message);
       }
     };
 
@@ -49,7 +61,7 @@ function ViewEmployees() {
 
     // Filter based on search term and selected service type
     return (
-      (jobTitle === "All" ||
+      (jobTitle === 'All' ||
         employee.jobTitle.toLowerCase() === jobTitle.toLowerCase()) &&
       (customerName.includes(searchString) ||
         customerPhone.includes(searchString))
@@ -62,7 +74,7 @@ function ViewEmployees() {
   };
   return (
     <Grid container justifyContent="center" alignItems="center">
-      {" "}
+      {' '}
       {isLoading ? (
         <Grid item>
           <Loading />
@@ -75,50 +87,55 @@ function ViewEmployees() {
               align="center"
               gutterBottom
               style={{
-                marginBottom: "3rem",
+                marginBottom: '3rem',
               }}
             >
-              {t("EmployeesOfTheCompany")}
+              {t('EmployeesOfTheCompany')}
             </Typography>
           </Grid>
           <Grid
             item
             sx={{
-              margin: "auto",
-              marginBottom: "2rem",
+              margin: 'auto',
+              marginBottom: '2rem',
               marginLeft: {
-                xs: "auto",
-                sm: i18n.language === "ar" ? "100vw" : "0rem",
-                md: i18n.language === "ar" ? "100vw" : "-2rem",
+                xs: 'auto',
+                sm: i18n.language === 'ar' ? '100vw' : '0rem',
+                md: i18n.language === 'ar' ? '100vw' : '-2rem',
               },
-              maxWidth: { xs: "90vw", sm: "500px" },
-              display: "flex",
-              gap: "1rem",
+              maxWidth: { xs: '90vw', sm: '500px' },
+              display: 'flex',
+              gap: '1rem',
             }}
           >
             <TextField
               select
-              label={t("JobTitle")}
+              label={t('JobTitle')}
               value={jobTitle}
               onChange={handleJobTitleChange}
               variant="outlined"
-              style={{ minWidth: "150px" }}
+              style={{ minWidth: '150px' }}
             >
-              <MenuItem value="All">{t("All")}</MenuItem>
-              <MenuItem value="Operator">{t("Operator")}</MenuItem>
-              <MenuItem value="Engineer">{t("Engineer")}</MenuItem>
+              <MenuItem value="All">{t('All')}</MenuItem>
+              <MenuItem value="Operator">{t('Operator')}</MenuItem>
+              <MenuItem value="Engineer">{t('Engineer')}</MenuItem>
               <MenuItem value="Inventory manager">
-                {t("InventoryManager")}
+                {t('InventoryManager')}
               </MenuItem>
-              <MenuItem value="Actor manager">{t("ActorManager")}</MenuItem>
-              <MenuItem value="Presenter">{t("Presenter")}</MenuItem>
+              <MenuItem value="Actor manager">{t('ActorManager')}</MenuItem>
+              <MenuItem value="Presenter">{t('Presenter')}</MenuItem>
             </TextField>
             <TextField
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               variant="outlined"
-              placeholder={t("EnterYourSearch")}
-              sx={{ minWidth: {xs:"50%",sm:i18n.language === "ar" ?"100%":"50%"} }}
+              placeholder={t('EnterYourSearch')}
+              sx={{
+                minWidth: {
+                  xs: '50%',
+                  sm: i18n.language === 'ar' ? '100%' : '50%',
+                },
+              }}
               fullWidth
               InputProps={{
                 startAdornment: (
@@ -131,15 +148,15 @@ function ViewEmployees() {
                     {searchTerm && (
                       <IconButton
                         edge="end"
-                        aria-label={t("ClearSearch")}
-                        onClick={(e) => setSearchTerm("")}
+                        aria-label={t('ClearSearch')}
+                        onClick={(e) => setSearchTerm('')}
                       >
                         <ClearIcon color="action" />
                       </IconButton>
                     )}
                   </InputAdornment>
                 ),
-                style: { backgroundColor: "white", borderRadius: "5px" },
+                style: { backgroundColor: 'white', borderRadius: '5px' },
               }}
             />
           </Grid>
@@ -147,7 +164,7 @@ function ViewEmployees() {
             container
             spacing={3}
             align="center"
-            sx={{ justifyContent: { xs: "center", md: "space-evenly" } }}
+            sx={{ justifyContent: { xs: 'center', md: 'space-evenly' } }}
           >
             {filteredEmployees.map((employee, index) => (
               <Grid item key={index}>
@@ -158,37 +175,37 @@ function ViewEmployees() {
           <Box
             sx={{
               height: 50,
-              transform: "translateZ(0px)",
+              transform: 'translateZ(0px)',
               flexGrow: 1,
-              position: "fixed",
+              position: 'fixed',
               bottom: 40,
               right: 20,
             }}
           >
             <span
               style={{
-                position: "relative",
+                position: 'relative',
                 right: 85,
                 bottom: 7,
                 display: Display,
-                color: "white",
-                padding: "5px 10px",
-                borderRadius: "5px",
-                fontSize: "12px",
-                backgroundColor: "rgba(0, 0, 0,0.6)",
+                color: 'white',
+                padding: '5px 10px',
+                borderRadius: '5px',
+                fontSize: '12px',
+                backgroundColor: 'rgba(0, 0, 0,0.6)',
               }}
             >
-              {t("AddNewEmployee")}
+              {t('AddNewEmployee')}
             </span>
-            <Link to={"/actor/add-employee"}>
+            <Link to={'/actor/add-employee'}>
               <SpeedDial
-                ariaLabel={t("SpeedDialBasicExample")}
-                sx={{ position: "fixed", bottom: 16, right: 16 }}
+                ariaLabel={t('SpeedDialBasicExample')}
+                sx={{ position: 'fixed', bottom: 16, right: 16 }}
                 icon={<SpeedDialIcon />}
                 direction="up"
                 open={false}
-                onMouseOver={() => setDisplay("inline")}
-                onMouseLeave={() => setDisplay("none")}
+                onMouseOver={() => setDisplay('inline')}
+                onMouseLeave={() => setDisplay('none')}
               ></SpeedDial>
             </Link>
           </Box>

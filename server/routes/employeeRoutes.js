@@ -1,5 +1,6 @@
 import express from 'express';
 import presenterRoute from './presenterRoutes.js';
+import actorRoute from './actorRoutes.js';
 import {
   addEmployee,
   changePassword,
@@ -108,10 +109,8 @@ router.put('/inventory/shipped/:orderId', sendOrderToShipped);
 //#endregion
 
 //#region Actor & Employees
-router.post('/', addEmployee);
+router.use('/actor', actorRoute);
 router.put('/', manageEmployees);
-router.get('/', getAllEmployees);
-router.get('/:id', getEmployeeById);
 router.delete('/', deleteEmployee);
 router.put('/change_password', changePassword);
 //#end region

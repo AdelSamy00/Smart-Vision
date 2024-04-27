@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
-import Form from "react-bootstrap/Form";
-import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import Loading from "../../components/shared/Loading";
-import "./styleSheets/EmployeeForm.css";
-import { handleFileUpload } from "../../utils";
+import React, { useEffect, useState } from 'react';
+import Form from 'react-bootstrap/Form';
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import Loading from '../../components/shared/Loading';
+import './styleSheets/EmployeeForm.css';
+import { apiRequest, handleFileUpload } from '../../utils';
+import { useSelector } from 'react-redux';
 import {
   Button,
   Dialog,
@@ -15,9 +16,10 @@ import {
   DialogTitle,
   Slide,
   Tooltip,
-} from "@mui/material";
-import { useTranslation } from "react-i18next";
-import i18n from "../../../Language/translate";
+} from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import i18n from '../../../Language/translate';
+import toast, { Toaster } from 'react-hot-toast';
 let current = new Date();
 
 function getmaxEmployeeDateOfBirth() {
@@ -32,40 +34,41 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function EmployeeForm() {
+  const { employee } = useSelector((state) => state?.employee);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const employeeAllTypes = [
-    t("Engineer"),
-    t("InventoryManager"),
-    t("FactotyManager"),
-    t("Presenter"),
-    t("ActorManager"),
-    t("Operator"),
+    t('Engineer'),
+    t('InventoryManager'),
+    t('FactotyManager'),
+    t('Presenter'),
+    t('ActorManager'),
+    t('Operator'),
   ];
   const qualificationAllTypes = [
     t("Bachelor's Degree"),
     t("Master's Degree"),
-    t("Doctor of Philosophy"),
-    t("Professional Certification (e.g., CPA, CFA)"),
-    t("Diploma"),
-    t("Associate Degree"),
-    t("High School Diploma/GED"),
-    t("Technical Certification"),
+    t('Doctor of Philosophy'),
+    t('Professional Certification (e.g., CPA, CFA)'),
+    t('Diploma'),
+    t('Associate Degree'),
+    t('High School Diploma/GED'),
+    t('Technical Certification'),
   ];
   const { employeeId } = useParams();
-  const [firstName, setfirstName] = useState("");
-  const [lastName, setlastName] = useState("");
-  const [email, setemail] = useState("");
-  const [phone, setphone] = useState("");
-  const [gender, setgender] = useState("");
-  const [dateOfBirth, setdateOfBirth] = useState("");
-  const [address, setaddress] = useState("");
-  const [qualification, setqualification] = useState("");
-  const [employeeType, setemployeeType] = useState("");
-  const [salary, setsalary] = useState("");
-  const [image, setimage] = useState("");
-  const [password, setpassword] = useState("");
-  const [confirmpassword, setconfirmpassword] = useState("");
+  const [firstName, setfirstName] = useState('');
+  const [lastName, setlastName] = useState('');
+  const [email, setemail] = useState('');
+  const [phone, setphone] = useState('');
+  const [gender, setgender] = useState('');
+  const [dateOfBirth, setdateOfBirth] = useState('');
+  const [address, setaddress] = useState('');
+  const [qualification, setqualification] = useState('');
+  const [employeeType, setemployeeType] = useState('');
+  const [salary, setsalary] = useState('');
+  const [image, setimage] = useState('');
+  const [password, setpassword] = useState('');
+  const [confirmpassword, setconfirmpassword] = useState('');
   const [PasswordConformed, setPasswordConformed] = useState(false);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -96,7 +99,7 @@ function EmployeeForm() {
           data: { id: employeeId },
         })
         .then((res) => {
-          navigate("/actor/view-employees");
+          navigate('/actor/view-employees');
         })
         .catch((e) => {
           console.log(e);
@@ -125,7 +128,7 @@ function EmployeeForm() {
           image,
         })
         .then((res) => {
-          navigate("/actor/view-employees");
+          navigate('/actor/view-employees');
           // console.log(res);
         })
         .catch((e) => {
@@ -156,7 +159,7 @@ function EmployeeForm() {
           image,
         })
         .then((res) => {
-          navigate("/actor/view-employees");
+          navigate('/actor/view-employees');
           // console.log(res);
         })
         .catch((e) => {
@@ -181,15 +184,18 @@ function EmployeeForm() {
   };
 
   async function getEmployee() {
-    await axios
-      .get(`/employees/${employeeId}`)
-      .then((res) => {
-        setEmployeetData(res?.data?.employee);
-        //console.log(res?.data?.employee);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    const res = await apiRequest({
+      url: `/employees/actor/${employeeId}`,
+      method: 'GET',
+      token: employee?.token,
+    });
+    if (res?.data?.success) {
+      setEmployeetData(res?.data?.employee);
+    } else {
+      toast.dismiss();
+      toast.error('Error');
+      setIsLoading(false);
+    }
   }
 
   const handleAgreeDeleteProductMessage = () => {
@@ -211,25 +217,26 @@ function EmployeeForm() {
 
   return (
     <>
+      <Toaster />
       {!isLoading ? (
         <main className="employeeFormMain">
-          <div className="employeeFormHeader" style={{ position: "relative" }}>
-            <h2>{employeeId ? t("EditEmployee") : t("AddNewEmployee")}</h2>
+          <div className="employeeFormHeader" style={{ position: 'relative' }}>
+            <h2>{employeeId ? t('EditEmployee') : t('AddNewEmployee')}</h2>
             {employeeId ? (
               <button
                 onClick={() => setshowDeleteMessage(true)}
                 style={
-                  i18n.language === "ar"
+                  i18n.language === 'ar'
                     ? {
-                        position: "absolute",
+                        position: 'absolute',
                         left: 0,
-                        top: "50%",
-                        transform: "translateY(-50%)",
+                        top: '50%',
+                        transform: 'translateY(-50%)',
                       }
                     : {}
                 }
               >
-                {t("delete")}
+                {t('delete')}
                 <DeleteForeverIcon />
               </button>
             ) : null}
@@ -238,7 +245,7 @@ function EmployeeForm() {
             <div className="employeeFormDivForTowFields">
               <Form.Group className="InputGroup">
                 <Form.Label htmlFor="firstName" className="FormLabel">
-                  {t("firstName")}
+                  {t('firstName')}
                 </Form.Label>
                 <Form.Control
                   required
@@ -246,14 +253,14 @@ function EmployeeForm() {
                   name="firstName"
                   id="firstName"
                   type="text"
-                  placeholder={t("firstName")}
+                  placeholder={t('firstName')}
                   value={firstName}
                   onChange={(e) => setfirstName(e.target.value)}
                 />
               </Form.Group>
               <Form.Group className="InputGroup">
                 <Form.Label htmlFor="lastName" className="FormLabel">
-                  {t("lastName")}
+                  {t('lastName')}
                 </Form.Label>
                 <Form.Control
                   required
@@ -261,7 +268,7 @@ function EmployeeForm() {
                   name="lastName"
                   id="lastName"
                   type="text"
-                  placeholder={t("lastName")}
+                  placeholder={t('lastName')}
                   value={lastName}
                   onChange={(e) => setlastName(e.target.value)}
                 />
@@ -270,7 +277,7 @@ function EmployeeForm() {
             <div className="employeeFormDivForTowFields">
               <Form.Group className="InputGroup">
                 <Form.Label htmlFor="email" className="FormLabel">
-                  {t("email")}
+                  {t('email')}
                 </Form.Label>
                 <Form.Control
                   required
@@ -278,14 +285,14 @@ function EmployeeForm() {
                   name="email"
                   id="email"
                   type="email"
-                  placeholder={t("email")}
+                  placeholder={t('email')}
                   value={email}
                   onChange={(e) => setemail(e.target.value)}
                 />
               </Form.Group>
               <Form.Group className=" InputGroup ">
                 <Form.Label htmlFor="phone" className="FormLabel">
-                  {t("phone")}
+                  {t('phone')}
                 </Form.Label>
                 <Form.Control
                   required
@@ -293,7 +300,7 @@ function EmployeeForm() {
                   name="phone"
                   id="phone"
                   type="number"
-                  placeholder={t("phone")}
+                  placeholder={t('phone')}
                   value={phone}
                   onChange={(e) => setphone(e.target.value)}
                 />
@@ -302,7 +309,7 @@ function EmployeeForm() {
             <div className="employeeFormDivForTowFields">
               <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv ">
                 <Form.Label className="FormLabel" htmlFor="gender">
-                  {t("gender")}
+                  {t('gender')}
                 </Form.Label>
                 <Form.Select
                   required
@@ -312,14 +319,14 @@ function EmployeeForm() {
                   value={gender}
                   onChange={(e) => setgender(e.target.value)}
                 >
-                  <option value="">{t("ChooseOption")}</option>
-                  <option value="Male">{t("Male")}</option>
-                  <option value="Female">{t("Female")}</option>
+                  <option value="">{t('ChooseOption')}</option>
+                  <option value="Male">{t('Male')}</option>
+                  <option value="Female">{t('Female')}</option>
                 </Form.Select>
               </Form.Group>
               <Form.Group className="InputGroup">
                 <Form.Label htmlFor="dateOfBirth" className="FormLabel">
-                  {t("dateOfBirth")}
+                  {t('dateOfBirth')}
                 </Form.Label>
                 <Form.Control
                   required
@@ -335,7 +342,7 @@ function EmployeeForm() {
             </div>
             <Form.Group className="InputGroup">
               <Form.Label htmlFor="address" className="FormLabel">
-                {t("address")}
+                {t('address')}
               </Form.Label>
               <Form.Control
                 required
@@ -343,7 +350,7 @@ function EmployeeForm() {
                 name="address"
                 id="address"
                 type="text"
-                placeholder={t("address")}
+                placeholder={t('address')}
                 value={address}
                 onChange={(e) => setaddress(e.target.value)}
               />
@@ -352,7 +359,7 @@ function EmployeeForm() {
             <div className="employeeFormDivForTowFields">
               <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv ">
                 <Form.Label className="FormLabel" htmlFor="qualification">
-                  {t("qualification")}
+                  {t('qualification')}
                 </Form.Label>
                 <Form.Select
                   required
@@ -362,7 +369,7 @@ function EmployeeForm() {
                   value={qualification}
                   onChange={(e) => setqualification(e.target.value)}
                 >
-                  <option value="">{t("ChooseOption")}</option>
+                  <option value="">{t('ChooseOption')}</option>
                   {qualificationAllTypes.map((type, idx) => {
                     return (
                       <option key={idx} value={type}>
@@ -374,7 +381,7 @@ function EmployeeForm() {
               </Form.Group>
               <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv ">
                 <Form.Label className="FormLabel" htmlFor="employeeType">
-                  {t("employeeType")}
+                  {t('employeeType')}
                 </Form.Label>
                 <Form.Select
                   required
@@ -384,7 +391,7 @@ function EmployeeForm() {
                   value={employeeType}
                   onChange={(e) => setemployeeType(e.target.value)}
                 >
-                  <option value="">{t("ChooseOption")}</option>
+                  <option value="">{t('ChooseOption')}</option>
                   {employeeAllTypes.map((type, idx) => {
                     return (
                       <option key={idx} value={type}>
@@ -398,7 +405,7 @@ function EmployeeForm() {
             <div className="employeeFormDivForTowFields">
               <Form.Group className="InputGroup">
                 <Form.Label className="FormLabel" htmlFor="salary">
-                  {t("Salary")}
+                  {t('Salary')}
                 </Form.Label>
                 <Form.Control
                   required
@@ -406,7 +413,7 @@ function EmployeeForm() {
                   name="salary"
                   id="salary"
                   type="number"
-                  placeholder={t("Salary")}
+                  placeholder={t('Salary')}
                   value={salary}
                   min={0}
                   onChange={(e) => setsalary(e.target.value)}
@@ -414,15 +421,15 @@ function EmployeeForm() {
               </Form.Group>
               <Form.Group className="InputGroup ">
                 <Form.Label className="FormLabel" htmlFor="uploadFile">
-                  {t("photo")}
+                  {t('photo')}
                 </Form.Label>
                 <div className="flex justify-items-center gap-2 mt-2">
                   <label
                     htmlFor="uploadFile"
                     className="text-gray-600 mt-2"
-                    style={{ order: i18n.language === "ar" ? "2" : "1" }}
+                    style={{ order: i18n.language === 'ar' ? '2' : '1' }}
                   >
-                    {t("UploadFile")}
+                    {t('UploadFile')}
                   </label>
                   <input
                     type="file"
@@ -430,8 +437,8 @@ function EmployeeForm() {
                     name="uploadFile"
                     className="uploadBtn file:hidden text-gray-700 bg-gray-300"
                     style={{
-                      width: "145px",
-                      order: i18n.language === "ar" ? "1" : "2",
+                      width: '145px',
+                      order: i18n.language === 'ar' ? '1' : '2',
                     }}
                     onChange={(e) => {
                       setimage(e.target.files[0]);
@@ -444,7 +451,7 @@ function EmployeeForm() {
               <div className="employeeFormDivForTowFields">
                 <Form.Group className="InputGroup">
                   <Form.Label htmlFor="password" className="FormLabel">
-                    {t("password")}
+                    {t('password')}
                   </Form.Label>
                   <Form.Control
                     required
@@ -452,18 +459,18 @@ function EmployeeForm() {
                     name="password"
                     id="password"
                     type="password"
-                    placeholder={t("password")}
-                    minLength={"8"}
+                    placeholder={t('password')}
+                    minLength={'8'}
                     value={password}
                     onChange={(e) => setpassword(e.target.value)}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {t("Minimum 8 characters")}.
+                    {t('Minimum 8 characters')}.
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="InputGroup">
                   <Form.Label htmlFor="confirmpassword" className="FormLabel">
-                    {t("confirmPassword")}
+                    {t('confirmPassword')}
                   </Form.Label>
                   <Form.Control
                     isInvalid={!PasswordConformed}
@@ -471,13 +478,13 @@ function EmployeeForm() {
                     name="confirmpassword"
                     id="confirmpassword"
                     type="password"
-                    minLength={"8"}
-                    placeholder={t("confirmPassword")}
+                    minLength={'8'}
+                    placeholder={t('confirmPassword')}
                     value={confirmpassword}
                     onChange={(e) => setconfirmpassword(e.target.value)}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {t("notConfirmedoassword")}
+                    {t('notConfirmedoassword')}
                   </Form.Control.Feedback>
                 </Form.Group>
               </div>
@@ -485,20 +492,20 @@ function EmployeeForm() {
             <div className="flex justify-around flex-row-reverse ">
               <button
                 type="submit"
-                style={{ order: i18n.language === "ar" ? "2" : "1" }}
+                style={{ order: i18n.language === 'ar' ? '2' : '1' }}
                 className="text-2xl bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-xl mb-4 h-16"
               >
-                {t("save")}
+                {t('save')}
               </button>
               <button
-                style={{ order: i18n.language === "ar" ? "1" : "2" }}
+                style={{ order: i18n.language === 'ar' ? '1' : '2' }}
                 className="text-2xl bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded-xl mb-4 h-16"
                 onClick={(e) => {
                   e.preventDefault();
                   history.back();
                 }}
               >
-                {t("cancel")}
+                {t('cancel')}
               </button>
             </div>
           </Form>
@@ -515,8 +522,8 @@ function EmployeeForm() {
         onClose={handleDisagreeDeleteProductMessage}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle sx={{ fontSize: "25px", fontWeight: "bold" }}>
-          {t("delete")} {t("employee")}
+        <DialogTitle sx={{ fontSize: '25px', fontWeight: 'bold' }}>
+          {t('delete')} {t('employee')}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
@@ -525,18 +532,18 @@ function EmployeeForm() {
             <br />
             This action cannot be undone and will permanently remove the
             employee from the database. */}
-            {t("deleteConfirmationMessage")}
+            {t('deleteConfirmationMessage')}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={handleDisagreeDeleteProductMessage}
-            sx={{ marginRight: "auto" }}
+            sx={{ marginRight: 'auto' }}
           >
-            {t("disagree")}
+            {t('disagree')}
           </Button>
           <Button onClick={handleAgreeDeleteProductMessage}>
-            {t("agree")}
+            {t('agree')}
           </Button>
         </DialogActions>
       </Dialog>
