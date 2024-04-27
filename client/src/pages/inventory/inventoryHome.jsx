@@ -40,7 +40,9 @@ const InventoryHome = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`/${dataType}/`);
+    
+        const url = dataType === 'products' ? '/products/all' : '/materials/';
+        const response = await axios.get(url);
         setData(response.data[dataType]);
         setIsLoading(false);
         console.log(response.data[dataType]);
@@ -62,7 +64,7 @@ const InventoryHome = () => {
         {t('all')} {dataType === 'products' ? t('products') : t('materials')}
       </h2>
       <div
-        className="materialTransactionsFilterNavbarItem ml-4"
+        className="materialTransactionsFilterNavbarItem mx-4"
         style={{ marginBottom: '2vh' }}
       >
         <label htmlFor="transactionType">{t('selectType')}:</label>

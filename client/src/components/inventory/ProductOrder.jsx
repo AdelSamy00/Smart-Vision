@@ -1,83 +1,51 @@
 import { useEffect, useState } from 'react';
 import { Grid, Button, Typography } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
+import { useSelector } from 'react-redux';
 import { apiRequest } from '../../utils';
 import toast, { Toaster } from 'react-hot-toast';
+import { t } from 'i18next';
 
-function ProductOrder({ order }) {
+function ProductOrder({ order, setOrders }) {
   const { employee } = useSelector((state) => state.employee);
   const [showOrder, setShowOrder] = useState(false);
   const [products, setProducts] = useState([{ product: '', quantity: '' }]);
-  const [transactions, setTransactions] = useState([]);
-  const [updatedOrder, setUpdatedOrder] = useState(order);
-  const [formattedDate, setFormattedDate] = useState('');
 
   useEffect(() => {
-    const productData = order.products;
-    console.log(productData);
-    setTransactions(productData);
-    const formattedProducts = productData.map((product) => ({
-      productName: product.product.name,
-      quantity: product.quantity,
+    //console.log(productData);
+    const formattedProducts = order?.products?.map((product) => ({
+      productName: product?.product?.name,
+      quantity: product?.quantity,
     }));
 
     setProducts(formattedProducts);
   }, []);
-  const toggleOrder = () => {
-    setShowOrder(!showOrder);
-  };
 
-  useEffect(() => {
-    const date = new Date(order?.createdAt);
-    const formatted = date.toLocaleDateString();
-    setFormattedDate(formatted);
-  }, [order?.createdAt]);
-
-  const handleStateChange = async () => {
+  const handleTransaction = async () => {
     try {
-      const response = await apiRequest({
-        method: 'PUT',
-        url: `/employees/orders`,
-        data: {
-          orderId: order._id,
-          newStatus: 'Shipped',
-        },
-      });
-      console.log(response.data.order);
-      setUpdatedOrder(response.data.order);
-      console.log('Updated order state:', response.data.order.state);
-    } catch (error) {
-      console.error('Error updating order status:', error);
-    }
-  };
-
-  const handleTransaction = async (method) => {
-    try {
-      const managerId = employee._id;
       const response = await apiRequest({
         method: 'PUT',
         url: `/employees/inventory/shipped/${order._id}`,
         data: {
-          managerId: managerId,
+          managerId: employee?._id,
           products: products,
         },
       });
-      console.log(response.data.order);
-      setUpdatedOrder(response.data.order);
-      console.log('Updated order state:', response.data.order.state);
-      if (response.data.success) {
-        toast.success('The Product Exported Successfully');
+      //console.log(response.data.order);
+      // console.log('Updated order state:', response.data.order.state);
+      if (response?.data?.success) {
+        toast.success(t('productExportedSuccessfully'));
         order.state = 'Shipped';
-        setTransactions([]);
+        setOrders((prevOrders) => {
+          return prevOrders.filter((item) => item._id !== order._id);
+        });
       } else {
-        console.log(response.data.message);
-        toast.error(response.data.message);
+        //console.log(response.data.message);
+        toast.error(response?.data?.message);
       }
     } catch (error) {
-      console.error('Error updating order status:', error);
-      console.error('Error making transaction:', error);
-      toast.error('There Is No Enough Quantity In The In The Inventory');
+      // console.error('Error updating order status:', error);
+      // console.error('Error making transaction:', error);
+      toast.error(t('noEnoughQuantityInInventory'));
     }
   };
 
@@ -126,7 +94,7 @@ function ProductOrder({ order }) {
             lg={4}
             sx={{ marginBottom: { xs: '1.3rem', md: '0rem' } }}
           >
-            <Typography variant="body1">Date Placed</Typography>
+            <Typography variant="body1">{t('datePlaced')}</Typography>
             <Typography variant="body2">
               {order.createdAt.substring(0, 10).split('-').reverse().join('-')}
             </Typography>
@@ -139,17 +107,15 @@ function ProductOrder({ order }) {
             sx={{
               textAlign: { md: 'center' },
               marginBottom: { xs: '2.1rem', lg: '0rem', md: '0rem' },
-
               display: 'flex',
               justifyContent: {
                 xs: 'flex-end',
                 md: 'center',
-                // lg: "flex-end",
               },
             }}
           >
             <Typography variant="body1">
-              Total Products : {order?.products.length}
+              {t('totalProducts')}: {order?.products.length}
             </Typography>
           </Grid>
           <Grid
@@ -160,7 +126,6 @@ function ProductOrder({ order }) {
             sx={{
               display: 'flex',
               justifyContent: {
-                // xs: "flex-start",
                 md: 'flex-end',
                 lg: 'flex-end',
               },
@@ -169,7 +134,7 @@ function ProductOrder({ order }) {
             }}
           >
             <Button
-              onClick={toggleOrder}
+              onClick={() => setShowOrder(!showOrder)}
               variant="contained"
               sx={{
                 backgroundColor: '#009688',
@@ -180,7 +145,7 @@ function ProductOrder({ order }) {
                 },
               }}
             >
-              {showOrder ? 'close' : 'Details'}
+              {showOrder ? t('close') : t('details')}
             </Button>
           </Grid>
         </Grid>
@@ -256,11 +221,12 @@ function ProductOrder({ order }) {
                             },
                           }}
                         >
-                          Quantity:
+                          {t('quantity')}:
                         </Typography>
                         <Typography
                           variant="body2"
                           sx={{
+                            marginInline: '5px',
                             fontSize: {
                               xs: '16px',
                               md: '22px',
@@ -278,7 +244,7 @@ function ProductOrder({ order }) {
             ))}
             <Grid item sm={8} xs={6}>
               <Button
-                onClick={() => handleTransaction('Export')}
+                onClick={() => handleTransaction()}
                 variant="contained"
                 sx={{
                   backgroundColor: '#009688',
@@ -289,7 +255,7 @@ function ProductOrder({ order }) {
                   },
                 }}
               >
-                Export
+                {t('export')}
               </Button>
             </Grid>
           </Grid>

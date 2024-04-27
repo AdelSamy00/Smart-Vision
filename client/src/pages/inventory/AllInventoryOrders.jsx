@@ -1,62 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import InventoryMatrialsOrders from './InventoryMatrialsOrders';
 import InventoryProductOrders from './InventoryProductOrders';
-import Loading from '../../components/shared/Loading';
-import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 const AllInventoryOrders = () => {
-  const [showOrder, setshowOrder] = useState(true);
+  const { t } = useTranslation();
   const [dataType, setDataType] = useState('products');
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const fetchData = async () => {
-    setIsLoading(true);
-    try {
-      const response = await axios.get(`/${dataType}/`);
-      setData(response.data[dataType]);
-      setIsLoading(false);
-      console.log(response.data[dataType]);
-    } catch (error) {
-      console.error(`Error fetching ${dataType}:`, error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [dataType]);
-
   //console.log(products);
   return (
     <div>
-      <h2 className="text-center text-3xl font-bold" style={{marginTop:"8vh",marginBottom:"4vh"}}>
-       {dataType === 'products' ? 'Product' : 'Material'} Orders
+      <h2
+        className="text-center text-3xl font-bold"
+        style={{ marginBlock: '1rem' }}
+      >
+        {dataType === 'products' ? t('products') : t('materials')}
       </h2>
-      <div className="materialTransactionsFilterNavbarItem ml-4" style={{marginBottom:"8vh"}}>
-        <label htmlFor="transactionType">Select Type:</label>
+      <div
+        className="materialTransactionsFilterNavbarItem mx-4"
+        style={{ marginBottom: '2vh' }}
+      >
+        <label htmlFor="transactionType">{t('selectType')}:</label>
         <select
           name="transactionType"
           id="transactionType"
           onChange={(e) => setDataType(e.target.value)}
           value={dataType}
         >
-          <option value="products">Products</option>
-          <option value="materials">Materials</option>
+          <option value="products">{t('products')}</option>
+          <option value="materials">{t('materials')}</option>
         </select>
       </div>
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <ul>
-          <li>
-            {dataType === 'products' ? (
-              <InventoryProductOrders Allproducts={data} />
-            ) : (
-              <InventoryMatrialsOrders AllMaterials={data} />
-            )}
-          </li>
-        </ul>
-      )}
+      <div>
+        {dataType === 'products' ? (
+          <InventoryProductOrders />
+        ) : (
+          <InventoryMatrialsOrders />
+        )}
+      </div>
     </div>
   );
 };

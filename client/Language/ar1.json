@@ -59,5 +59,15 @@
     "thereIsNoProducts": "لا يوجد منتجات.",
     "thereIsNoMaterials": "لا يوجد موارد.",
     "productName": "اسم المنتج",
-    "includeAtLeastOneColor": "قم بأضافة لون واحد على الأقل"
+    "includeAtLeastOneColor": "قم بأضافة لون واحد على الأقل",
+    "FailedToAddProduct": "فشل في إضافة المنتج. حاول مرة اخرى.",
+    "FailedToAddMaterial": "فشل في إضافة المنتج. حاول مرة اخرى.",
+    "datePlaced": "تاريخ الطلب",
+    "totalProducts": "إجمالي المنتجات",
+    "close": "إغلاق",
+    "export": "تصدير",
+    "noEnoughQuantityInInventory": "لا يوجد كمية كافية في المخزون",
+    "productExportedSuccessfully": "تم تصدير المنتج بنجاح",
+    "done": "تم",
+    "FailedTryAgain": "فشل. حاول مرة اخرى."
 }

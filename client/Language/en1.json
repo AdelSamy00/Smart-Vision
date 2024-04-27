@@ -57,8 +57,18 @@
     "products": "Products",
     "all": "All",
     "selectType": "Select Type",
-    "thereIsNoProducts":"There is no products.",
-    "thereIsNoMaterials":"There is no Materials.",
-    "productName":"Product Name",
-    "includeAtLeastOneColor":"Include at least one color."
+    "thereIsNoProducts": "There is no products.",
+    "thereIsNoMaterials": "There is no Materials.",
+    "productName": "Product Name",
+    "includeAtLeastOneColor": "Include at least one color.",
+    "FailedToAddProduct": "Failed to add product. Please try again.",
+    "FailedToAddMaterial": "Failed to add Material. Please try again.",
+    "datePlaced": "Date Placed",
+    "totalProducts": "Total Products",
+    "close": "Close",
+    "export": "Export",
+    "noEnoughQuantityInInventory": "There Is No Enough Quantity In The Inventory",
+    "productExportedSuccessfully": "The Product Exported Successfully",
+    "done": "Done",
+    "FailedTryAgain": "Failed. Please try again."
 }

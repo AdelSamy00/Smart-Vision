@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import { TextField, Button, Grid } from "@mui/material";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import React, { useState } from 'react';
+import { TextField, Button, Grid } from '@mui/material';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 const AddMatrialForm = () => {
+  const { t } = useTranslation();
   const [productData, setProductData] = useState({
-    name: "",
-    quantity: "",
+    name: '',
+    quantity: '',
   });
-
-  const [submitMessage, setSubmitMessage] = useState("");
 
   const handleChange = (e) => {
     let value = e.target.value;
-    if (e.target.name === "quantity" && value < 0) {
+    if (e.target.name === 'quantity' && value < 0) {
       value = 0;
     }
 
@@ -24,51 +24,56 @@ const AddMatrialForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/Materials/", productData);
+      const response = await axios.post('/Materials/', productData);
       setProductData({
-        name: "",
-        quantity: ""
-      })
+        name: '',
+        quantity: '',
+      });
       toast.dismiss();
       toast.success(response.data.message);
     } catch (error) {
-      console.error("Error adding product:", error);
-      setSubmitMessage("Failed to add product. Please try again.");
+      console.error('Error adding product:', error);
+        toast.error(t('FailedToAddMaterial'));
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="ProductForm">
+    <form onSubmit={handleSubmit} className="w-4/5 m-auto py-7 max-w-4xl">
       <Toaster
         toastOptions={{
           style: {
             duration: 3000,
-            border: "1px solid #6A5ACD",
-            backgroundColor: "#6A5ACD",
-            padding: "16px",
-            color: "white",
-            fontWeight: "Bold",
-            marginTop: "65px",
-            textAlign: "center",
+            border: '1px solid #6A5ACD',
+            backgroundColor: '#6A5ACD',
+            padding: '16px',
+            color: 'white',
+            fontWeight: 'Bold',
+            marginTop: '65px',
+            textAlign: 'center',
           },
         }}
       />
-      <Grid container spacing={2}>
-        <Grid item xs={12} >
+      <Grid container spacing={2} sx={{marginTop:'6rem'}}>
+        <Grid item xs={12} sm={6}>
+          <label className="mb-2" htmlFor="name">
+            {t('productName')} *
+          </label>
           <TextField
             fullWidth
-            label="Material Name"
-            variant="outlined"
+            id="name"
             name="name"
             value={productData.name}
             onChange={handleChange}
             required
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={6}>
+          <label className="mb-2" htmlFor="Quantity">
+            {t('quantity')} *
+          </label>
           <TextField
             fullWidth
-            label="Quantity"
+            id="Quantity"
             variant="outlined"
             name="quantity"
             type="number"
@@ -77,21 +82,22 @@ const AddMatrialForm = () => {
             required
           />
         </Grid>
-        <Grid container style={{marginTop:"20px"}}>
-        <Grid item xs={6}  style={{display:"flex",marginLeft:"15px"}}>
-          <Button type="submit" variant="contained"  style={{backgroundColor: "#edede9", color: "black"}}>
-            Add 
-          </Button>
-        </Grid>
-        <Grid item xs={5.6}  style={{display:"flex" ,justifyContent:"flex-end",marginRight:"-30px"}}>
-          <Link to="/inventory">
-            <Button variant="contained" style={{backgroundColor: "#edede9", color: "black"}}>
-              Show 
+        <Grid container style={{ marginTop: '20px' }}>
+          <Grid item xs={12} style={{ display: 'flex' }}>
+            <Button
+              type="submit"
+              variant="contained"
+              style={{
+                backgroundColor: '#edede9',
+                color: 'black',
+                margin: 'auto',
+                fontSize: '20px',
+              }}
+            >
+              {t('add')}
             </Button>
-          </Link>
+          </Grid>
         </Grid>
-        </Grid>
-
       </Grid>
     </form>
   );

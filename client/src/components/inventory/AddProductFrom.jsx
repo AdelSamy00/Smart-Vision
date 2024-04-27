@@ -12,6 +12,7 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import InputColor from '../Presenter/InputColor';
+import { useNavigate } from 'react-router-dom';
 const Allcategorys = ['sofa', 'chair', 'bed', 'table'];
 const AddProductForm = () => {
   const { t } = useTranslation();
@@ -23,7 +24,6 @@ const AddProductForm = () => {
     colors: [],
   });
   const [colors, setColors] = useState([]);
-  const [submitMessage, setSubmitMessage] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleOpenSnackbar = () => {
@@ -66,7 +66,7 @@ const AddProductForm = () => {
         // console.log(response);
       } catch (error) {
         console.error('Error adding product:', error);
-        setSubmitMessage('Failed to add product. Please try again.');
+        toast.error(t('FailedToAddProduct'));
       }
     }
   };
@@ -170,18 +170,6 @@ const AddProductForm = () => {
               </Button>
             </Grid>
           </Grid>
-
-          {submitMessage && (
-            <Grid item xs={12}>
-              <p
-                className={`${
-                  submitMessage.includes('success') ? 'success' : 'error'
-                }`}
-              >
-                {submitMessage}
-              </p>
-            </Grid>
-          )}
         </Grid>
       </form>
       <Snackbar
