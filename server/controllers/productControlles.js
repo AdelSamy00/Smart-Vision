@@ -19,6 +19,24 @@ export const getShowProducts = async (req, res, next) => {
     res.status(404).json({ message: error.message });
   }
 };
+export const getAllProducts = async (req, res, next) => {
+  try {
+    const products = await Products.find({}).populate({
+      path: 'reviews',
+      populate: {
+        path: 'customer',
+        select: 'username email -password',
+      },
+    });
+    res.status(200).json({
+      success: true,
+      message: 'get all products successfully',
+      products,
+    });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
 
 export const addToStore = async (req, res, next) => {
   try {
