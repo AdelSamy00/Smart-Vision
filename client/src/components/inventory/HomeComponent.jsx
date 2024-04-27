@@ -1,16 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Grid, Typography, Button } from '@mui/material';
-import Loading from '../shared/Loading';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import toast, { Toaster } from 'react-hot-toast';
-import { useSelector, useDispatch } from 'react-redux';
-import { addToCartP } from '../../redux/ProductCard';
+import toast from 'react-hot-toast';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-
 import {
   Card,
   CardActions,
@@ -20,12 +16,15 @@ import {
   Collapse,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useTranslation } from 'react-i18next';
+import i18n from '../../../Language/translate';
+
 const ExpandMore = ({ expand, ...other }) => <IconButton {...other} />;
 
 function HomeComponent({ Allproducts }) {
-  const [displayedOrders, setDisplayedOrders] = useState(1);
+  // const [displayedOrders, setDisplayedOrders] = useState(1);
+  const { t } = useTranslation();
   const [products, setProducts] = useState(Allproducts);
-
   const [expandedStates, setExpandedStates] = useState({});
 
   const handleExpandClick = (orderId) => {
@@ -48,7 +47,7 @@ function HomeComponent({ Allproducts }) {
       toast.error('Failed to delete product. Please try again.');
     }
   };
-  
+
   return (
     <Grid
       container
@@ -79,10 +78,10 @@ function HomeComponent({ Allproducts }) {
                       fontSize: '18px',
                     }}
                   >
-                    Name : {product.name}
+                    {t('name')}: {product.name}
                   </CardContent>
                   <CardContent style={{ marginTop: '-20px' }}>
-                    Quantity : {product?.quantity}
+                    {t('quantity')}: {product?.quantity}
                   </CardContent>
                   <CardActions
                     style={{ display: 'flex', justifyContent: 'space-between' }}
@@ -97,13 +96,16 @@ function HomeComponent({ Allproducts }) {
                       onClick={() => handleExpandClick(product._id)}
                       aria-expanded={expandedStates[product._id]}
                       aria-label="show more"
-                      style={{ marginLeft: 'auto', marginTop: '-20px' }}
+                      style={{
+                        marginLeft: i18n?.language === 'ar' ? 0 : 'auto',
+                        marginTop: '-20px',
+                      }}
                     >
                       <ExpandMoreIcon />
                     </ExpandMore>
                   </CardActions>
                   <Collapse
-                    in={expandedStates[product._id]}
+                    in={expandedStates[product?._id]}
                     timeout="auto"
                     unmountOnExit
                   >
@@ -112,24 +114,24 @@ function HomeComponent({ Allproducts }) {
                         variant="body2"
                         style={{ marginBottom: '5px', fontSize: '15px' }}
                       >
-                        Category : {product.category}
+                        {t('Category')}: {product.category}
                       </Typography>
                       <Typography
                         variant="body2"
                         style={{ marginBottom: '5px', fontSize: '15px' }}
                       >
-                        colors :{' '}
-                        {product.colors ? product.colors.join(' , ') : ''}
+                        {t('Color')}:{' '}
+                        {product?.colors ? product.colors.join(' , ') : ''}
                       </Typography>
                       <Typography
                         variant="body2"
                         style={{ marginBottom: '5px', fontSize: '15px' }}
                       >
-                        {product.description}
+                        {product?.description}
                       </Typography>
                       <Typography
                         variant="body2"
-                        onClick={() => handleDelete(product._id)}
+                        onClick={() => handleDelete(product?._id)}
                       >
                         <DeleteIcon style={{ color: '#495057' }} />
                       </Typography>
@@ -147,17 +149,17 @@ function HomeComponent({ Allproducts }) {
             fontWeight: 'bold',
             fontSize: '20px',
             width: '45%',
-            border: '2px solid',
-            margin: 'auto',
-            padding: '20px',
-            marginBottom: '5rem',
-            borderRadius: '5px',
+            border: '2px solid #a8a8a8',
+            paddingBlock: '20px',
+            marginTop: '2rem',
+            borderRadius: '10px',
+            color: '#a8a8a8',
           }}
         >
-          <p style={{ marginBottom: '12px' }}>There is no products .</p>
-          <Link to="/addProduct">
+          <p style={{ marginBottom: '12px' }}>{t('thereIsNoProducts')}</p>
+          <Link to="/inventory/add/product">
             <Button variant="contained" color="primary">
-              Add Product
+              {t('add')} {t('products')}
             </Button>
           </Link>
         </div>

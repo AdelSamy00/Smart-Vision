@@ -14,7 +14,9 @@ import {
   CardContent,
   IconButton,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 function MatrialComponnent({ AllMaterials }) {
+  const { t } = useTranslation();
   const [Matrials, setMatrials] = useState(AllMaterials);
 
   const handleDelete = async (matrialId) => {
@@ -60,7 +62,7 @@ function MatrialComponnent({ AllMaterials }) {
                     style={{ marginTop: '10px' }}
                   />
                   <CardContent style={{ marginTop: '-20px' }}>
-                    Quantity : {matrial?.quantity}
+                    {t('quantity')}: {matrial?.quantity}
                   </CardContent>
                   <CardActions
                     style={{ display: 'flex', justifyContent: 'space-between' }}
@@ -85,17 +87,18 @@ function MatrialComponnent({ AllMaterials }) {
             textAlign: 'center',
             fontWeight: 'bold',
             fontSize: '20px',
-            width: '65%',
-            border: '2px solid',
-            margin: 'auto',
-            padding: '20px',
-            marginBottom: '5rem',
+            width: '45%',
+            border: '2px solid #a8a8a8',
+            paddingBlock: '20px',
+            marginTop: '2rem',
+            borderRadius: '10px',
+            color: '#a8a8a8',
           }}
         >
-          <p style={{ marginBottom: '12px' }}>there is no Matrials .</p>
-          <Link to="/addMatrial">
+          <p style={{ marginBottom: '12px' }}>{t('thereIsNoMaterials')}</p>
+          <Link to="/inventory/add/matrial">
             <Button variant="contained" color="primary">
-              Add Matrial
+              {t('add')} {t('materials')}
             </Button>
           </Link>
         </div>

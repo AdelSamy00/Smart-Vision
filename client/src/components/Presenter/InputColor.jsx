@@ -52,18 +52,20 @@ const StyledTag = styled(Tag)(
   () => `
   display: flex;
   align-items: center;
-  height: 40px;
+  height: 34px;
   margin: 2px;
   background-color: #fafafa;
   border: 1px solid #e8e8e8;
   border-radius:10rem;
-  padding: 0 4px 0 10px;
+  padding: 4px 10px;
+  gap:3px;
 
   & span {
-    font-size:25px;
+    font-size:20px;
+    
   }
   & svg {
-    font-size: 20px;
+    font-size: 16px;
     cursor: pointer;
   }
 `
@@ -78,7 +80,7 @@ const Listbox = styled('ul')(
   max-height: 250px;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  z-index: 1;
+  z-index: 1000;
 
   & li {
     padding: 5px 12px;
@@ -114,7 +116,7 @@ const Listbox = styled('ul')(
 );
 
 export default function InputColor({ colors, setColors }) {
-  const allColors = ['Red', 'Gray', 'Black','Brown', 'Off-White','Green'];
+  const allColors = ['Red', 'Gray', 'Black', 'Brown', 'Off-White', 'Green'];
   const [initColors, setInitColors] = useState(colors);
   const {
     getInputProps,
@@ -131,7 +133,6 @@ export default function InputColor({ colors, setColors }) {
     multiple: true,
     options: allColors,
     getOptionLabel: (option) => option,
-    
   });
 
   useEffect(() => {

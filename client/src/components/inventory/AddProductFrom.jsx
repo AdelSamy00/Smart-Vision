@@ -1,24 +1,44 @@
-import React, { useState } from "react";
-import { TextField, Button, Grid } from "@mui/material";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import "./stylesheets/AddProductForm.css";
-import toast, { Toaster } from "react-hot-toast";
-
+import React, { useState } from 'react';
+import {
+  TextField,
+  Button,
+  Grid,
+  Select,
+  MenuItem,
+  Snackbar,
+  Alert,
+} from '@mui/material';
+import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
+import InputColor from '../Presenter/InputColor';
+const Allcategorys = ['sofa', 'chair', 'bed', 'table'];
 const AddProductForm = () => {
+  const { t } = useTranslation();
   const [productData, setProductData] = useState({
-    name: "",
-    quantity: "",
-    description: "",
-    category: "",
-    colors: "",
+    name: '',
+    quantity: '',
+    description: '',
+    category: '',
+    colors: [],
   });
+  const [colors, setColors] = useState([]);
+  const [submitMessage, setSubmitMessage] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const [submitMessage, setSubmitMessage] = useState("");
+  const handleOpenSnackbar = () => {
+    setOpenSnackbar(true);
+  };
 
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
   const handleChange = (e) => {
     let value = e.target.value;
-    if (e.target.name === "quantity" && value < 0) {
+    if (e.target.name === 'quantity' && value < 0) {
       value = 0;
     }
 
@@ -27,126 +47,158 @@ const AddProductForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post("/Products/", productData);
-      setProductData({
-        name: "",
-        quantity: "",
-        description: "",
-        category: "",
-        colors: "",
-      })
-      toast.dismiss();
-      toast.success(response.data.message);
-    } catch (error) {
-      console.error("Error adding product:", error);
-      setSubmitMessage("Failed to add product. Please try again.");
+    if (!colors?.length) {
+      handleOpenSnackbar();
+    } else {
+      productData.colors = colors;
+      try {
+        const response = await axios.post('/Products/', productData);
+        setProductData({
+          name: '',
+          quantity: '',
+          description: '',
+          category: '',
+          colors: [],
+        });
+        setColors([]);
+        toast.dismiss();
+        toast.success(response.data.message);
+        // console.log(response);
+      } catch (error) {
+        console.error('Error adding product:', error);
+        setSubmitMessage('Failed to add product. Please try again.');
+      }
     }
   };
-
   return (
-    <form onSubmit={handleSubmit} className="ProductForm">
-      <Toaster
-        toastOptions={{
-          style: {
-            duration: 3000,
-            border: "1px solid #6A5ACD",
-            backgroundColor: "#6A5ACD",
-            padding: "16px",
-            color: "white",
-            fontWeight: "Bold",
-            marginTop: "65px",
-            textAlign: "center",
-          },
-        }}
-      />
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label="Product Name"
-            variant="outlined"
-            name="name"
-            value={productData.name}
-            onChange={handleChange}
-            required
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label="Category"
-            variant="outlined"
-            name="category"
-            value={productData.category}
-            onChange={handleChange}
-            required
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label="Quantity"
-            variant="outlined"
-            name="quantity"
-            type="number"
-            value={productData.quantity}
-            onChange={handleChange}
-            required
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            fullWidth
-            label="Color"
-            variant="outlined"
-            name="colors"
-            value={productData.colors}
-            onChange={handleChange}
-            required
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Description"
-            variant="outlined"
-            name="description"
-            multiline
-            rows={3}
-            value={productData.description}
-            onChange={handleChange}
-            required
-          />
-        </Grid>
-        <Grid container style={{marginTop:"20px"}}>
-        <Grid item xs={6}  style={{display:"flex",marginLeft:"15px"}}>
-          <Button type="submit" variant="contained" style={{backgroundColor: "#edede9", color: "black"}}>
-            Add 
-          </Button>
-        </Grid>
-        <Grid item xs={5.6}  style={{display:"flex" ,justifyContent:"flex-end",marginRight:"-30px"}}>
-          <Link to="/inventory">
-            <Button variant="contained" style={{backgroundColor: "#edede9", color: "black"}}>
-              Show
-            </Button>
-          </Link>
-        </Grid>
-        </Grid>
-
-        {submitMessage && (
-          <Grid item xs={12}>
-            <p
-              className={`${
-                submitMessage.includes("success") ? "success" : "error"
-              }`}
-            >
-              {submitMessage}
-            </p>
+    <>
+      <form onSubmit={handleSubmit} className="w-4/5 m-auto py-7 max-w-4xl">
+        <Toaster
+          toastOptions={{
+            style: {
+              duration: 3000,
+              border: '1px solid #6A5ACD',
+              backgroundColor: '#6A5ACD',
+              padding: '16px',
+              color: 'white',
+              fontWeight: 'Bold',
+              marginTop: '65px',
+              textAlign: 'center',
+            },
+          }}
+        />
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <label className="mb-2" htmlFor="name">
+              {t('productName')} *
+            </label>
+            <TextField
+              fullWidth
+              id="name"
+              name="name"
+              value={productData.name}
+              onChange={handleChange}
+              required
+            />
           </Grid>
-        )}
-      </Grid>
-    </form>
+          <Grid item xs={12} sm={6}>
+            <label className="mb-2" htmlFor="Category">
+              {t('Category')} *
+            </label>
+            <Select
+              fullWidth
+              id="Category"
+              name="category"
+              onChange={handleChange}
+              required
+              value={productData.category}
+            >
+              {Allcategorys.map((item) => (
+                <MenuItem key={item} value={item}>
+                  {item}
+                </MenuItem>
+              ))}
+            </Select>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <label className="mb-2" htmlFor="Quantity">
+              {t('quantity')} *
+            </label>
+            <TextField
+              fullWidth
+              id="Quantity"
+              variant="outlined"
+              name="quantity"
+              type="number"
+              value={productData.quantity}
+              onChange={handleChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <label className="mb-2">{t('Color')} *</label>
+            <InputColor colors={colors} setColors={setColors} />
+          </Grid>
+          <Grid item xs={12}>
+            <label className="mb-2" htmlFor="description">
+              {t('description')} *
+            </label>
+            <TextField
+              fullWidth
+              id="description"
+              name="description"
+              multiline
+              rows={3}
+              value={productData.description}
+              onChange={handleChange}
+              required
+            />
+          </Grid>
+          <Grid container style={{ marginTop: '20px' }}>
+            <Grid item xs={12} style={{ display: 'flex' }}>
+              <Button
+                type="submit"
+                variant="contained"
+                style={{
+                  backgroundColor: '#edede9',
+                  color: 'black',
+                  margin: 'auto',
+                  fontSize: '20px',
+                }}
+              >
+                {t('add')}
+              </Button>
+            </Grid>
+          </Grid>
+
+          {submitMessage && (
+            <Grid item xs={12}>
+              <p
+                className={`${
+                  submitMessage.includes('success') ? 'success' : 'error'
+                }`}
+              >
+                {submitMessage}
+              </p>
+            </Grid>
+          )}
+        </Grid>
+      </form>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%', direction: 'ltr' }}
+        >
+          {t('includeAtLeastOneColor')}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 

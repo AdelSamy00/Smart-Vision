@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
-import HomeComponent from "../../components/inventory/HomeComponent";
-import MatrialComponnent from "../../components/inventory/matrialComponnent";
-import Loading from "../../components/shared/Loading";
-import axios from "axios";
-import Box from "@mui/material/Box";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import HomeComponent from '../../components/inventory/HomeComponent';
+import MatrialComponnent from '../../components/inventory/matrialComponnent';
+import Loading from '../../components/shared/Loading';
+import axios from 'axios';
+import Box from '@mui/material/Box';
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const InventoryHome = () => {
-  const [showOrder, setshowOrder] = useState(true);
-  const [dataType, setDataType] = useState("products");
+  // const [showOrder, setshowOrder] = useState(true);
+  const { t } = useTranslation();
+  const [dataType, setDataType] = useState('products');
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -22,7 +24,7 @@ const InventoryHome = () => {
           <SpeedDialIcon />
         </Link>
       ),
-      name: 'Add Material',
+      name: `${t('add')} ${t('materials')}`,
     },
     {
       icon: (
@@ -30,23 +32,23 @@ const InventoryHome = () => {
           <SpeedDialIcon />
         </Link>
       ),
-      name: 'Add Product',
+      name: `${t('add')} ${t('products')}`,
     },
   ];
 
-  const fetchData = async () => {
-    setIsLoading(true);
-    try {
-      const response = await axios.get(`/${dataType}/`);
-      setData(response.data[dataType]);
-      setIsLoading(false);
-      console.log(response.data[dataType]);
-    } catch (error) {
-      console.error(`Error fetching ${dataType}:`, error);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(`/${dataType}/`);
+        setData(response.data[dataType]);
+        setIsLoading(false);
+        console.log(response.data[dataType]);
+      } catch (error) {
+        console.error(`Error fetching ${dataType}:`, error);
+      }
+    };
+
     fetchData();
   }, [dataType]);
 
@@ -55,63 +57,62 @@ const InventoryHome = () => {
     <div>
       <h2
         className="text-center text-3xl font-bold"
-        style={{ marginTop: "8vh", marginBottom: "4vh" }}
+        style={{ marginBlock: '1rem' }}
       >
-        All {dataType === "products" ? "Products" : "Materials"}
+        {t('all')} {dataType === 'products' ? t('products') : t('materials')}
       </h2>
       <div
         className="materialTransactionsFilterNavbarItem ml-4"
-        style={{ marginBottom: "2vh" }}
+        style={{ marginBottom: '2vh' }}
       >
-        <label htmlFor="transactionType">Select Type:</label>
+        <label htmlFor="transactionType">{t('selectType')}:</label>
         <select
           name="transactionType"
           id="transactionType"
           onChange={(e) => setDataType(e.target.value)}
           value={dataType}
         >
-          <option value="products">Products</option>
-          <option value="materials">Materials</option>
+          <option value="products">{t('products')}</option>
+          <option value="materials">{t('materials')}</option>
         </select>
       </div>
       {isLoading ? (
-        <Loading />
+        <div className="h-72">
+          <Loading />
+        </div>
       ) : (
-        <ul style={{ position: "relative" }}>
-          <li>
-            {dataType === "products" ? (
-              <HomeComponent Allproducts={data} />
-            ) : (
-              <MatrialComponnent AllMaterials={data} />
-            )}
-          </li>
-          <Box
-            sx={{
-              height: 320,
-              transform: "translateZ(0px)",
-              flexGrow: 1,
-              position: "fixed",
-              bottom: 16,
-              right: 0,
-            }}
-          >
-            <SpeedDial
-              ariaLabel="SpeedDial basic example"
-              sx={{ position: "absolute", bottom: 16, right: 16 }}
-              icon={<SpeedDialIcon/>}
-              direction="left"
-            >
-              {actions.map((action) => (
-                <SpeedDialAction
-                  key={action.name}
-                  icon={action.icon}
-                  tooltipTitle={action.name}
-                />
-              ))}
-            </SpeedDial>
-          </Box>
-        </ul>
+        <div style={{ position: 'relative' }}>
+          {dataType === 'products' ? (
+            <HomeComponent Allproducts={data} />
+          ) : (
+            <MatrialComponnent AllMaterials={data} />
+          )}
+        </div>
       )}
+      <Box
+        sx={{
+          height: 320,
+          transform: 'translateZ(0px)',
+          flexGrow: 1,
+          position: 'fixed',
+          bottom: 16,
+          right: 16,
+        }}
+      >
+        <SpeedDial
+          ariaLabel="SpeedDial basic example"
+          sx={{ position: 'absolute', bottom: 16, right: 16 }}
+          icon={<SpeedDialIcon />}
+        >
+          {actions.map((action) => (
+            <SpeedDialAction
+              key={action.name}
+              icon={action.icon}
+              tooltipTitle={action.name}
+            />
+          ))}
+        </SpeedDial>
+      </Box>
     </div>
   );
 };

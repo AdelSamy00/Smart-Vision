@@ -52,5 +52,12 @@
     "hour": "ساعة",
     "materialNameEmpty": "اسم المادة لا يمكن أن يكون فارغًا",
     "materialQuantityEmpty": "كمية المادة لا يمكن أن تكون فارغة",
-    "uploadFile": "تحميل الملف"
+    "uploadFile": "تحميل الملف",
+    "all": "جميع",
+    "products": "المنتجات",
+    "selectType": "اختر صنف",
+    "thereIsNoProducts": "لا يوجد منتجات.",
+    "thereIsNoMaterials": "لا يوجد موارد.",
+    "productName": "اسم المنتج",
+    "includeAtLeastOneColor": "قم بأضافة لون واحد على الأقل"
 }
