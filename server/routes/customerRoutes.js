@@ -56,8 +56,8 @@ router.delete('/review', customerAuth, deleteReview);
 router.put('/review', customerAuth, updateReview);
 
 //Services
-router.post('/service', makeService);
-router.delete('/service', cancelService);
+router.post('/service', customerAuth, makeService);
+router.delete('/service', customerAuth, cancelService);
 router.get('/service/:id', getServiceHistory);
 
 export default router;

@@ -1,29 +1,29 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import { handleMultipleFilesUpload } from "../../utils";
-import Loading from "../shared/Loading";
-import { TextField, Button, Grid } from "@mui/material";
-import { apiRequest } from "../../utils";
-import { styled } from "@mui/material/styles";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import Checkbox from "@mui/material/Checkbox";
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleMultipleFilesUpload } from '../../utils';
+import Loading from '../shared/Loading';
+import { TextField, Button, Grid } from '@mui/material';
+import { apiRequest } from '../../utils';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import Checkbox from '@mui/material/Checkbox';
+import { SetCustomer } from '../../redux/CustomerSlice';
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 function BookingServiceForm({ socket, setSocket }) {
   const { state } = useLocation();
+  const dispatch = useDispatch();
   const [images, setImages] = useState([{}]);
   const service = state ? state.service : null;
   const { customer } = useSelector((state) => state.customer);
   const [loading, setLoading] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({
-    ServiceName: "",
+    ServiceName: '',
     phoneNumber: customer?.phone,
     address: customer?.address,
-    description: "",
+    description: '',
     images: [{}],
     measuring: false,
   });
@@ -46,37 +46,73 @@ function BookingServiceForm({ socket, setSocket }) {
     e.preventDefault();
     setLoading(true);
     try {
-      console.log(images);
       const uploadedImages =
-        images && (await handleMultipleFilesUpload(images));
-
-      console.log("Uploaded Image URL:", uploadedImages);
-      const response = await apiRequest({
-        method: "post",
-        url: "/customers/service",
-        data: {
-          id: customer._id,
-          service: service.title,
-          description: formData.description,
-          images: uploadedImages,
-          phone: formData.phoneNumber,
-          address: formData.address,
-          measuring: formData.measuring,
-        },
-      });
-      if (response.data.success) {
-        console.log(response.data);
-        setFormSubmitted(true);
-        socket?.emit("setService", {
-          user: customer,
-          type: "addService",
-          serviceOrder: response?.data.serviceOrder,
+        images.length > 1 && (await handleMultipleFilesUpload(images));
+      console.log('Uploaded Image URL:', uploadedImages);
+      if (uploadedImages) {
+        const response = await apiRequest({
+          method: 'POST',
+          url: '/customers/service',
+          data: {
+            id: customer._id,
+            service: service.title,
+            description: formData.description,
+            images: uploadedImages,
+            phone: formData.phoneNumber,
+            address: formData.address,
+            measuring: formData.measuring,
+          },
+          token: customer?.token,
         });
+        if (response.data.success) {
+          const newData = {
+            token: localStorage?.getItem('token'),
+            ...response.data?.customer,
+          };
+          dispatch(SetCustomer(newData));
+          setFormSubmitted(true);
+          socket?.emit('setService', {
+            user: customer,
+            type: 'addService',
+            serviceOrder: response?.data.serviceOrder,
+          });
+          console.log(response.data);
+        } else {
+          console.error(response?.message);
+        }
       } else {
-        console.error(response.data.message);
+        const response = await apiRequest({
+          method: 'POST',
+          url: '/customers/service',
+          data: {
+            id: customer._id,
+            service: service.title,
+            description: formData.description,
+            phone: formData.phoneNumber,
+            address: formData.address,
+            measuring: formData.measuring,
+          },
+          token: customer?.token,
+        });
+        if (response.data.success) {
+          const newData = {
+            token: localStorage?.getItem('token'),
+            ...response.data?.customer,
+          };
+          dispatch(SetCustomer(newData));
+          setFormSubmitted(true);
+          socket?.emit('setService', {
+            user: customer,
+            type: 'addService',
+            serviceOrder: response?.data.serviceOrder,
+          });
+          console.log(response.data);
+        } else {
+          console.error(response?.message);
+        }
       }
     } catch (error) {
-      console.error("Failed to submit the form:", error.response.data.message);
+      console.error('Failed to submit the form:', error.message);
     } finally {
       setLoading(false);
     }
@@ -88,9 +124,9 @@ function BookingServiceForm({ socket, setSocket }) {
           {/* {console.log(socket)} */}
           <h2
             style={{
-              fontSize: "20px",
-              fontWeight: "bold",
-              paddingBottom: "20px",
+              fontSize: '20px',
+              fontWeight: 'bold',
+              paddingBottom: '20px',
             }}
           >
             If You Need To Book This Service Fill This Form .
@@ -152,12 +188,12 @@ function BookingServiceForm({ socket, setSocket }) {
               {/* Need Measuring ?  <Checkbox {...label} /> */}
               <Grid container>
                 <Grid item xs={12}>
-                  <div className="p-2 w-full" style={{ marginTop: "15px" }}>
+                  <div className="p-2 w-full" style={{ marginTop: '15px' }}>
                     <div className="relative flex justify-items-center gap-2">
                       <label
                         htmlFor="images"
                         className="leading-7 text-sm text-gray-600 mt-1"
-                        style={{ fontSize: "20px" }}
+                        style={{ fontSize: '20px' }}
                       >
                         <CloudUploadIcon className="mr-2" />
                         UploadFile
@@ -167,7 +203,7 @@ function BookingServiceForm({ socket, setSocket }) {
                         id="images"
                         name="images"
                         className="uploadBtn file:hidden text-gray-700  w-1/4"
-                        style={{ backgroundColor: "#3c6e71", color: "white" }}
+                        style={{ backgroundColor: '#3c6e71', color: 'white' }}
                         onChange={(e) => {
                           setImages(e.target.files);
                         }}
@@ -179,30 +215,34 @@ function BookingServiceForm({ socket, setSocket }) {
                 <Grid
                   item
                   xs={12}
-                  style={{ marginTop: "20px", marginLeft: "10px" ,fontSize:"20px"}}
+                  style={{
+                    marginTop: '20px',
+                    marginLeft: '10px',
+                    fontSize: '20px',
+                  }}
                 >
                   Need Measuring ?
                   <Checkbox
                     checked={formData.measuring}
                     onChange={handleCheckboxChange}
-                    inputProps={{ "aria-label": "controlled" }}
-                    style={{ color: "#3c6e71" }}
+                    inputProps={{ 'aria-label': 'controlled' }}
+                    style={{ color: '#3c6e71' }}
                   />
                 </Grid>
               </Grid>
 
               <div
                 className="w-full flex justify-center"
-                style={{ marginTop: "20px" }}
+                style={{ marginTop: '20px' }}
               >
                 <Button
                   type="submit"
                   variant="contained"
                   className="checkoutButton"
                   style={{
-                    width: "100%",
-                    backgroundColor: "#3c6e71",
-                    color: "white",
+                    width: '100%',
+                    backgroundColor: '#3c6e71',
+                    color: 'white',
                   }}
                 >
                   submit
@@ -223,9 +263,9 @@ function BookingServiceForm({ socket, setSocket }) {
           <div className="m-auto text-center">
             <h2
               style={{
-                fontSize: "20px",
-                fontWeight: "bold",
-                paddingBottom: "20px",
+                fontSize: '20px',
+                fontWeight: 'bold',
+                paddingBottom: '20px',
               }}
             >
               For booking this service, you need to log in first.
