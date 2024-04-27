@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { TextField, Button, Grid } from "@mui/material";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import "./stylesheets/AddProductForm.css";
 import toast, { Toaster } from "react-hot-toast";
 
 const AddMatrialForm = () => {
