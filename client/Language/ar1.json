@@ -69,5 +69,7 @@
     "noEnoughQuantityInInventory": "لا يوجد كمية كافية في المخزون",
     "productExportedSuccessfully": "تم تصدير المنتج بنجاح",
     "done": "تم",
-    "FailedTryAgain": "فشل. حاول مرة اخرى."
+    "FailedTryAgain": "فشل. حاول مرة اخرى.",
+    "update": "تعديل",
+    "addSuccessfully": "اضيف بنجاح"
 }

@@ -1,27 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { TextField, Button, Grid } from "@mui/material";
-import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
-import { Link, useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { TextField, Button, Grid } from '@mui/material';
+import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
+import { Link, useParams } from 'react-router-dom';
+import { t } from 'i18next';
 
 const UpdateMatrialForm = () => {
   const { matrialId } = useParams();
   const [matrialData, setMatrialData] = useState({
-    id:matrialId,
-    name: "",
-    quantity: "",
+    id: matrialId,
+    name: '',
+    quantity: '',
   });
-
-  const [submitMessage, setSubmitMessage] = useState("");
 
   useEffect(() => {
     const fetchMaterialDetails = async () => {
       try {
         const response = await axios.get(`/Materials/${matrialId}`);
         setMatrialData(response.data.material);
-        console.log(response.data.material);
+        //console.log(response.data.material);
       } catch (error) {
-        console.error("Error fetching material details:", error);
+        console.error('Error fetching material details:', error);
       }
     };
 
@@ -30,91 +29,90 @@ const UpdateMatrialForm = () => {
 
   const handleChange = (e) => {
     let value = e.target.value;
-    if (e.target.name === "quantity" && value < 0) {
+    if (e.target.name === 'quantity' && value < 0) {
       value = 0;
     }
-
     setMatrialData({ ...matrialData, [e.target.name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(matrialData);
     try {
       const response = await axios.put(`/Materials/`, {
-        id:matrialId,
+        id: matrialId,
         name: matrialData.name,
         quantity: matrialData.quantity,
       });
       toast.dismiss();
-      toast.success(response.data.message);
+      toast.success(t('addSuccessfully'));
     } catch (error) {
-      console.error("Error updating material:", error);
-      setSubmitMessage("Failed to update material. Please try again.");
+      console.error('Error updating material:', error);
+      toast.error(t('FailedTryAgain'));
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}  className="ProductForm">
+    <form onSubmit={handleSubmit} className="w-4/5 m-auto py-7 max-w-4xl">
       <Toaster
         toastOptions={{
           style: {
             duration: 3000,
-            border: "1px solid #6A5ACD",
-            backgroundColor: "#6A5ACD",
-            padding: "16px",
-            color: "white",
-            fontWeight: "Bold",
-            marginTop: "65px",
-            textAlign: "center",
+            border: '1px solid #6A5ACD',
+            backgroundColor: '#6A5ACD',
+            padding: '16px',
+            color: 'white',
+            fontWeight: 'Bold',
+            marginTop: '65px',
+            textAlign: 'center',
           },
         }}
       />
-      <Grid container >
-      <Grid item xs={12}>
+      <Grid container spacing={2} sx={{ marginTop: '6rem' }}>
+        <Grid item xs={12} sm={6}>
+          <label className="mb-2" htmlFor="name">
+            {t('productName')} *
+          </label>
           <TextField
             fullWidth
-            label="Matrial Name"
-            variant="outlined"
+            id="name"
             name="name"
             value={matrialData.name}
             onChange={handleChange}
             required
-            style={{marginBottom:"20px"}}
           />
         </Grid>
-        <Grid item xs={12} >
+        <Grid item xs={12} sm={6}>
+          <label className="mb-2" htmlFor="Quantity">
+            {t('quantity')} *
+          </label>
           <TextField
             fullWidth
-            label="Quantity"
+            id="Quantity"
             variant="outlined"
             name="quantity"
             type="number"
             value={matrialData.quantity}
             onChange={handleChange}
             required
-            style={{marginBottom:"20px"}}
           />
         </Grid>
-        <Grid  container >
-        <Grid item xs={6}  style={{display:"flex" ,justifyContent:"flex-start"}}>
-          <Button type="submit" variant="contained"style={{backgroundColor: "#edede9", color: "black"}}>
-            Update
-          </Button>
-        </Grid>
-        <Grid item xs={6}  style={{ display:"flex" ,justifyContent:"flex-end"}}>
-          <Link to="/inventory">
-            <Button variant="contained" style={{backgroundColor: "#edede9", color: "black"}}>
-              Show
+        <Grid container style={{ marginTop: '20px' }}>
+          <Grid item xs={12} style={{ display: 'flex' }}>
+            <Button
+              type="submit"
+              variant="contained"
+              style={{
+                backgroundColor: '#edede9',
+                color: 'black',
+                margin: 'auto',
+                fontSize: '20px',
+              }}
+            >
+              {t('update')}
             </Button>
-          </Link>
-        </Grid>
-        </Grid>
-
-        {submitMessage && (
-          <Grid item xs={12}>
-            <p className="error">{submitMessage}</p>
           </Grid>
-        )}
+        </Grid>
       </Grid>
     </form>
   );

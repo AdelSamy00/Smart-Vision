@@ -30,10 +30,10 @@ const AddMatrialForm = () => {
         quantity: '',
       });
       toast.dismiss();
-      toast.success(response.data.message);
+      toast.success(t('addSuccessfully'));
     } catch (error) {
       console.error('Error adding product:', error);
-        toast.error(t('FailedToAddMaterial'));
+      toast.error(t('FailedToAddMaterial'));
     }
   };
 
@@ -53,7 +53,7 @@ const AddMatrialForm = () => {
           },
         }}
       />
-      <Grid container spacing={2} sx={{marginTop:'6rem'}}>
+      <Grid container spacing={2} sx={{ marginTop: '6rem' }}>
         <Grid item xs={12} sm={6}>
           <label className="mb-2" htmlFor="name">
             {t('productName')} *

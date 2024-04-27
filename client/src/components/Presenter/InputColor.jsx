@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useAutocomplete } from '@mui/base/useAutocomplete';
+import useAutocomplete from '@mui/material/useAutocomplete';
 import CheckIcon from '@mui/icons-material/Check';
 import { styled } from '@mui/material/styles';
 import { autocompleteClasses } from '@mui/material/Autocomplete';
@@ -117,34 +117,38 @@ const Listbox = styled('ul')(
 
 export default function InputColor({ colors, setColors }) {
   const allColors = ['Red', 'Gray', 'Black', 'Brown', 'Off-White', 'Green'];
-  const [initColors, setInitColors] = useState(colors);
+  const [value, setValue] = useState(colors);
+
   const {
     getInputProps,
     getTagProps,
     getListboxProps,
     getOptionProps,
     groupedOptions,
-    value,
     focused,
     setAnchorEl,
   } = useAutocomplete({
     id: 'customized-hook-demo',
-    defaultValue: initColors,
+    value,
+    onChange: (event, newValue) => {
+      setValue(newValue);
+      setColors(newValue);
+    },
     multiple: true,
     options: allColors,
     getOptionLabel: (option) => option,
   });
 
   useEffect(() => {
-    setColors(value);
-  }, [value]);
+    setValue(colors);
+  }, [colors]);
 
   return (
     <>
       <div>
         <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
           {value.map((option, index) => (
-            <StyledTag label={option} {...getTagProps({ index })} />
+            <StyledTag key={index} label={option} {...getTagProps({ index })} />
           ))}
           <input {...getInputProps()} />
         </InputWrapper>
@@ -152,7 +156,7 @@ export default function InputColor({ colors, setColors }) {
       {groupedOptions.length > 0 ? (
         <Listbox {...getListboxProps()}>
           {groupedOptions.map((option, index) => (
-            <li {...getOptionProps({ option, index })}>
+            <li key={index} {...getOptionProps({ option, index })}>
               <span>{option}</span>
               <CheckIcon fontSize="small" />
             </li>
@@ -162,3 +166,8 @@ export default function InputColor({ colors, setColors }) {
     </>
   );
 }
+
+InputColor.propTypes = {
+  colors: PropTypes.array.isRequired,
+  setColors: PropTypes.func.isRequired,
+};

@@ -70,5 +70,7 @@
     "noEnoughQuantityInInventory": "There Is No Enough Quantity In The Inventory",
     "productExportedSuccessfully": "The Product Exported Successfully",
     "done": "Done",
-    "FailedTryAgain": "Failed. Please try again."
+    "FailedTryAgain": "Failed. Please try again.",
+    "update": "Update",
+    "addSuccessfully": "Added Successfully"
 }

@@ -62,7 +62,7 @@ const AddProductForm = () => {
         });
         setColors([]);
         toast.dismiss();
-        toast.success(response.data.message);
+        toast.success(t("addSuccessfully"));
         // console.log(response);
       } catch (error) {
         console.error('Error adding product:', error);
