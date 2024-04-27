@@ -30,7 +30,10 @@ function Card({ product, handelDelete }) {
 
   return (
     <div className="productCard mb-12">
-      <Link className="productCardLink" to={`/p/product/${product?._id}`}>
+      <Link
+        className="productCardLink"
+        to={`/presenter/product/${product?._id}`}
+      >
         {product?.images?.length === 1 ? (
           <div className="sbProductCardDivImg">
             <img className="sbProductCardImg" src={product?.images[0]} />

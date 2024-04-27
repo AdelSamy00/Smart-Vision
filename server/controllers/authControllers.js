@@ -1,5 +1,10 @@
 import Customers from '../models/CustomerModel.js';
-import { compareString, createJWT, hashString } from '../utils/index.js';
+import {
+  compareString,
+  createEmployeeJWT,
+  createJWT,
+  hashString,
+} from '../utils/index.js';
 import { validateSignup } from '../Joi/Schema.js';
 import { sendVerificationEmail } from '../utils/sendEmail.js';
 import Employees from '../models/Employee.js';
@@ -145,7 +150,7 @@ export const employeeLogin = async (req, res, next) => {
     return;
   }
   employee.password = undefined;
-  const token = createJWT(employee?.jobTitle);
+  const token = createEmployeeJWT(employee?.jobTitle);
   res.cookie('token', token, {
     httpOnly: true,
     //secure: true,

@@ -17,6 +17,11 @@ export function createJWT(id) {
     expiresIn: '1d',
   });
 }
+export function createEmployeeJWT(jobTitle) {
+  return JWT.sign({ jobTitle: jobTitle }, process.env.JWT_SECRET_KEY, {
+    expiresIn: '1d',
+  });
+}
 
 //Socket io
 export const addNewOnline = ({ user }, socketId, onlineUsers) => {

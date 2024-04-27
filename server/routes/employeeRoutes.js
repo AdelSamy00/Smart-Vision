@@ -1,4 +1,5 @@
 import express from 'express';
+import presenterRoute from './presenterRoutes.js';
 import {
   addEmployee,
   changePassword,
@@ -10,14 +11,12 @@ import {
   manageCustomers,
   addCustomer,
   getAllEmployees,
-  getCustomizationOrders,
   getEmployeeById,
   getServiceById,
   manageEmployees,
 } from '../controllers/EmployeeControllers.js';
 import {
   getAssignedServices,
-  getCustomizationOrdersById,
   sendCustomizationDetails,
 } from '../controllers/EngineerControllers.js';
 import {
@@ -45,7 +44,7 @@ import {
 
 const router = express.Router();
 
-//#region Customer
+/* //#region Customer
 //get Customers
 router.get('/getCustomers', getAllCustomers);
 //get Customer
@@ -54,10 +53,12 @@ router.get('/getCustomer/:customerId', getCustomerById);
 router.delete('/deleteCustomer', deleteCustomer);
 router.post('/customer', addCustomer);
 router.put('/customer', manageCustomers);
+
+//#endregion */
+
+router.use(`/presenter`, presenterRoute);
 //delete unfavorite Reviews
 router.delete('/delete-review', deleteReview);
-//#endregion
-
 //#region Engineer
 router.get('/engineer', getAllEngineers); //help operator to get all engineer.
 //get Assigned Customization Orders to Engineer

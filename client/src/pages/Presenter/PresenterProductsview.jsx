@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Grid, Typography, Button, CircularProgress } from "@mui/material";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import "./StyleSheets/PresenterProductsView.css"; // Import custom CSS for advanced styling
-import Loading from "../../components/shared/Loading";
+import React, { useState, useEffect } from 'react';
+import { Grid, Typography, Button } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import './StyleSheets/PresenterProductsView.css'; // Import custom CSS for advanced styling
+import Loading from '../../components/shared/Loading';
+import { apiRequest } from '../../utils';
 
 function PresenterProductsView() {
+  const { employee } = useSelector((state) => state?.employee);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   // const [displayedProducts, setDisplayedProducts] = useState(3); // Show initial 3 orders
@@ -14,12 +15,16 @@ function PresenterProductsView() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("/products/not-shown/");
-        console.log("API response:", response.data.products);
+        const response = await apiRequest({
+          url: '/employees/presenter/not-shown/',
+          method: 'GET',
+          token: employee?.token,
+        });
+        console.log('API response:', response.data.products);
         setProducts(response.data.products);
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching products:", error.response.data.message);
+        console.error('Error fetching products:', error.response.data.message);
       }
     };
 
@@ -36,7 +41,7 @@ function PresenterProductsView() {
       alignItems="center"
       className="presenter-products-container"
     >
-      {" "}
+      {' '}
       {/* Apply advanced styling class */}
       {isLoading ? (
         <Grid item>
@@ -57,7 +62,7 @@ function PresenterProductsView() {
             {products.map((product, index) => (
               <Grid key={index} item xs={12} md={6} lg={4}>
                 <div className={`presenter-product-card`}>
-                  {" "}
+                  {' '}
                   <Typography
                     variant="h6"
                     align="center"
@@ -83,9 +88,9 @@ function PresenterProductsView() {
                     Description: {product.description}
                   </Typography>
                   <div className="button-container">
-                    {" "}
+                    {' '}
                     <Link
-                      to={`/addtoStore/product/${product?._id}`}
+                      to={`/presenter/add-to-store/product/${product?._id}`}
                       className="link-style"
                     >
                       <Button
@@ -94,14 +99,14 @@ function PresenterProductsView() {
                         className="add-to-store-button"
                         style={{
                           background:
-                            "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+                            'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
 
-                          textTransform: "capitalize",
+                          textTransform: 'capitalize',
                           height: 34,
-                          padding: "0px 15px",
+                          padding: '0px 15px',
                         }}
                       >
-                        {" "}
+                        {' '}
                         Add to Store
                       </Button>
                     </Link>

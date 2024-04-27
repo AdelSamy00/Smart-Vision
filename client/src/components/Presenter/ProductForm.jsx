@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import InputColor from '../../components/Presenter/InputColor';
 import { Alert, Snackbar } from '@mui/material';
@@ -10,6 +11,7 @@ import Loading from '../../components/shared/Loading';
 import './StyleSheets/ProductForm.css';
 function ProductForm({ product, method }) {
   const navigate = useNavigate();
+  const { employee } = useSelector((state) => state?.employee);
   const [description, setDescription] = useState(product?.description || '');
   const [images, setImages] = useState(product?.images || '');
   const [newImages, setNewImages] = useState([]);
@@ -37,9 +39,9 @@ function ProductForm({ product, method }) {
 
   async function addProduct(imagesUrl) {
     try {
-      await apiRequest({
+      const res = await apiRequest({
         method: 'POST',
-        url: `/products/add-to-store/`,
+        url: `/employees/presenter/add-to-store/`,
         data: {
           _id: product._id,
           name: productName,
@@ -51,14 +53,16 @@ function ProductForm({ product, method }) {
           colors,
           show,
         },
-      })
-        .then((res) => {
-          console.log(res);
-          navigate('/presenter-home');
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+        token: employee?.token,
+      });
+      console.log(res);
+      if (res?.data?.success === true) {
+        console.log(res);
+        navigate('/presenter/home');
+      } else {
+        console.log(res.message);
+        setIsLoading(false);
+      }
     } catch (error) {
       console.log(error);
     }

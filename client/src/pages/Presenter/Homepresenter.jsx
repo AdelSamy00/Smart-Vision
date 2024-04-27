@@ -6,6 +6,7 @@ import Card from '../../components/Presenter/Card';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
 import Loading from '../../components/shared/Loading';
+import { apiRequest } from '../../utils';
 
 const HomePresenter = () => {
   const [products, setProducts] = useState([]);
@@ -35,7 +36,10 @@ const HomePresenter = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('/products/');
+        const response = await apiRequest({
+          url: '/products/',
+          method: 'GET',
+        });
         console.log('API response:', response.data.products);
         setProducts(response.data.products);
         setIsLoading(false);
@@ -51,17 +55,17 @@ const HomePresenter = () => {
   };
   const handleCategoryChange = (category) => {
     setSelectedCategories((prevCategories) => {
-        const index = prevCategories.indexOf(category);
+      const index = prevCategories.indexOf(category);
 
-        if (index === -1) {
-          const updatedCategories = prevCategories.includes('All')
-            ? prevCategories.filter((cat) => cat !== 'All')
-            : prevCategories;
+      if (index === -1) {
+        const updatedCategories = prevCategories.includes('All')
+          ? prevCategories.filter((cat) => cat !== 'All')
+          : prevCategories;
 
-          return [...updatedCategories, category];
-        } else {
-          return prevCategories.filter((cat) => cat !== category);
-        }
+        return [...updatedCategories, category];
+      } else {
+        return prevCategories.filter((cat) => cat !== category);
+      }
     });
   };
   useEffect(() => {
