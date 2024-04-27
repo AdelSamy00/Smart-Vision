@@ -26,7 +26,7 @@ function ImageSlider() {
               className="flex justify-center items-end w-full  h-[400px] bg-center"
               style={{ backgroundImage: `url(${image.url})` }}
             >
-              <span className="text-2xl mb-4  text-white">{image.title}</span>
+              {/* <span className="text-2xl mb-4  text-white">{image.title}</span> */}
             </div>
           </div>
         ))}

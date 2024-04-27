@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
-import CategoryCard from './CategoryCard';
-import '../../pages/e-commers/StyleSheets/Homepage.css';
-import ProductCard from './ProductCard';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useRef, useState } from "react";
+import CategoryCard from "./CategoryCard";
+import "../../pages/e-commers/StyleSheets/Homepage.css";
+import ProductCard from "./ProductCard";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import { setCart } from "../../redux/CartSlice";
-import { SetCustomer } from '../../redux/CustomerSlice';
-import { useNavigate } from 'react-router-dom';
+import { SetCustomer } from "../../redux/CustomerSlice";
+import { useNavigate } from "react-router-dom";
+import i18n from "../../../Language/translate";
 
 function HomeSlider({ items, option, setSelectedOption }) {
   const categoryCardsRef = useRef(null);
@@ -101,9 +102,29 @@ function HomeSlider({ items, option, setSelectedOption }) {
 
     const handleScroll = () => {
       if (container) {
-        const showLeftArrow = container.scrollLeft > 0;
-        const showRightArrow =
-          container.scrollLeft < container.scrollWidth - container.offsetWidth;
+        let showLeftArrow, showRightArrow;
+
+        if (i18n.language === "ar") {
+          showLeftArrow =
+            container.scrollLeft >
+              container.offsetWidth - container.scrollWidth + 1 ||
+            (container.scrollLeft === 0 && items.length > 4);
+          showRightArrow =
+            container.scrollLeft >=
+              container.offsetWidth - container.scrollWidth &&
+            container.scrollLeft < 0;
+        } else {
+          showLeftArrow = container.scrollLeft > 0;
+          showRightArrow =
+            container.scrollLeft <
+            container.scrollWidth - container.offsetWidth - 1;
+        }
+        // console.log("Scroll Left:", container.scrollLeft);
+        // console.log("Scroll Width:", container.scrollWidth);
+        // console.log("Offset Width:", container.offsetWidth);
+        // console.log("Client Width:", container.clientWidth);
+        // console.log("Show Left Arrow:", showLeftArrow);
+        // console.log("Show Right Arrow:", showRightArrow);
 
         if (leftArrowRef.current) {
           leftArrowRef.current.style.visibility = showLeftArrow
@@ -129,10 +150,23 @@ function HomeSlider({ items, option, setSelectedOption }) {
     if (sliderContainer) {
       sliderContainer.addEventListener("mouseenter", () => {
         if (container) {
-          const showLeftArrow = container.scrollLeft > 0;
-          const showRightArrow =
-            container.scrollLeft <
-            container.scrollWidth - container.offsetWidth;
+          let showLeftArrow, showRightArrow;
+
+          if (i18n.language === "ar") {
+            showLeftArrow =
+              container.scrollLeft >
+                container.offsetWidth - container.scrollWidth + 1 ||
+              (container.scrollLeft === 0 && items.length > 4);
+            showRightArrow =
+              container.scrollLeft >=
+                container.offsetWidth - container.scrollWidth &&
+              container.scrollLeft < 0;
+          } else {
+            showLeftArrow = container.scrollLeft > 0;
+            showRightArrow =
+              container.scrollLeft <
+              container.scrollWidth - container.offsetWidth - 1;
+          }
 
           if (leftArrowRef.current) {
             leftArrowRef.current.style.visibility = showLeftArrow
@@ -166,9 +200,9 @@ function HomeSlider({ items, option, setSelectedOption }) {
     const container = categoryCardsRef.current;
     if (container) {
       const scrollWidth = itemsToScroll * container.children[0].offsetWidth;
-      let scrollAmount = -1 * scrollWidth;
+      let scrollAmount = 1 * scrollWidth;
       container.scrollTo({
-        left: container.scrollLeft + scrollAmount,
+        left: container.scrollLeft - scrollAmount,
         behavior: "smooth",
       });
     }
@@ -178,9 +212,9 @@ function HomeSlider({ items, option, setSelectedOption }) {
     const container = categoryCardsRef.current;
     if (container) {
       const scrollWidth = itemsToScroll * container.children[0].offsetWidth;
-      let scrollAmount = 1 * scrollWidth;
+      let scrollAmount = -1 * scrollWidth;
       container.scrollTo({
-        left: container.scrollLeft + scrollAmount,
+        left: container.scrollLeft - scrollAmount,
         behavior: "smooth",
       });
     }
@@ -230,6 +264,7 @@ function HomeSlider({ items, option, setSelectedOption }) {
           left: "50%",
           transform: "translate(-50%, -50%)",
           pointerEvents: "none",
+          direction: "ltr",
         }}
       >
         <button

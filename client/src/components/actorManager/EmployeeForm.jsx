@@ -429,7 +429,7 @@ function EmployeeForm() {
                     className="text-gray-600 mt-2"
                     style={{ order: i18n.language === 'ar' ? '2' : '1' }}
                   >
-                    {t('UploadFile')}
+                    {t('uploadFile')}
                   </label>
                   <input
                     type="file"

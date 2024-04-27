@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import './StyleSheets/BagPage.css';
-import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
-import { Button } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { setCart } from '../../redux/CartSlice';
-import LoginMessage from '../../components/e-commers/LoginMessage';
+import React, { useEffect, useState } from "react";
+import "./StyleSheets/BagPage.css";
+import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
+import { Button } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setCart } from "../../redux/CartSlice";
+import LoginMessage from "../../components/e-commers/LoginMessage";
+import { useTranslation } from "react-i18next";
+import i18n from "../../../Language/translate";
 
 const Bag = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { customer } = useSelector((state) => state.customer);
@@ -45,7 +48,7 @@ const Bag = () => {
   };
 
   function handleCheckout() {
-    customer._id ? navigate('/checkout') : setshowLoginMessage(true);
+    customer._id ? navigate("/checkout") : setshowLoginMessage(true);
   }
 
   function calculateTotalPrice() {
@@ -69,13 +72,13 @@ const Bag = () => {
       {cart.length === 0 ? (
         <div className="BagIsEmptyDiv">
           <div>
-            <h2>Your bag is empty</h2>
-            <p>Add some Products</p>
+            <h2>{t("Your bag is empty")}</h2>
+            <p>{t("Add some Products")}</p>
             <Link
               to="/store"
               className="btn btn-lg btn-secondary font-bold text-white mt-2"
             >
-              View Product
+              {t("View Product")}
             </Link>
           </div>
         </div>
@@ -84,22 +87,22 @@ const Bag = () => {
           <div className="BagContent">
             <h1
               style={{
-                fontWeight: 'bold',
-                marginBottom: '1rem',
-                fontSize: '40px',
-                color: '#333',
+                fontWeight: "bold",
+                marginBottom: "1rem",
+                fontSize: "40px",
+                color: "#333",
               }}
               className="BagHeader"
             >
-              Your Bag
+              {t("Your Bag")}
             </h1>
             <p
               style={{
-                fontSize: '24px',
-                marginBottom: '20px',
+                fontSize: "24px",
+                marginBottom: "20px",
               }}
             >
-              Total Items: {productsInCart}
+              {t("Total Items")}: {productsInCart}
             </p>
             <hr />
             <ul className="BagList">
@@ -107,9 +110,9 @@ const Bag = () => {
                 <li
                   key={item._id}
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    margin: '20px 0px',
+                    display: "flex",
+                    alignItems: "center",
+                    margin: "20px 0px",
                   }}
                 >
                   {item.images && item.images.length > 0 && (
@@ -117,25 +120,32 @@ const Bag = () => {
                       src={item.images[0]}
                       alt={item.name}
                       style={{
-                        width: '270px',
-                        height: '170px',
-                        marginRight: '10px',
+                        width: "270px",
+                        height: "170px",
+                        marginRight: "10px",
                       }}
                     />
                   )}
 
-                  <div style={{ marginLeft: '20px' }}>
-                    <div style={{ maxWidth: '300px' }}>
+                  <div
+                    style={{
+                      marginLeft: i18n.language === "en" ? "20px" : "0px",
+                      marginRight: i18n.language === "ar" ? "2rem" : "0px",
+                    }}
+                  >
+                    <div style={{ maxWidth: "300px" }}>
                       <p>{item.name}</p>
-                      <p>Price: {item.price} LE</p>
+                      <p>
+                        {t("Price")}: {item.price} {t("EGP")}
+                      </p>
                     </div>
                     <div>
-                      <div style={{ display: 'flex' }} className="divsContent">
+                      <div style={{ display: "flex" }} className="divsContent">
                         <div
                           className="quantity-controls"
                           style={{
-                            padding: '7px 3px',
-                            borderRadius: '30px',
+                            padding: "7px 3px",
+                            borderRadius: "30px",
                           }}
                         >
                           <button
@@ -145,7 +155,7 @@ const Bag = () => {
                           </button>
                           <span
                             style={{
-                              padding: '20px',
+                              padding: "20px",
                             }}
                           >
                             {item.quantity || 1}
@@ -159,8 +169,10 @@ const Bag = () => {
                         <button
                           onClick={() => handleRemoveFromCart(item._id)}
                           style={{
-                            marginTop: '15px',
-                            marginLeft: '1rem',
+                            marginTop: "15px",
+                            marginLeft: i18n.language === "en" ? "1rem" : "0rem",
+                            marginRight:
+                              i18n.language === "ar" ? "1rem" : "0rem",
                           }}
                         >
                           <DeleteSharpIcon />
@@ -172,7 +184,9 @@ const Bag = () => {
                 </li>
               ))}
             </ul>
-            <p className="BagTotalPrice">Total Price: {totalPrice} EL</p>
+            <p className="BagTotalPrice">
+              {t("Total Price")}: {totalPrice} {t("EGP")}
+            </p>
             <div className="w-full flex justify-center">
               <Button
                 type="submit"
@@ -180,7 +194,7 @@ const Bag = () => {
                 className="checkoutButton"
                 onClick={handleCheckout}
               >
-                checkout
+                {t("checkout")}
               </Button>
             </div>
           </div>

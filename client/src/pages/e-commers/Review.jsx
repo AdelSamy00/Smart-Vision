@@ -5,8 +5,11 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Grid from "@mui/material/Grid";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next"; // Import the useTranslation hook
 
 export default function Review() {
+  const { t } = useTranslation(); // Initialize the useTranslation hook
+
   const [products, setProducts] = React.useState([]);
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -32,9 +35,9 @@ export default function Review() {
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Order summary
+        {t("Order summary")}
       </Typography>
-      <List disablePadding style={{width:"100%"}}>
+      <List disablePadding style={{ width: "100%" }}>
         {products.map((product) => (
           <ListItem
             key={product._id}
@@ -43,7 +46,7 @@ export default function Review() {
               px: 0,
               borderTop: "1px solid grey",
               borderBottom: "1px solid grey",
-              boxShadow:'none'
+              boxShadow: "none",
             }}
             variant="outlined"
           >
@@ -53,8 +56,10 @@ export default function Review() {
               style={{ width: 100, height: 70, marginRight: 10 }}
             />
             <Typography variant="body2" style={{ fontSize: "15px" }}>
-              <span style={{ fontSize: "18px" }}>{product.quantity?product.quantity:1}</span> x{" "}
-              {(product.name)}
+              <span style={{ fontSize: "18px" }}>
+                {product.quantity ? product.quantity : 1}
+              </span>{" "}
+              x {product.name}
               <br />
               {/* <span style={{ fontSize: "11px" }}>{product.description}</span> */}
             </Typography>
@@ -63,35 +68,44 @@ export default function Review() {
               variant="body2"
               sx={{ fontWeight: 700, marginRight: 3, marginLeft: "auto" }}
             >
-              EGP {product.price}
+              {product.price} {t("EGP")}
             </Typography>
           </ListItem>
         ))}
-        <ListItem sx={{ py: 1, px: 0 }}>
-          <ListItemText primary="Total" sx={{ marginLeft: 3 }} />
+        <ListItem
+          sx={{
+            // py: 1,
+            // px: 0,
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography variant="subtitle1" >{t("Total")}</Typography>
           <Typography
             variant="subtitle1"
             sx={{ fontWeight: 700, marginRight: 3 }}
           >
-            EGP {totalPrice}
+            {totalPrice}
+            {t("EGP")}
           </Typography>
         </ListItem>
       </List>
       <Grid container spacing={2} style={{ textAlign: "" }}>
         <Grid item xs={12} sm={12}>
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-            Shipping Info
+            {t("Shipping Info")}
           </Typography>
           {shippingInfo && (
             <React.Fragment>
               <Typography gutterBottom>
-                Your Name Is :{shippingInfo.firstName} {shippingInfo.lastName}
+                {t("Your Name Is")}: {shippingInfo.firstName}{" "}
+                {shippingInfo.lastName}
               </Typography>
               <Typography gutterBottom>
-                Your Address Is :{shippingInfo.address}
+                {t("Your Address Is")}: {shippingInfo.address}
               </Typography>
               <Typography gutterBottom>
-                Your Phone Number Is :{shippingInfo.phoneNumber}
+                {t("Your Phone Number Is")}: {shippingInfo.phoneNumber}
               </Typography>
             </React.Fragment>
           )}

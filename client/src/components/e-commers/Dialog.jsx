@@ -6,8 +6,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 export default function AlertDialog({ open, onClose, products, msg }) {
+  const { t } = useTranslation();
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
@@ -25,7 +27,7 @@ export default function AlertDialog({ open, onClose, products, msg }) {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          OK
+          {t("OK")}
         </Button>
       </DialogActions>
     </Dialog>

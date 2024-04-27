@@ -7,8 +7,11 @@ import toast, { Toaster } from 'react-hot-toast';
 import './StyleSheets/Favorites.css';
 import Loading from '../../components/shared/Loading.jsx';
 import { setCart } from '../../redux/CartSlice.js';
+import { useTranslation } from "react-i18next"; 
+import i18n from "../../../Language/translate";
 
 function Favourites() {
+  const { t } = useTranslation();
   const { customer } = useSelector((state) => state.customer);
   const { cart } = useSelector((state) => state.cart);
   const [favoritProducts, setFavoritProducts] = useState([]);
@@ -88,7 +91,7 @@ function Favourites() {
             },
           }}
         />
-        <h1>Favorites</h1>
+        <h1>{t('Favorites')}</h1>
         {isLoading ? (
           <Loading />
         ) : (
@@ -114,7 +117,7 @@ function Favourites() {
                 );
               })
             ) : (
-              <h2>Your favorite list is empty.</h2>
+              <h2>{t('Your favorite list is empty.')}</h2>
             )}
           </div>
         )}

@@ -1,7 +1,9 @@
 import React from 'react';
 import ImageSlider from '../../components/e-commers/ImageSlider';
-
+import { useTranslation } from "react-i18next"; // Import the useTranslation hook
+import i18n from "../../../Language/translate";
 function AboutUs() {
+  const { t } = useTranslation();
   return (
     <section className="text-gray-600 body-font">
       <div className="container px-5 py-10 mx-auto flex flex-col ">
@@ -39,15 +41,9 @@ function AboutUs() {
               </div>
             </div>
             <div className="sm:w-2/3 sm:pl-8 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
-              <h2 className="text-2xl mb-2">Smart Vision Company</h2>
+              <h2 className="text-2xl mb-2">{i18n.language==="ar"?`${t("Company")} Smart Vision`:`Smart Vision ${t("Company")}`}</h2>
               <p className="leading-relaxed text-lg mb-4">
-                A leading company in its field and has smart solutions in
-                employing products through specialized engineers with high
-                quality and commitment to specifications and deadlines in the
-                manufacture, supply and installation of (office curtains - HDF
-                parquet - kitchens - armored doors - bathroom and dressing units
-                - stretch ceilings) two-year warranty and lifelong maintenance -
-                sale At factory prices.
+                {t("SmartVisionMessage3")}
               </p>
             </div>
           </div>
@@ -61,12 +57,10 @@ function AboutUs() {
                 className="self-center"
               />
               <h2 className="text-3xl text-blue-500 text-center ">
-                Our Vision
+                {t("OurVision")}
               </h2>
               <p className="text-black">
-                Smart Vision seeks to provide the best services with high
-                quality to its customers while achieving the equation between
-                (commitment - price - quality)
+                {t("SmartVisionMessage")}
               </p>
             </div>
             <div className="md:w-1/3 flex flex-col p-10 hover:bg-slate-100 transition ease-in duration-800">
@@ -77,11 +71,9 @@ function AboutUs() {
                 height={60}
                 className="self-center"
               />
-              <h2 className="text-3xl text-blue-500 text-center">Mission</h2>
+              <h2 className="text-3xl text-blue-500 text-center">{t("Mission")}</h2>
               <p className="text-black">
-                We affirm our keenness to work continuously to obtain excellent
-                results by forming a partnership between us and our customers in
-                achieving the vision of Smart Vision.
+              {t("SmartVisionMessage1")}
               </p>
             </div>
             <div className="md:w-1/3 flex flex-col  bg-slate-300  p-10 hover:bg-slate-100 transition ease-in duration-800">
@@ -92,12 +84,9 @@ function AboutUs() {
                 height={60}
                 className="self-center"
               />
-              <h2 className="text-3xl text-blue-500 text-center">Commitment</h2>
+              <h2 className="text-3xl text-blue-500 text-center">{t("Commitment")}</h2>
               <p className="text-black">
-                We are committed to hard and continuous work and learning to
-                provide our services to our customers without discrimination,
-                and to work to develop our products to reach the highest levels
-                of quality
+              {t("SmartVisionMessage2")}
               </p>
             </div>
           </div>

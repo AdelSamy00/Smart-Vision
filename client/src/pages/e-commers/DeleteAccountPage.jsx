@@ -13,13 +13,15 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { apiRequest } from '../../utils';
 import { Alert, Snackbar } from '@mui/material';
-
+import { useTranslation } from "react-i18next"; // Import the useTranslation hook
+import i18n from "../../../Language/translate";
 //to Tranition the message from the end of the page
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const DeleteAccountPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [error, setError] = useState('');
@@ -85,18 +87,17 @@ const DeleteAccountPage = () => {
           aria-describedby="alert-dialog-slide-description"
         >
           <DialogTitle sx={{ fontSize: '25px', fontWeight: 'bold' }}>
-            Your account is deleted
+            {t("Your account is deleted")}
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
-              Your Smart Vision account has now been deleted.
+              {t("Your Smart Vision account has now been deleted")}.
               <br />
-              We are sad to see you leave, and hope you will come back in the
-              future.
+              {t("We are sad to see you leave, and hope you will come back in the future")}.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCancelMessage}>Cancel</Button>
+            <Button onClick={handleCancelMessage}>{t("cancel")}</Button>
           </DialogActions>
         </Dialog>
       </div>

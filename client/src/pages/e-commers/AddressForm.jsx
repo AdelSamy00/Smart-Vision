@@ -4,8 +4,10 @@ import React, { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-
+import { useTranslation } from "react-i18next"; // Import the useTranslation hook
+import i18n from "../../../Language/translate";
 export default function AddressForm({ formData, onChange, errorMessage }) {
+  const { t } = useTranslation();
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     onChange({ ...formData, [name]: value });
@@ -18,7 +20,7 @@ export default function AddressForm({ formData, onChange, errorMessage }) {
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Shipping Address
+        {t("Shipping address")}
       </Typography>
       <form>
         <Grid container spacing={2}>
@@ -27,7 +29,7 @@ export default function AddressForm({ formData, onChange, errorMessage }) {
               required
               id="firstName"
               name="firstName"
-              label="First Name"
+              label={t("First Name")}
               autoComplete="given-name"
               value={formData.firstName}
               onChange={handleInputChange}
@@ -42,7 +44,7 @@ export default function AddressForm({ formData, onChange, errorMessage }) {
               required
               id="lastName"
               name="lastName"
-              label="Last Name"
+              label={t("Last Name")}
               autoComplete="family-name"
               value={formData.lastName}
               onChange={handleInputChange}
@@ -56,7 +58,7 @@ export default function AddressForm({ formData, onChange, errorMessage }) {
               required
               id="phoneNumber"
               name="phoneNumber"
-              label="Phone Number"
+              label={t("Phone Number")}
               autoComplete="tel"
               value={formData.phoneNumber}
               onChange={handleInputChange}
@@ -70,7 +72,7 @@ export default function AddressForm({ formData, onChange, errorMessage }) {
               required
               id="address"
               name="address"
-              label="Address"
+              label={t("Address")}
               autoComplete="shipping address-line1"
               value={formData.address}
               onChange={handleInputChange}
@@ -83,7 +85,7 @@ export default function AddressForm({ formData, onChange, errorMessage }) {
             <TextField
               id="city"
               name="city"
-              label="City"
+              label={t("City")}
               autoComplete="shipping address-level2"
               value={formData.city}
               required
@@ -97,7 +99,7 @@ export default function AddressForm({ formData, onChange, errorMessage }) {
             <TextField
               id="country"
               name="country"
-              label="Country"
+              label={t("Country")}
               autoComplete="shipping country"
               value={formData.country}
               required

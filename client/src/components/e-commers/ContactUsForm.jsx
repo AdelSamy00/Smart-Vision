@@ -4,7 +4,10 @@ import Loading from '../shared/Loading';
 import axios from 'axios';
 import { handleFileUpload } from '../../utils';
 import toast, { Toaster } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
+
 function ContactUsForm() {
+  const { t } = useTranslation();
   const [image, setImage] = useState(null);
   const {
     register,
@@ -28,7 +31,6 @@ function ContactUsForm() {
         .then((res) => {
           toast.dismiss();
           toast(res.data.message);
-          //alert(res.data.message);
         })
         .catch((err) => {
           console.log(err);
@@ -39,11 +41,13 @@ function ContactUsForm() {
       });
     }
   };
+
   useEffect(() => {
     if (isSubmitSuccessful) {
       reset();
     }
   }, [isSubmitSuccessful, reset]);
+
   return (
     <form
       className="flex flex-wrap flex-col -m-2 sm:flex-row"
@@ -66,7 +70,7 @@ function ContactUsForm() {
       <div className="p-2 sm:w-1/2 ">
         <div className="relative">
           <label htmlFor="name" className="leading-7 text-sm text-gray-600">
-            Name*
+            {t('Name')}*
           </label>
           <input
             type="text"
@@ -78,14 +82,14 @@ function ContactUsForm() {
             })}
           />
           {errors.name && (
-            <div className="text-red-500">{errors.name.message}</div>
+            <div className="text-red-500">{t(errors.name.message)}</div>
           )}
         </div>
       </div>
       <div className="p-2 sm:w-1/2">
         <div className="relative">
           <label htmlFor="email" className="leading-7 text-sm text-gray-600">
-            Email*
+            {t('Email')}*
           </label>
           <input
             type="email"
@@ -93,24 +97,24 @@ function ContactUsForm() {
             name="email"
             className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             {...register('email', {
-              required: 'Email Address is required',
+              required: t('Email Address is required'),
               validate: (value) => {
                 if (!value.includes('@')) {
-                  return 'Email must include @';
+                  return t('Email must include @');
                 }
                 return true;
               },
             })}
           />
           {errors.email && (
-            <div className="text-red-500">{errors.email.message}</div>
+            <div className="text-red-500">{t(errors.email.message)}</div>
           )}
         </div>
       </div>
       <div className="p-2 w-full">
         <div className="relative">
           <label htmlFor="message" className="leading-7 text-sm text-gray-600">
-            Message*
+            {t('Message')}*
           </label>
           <textarea
             id="message"
@@ -121,7 +125,7 @@ function ContactUsForm() {
             })}
           ></textarea>
           {errors.message && (
-            <div className="text-red-500">{errors.message.message}</div>
+            <div className="text-red-500">{t(errors.message.message)}</div>
           )}
         </div>
       </div>
@@ -131,7 +135,7 @@ function ContactUsForm() {
             htmlFor="uploadFile"
             className="leading-7 text-sm text-gray-600 mt-1"
           >
-            uploadFile
+            {t('uploadFile')}
           </label>
           <input
             type="file"
@@ -152,7 +156,7 @@ function ContactUsForm() {
             disabled={isSubmitting}
             className="flex mx-auto text-white bg-indigo-700 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-900 rounded text-lg"
           >
-            Send
+            {t('Send')}
           </button>
         )}
       </div>

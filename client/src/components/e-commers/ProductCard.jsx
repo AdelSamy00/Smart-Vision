@@ -3,13 +3,15 @@ import Rating from '@mui/material/Rating';
 import './stylesheets/ProductCard.css';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-
+import { useTranslation } from "react-i18next"; // Import the useTranslation hook
+import i18n from "../../../Language/translate";
 function ProductCard({
   product,
   favoriteList = [],
   handelFavorit,
   handelCart,
 }) {
+  const { t } = useTranslation();
   const { customer } = useSelector((state) => state.customer);
   const { cart } = useSelector((state) => state.cart);
   const isFavorit = () => {
@@ -83,7 +85,7 @@ function ProductCard({
           <div className="w-full">
             <h5>{product?.name}</h5>
             <h6>{product?.category}</h6>
-            <p>{product?.price} EL</p>
+            <p>{product?.price} {t("EGP")}</p>
           </div>
           <div className="sbProductCardDataRating">
             <Rating
