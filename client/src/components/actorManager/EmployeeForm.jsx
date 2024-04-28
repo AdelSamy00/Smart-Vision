@@ -38,22 +38,22 @@ function EmployeeForm() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const employeeAllTypes = [
-    t('Engineer'),
-    t('InventoryManager'),
-    t('FactotyManager'),
-    t('Presenter'),
-    t('ActorManager'),
-    t('Operator'),
+    'Engineer',
+    'Inventory Manager',
+    'Factoty',
+    'Presenter',
+    'Actor Manager',
+    'Operator',
   ];
   const qualificationAllTypes = [
-    t("Bachelor's Degree"),
-    t("Master's Degree"),
-    t('Doctor of Philosophy'),
-    t('Professional Certification (e.g., CPA, CFA)'),
-    t('Diploma'),
-    t('Associate Degree'),
-    t('High School Diploma/GED'),
-    t('Technical Certification'),
+    "Bachelor's Degree",
+    "Master's Degree",
+    'Doctor of Philosophy',
+    'Professional Certification (e.g., CPA, CFA)',
+    'Diploma',
+    'Associate Degree',
+    'High School Diploma/GED',
+    'Technical Certification',
   ];
   const { employeeId } = useParams();
   const [firstName, setfirstName] = useState('');
@@ -66,7 +66,6 @@ function EmployeeForm() {
   const [qualification, setqualification] = useState('');
   const [employeeType, setemployeeType] = useState('');
   const [salary, setsalary] = useState('');
-  const [image, setimage] = useState('');
   const [password, setpassword] = useState('');
   const [confirmpassword, setconfirmpassword] = useState('');
   const [PasswordConformed, setPasswordConformed] = useState(false);
@@ -85,7 +84,6 @@ function EmployeeForm() {
     setaddress(employee?.address);
     setqualification(employee?.qualification);
     setphone(employee?.phone);
-    setimage(employee?.image);
     setemployeeType(employee?.jobTitle);
     setpassword(employee?.password);
     setconfirmpassword(employee?.password);
@@ -127,7 +125,6 @@ function EmployeeForm() {
           salary,
           phone,
           address,
-          image,
         },
         token: employee?.token,
       });
@@ -143,8 +140,10 @@ function EmployeeForm() {
 
   async function handleUpdateEmployee() {
     try {
-      await axios
-        .put(`/employees/`, {
+      const res = await apiRequest({
+        url: `/employees/actor/`,
+        method: 'PUT',
+        data: {
           employeeId,
           firstName,
           lastName,
@@ -158,15 +157,14 @@ function EmployeeForm() {
           salary,
           phone,
           address,
-          image,
-        })
-        .then((res) => {
-          navigate('/actor/view-employees');
-          // console.log(res);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+        },
+        token: employee?.token,
+      });
+      if (res?.data?.success) {
+        navigate('/actor/employees');
+      } else {
+        console.log(res?.message);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -181,7 +179,6 @@ function EmployeeForm() {
     } else {
       setIsLoading(true);
       employeeId ? handleUpdateEmployee() : handleAddEmployee();
-      //const picture = image && (await handleFileUpload(image));
     }
   };
 
@@ -375,7 +372,7 @@ function EmployeeForm() {
                   {qualificationAllTypes.map((type, idx) => {
                     return (
                       <option key={idx} value={type}>
-                        {type}
+                        {t(type)}
                       </option>
                     );
                   })}
@@ -396,8 +393,8 @@ function EmployeeForm() {
                   <option value="">{t('ChooseOption')}</option>
                   {employeeAllTypes.map((type, idx) => {
                     return (
-                      <option key={idx} value={type}>
-                        {type}
+                      <option key={idx} value={type.toLowerCase()}>
+                        {t(type)}
                       </option>
                     );
                   })}

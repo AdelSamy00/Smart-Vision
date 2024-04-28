@@ -110,9 +110,8 @@ router.put('/inventory/shipped/:orderId', sendOrderToShipped);
 
 //#region Actor & Employees
 router.use('/actor', actorRoute);
-router.put('/', manageEmployees);
 router.delete('/', deleteEmployee);
-router.put('/change_password', changePassword);
+
 //#end region
 
 router.put('/update_state', updateServiceOrderStateToManufactured);

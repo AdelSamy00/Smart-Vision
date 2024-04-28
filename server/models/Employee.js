@@ -46,10 +46,8 @@ const employeeSchema = new mongoose.Schema(
       required: [true, 'Salary is Required!'],
     },
     jobTitle: { type: String, required: [true, 'Job title is Required!'] },
-    image: { type: String }, 
-    birthday: { type: Date }, 
+    birthday: { type: Date },
     verified: { type: Boolean, default: true },
-    
   },
   {
     timestamps: true,
