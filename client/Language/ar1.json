@@ -71,5 +71,13 @@
     "done": "تم",
     "FailedTryAgain": "فشل. حاول مرة اخرى.",
     "update": "تعديل",
-    "addSuccessfully": "اضيف بنجاح"
+    "addSuccessfully": "اضيف بنجاح",
+    "import": "وارد",
+    "fillAllQuantities": "يرجى ملء جميع الكميات قبل المتابعة.",
+    "transactionType": "نوع المعاملة",
+    "startDate": "تاريخ البدء",
+    "endDate": "تاريخ الانتهاء",
+    "today": "اليوم",
+    "clear": "مسح",
+    "noTransactionFound": "لم يتم العثور على أي معاملة."
 }

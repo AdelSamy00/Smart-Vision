@@ -3,7 +3,6 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { apiRequest } from '../../utils';
-
 import {
   Grid,
   TextField,
@@ -16,12 +15,12 @@ import {
 } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { t } from 'i18next';
 
 function TransactionPPComponent() {
   const [transactions, setTransactions] = useState([]);
   const { employee } = useSelector((state) => state.employee);
   const [products, setProducts] = useState([{ product: '', quantity: '' }]);
-  const [isLoading, setIsLoading] = useState(true);
   const newProductNameRef = useRef(null);
   const newProductQuantityRef = useRef(null);
   const [allProducts, setAllProducts] = useState([]);
@@ -31,18 +30,16 @@ function TransactionPPComponent() {
     newProductQuantity: '',
   });
 
-  const fetchProducts = async () => {
-    try {
-      const response = await axios.get(`/products/`);
-      setAllProducts(response.data.products);
-      setIsLoading(false);
-      console.log(response.data.products);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    }
-  };
-
   useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(`/products/`);
+        setAllProducts(response.data.products);
+        console.log(response.data.products);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
     fetchProducts();
   }, []);
 
@@ -60,7 +57,6 @@ function TransactionPPComponent() {
     );
     setProducts(selectedProductsData);
     setTransactions(selectedProductsData);
-    setIsLoading(false);
   }, [allProducts, orderDetails.products]);
 
   const addProduct = () => {
@@ -104,9 +100,8 @@ function TransactionPPComponent() {
     const hasNullQuantity = products.some(
       (product) => product.quantity === null || product.quantity === ''
     );
-
     if (hasNullQuantity) {
-      toast.error('Please fill in all the quantities before proceeding.');
+      toast.error(t('fillAllQuantities'));
       return;
     }
     try {
@@ -122,7 +117,7 @@ function TransactionPPComponent() {
         },
       });
       if (response.data.success) {
-        toast.success(response.data.message);
+        toast.success(t('addSuccessfully'));
         setTransactions([]);
         setOrderDetails({
           products: [],
@@ -130,11 +125,11 @@ function TransactionPPComponent() {
           newProductQuantity: '',
         });
       } else {
-        toast.error(response.data.message);
+        toast.error(t('FailedTryAgain'));
       }
     } catch (error) {
       console.error('Error making transaction:', error);
-      toast.error('Failed to make transaction. Please try again.');
+      toast.error(t('FailedTryAgain'));
     }
   };
 
@@ -188,7 +183,7 @@ function TransactionPPComponent() {
             justifyContent: 'flex-start',
           }}
         >
-          Product Transaction:
+          {t('products')}:
         </Typography>
       </Grid>
       <Grid item xs={5}>
@@ -199,7 +194,7 @@ function TransactionPPComponent() {
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Product Name"
+              placeholder={t('name')}
               type="text"
               name="newProductName"
               inputRef={newProductNameRef}
@@ -224,7 +219,7 @@ function TransactionPPComponent() {
       <Grid item xs={5}>
         <TextField
           type="number"
-          label="Quantity"
+          placeholder={t('quantity')}
           name="newProductQuantity"
           inputRef={newProductQuantityRef}
           value={orderDetails.newProductQuantity}
@@ -235,7 +230,7 @@ function TransactionPPComponent() {
       </Grid>
       <Grid item xs={2}>
         <Button fullWidth onClick={addProduct} style={{ marginTop: '10px' }}>
-          Add
+          {t('add')}
         </Button>
       </Grid>
       {orderDetails.products.length > 0 && (
@@ -281,18 +276,18 @@ function TransactionPPComponent() {
             onClick={() => handleTransaction('Export')}
             style={{ backgroundColor: '#edede9', color: 'black' }}
           >
-            Export
+            {t('export')}
           </Button>
           <Button
             variant="contained"
             onClick={() => handleTransaction('Import')}
             style={{
-              marginLeft: '70px',
+              marginInline: '70px',
               backgroundColor: '#edede9',
               color: 'black',
             }}
           >
-            Import
+            {t('import')}
           </Button>
         </Grid>
       </Grid>

@@ -15,12 +15,12 @@ import {
 } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { t } from 'i18next';
 
 function TransactionMComponent() {
   const [transactions, setTransactions] = useState([]);
   const { employee } = useSelector((state) => state.employee);
   const [Matrials, setMatrials] = useState([{ material: '', quantity: '' }]);
-  const [isLoading, setIsLoading] = useState(true);
   const newMaterialNameRef = useRef(null);
   const newMaterialQuantityRef = useRef(null);
   const [AllMatrials, setAllMatrials] = useState([]);
@@ -30,17 +30,17 @@ function TransactionMComponent() {
     newMaterialQuantity: '',
   });
 
-  const fetchMaterials = async () => {
-    try {
-      const response = await axios.get(`/Materials/`);
-      setAllMatrials(response.data.materials);
-      setIsLoading(false);
-      console.log(response.data.materials);
-    } catch (error) {
-      console.error('Error fetching materials:', error);
-    }
-  };
   useEffect(() => {
+    const fetchMaterials = async () => {
+      try {
+        const response = await axios.get(`/Materials/`);
+        setAllMatrials(response.data.materials);
+        //console.log(response.data.materials);
+      } catch (error) {
+        console.error('Error fetching materials:', error);
+      }
+    };
+
     fetchMaterials();
   }, []);
 
@@ -58,12 +58,7 @@ function TransactionMComponent() {
     );
     setMatrials(selectedMaterialsData);
     setTransactions(selectedMaterialsData);
-    setIsLoading(false);
   }, [AllMatrials, orderDetails.materials]);
-
-  useEffect(() => {
-    console.log(transactions);
-  }, [transactions]);
 
   const addMaterial = () => {
     const { newMaterialName, newMaterialQuantity } = orderDetails;
@@ -108,7 +103,7 @@ function TransactionMComponent() {
     );
 
     if (hasNullQuantity) {
-      toast.error('Please fill in all the quantities before proceeding.');
+      toast.error(t('fillAllQuantities'));
       return;
     }
     try {
@@ -124,7 +119,7 @@ function TransactionMComponent() {
         },
       });
       if (response.data.success) {
-        toast.success(response.data.message);
+        toast.success(t('addSuccessfully'));
         setTransactions([]);
         setOrderDetails({
           materials: [],
@@ -132,13 +127,14 @@ function TransactionMComponent() {
           newMaterialQuantity: '',
         });
       } else {
-        toast.error(response.data.message);
+        toast.error(t('FailedTryAgain'));
       }
     } catch (error) {
       console.error('Error making transaction:', error);
-      toast.error('Failed to make transaction. Please try again.');
+      toast.error(t('FailedTryAgain'));
     }
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setOrderDetails({ ...orderDetails, [name]: value });
@@ -151,6 +147,7 @@ function TransactionMComponent() {
       }
     }
   };
+  
   const removeMaterial = (index) => {
     const materials = [...orderDetails.materials];
     materials.splice(index, 1);
@@ -189,29 +186,31 @@ function TransactionMComponent() {
             justifyContent: 'flex-start',
           }}
         >
-          Materials Transaction :
+          {t('materials')}:
         </Typography>
       </Grid>
       <Grid item xs={5}>
-        {console.log(AllMatrials)}
         <Autocomplete
           options={AllMatrials}
           getOptionLabel={(option) => option.name}
           id="combo-box-demo"
           renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Material Name"
-              type="text"
-              name="newMaterialName"
-              inputRef={newMaterialNameRef}
-              value={orderDetails.newMaterialName}
-              onKeyDown={(e) =>
-                e.key === 'Enter' &&
-                orderDetails.newMaterialName.trim() !== '' &&
-                newMaterialQuantityRef.current.focus()
-              }
-            />
+            <>
+              <TextField
+                {...params}
+                placeholder={t('name')}
+                type="text"
+                id="newMaterialName"
+                name="newMaterialName"
+                inputRef={newMaterialNameRef}
+                value={orderDetails.newMaterialName}
+                onKeyDown={(e) =>
+                  e.key === 'Enter' &&
+                  orderDetails.newMaterialName.trim() !== '' &&
+                  newMaterialQuantityRef.current.focus()
+                }
+              />
+            </>
           )}
           onChange={(event, newValue) => {
             if (newValue) {
@@ -226,7 +225,7 @@ function TransactionMComponent() {
       <Grid item xs={5}>
         <TextField
           type="number"
-          label="Quantity"
+          placeholder={t('quantity')}
           name="newMaterialQuantity"
           inputRef={newMaterialQuantityRef}
           value={orderDetails.newMaterialQuantity}
@@ -237,7 +236,7 @@ function TransactionMComponent() {
       </Grid>
       <Grid item xs={2}>
         <Button fullWidth onClick={addMaterial} style={{ marginTop: '10px' }}>
-          Add
+          {t('add')}
         </Button>
       </Grid>
       {orderDetails.materials.length > 0 && (
@@ -283,18 +282,18 @@ function TransactionMComponent() {
             onClick={() => handleTransaction('Export')}
             style={{ backgroundColor: '#edede9', color: 'black' }}
           >
-            Export
+            {t('export')}
           </Button>
           <Button
             variant="contained"
             onClick={() => handleTransaction('Import')}
             style={{
-              marginLeft: '70px',
+              marginInline: '70px',
               backgroundColor: '#edede9',
               color: 'black',
             }}
           >
-            Import
+            {t('import')}
           </Button>
         </Grid>
       </Grid>

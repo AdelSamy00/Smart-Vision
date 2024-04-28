@@ -72,5 +72,13 @@
     "done": "Done",
     "FailedTryAgain": "Failed. Please try again.",
     "update": "Update",
-    "addSuccessfully": "Added Successfully"
+    "addSuccessfully": "Added Successfully",
+    "import": "Import",
+    "fillAllQuantities": "Please fill in all the quantities before proceeding.",
+    "transactionType": "Transaction Type",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "today": "Today",
+    "clear": "Clear",
+    "noTransactionFound": "No transaction found."
 }

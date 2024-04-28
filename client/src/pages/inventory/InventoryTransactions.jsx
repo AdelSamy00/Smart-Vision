@@ -4,6 +4,7 @@ import Loading from '../../components/shared/Loading';
 import Table from 'react-bootstrap/Table';
 import './styleSheets/InventoryMaterialTransactions.css';
 import getTodayDate from '../../utils/dates';
+import { t } from 'i18next';
 
 function InventoryTransactions() {
   const todayDate = getTodayDate();
@@ -16,24 +17,24 @@ function InventoryTransactions() {
   const [foundTransactions, setfoundTransactions] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   //console.log(allTransactions);
-  async function fetchOrderHistory() {
-    try {
-      await axios
-        .get(`/employees/transaction`)
-        .then((res) => {
-          setallTransactions(res?.data?.transactions);
-          setfilteredTransactions(res?.data?.transactions);
-          res?.data?.transactions?.length > 0 && setfoundTransactions(true);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  }
   useEffect(() => {
+    async function fetchOrderHistory() {
+      try {
+        await axios
+          .get(`/employees/transaction`)
+          .then((res) => {
+            setallTransactions(res?.data?.transactions);
+            setfilteredTransactions(res?.data?.transactions);
+            res?.data?.transactions?.length > 0 && setfoundTransactions(true);
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
     fetchOrderHistory();
   }, []);
 
@@ -58,45 +59,43 @@ function InventoryTransactions() {
     setfilteredTransactions(filtered);
   }, [transactionMethod, startDate, endtDate]);
 
-  console.log(foundTransactions);
+  //console.log(foundTransactions);
 
   return (
     <>
       {!isLoading ? (
         <main className="materialTransactionsMain">
-          {console.log(allTransactions)}
           <div
             className="materialTransactionsFilterNavbarItem mt-4"
             style={{ marginBottom: '1.5rem' }}
           >
-            <label htmlFor="transactionType">Select Type:</label>
+            <label htmlFor="transactionType">{t('selectType')}:</label>
             <select
               name="transactionType"
               id="transactionType"
               onChange={(e) => setType(e.target.value)}
               value={type}
             >
-              <option value={'Products'}>Products</option>
-              <option value={'Materials'}>Materials</option>
+              <option value={'Products'}>{t('products')}</option>
+              <option value={'Materials'}>{t('materials')}</option>
             </select>
           </div>
-          <h2>{type} Transactions</h2>
-          {console.log(type)}
+          <h2 className="mb-2">{t(type.toLowerCase())}</h2>
           <div className="materialTransactionsFilterNavbar">
-            <div className="materialTransactionsFilterNavbarItem">
-              <label htmlFor="transactionMethod">Transaction Type:</label>
+            <div className="materialTransactionsFilterNavbarItem ">
+              <label htmlFor="transactionMethod">{t('transactionType')}:</label>
               <select
                 name="transactionMethod"
                 id="transactionMethod"
                 onChange={(e) => settransactionMethod(e.target.value)}
               >
-                <option value="All">All</option>
-                <option value="Export">Export</option>
-                <option value="Import">Import</option>
+                <option value="All">{t('all')}</option>
+                <option value="Export">{t('export')}</option>
+                <option value="Import">{t('import')}</option>
               </select>
             </div>
             <div className="materialTransactionsFilterNavbarItem">
-              <label htmlFor="startDate">Start Date:</label>
+              <label htmlFor="startDate">{t('startDate')}:</label>
               <input
                 type="date"
                 id="startDate"
@@ -107,7 +106,7 @@ function InventoryTransactions() {
               />
             </div>
             <div className="materialTransactionsFilterNavbarItem">
-              <label htmlFor="endtDate">End Date:</label>
+              <label htmlFor="endtDate">{t('endDate')}:</label>
               <input
                 type="date"
                 id="endtDate"
@@ -126,18 +125,18 @@ function InventoryTransactions() {
                   setstartDate(todayDate);
                 }}
               >
-                <span className="flex mb-1">Today</span>
+                <span className="flex mb-1">{t('today')}</span>
               </button>
               <button
                 type="submit"
-                className="text-xl ml-3 bg-slate-700 hover:bg-slate-800 text-white py-1 px-2 rounded-xl "
+                className="text-xl mx-3 bg-slate-700 hover:bg-slate-800 text-white py-1 px-2 rounded-xl "
                 onClick={() => {
                   settransactionMethod('All');
                   setendDate('');
                   setstartDate('');
                 }}
               >
-                <span className="flex mb-1">Clear</span>
+                <span className="flex mb-1">{t('clear')}</span>
               </button>
             </div>
           </div>
@@ -145,15 +144,14 @@ function InventoryTransactions() {
             <Table striped bordered hover responsive>
               <thead className="materialTransactionsTableHead">
                 <tr>
-                  <th>Date</th>
-                  <th>Name</th>
-                  <th>Export</th>
-                  <th>Import</th>
+                  <th>{t('date')}</th>
+                  <th>{t('name')}</th>
+                  <th>{t('export')}</th>
+                  <th>{t('import')}</th>
                 </tr>
               </thead>
               <tbody className="materialTransactionsTableBody">
                 {filteredTransactions?.map((transaction) => {
-                  //console.log(filteredTransactions.length > 0);
                   let transactionType;
                   {
                     type === 'Materials'
@@ -186,7 +184,7 @@ function InventoryTransactions() {
           </div>
           {!foundTransactions && (
             <div className="materialTransactionsNotfound">
-              <p className="m-auto">No transaction found.</p>
+              <p className="m-auto">{t('noTransactionFound')}</p>
             </div>
           )}
         </main>

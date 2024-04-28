@@ -41,7 +41,7 @@
     gap: 8px;
 }
 
-.materialTransactionsFilterNavbarItem input  {
+.materialTransactionsFilterNavbarItem input {
     border: 1px solid #9a9a9a;
     border-radius: .5rem;
     padding: 6px 10px;
@@ -57,6 +57,7 @@
     text-align: center;
     padding: 3px !important;
     margin-right: .5rem !important;
+    direction: ltr;
 }
 
 .materialTransactionsFilterNavbarItem label {
@@ -66,6 +67,11 @@
 
 .materialTransactionsFilterNavbarbuttons {
     margin-left: auto;
+}
+
+:dir(rtl) .materialTransactionsFilterNavbarbuttons {
+    margin-left: 0;
+    margin-right: auto;
 }
 
 .materialTransactionsTableDiv {

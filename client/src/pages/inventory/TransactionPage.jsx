@@ -1,8 +1,8 @@
 import React from "react";
 import { Grid } from "@mui/material";
-
 import TransactionMComponent from "../../components/inventory/TransactionMComponent";
 import TransactionPPComponent from "../../components/inventory/TransactionPPComponent";
+
 function TransactionsPage() {
   return (
     <Grid
