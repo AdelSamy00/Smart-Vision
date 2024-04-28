@@ -1,21 +1,7 @@
 import express from 'express';
 import presenterRoute from './presenterRoutes.js';
 import actorRoute from './actorRoutes.js';
-import {
-  addEmployee,
-  changePassword,
-  deleteEmployee,
-  deleteReview,
-  getAllCustomers,
-  getCustomerById,
-  deleteCustomer,
-  manageCustomers,
-  addCustomer,
-  getAllEmployees,
-  getEmployeeById,
-  getServiceById,
-  manageEmployees,
-} from '../controllers/EmployeeControllers.js';
+import { getServiceById } from '../controllers/EmployeeControllers.js';
 import {
   getAssignedServices,
   sendCustomizationDetails,
@@ -59,6 +45,8 @@ router.put('/customer', manageCustomers);
 
 router.use(`/presenter`, presenterRoute);
 
+router.use('/actor', actorRoute);
+
 //#region Engineer
 router.get('/engineer', getAllEngineers); //help operator to get all engineer.
 //get Assigned Customization Orders to Engineer
@@ -66,13 +54,6 @@ router.get('/engineer/:id', getAssignedServices);
 // Assigned Engineer to Services
 router.post('/engineer', assignedEnginerToService);
 //#endregion
-
-//#region Customization Orders
-//get Customization Orders
-//router.get('/customizationOrders', getCustomizationOrders);
-
-// get customization Order by Id to engineer
-//router.get('/customizationOrders/:serviceId', getCustomizationOrdersById);
 
 // Customization Orders Details
 router.post('/customizationOrders', sendCustomizationDetails); ///send-customization-details
@@ -107,12 +88,6 @@ router.put('/services', updateServiceOrderStatus); // to get services order to o
 router.get('/inventory', getConfirmedOrders); // get confirmed order to inventory manager
 router.put('/inventory/shipped/:orderId', sendOrderToShipped);
 //#endregion
-
-//#region Actor & Employees
-router.use('/actor', actorRoute);
-router.delete('/', deleteEmployee);
-
-//#end region
 
 router.put('/update_state', updateServiceOrderStateToManufactured);
 export default router;

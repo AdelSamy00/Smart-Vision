@@ -40,7 +40,7 @@ function EmployeeForm() {
   const employeeAllTypes = [
     'Engineer',
     'Inventory Manager',
-    'Factoty',
+    'Factory',
     'Presenter',
     'Actor Manager',
     'Operator',
@@ -92,16 +92,17 @@ function EmployeeForm() {
 
   async function handleDeleteEmployee() {
     try {
-      await axios
-        .delete(`/employees/`, {
-          data: { id: employeeId },
-        })
-        .then((res) => {
-          navigate('/actor/view-employees');
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      const res = await apiRequest({
+        url: `/employees/actor/`,
+        method: 'DELETE',
+        data: { id: employeeId },
+        token: employee?.token,
+      });
+      if (res?.data?.success) {
+        navigate('/actor/employees');
+      } else {
+        console.log(res?.message);
+      }
     } catch (error) {
       console.log(error);
     }

@@ -2,6 +2,7 @@ import express from 'express';
 import {
   addEmployee,
   changePassword,
+  deleteEmployee,
   getAllEmployees,
   getEmployeeById,
   manageEmployees,
@@ -14,6 +15,7 @@ router.post('/', actorManagerAuth, addEmployee);
 router.get('/', actorManagerAuth, getAllEmployees);
 router.get('/:id', actorManagerAuth, getEmployeeById);
 router.put('/', actorManagerAuth, manageEmployees);
+router.delete('/', actorManagerAuth, deleteEmployee);
 router.put('/change_password', actorManagerAuth, changePassword);
 
 export default router;
