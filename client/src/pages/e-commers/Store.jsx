@@ -367,14 +367,14 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                   left:
                     i18n.language === "ar"
                       ? screenwidth >= 1280
-                        ? "-6rem"
+                        ? "-8rem"
                         : screenwidth >= 720
-                        ? "-8rem"
+                        ? "-9.5rem"
                         : screenwidth >= 585
-                        ? "-8rem"
+                        ? "-9.5rem"
                         : screenwidth >= 420
-                        ? "-12rem"
-                        : "-12rem"
+                        ? "-14rem"
+                        : "-14rem"
                       : "",
                 }}
               >
@@ -437,14 +437,14 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                   left:
                     i18n.language === "ar"
                       ? screenwidth >= 1280
-                        ? "-6rem"
+                        ? "-7.5rem"
                         : screenwidth >= 720
-                        ? "-8rem"
+                        ? "-9rem"
                         : screenwidth >= 580
-                        ? "-8rem"
+                        ? "-9rem"
                         : screenwidth >= 420
-                        ? "-12rem"
-                        : "-12rem"
+                        ? "-13rem"
+                        : "-13rem"
                       : "",
                 }}
               >
@@ -510,11 +510,11 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                   left:
                     i18n.language === "ar"
                       ? screenwidth >= 1280
-                        ? "-6rem"
+                        ? "-7rem"
                         : screenwidth >= 720
-                        ? "-7rem"
+                        ? "-8.5rem"
                         : screenwidth >= 590
-                        ? "-7rem"
+                        ? "-8.5rem"
                         : screenwidth >= 420
                         ? "0rem"
                         : "0rem"
@@ -597,9 +597,9 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                   left:
                     i18n.language === "ar"
                       ? screenwidth >= 1280
-                        ? "-6.5rem"
+                        ? "-8rem"
                         : screenwidth >= 800
-                        ? "-7.5rem"
+                        ? "-9rem"
                         : screenwidth >= 720
                         ? "0rem"
                         : "0rem"

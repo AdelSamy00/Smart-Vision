@@ -3,7 +3,11 @@ import { useLocation } from 'react-router-dom';
 import BookingServiceForm from '../../components/e-commers/BookingServiceForm';
 import './StyleSheets/servicesdetails.css';
 import { Grid } from '@mui/material';
+import { useTranslation } from "react-i18next"; 
+import i18n from "../../../Language/translate";
+
 function ServicesDetails({ socket, setSocket }) {
+  const { t } = useTranslation();
   const { state } = useLocation();
   const service = state ? state.service : null;
 
@@ -12,7 +16,7 @@ function ServicesDetails({ socket, setSocket }) {
       <Grid container style={{display:"flex",justifyContent:'space-between'}}>
         <Grid item lg={5.5} md={5.5} sm={12}>
         <div className="ServicesDetailsContent">
-        <h2 className="text-3xl font-bold mt-5 mb-3">{service.title}</h2>
+        <h2 className="text-3xl font-bold mt-5 mb-3">{t(service.title)}</h2>
         <img
           src={service.image_url}
           alt={service.title}
@@ -24,7 +28,7 @@ function ServicesDetails({ socket, setSocket }) {
           className="text-gray-600 mt-3 descriptionServices"
           style={{ maxWidth: '90vw' }}
         >
-          {service.description}
+          {t(service.description)}
         </p>
       </div>
         </Grid>

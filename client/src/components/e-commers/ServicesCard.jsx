@@ -1,7 +1,9 @@
 // ServicesCard.jsx
 import React from 'react';
-
+import { useTranslation } from "react-i18next"; 
+import i18n from "../../../Language/translate";
 function ServicesCard({ services, onServiceClick }) {
+  const { t } = useTranslation();
   return services.map((service, idx) => (
     <div key={idx} className="w-[100%] md:w-[45%] lg:w-[30%] h-full  mb-5">
       <div
@@ -17,7 +19,7 @@ function ServicesCard({ services, onServiceClick }) {
           />
         </div>
         <div className="container flex items-center ml-5 mb-3">
-          {service.title}
+          {t(service.title)}
           <svg
             className="w-8 h-6 mt-2 ml-2"
             viewBox="0 0 24 24"

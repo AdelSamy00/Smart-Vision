@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ServicesCard from '../../components/e-commers/ServicesCard';
+import { useTranslation } from "react-i18next"; 
+import i18n from "../../../Language/translate";
 function Services() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const services = [
     {
       image_url: '/assemblyService.png',
@@ -30,7 +33,7 @@ function Services() {
       title: 'Customization Service',
       link: '/',
       description:
-        'Terms and conditions Includes installation within Egypt only Goods can be delivered for an added fee No alterations can be made to smart vision lighting fixtures smart vision blinds  rods Patching and painting are not included in the service. ',
+        'Terms and conditions Includes installation within Egypt only Goods can be delivered for an added fee No alterations can be made to smart vision lighting fixtures smart vision blinds  rods Patching and painting are not included in the service.',
     },
     {
       image_url: '/measuringService.png',
@@ -57,10 +60,9 @@ function Services() {
   return (
     <section className="container">
       <div className="mb-5">
-        <h2 className="text-3xl font-bold mt-5 mb-3">Our services</h2>
+        <h2 className="text-3xl font-bold mt-5 mb-3">{t("Our services")}</h2>
         <p className="text-gray-600 md:w-2/4">
-          You can do everything yourself, but you don’t have to. We offer a
-          range of services to make your life easier.
+          {t("You can do everything yourself, but you don’t have to. We offer a range of services to make your life easier")}.
         </p>
       </div>
       {/* Services Cards */}

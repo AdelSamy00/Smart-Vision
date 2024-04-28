@@ -1,17 +1,20 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { handleMultipleFilesUpload } from '../../utils';
-import Loading from '../shared/Loading';
-import { TextField, Button, Grid } from '@mui/material';
-import { apiRequest } from '../../utils';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import Checkbox from '@mui/material/Checkbox';
-import { SetCustomer } from '../../redux/CustomerSlice';
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { handleMultipleFilesUpload } from "../../utils";
+import Loading from "../shared/Loading";
+import { TextField, Button, Grid } from "@mui/material";
+import { apiRequest } from "../../utils";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import Checkbox from "@mui/material/Checkbox";
+import { SetCustomer } from "../../redux/CustomerSlice";
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
+import { useTranslation } from "react-i18next";
+import i18n from "../../../Language/translate";
 
 function BookingServiceForm({ socket, setSocket }) {
+  const { t } = useTranslation();
   const { state } = useLocation();
   const dispatch = useDispatch();
   const [images, setImages] = useState([{}]);
@@ -20,10 +23,10 @@ function BookingServiceForm({ socket, setSocket }) {
   const [loading, setLoading] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({
-    ServiceName: '',
+    ServiceName: "",
     phoneNumber: customer?.phone,
     address: customer?.address,
-    description: '',
+    description: "",
     images: [{}],
     measuring: false,
   });
@@ -48,11 +51,11 @@ function BookingServiceForm({ socket, setSocket }) {
     try {
       const uploadedImages =
         images.length > 1 && (await handleMultipleFilesUpload(images));
-      console.log('Uploaded Image URL:', uploadedImages);
+      console.log("Uploaded Image URL:", uploadedImages);
       if (uploadedImages) {
         const response = await apiRequest({
-          method: 'POST',
-          url: '/customers/service',
+          method: "POST",
+          url: "/customers/service",
           data: {
             id: customer._id,
             service: service.title,
@@ -66,14 +69,14 @@ function BookingServiceForm({ socket, setSocket }) {
         });
         if (response.data.success) {
           const newData = {
-            token: localStorage?.getItem('token'),
+            token: localStorage?.getItem("token"),
             ...response.data?.customer,
           };
           dispatch(SetCustomer(newData));
           setFormSubmitted(true);
-          socket?.emit('setService', {
+          socket?.emit("setService", {
             user: customer,
-            type: 'addService',
+            type: "addService",
             serviceOrder: response?.data.serviceOrder,
           });
           console.log(response.data);
@@ -82,8 +85,8 @@ function BookingServiceForm({ socket, setSocket }) {
         }
       } else {
         const response = await apiRequest({
-          method: 'POST',
-          url: '/customers/service',
+          method: "POST",
+          url: "/customers/service",
           data: {
             id: customer._id,
             service: service.title,
@@ -96,14 +99,14 @@ function BookingServiceForm({ socket, setSocket }) {
         });
         if (response.data.success) {
           const newData = {
-            token: localStorage?.getItem('token'),
+            token: localStorage?.getItem("token"),
             ...response.data?.customer,
           };
           dispatch(SetCustomer(newData));
           setFormSubmitted(true);
-          socket?.emit('setService', {
+          socket?.emit("setService", {
             user: customer,
-            type: 'addService',
+            type: "addService",
             serviceOrder: response?.data.serviceOrder,
           });
           console.log(response.data);
@@ -112,7 +115,7 @@ function BookingServiceForm({ socket, setSocket }) {
         }
       }
     } catch (error) {
-      console.error('Failed to submit the form:', error.message);
+      console.error("Failed to submit the form:", error.message);
     } finally {
       setLoading(false);
     }
@@ -124,12 +127,12 @@ function BookingServiceForm({ socket, setSocket }) {
           {/* {console.log(socket)} */}
           <h2
             style={{
-              fontSize: '20px',
-              fontWeight: 'bold',
-              paddingBottom: '20px',
+              fontSize: "20px",
+              fontWeight: "bold",
+              paddingBottom: "20px",
             }}
           >
-            If You Need To Book This Service Fill This Form .
+            {t("If You Need To Book This Service Fill This Form")} .
           </h2>
           {loading && <Loading />}
           {!formSubmitted && !loading && (
@@ -138,7 +141,7 @@ function BookingServiceForm({ socket, setSocket }) {
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label="Service Name"
+                    label={t("Service Name")}
                     variant="outlined"
                     name="ServiceName"
                     value={service.title}
@@ -149,7 +152,7 @@ function BookingServiceForm({ socket, setSocket }) {
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label="Phone Number"
+                    label={t("Phone Number")}
                     variant="outlined"
                     name="phoneNumber"
                     type="tel"
@@ -161,7 +164,7 @@ function BookingServiceForm({ socket, setSocket }) {
                 <Grid item xs={12}>
                   <TextField
                     fullWidth
-                    label="Address"
+                    label={t("Address")}
                     variant="outlined"
                     name="address"
                     multiline
@@ -174,7 +177,7 @@ function BookingServiceForm({ socket, setSocket }) {
                 <Grid item xs={12}>
                   <TextField
                     fullWidth
-                    label="Description"
+                    label={t("Description")}
                     variant="outlined"
                     name="description"
                     multiline
@@ -188,22 +191,39 @@ function BookingServiceForm({ socket, setSocket }) {
               {/* Need Measuring ?  <Checkbox {...label} /> */}
               <Grid container>
                 <Grid item xs={12}>
-                  <div className="p-2 w-full" style={{ marginTop: '15px' }}>
+                  <div className="p-2 w-full" style={{ marginTop: "15px" }}>
                     <div className="relative flex justify-items-center gap-2">
                       <label
                         htmlFor="images"
                         className="leading-7 text-sm text-gray-600 mt-1"
-                        style={{ fontSize: '20px' }}
+                        style={{
+                          fontSize: "20px",
+                          order: i18n.language === "ar" ? "2" : "1",
+                        }}
                       >
-                        <CloudUploadIcon className="mr-2" />
-                        UploadFile
+                        {" "}
+                        {i18n.language === "ar" ? (
+                          <>
+                            {t("uploadFile")}
+                            <CloudUploadIcon className="mr-2" />
+                          </>
+                        ) : (
+                          <>
+                            <CloudUploadIcon className="mr-2" />
+                            {t("uploadFile")}
+                          </>
+                        )}
                       </label>
                       <input
                         type="file"
                         id="images"
                         name="images"
                         className="uploadBtn file:hidden text-gray-700  w-1/4"
-                        style={{ backgroundColor: '#3c6e71', color: 'white' }}
+                        style={{
+                          backgroundColor: "#3c6e71",
+                          color: "white",
+                          order: i18n.language === "ar" ? "1" : "2",
+                        }}
                         onChange={(e) => {
                           setImages(e.target.files);
                         }}
@@ -216,36 +236,36 @@ function BookingServiceForm({ socket, setSocket }) {
                   item
                   xs={12}
                   style={{
-                    marginTop: '20px',
-                    marginLeft: '10px',
-                    fontSize: '20px',
+                    marginTop: "20px",
+                    marginLeft: "10px",
+                    fontSize: "20px",
                   }}
                 >
-                  Need Measuring ?
+                  {t("Need Measuring ?")}
                   <Checkbox
                     checked={formData.measuring}
                     onChange={handleCheckboxChange}
-                    inputProps={{ 'aria-label': 'controlled' }}
-                    style={{ color: '#3c6e71' }}
+                    inputProps={{ "aria-label": "controlled" }}
+                    style={{ color: "#3c6e71" }}
                   />
                 </Grid>
               </Grid>
 
               <div
                 className="w-full flex justify-center"
-                style={{ marginTop: '20px' }}
+                style={{ marginTop: "20px" }}
               >
                 <Button
                   type="submit"
                   variant="contained"
                   className="checkoutButton"
                   style={{
-                    width: '100%',
-                    backgroundColor: '#3c6e71',
-                    color: 'white',
+                    width: "100%",
+                    backgroundColor: "#3c6e71",
+                    color: "white",
                   }}
                 >
-                  submit
+                  {t("Submit")}
                 </Button>
               </div>
             </form>
@@ -253,7 +273,7 @@ function BookingServiceForm({ socket, setSocket }) {
           {formSubmitted && (
             <div>
               <p className="text-green-500 mt-3">
-                Thank you! We will get in touch with you in a few days.
+                {t("Thank you! We will get in touch with you in a few days")}.
               </p>
             </div>
           )}
@@ -263,18 +283,18 @@ function BookingServiceForm({ socket, setSocket }) {
           <div className="m-auto text-center">
             <h2
               style={{
-                fontSize: '20px',
-                fontWeight: 'bold',
-                paddingBottom: '20px',
+                fontSize: "20px",
+                fontWeight: "bold",
+                paddingBottom: "20px",
               }}
             >
-              For booking this service, you need to log in first.
+              {t("For booking this service, you need to log in first")}.
             </h2>
             <Link
               to="/login"
               className="btn btn-secondary text-xl font-bold text-white"
             >
-              Log in
+              {t("Log in")}
             </Link>
           </div>
         </div>
