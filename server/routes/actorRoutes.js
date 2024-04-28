@@ -8,8 +8,8 @@ import actorManagerAuth from '../middlewares/actorManagerMiddleware.js';
 
 const router = express.Router();
 
-router.post('/', addEmployee);
+router.post('/', actorManagerAuth, addEmployee);
 router.get('/', actorManagerAuth, getAllEmployees);
-router.get('/:id', getEmployeeById);
+router.get('/:id', actorManagerAuth, getEmployeeById);
 
 export default router;

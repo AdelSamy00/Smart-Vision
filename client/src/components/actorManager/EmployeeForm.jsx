@@ -111,8 +111,10 @@ function EmployeeForm() {
 
   async function handleAddEmployee() {
     try {
-      await axios
-        .post(`/employees/`, {
+      const res = await apiRequest({
+        url: `/employees/actor/`,
+        method: 'POST',
+        data: {
           firstName,
           lastName,
           username: `${firstName} ${lastName}`,
@@ -126,14 +128,14 @@ function EmployeeForm() {
           phone,
           address,
           image,
-        })
-        .then((res) => {
-          navigate('/actor/view-employees');
-          // console.log(res);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+        },
+        token: employee?.token,
+      });
+      if (res?.data?.success) {
+        navigate('/actor/employees');
+      } else {
+        console.log(res?.message);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -418,33 +420,6 @@ function EmployeeForm() {
                   min={0}
                   onChange={(e) => setsalary(e.target.value)}
                 />
-              </Form.Group>
-              <Form.Group className="InputGroup ">
-                <Form.Label className="FormLabel" htmlFor="uploadFile">
-                  {t('photo')}
-                </Form.Label>
-                <div className="flex justify-items-center gap-2 mt-2">
-                  <label
-                    htmlFor="uploadFile"
-                    className="text-gray-600 mt-2"
-                    style={{ order: i18n.language === 'ar' ? '2' : '1' }}
-                  >
-                    {t('uploadFile')}
-                  </label>
-                  <input
-                    type="file"
-                    id="uploadFile"
-                    name="uploadFile"
-                    className="uploadBtn file:hidden text-gray-700 bg-gray-300"
-                    style={{
-                      width: '145px',
-                      order: i18n.language === 'ar' ? '1' : '2',
-                    }}
-                    onChange={(e) => {
-                      setimage(e.target.files[0]);
-                    }}
-                  />
-                </div>
               </Form.Group>
             </div>
             {!employeeId ? (

@@ -14,7 +14,7 @@ const AbilityToChangeProductDetails = async (req, res, next) => {
     ) {
       next();
     } else {
-      next('you are not factory');
+      next('you are not presenter or inventory manager');
     }
   } catch (error) {
     console.log(error);
