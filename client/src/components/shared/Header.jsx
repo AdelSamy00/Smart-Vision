@@ -83,10 +83,11 @@ const Header = () => {
     setfilteredProducts(filtered);
   }, [searchValue]);
 
-  const toggleLanguage = () => {
-    const newLanguage = i18n.language === 'en' ? 'ar' : 'en';
-    i18n.changeLanguage(newLanguage);
-  };
+const toggleLanguage = () => {
+  const newLanguage = i18n.language === 'en' ? 'ar' : 'en';
+  i18n.changeLanguage(newLanguage);
+  window.localStorage.setItem('language', JSON.stringify(newLanguage));
+};
   return (
     <header style={{ display: 'flex' ,direction:"ltr"}}>
       <div className="menu">

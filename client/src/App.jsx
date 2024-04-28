@@ -61,9 +61,6 @@ import {
   ViewProductOrders,
   ViewServiceOrder,
   ServiseDetailsOperator,
-  AddCustomer,
-  EditCustomer,
-  ViewCustomers,
 } from './pages/operator/index.js';
 
 import {
@@ -74,7 +71,6 @@ import {
 } from './pages/actorManager/index.js';
 import { OrderDetailsFactory } from './pages/factory/index.js';
 import { FactorView } from './pages/factory/index.js';
-import OrderComponent from './components/e-commers/OrderComponent.jsx';
 import AddProductForm from './components/inventory/AddProductFrom';
 import AddMatrialForm from './components/inventory/AddMatrialForm';
 import UpdateProductForm from './components/inventory/UpdateProductForm';
@@ -86,15 +82,15 @@ import {
 } from './utils/ShouldRender.jsx';
 import { io } from 'socket.io-client';
 import { useEffect, useState } from 'react';
-import EmployeeHeader from './components/shared/EmployeeHeader.jsx';
-import EditProductForm from './components/Presenter/EditProductPresenter.jsx';
 import ProductOrderHistory from './pages/operator/viewOrderHistory.jsx';
 import ProductOrderDetails from './pages/operator/ProductOrderDetails.jsx';
+import i18n from '../Language/translate.jsx';
 
 function App() {
   const location = useLocation();
   const { customer } = useSelector((state) => state.customer);
   const { employee } = useSelector((state) => state.employee);
+
   axios.defaults.baseURL = 'http://localhost:3000';
   axios.defaults.headers = {
     'Content-Type': 'application/json',
@@ -102,7 +98,12 @@ function App() {
   };
   //add by adel
   const [socket, setSocket] = useState(null);
-
+  const initialLanguage = {
+    language: JSON.parse(window?.localStorage.getItem('language')) ?? 'en',
+  };
+  useEffect(() => {
+    i18n.changeLanguage(initialLanguage.language);
+  }, []);
   useEffect(() => {
     if (customer?.email || employee?.email) {
       setSocket(io(import.meta.env.VITE_APP_SERVER_URL));
@@ -263,12 +264,6 @@ function App() {
             path="/operator/order-details/:orderId"
             element={<ProductOrderDetails />}
           />
-          {/* <Route path="/operator/add-customer" element={<AddCustomer />} />
-          <Route
-            path="/operator/edit-customer/:customerId"
-            element={<EditCustomer />}
-          />
-          <Route path="/operator/customers" element={<ViewCustomers />} /> */}
         </Route>
         {/* Private actor manager Routes */}
         <Route element={<ActorLayout />}>

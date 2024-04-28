@@ -23,8 +23,8 @@ i18n
       },
     },
     debugger:true,
-    lng: 'ar',
-    fallbackLng: 'ar', // Default language if translation not available
+    lng: 'en',
+    fallbackLng: 'en', // Default language if translation not available
     interpolation: {
         escapeValue: false, // React already escapes values
       },

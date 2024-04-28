@@ -154,10 +154,11 @@ function EmployeeHeader({ props }) {
     setnumberOfNotifications(0);
     setOpen(!open);
   };
-  const toggleLanguage = () => {
-    const newLanguage = i18n.language === 'en' ? 'ar' : 'en';
-    i18n.changeLanguage(newLanguage);
-  };
+const toggleLanguage = () => {
+  const newLanguage = i18n.language === 'en' ? 'ar' : 'en';
+  i18n.changeLanguage(newLanguage);
+  window.localStorage.setItem('language', JSON.stringify(newLanguage));
+};
   return (
     <>
       <header className="employeeHeaderMain">
