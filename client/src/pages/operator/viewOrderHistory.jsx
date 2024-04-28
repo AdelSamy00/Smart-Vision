@@ -1,44 +1,44 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import Loading from "../../components/shared/Loading";
-import Table from "react-bootstrap/Table";
-import getTodayDate from "../../utils/dates";
-import { Link } from "react-router-dom";
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import Loading from '../../components/shared/Loading';
+import Table from 'react-bootstrap/Table';
+import getTodayDate from '../../utils/dates';
+import { Link } from 'react-router-dom';
+import { t } from 'i18next';
 
 function ProductOrderHistory() {
   const todayDate = getTodayDate();
   const [data, setData] = useState([]);
-  const [dataType, setDataType] = useState("orders");
+  const [dataType, setDataType] = useState('orders');
   const [filteredData, setFilteredData] = useState([]);
-  const [orderState, setOrderState] = useState("All");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [orderState, setOrderState] = useState('All');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
-  async function fetchData() {
-    setIsLoading(true); 
-    try {
-      const res = await axios.get(`/employees/${dataType}`);
-      setData(res?.data[dataType]);
-    } catch (error) {
-      console.error(`Error fetching ${dataType} history:`, error);
-    } finally {
-      setIsLoading(false); 
-    }
-  }
-
   useEffect(() => {
+    async function fetchData() {
+      setIsLoading(true);
+      try {
+        const res = await axios.get(`/employees/${dataType}`);
+        setData(res?.data[dataType]);
+      } catch (error) {
+        console.error(`Error fetching ${dataType} history:`, error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
     fetchData();
   }, [dataType]);
 
   useEffect(() => {
     if (data) {
       let filtered = data.filter((item) =>
-        orderState === "All"
+        orderState === 'All'
           ? true
           : item.state.toLowerCase() === orderState.toLowerCase()
       );
-
       if (startDate && endDate) {
         filtered = filtered.filter((item) => {
           const itemDate = new Date(item.createdAt.substring(0, 10));
@@ -47,10 +47,8 @@ function ProductOrderHistory() {
           return itemDate >= start && itemDate <= end;
         });
       }
-
       // Sort filtered data by createdAt
       filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
       setFilteredData(filtered);
     }
   }, [data, orderState, startDate, endDate]);
@@ -60,37 +58,37 @@ function ProductOrderHistory() {
     <>
       {!isLoading ? (
         <main className="materialTransactionsMain">
-          <h2 style={{ marginBottom: "2rem" }}>History</h2>
+          <h2 style={{ marginBottom: '1rem' }}>{t('history')}</h2>
           <div className="materialTransactionsFilterNavbar">
             <div className="materialTransactionsFilterNavbarItem">
-              <label htmlFor="HistoryType">History Type:</label>
+              <label htmlFor="HistoryType">{t('historyType')}:</label>
               <select
                 value={dataType}
                 id="HistoryType"
                 onChange={(e) => setDataType(e.target.value)}
               >
-                <option value="orders">Products</option>
-                <option value="services">Services</option>
+                <option value="orders">{t('Products')}</option>
+                <option value="services">{t('Services')}</option>
               </select>
             </div>
             <div className="materialTransactionsFilterNavbarItem">
-              <label htmlFor="transactionType">State:</label>
+              <label htmlFor="transactionType">{t('state')}:</label>
               <select
                 name="transactionType"
                 id="transactionType"
                 onChange={(e) => setOrderState(e.target.value)}
                 value={orderState}
               >
-                <option value="All">All</option>
-                <option value="Pending">Pending</option>
-                <option value="Confirmed">Confirmed</option>               
-                <option value="Shipped">Shipped</option>
-                <option value="Delivered">Delivered</option>
-                <option value="Canceled">Canceled</option>
+                <option value="All">{t('All')}</option>
+                <option value="Pending">{t('Pending')}</option>
+                <option value="Confirmed">{t('Confirmed')}</option>
+                <option value="Shipped">{t('Shipped')}</option>
+                <option value="Delivered">{t('Delivered')}</option>
+                <option value="Canceled">{t('Canceled')}</option>
               </select>
             </div>
             <div className="materialTransactionsFilterNavbarItem">
-              <label htmlFor="startDate">Start Date:</label>
+              <label htmlFor="startDate">{t('startDate')}:</label>
               <input
                 type="date"
                 id="startDate"
@@ -101,7 +99,7 @@ function ProductOrderHistory() {
               />
             </div>
             <div className="materialTransactionsFilterNavbarItem">
-              <label htmlFor="endDate">End Date:</label>
+              <label htmlFor="endDate">{t('endDate')}:</label>
               <input
                 type="date"
                 id="endDate"
@@ -115,23 +113,23 @@ function ProductOrderHistory() {
                 type="submit"
                 className="text-xl bg-slate-700 hover:bg-slate-800 text-white py-1 px-2 rounded-xl "
                 onClick={() => {
-                  setOrderState("All");
+                  setOrderState('All');
                   setEndDate(todayDate);
                   setStartDate(todayDate);
                 }}
               >
-                <span className="flex mb-1">Today</span>
+                <span className="flex mb-1">{t('today')}</span>
               </button>
               <button
                 type="submit"
-                className="text-xl ml-3 bg-slate-700 hover:bg-slate-800 text-white py-1 px-2 rounded-xl "
+                className="text-xl mx-3 bg-slate-700 hover:bg-slate-800 text-white py-1 px-2 rounded-xl "
                 onClick={() => {
-                  setOrderState("All");
-                  setEndDate("");
-                  setStartDate("");
+                  setOrderState('All');
+                  setEndDate('');
+                  setStartDate('');
                 }}
               >
-                <span className="flex mb-1">Clear</span>
+                <span className="flex mb-1">{t('clear')}</span>
               </button>
             </div>
           </div>
@@ -139,18 +137,16 @@ function ProductOrderHistory() {
             <Table striped bordered hover responsive>
               <thead className="materialTransactionsTableHead">
                 <tr>
-                  <th>Date</th>
+                  <th>{t('date')}</th>
                   <th className="text-nowrap w-52">
-                    {dataType === "orders" ? "Order Number" : "Service Type"}
+                    {dataType === 'orders' ? t('orderNumber') : t('Services')}
                   </th>
-                  <th>State</th>
-                  <th className="text-nowrap w-52">Customer</th>
+                  <th>{t('state')}</th>
+                  <th className="text-nowrap w-52">{t('customerName')}</th>
                   <th className="text-nowrap w-52">
-                    {dataType === "orders"
-                      ? "Total Price"
-                      : "Assigned Engineer"}
+                    {dataType === 'orders' ? t('Total Price') : t('Engineer')}
                   </th>
-                  <th className="text-nowrap w-52">Details</th>
+                  <th className="text-nowrap w-52">{t('details')}</th>
                 </tr>
               </thead>
               <tbody className="materialTransactionsTableBody">
@@ -160,27 +156,27 @@ function ProductOrderHistory() {
                       {item.createdAt?.substring(0, 10)}
                     </td>
                     <td>
-                      {dataType === "orders" ? item.orderNumber : item.service}
+                      {dataType === 'orders' ? item.orderNumber : item.service}
                     </td>
                     <td>{item.state}</td>
                     <td>
-                      {dataType === "orders"
+                      {dataType === 'orders'
                         ? item.customerData?.firstName +
-                          " " +
+                          ' ' +
                           item.customerData?.lastName
-                        : item.customer?.username || "Unknown"}{" "}
+                        : item.customer?.username || 'Unknown'}{' '}
                     </td>
                     <td>
-                      {dataType === "orders"
+                      {dataType === 'orders'
                         ? item?.totalPrice
                         : item?.assignedEngineer?.username}
                     </td>
                     <td>
-                      {dataType === "orders" ? (
+                      {dataType === 'orders' ? (
                         <>
                           <Link to={`/operator/order-details/${item._id}`}>
-                            <button style={{ textDecoration: "underline" }}>
-                              Click Me
+                            <button style={{ textDecoration: 'underline' }}>
+                              {t('details')}
                             </button>
                           </Link>
                         </>
@@ -189,8 +185,8 @@ function ProductOrderHistory() {
                           <Link
                             to={`/operator/servise-details/${item._id}?from=Servishistory`}
                           >
-                            <button style={{ textDecoration: "underline" }}>
-                              Click Me
+                            <button style={{ textDecoration: 'underline' }}>
+                              {t('details')}
                             </button>
                           </Link>
                         </>
@@ -208,7 +204,9 @@ function ProductOrderHistory() {
           )}
         </main>
       ) : (
-        <Loading />
+        <div className="h-96">
+          <Loading />
+        </div>
       )}
     </>
   );

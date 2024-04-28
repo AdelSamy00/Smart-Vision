@@ -12,6 +12,7 @@ import Badge from '@mui/material/Badge';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { clearNotification } from '../../redux/NotificationSlice';
 import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 const ENGINEER = [
   {
     path: '/engineer/orders',
@@ -64,7 +65,7 @@ const INVENTORY = [
 
   {
     path: '/inventory/transaction',
-    title: 'Transaction',
+    title: 'Transactions',
   },
   {
     path: '/inventory/history',
@@ -168,11 +169,11 @@ function EmployeeHeader({ props }) {
           {navLinks?.map((item, idx) => {
             return (
               <NavLink key={idx} to={item.path}>
-                {item.title}
+                {t(item.title)}
               </NavLink>
             );
           })}
-           <button onClick={toggleLanguage}>
+          <button onClick={toggleLanguage} className='ml-auto mr-2'>
             {i18n.language === 'en' ? 'العربية' : 'English'}
           </button>
         </div>
@@ -219,7 +220,7 @@ function EmployeeHeader({ props }) {
             {navLinks?.map((item, idx) => {
               return (
                 <NavLink key={idx} to={item.path}>
-                  {item.title}
+                  {t(item.title)}
                 </NavLink>
               );
             })}
