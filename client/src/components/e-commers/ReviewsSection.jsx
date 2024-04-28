@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import Rating from '@mui/material/Rating';
-import ProgressBar from 'react-bootstrap/ProgressBar';
-import StarIcon from '@mui/icons-material/Star';
-import Reviews from './Reviews';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import Rating from "@mui/material/Rating";
+import ProgressBar from "react-bootstrap/ProgressBar";
+import StarIcon from "@mui/icons-material/Star";
+import Reviews from "./Reviews";
+import { Link, useLocation, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import i18n from "../../../Language/translate";
 function ReviewsSection({
   reviews,
   TotalProductRating,
   setReviews,
   setTotalRating,
 }) {
+  const { t } = useTranslation();
   const { productId } = useParams();
   const location = useLocation();
-  const inReviewsPage = location?.pathname?.includes('reviews');
+  const inReviewsPage = location?.pathname?.includes("reviews");
   const [progressBar, setProgressBar] = useState([]);
   //set valuse to prograss bar
   function setUpPrograssBar() {
@@ -41,21 +44,21 @@ function ReviewsSection({
     progressBar.map((rating) => {
       totalReviews = totalReviews + rating.numOfRating;
     });
-    if (method === 'add') {
+    if (method === "add") {
       progressBar.map((rating) => {
         if (review?.rating === rating.number) {
           rating.numOfRating++;
           totalReviews++;
         }
       });
-    } else if (method === 'delete') {
+    } else if (method === "delete") {
       progressBar.map((rating) => {
         if (review?.rating === rating.number) {
           rating.numOfRating--;
           totalReviews--;
         }
       });
-    } else if (method === 'edit') {
+    } else if (method === "edit") {
       progressBar.map((rating) => {
         if (review?.rating === rating.number) {
           rating.numOfRating++;
@@ -82,7 +85,7 @@ function ReviewsSection({
     <>
       <div className="productDetailReviews">
         <div className="productDetailReviewsDetails">
-          <h4>Customer Reviews</h4>
+          <h4>{t("Customer Reviews")}</h4>
           <div className="productDetailRatingForReviews">
             <Rating
               readOnly
@@ -92,7 +95,13 @@ function ReviewsSection({
               sx={{ fontSize: 25 }}
             />
             <p>
-              {TotalProductRating} Based on {reviews?.length} Reviews{' '}
+              {i18n.language === "en"
+                ? `${TotalProductRating} ${t("Based on")} ${
+                    reviews?.length
+                  } ${t("Reviews")}`
+                : `${TotalProductRating} ${t("Based on")} ${
+                    reviews?.length
+                  } ${t("Reviews")} `}
             </p>
           </div>
           <div className="productDetailRatingAllBars">
@@ -102,7 +111,7 @@ function ReviewsSection({
                   <div className="productDetailRatingBar" key={idx}>
                     <div className="flex">
                       <p className="mr-1">{bar.number}</p>
-                      <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
+                      <StarIcon sx={{ color: "#ffbb00", fontSize: 20 }} />
                     </div>
                     <ProgressBar
                       now={bar.progres}
@@ -118,10 +127,12 @@ function ReviewsSection({
             )}
           </div>
           <div className="productDetailReviewsFooter">
-            <h5>Share your thoughts</h5>
+            <h5>{t("Share your thoughts")}</h5>
             <p>
-              If you have used this product, share your thoughts with other
-              customers.
+              {t(
+                "If you have used this product, share your thoughts with other customers"
+              )}
+              .
             </p>
           </div>
         </div>
@@ -140,7 +151,8 @@ function ReviewsSection({
                     setTotalRating={setTotalRating}
                   />
                 ))
-            ) : (// show last 3 reviews only
+            ) : (
+              // show last 3 reviews only
               reviews
                 ?.slice(-3)
                 ?.reverse()
@@ -152,16 +164,15 @@ function ReviewsSection({
                     setTotalRating={setTotalRating}
                   />
                 ))
-              
             )
           ) : (
             <div className="productDetailNoReviews">
-              <h5>Currently, there are no reviews available</h5>
+              <h5>{t("Currently, there are no reviews available")}</h5>
             </div>
           )}
           {reviews?.length > 3 && !inReviewsPage ? (
             <Link to={`/product/${productId}/reviews`}>
-              <div className="showMoreReviews">View More Reviews</div>
+              <div className="showMoreReviews">{t("View More Reviews")}</div>
             </Link>
           ) : null}
         </div>

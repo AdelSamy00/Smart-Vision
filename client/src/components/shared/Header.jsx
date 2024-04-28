@@ -1,29 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import Toolbar from '@mui/material/Toolbar';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
-import './StyleSheets/Header.css';
-import Menu from './Menu';
-import Avatar from '@mui/material/Avatar';
-import InputAdornment from '@mui/material/InputAdornment';
-import SearchIcon from '@mui/icons-material/Search';
-import IconButton from '@mui/material/IconButton';
-import { Link, useNavigate } from 'react-router-dom';
-import Badge from '@mui/material/Badge';
-import axios from 'axios';
-import LoginMessage from '../e-commers/LoginMessage';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import Toolbar from "@mui/material/Toolbar";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+import "./StyleSheets/Header.css";
+import Menu from "./Menu";
+import Avatar from "@mui/material/Avatar";
+import InputAdornment from "@mui/material/InputAdornment";
+import SearchIcon from "@mui/icons-material/Search";
+import IconButton from "@mui/material/IconButton";
+import { Link, useNavigate } from "react-router-dom";
+import Badge from "@mui/material/Badge";
+import axios from "axios";
+import LoginMessage from "../e-commers/LoginMessage";
+import { useTranslation } from "react-i18next";
+import i18n from "../../../Language/translate";
 const Header = () => {
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const { t } = useTranslation();
   const { customer } = useSelector((state) => state.customer);
   const { cart } = useSelector((state) => state.cart);
   const [productsInCart, setproductsInCart] = useState(null);
   const [showSearchResults, setshowSearchResults] = useState(false);
   const [Products, setProducts] = useState([]);
   const [filteredProducts, setfilteredProducts] = useState([]);
-  const [searchValue, setsearchValue] = useState('');
+  const [searchValue, setsearchValue] = useState("");
   const [showLoginMessage, setshowLoginMessage] = useState(false);
 
   async function getProducts() {
@@ -47,7 +48,7 @@ const Header = () => {
 
   const renderUserName = () => {
     if (!customer || !customer.username) {
-      return 'Log in or sign up';
+      return t("Log in or sign up");
     }
     return customer.username;
   };
@@ -83,39 +84,39 @@ const Header = () => {
     setfilteredProducts(filtered);
   }, [searchValue]);
 
-const toggleLanguage = () => {
-  const newLanguage = i18n.language === 'en' ? 'ar' : 'en';
-  i18n.changeLanguage(newLanguage);
-  window.localStorage.setItem('language', JSON.stringify(newLanguage));
-};
+  const toggleLanguage = () => {
+    const newLanguage = i18n.language === "en" ? "ar" : "en";
+    i18n.changeLanguage(newLanguage);
+    window.localStorage.setItem('language', JSON.stringify(newLanguage));
+  };
   return (
-    <header style={{ display: 'flex' ,direction:"ltr"}}>
+    <header style={{ display: "flex", direction: "ltr" }}>
       <div className="menu">
         <Menu></Menu>
-        <p>Menu</p>
+        <p>{t("Menu")}</p>
       </div>
-      <div style={{ position: 'relative' }} className="head">
+      <div style={{ position: "relative" }} className="head">
         <Toolbar
-          style={{ display: 'flex', justifyContent: 'space-between' }}
+          style={{ display: "flex", justifyContent: "space-between" }}
           className="header-row"
         >
           <div className="header-logo">
-            <Link to={'/home'}>
+            <Link to={"/home"}>
               <img src="/smartVisionLogo.png" />
             </Link>
           </div>
           <div className="icons">
-            <Link to={'/profile'}>
+            <Link to={"/profile"}>
               <button
                 className="userAccount btnHover"
-                style={{ display: 'flex', padding: '10px 20px 10px 8px' }}
+                style={{ display: "flex", padding: "10px 20px 10px 8px" }}
               >
                 <Avatar sx={{ width: 35, height: 35 }} className="avatar" />
                 <p
                   style={{
-                    fontSize: '19px',
-                    paddingTop: '0.2rem',
-                    marginLeft: '0.5rem',
+                    fontSize: "19px",
+                    paddingTop: "0.2rem",
+                    marginLeft: "0.5rem",
                     // width:"210px",
                     // marginLeft:"-0.7rem"
                   }}
@@ -127,36 +128,36 @@ const toggleLanguage = () => {
             </Link>
             <button
               className="btnHover favorite"
-              style={{ outline: 'none', padding: '4px 12px' }}
+              style={{ outline: "none", padding: "4px 12px" }}
               onClick={() => {
                 customer?._id
-                  ? navigate('/favourites')
+                  ? navigate("/favourites")
                   : setshowLoginMessage(true);
               }}
             >
               <FavoriteIcon
-                style={{ fontSize: '22px', marginTop: '0.8rem' }}
+                style={{ fontSize: "22px", marginTop: "0.8rem" }}
               ></FavoriteIcon>
             </button>
-            <Link to={'./bag'}>
+            <Link to={"./bag"}>
               <IconButton
                 aria-label="cart"
-                style={{ padding: '12px', marginLeft: '2px' }}
+                style={{ padding: "12px", marginLeft: "2px" }}
                 className="badge"
               >
                 <Badge
                   badgeContent={
                     <span
                       style={{
-                        fontSize: '16px',
-                        backgroundColor: '#f8f9fa',
-                        borderRadius: '50%',
-                        width: '20px',
-                        height: '20px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        fontWeight: 'bold',
+                        fontSize: "16px",
+                        backgroundColor: "#f8f9fa",
+                        borderRadius: "50%",
+                        width: "20px",
+                        height: "20px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        fontWeight: "bold",
                       }}
                     >
                       {productsInCart}
@@ -164,9 +165,9 @@ const toggleLanguage = () => {
                   }
                   color="black"
                 >
-                  {' '}
+                  {" "}
                   <ShoppingBasketIcon
-                    style={{ color: 'black', fontSize: '25px' }}
+                    style={{ color: "black", fontSize: "25px" }}
                   />
                 </Badge>
               </IconButton>
@@ -174,7 +175,10 @@ const toggleLanguage = () => {
           </div>
         </Toolbar>
         <Toolbar className="searchinput">
-          <div className="btnHover search">
+          <div
+            className="btnHover search"
+            style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
+          >
             <InputAdornment position="start">
               <IconButton>
                 <SearchIcon />
@@ -184,12 +188,12 @@ const toggleLanguage = () => {
               className="searchInput"
               type="search"
               value={searchValue}
-              placeholder="What Are You Looking For ?"
+              placeholder={t("What Are You Looking For ?")}
               onChange={(e) => setsearchValue(e.target.value)}
               onFocus={() => setshowSearchResults(true)}
               onBlur={() => {
                 setTimeout(() => {
-                  setsearchValue('');
+                  setsearchValue("");
                   setshowSearchResults(false);
                 }, 200);
               }}
@@ -220,7 +224,7 @@ const toggleLanguage = () => {
                   })
                 ) : (
                   <li className="searchInputResultsNotFound">
-                    No product found
+                    {t("No product found")}
                   </li>
                 )}
               </ul>
@@ -228,29 +232,32 @@ const toggleLanguage = () => {
           </div>
         </Toolbar>
         <Toolbar className="row3">
-          <ul className="headerUl links">
+          <ul
+            className="headerUl links"
+            style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
+          >
             <li>
-              <Link to="/home">Home</Link>
+              <Link to="/home">{t("Home")}</Link>
             </li>
             <li>
-              <Link to="/store">Products</Link>
+              <Link to="/store">{t("Products")}</Link>
             </li>
             <li>
-              <Link to="/services">Services</Link>
+              <Link to="/services">{t("Services")}</Link>
             </li>
             <li>
-              <Link to="/about">About Us</Link>
+              <Link to="/about">{t("About Us")}</Link>
             </li>
             <li>
-              <Link to="/contact-us">Contact Us</Link>
+              <Link to="/contact-us">{t("Contact Us")}</Link>
             </li>
           </ul>
           <button
             className="btnHover lang"
             onClick={toggleLanguage}
-            style={{ fontSize: '19px', outline: 'none' }}
+            style={{ fontSize: "19px", outline: "none" }}
           >
-            {i18n.language === 'en' ? 'العربية' : 'English'}
+            {i18n.language === "en" ? "العربية" : "English"}
           </button>
         </Toolbar>
       </div>

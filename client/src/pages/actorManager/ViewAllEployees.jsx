@@ -119,11 +119,12 @@ function ViewEmployees() {
               <MenuItem value="All">{t('All')}</MenuItem>
               <MenuItem value="Operator">{t('Operator')}</MenuItem>
               <MenuItem value="Engineer">{t('Engineer')}</MenuItem>
-              <MenuItem value="Inventory manager">
-                {t('InventoryManager')}
+              <MenuItem value="Inventory Manager">
+                {t('Inventory Manager')}
               </MenuItem>
-              <MenuItem value="Actor manager">{t('ActorManager')}</MenuItem>
+              <MenuItem value="Actor Manager">{t('Actor Manager')}</MenuItem>
               <MenuItem value="Presenter">{t('Presenter')}</MenuItem>
+              <MenuItem value="Factory">{t('Factory')}</MenuItem>
             </TextField>
             <TextField
               value={searchTerm}

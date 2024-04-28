@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import { useTranslation } from "react-i18next"; 
+import i18n from "../../../Language/translate";
 const CategoryCard = ({ name, imageUrl, onClick, isLast }) => {
+  const { t } = useTranslation();
+
   return (
     <div
       className={`category-card active `}
@@ -73,7 +76,7 @@ const CategoryCard = ({ name, imageUrl, onClick, isLast }) => {
             onMouseEnter={(e) => (e.target.style.backgroundColor = "#f0f0f0")}
             onMouseLeave={(e) => (e.target.style.backgroundColor = "white")}
           >
-            {name}
+            {t(name)}
           </button>
         )}
       </div>

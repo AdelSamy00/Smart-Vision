@@ -11,8 +11,11 @@ import Loading from "../../components/shared/Loading";
 import LoginMessage from "../../components/e-commers/LoginMessage";
 import HomeSlider from "../../components/e-commers/HomeSlider";
 import ReviewsSection from "../../components/e-commers/ReviewsSection";
+import { useTranslation } from "react-i18next"; 
+import i18n from "../../../Language/translate";
 
 function ProductDetails() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { productId } = useParams();
   const { customer } = useSelector((state) => state.customer);
@@ -176,8 +179,8 @@ function ProductDetails() {
               <div>
                 <h1>{product?.name}</h1>
                 <div className="productDetailCategory">
-                  <h2>Category:</h2>
-                  <p>{product?.category}</p>
+                  <h2>{t("Category")}:</h2>
+                  <h2 style={{fontWeight:"normal"}}>{product?.category}</h2>
                 </div>
                 <div className="productDetailRating">
                   <Rating
@@ -188,22 +191,22 @@ function ProductDetails() {
                     sx={{ fontSize: 30 }}
                   />
                   <p>
-                    {totalRating} Based on {reviews?.length} Reviews.{" "}
+                    {totalRating} {t("Based on")} {reviews?.length} {t("Reviews")}.{" "}
                   </p>
                 </div>
-                <h3>Description:</h3>
+                <h3>{t("Description")}:</h3>
                 <p className="productDetailDescription">
                   {product?.description}
                 </p>
                 <div className="productDetailColors">
-                  <p>Color: </p>
+                  <p>{t("Color")}: </p>
                   {product?.colors.map((color, idx) => (
                     <span key={idx} className="mr-3">
-                      {color}
+                      {t(color)}
                     </span>
                   ))}
                 </div>
-                <p className="productDetailsPrice">{product?.price} EL</p>
+                <p className="productDetailsPrice">{product?.price} {t("EGP")}</p>
               </div>
               <div className="productDetailsDataFooter">
                 {product?.quantity === 0 ? (
@@ -217,7 +220,7 @@ function ProductDetails() {
                       fontSize: "20px",
                     }}
                   >
-                    Out of Stock
+                    {t("Out of Stock")}
                   </h2>
                 ) : (
                   <button
@@ -236,7 +239,7 @@ function ProductDetails() {
                       )
                     }
                   >
-                    {!inCart ? " Add to cart " : "Remove From cart"}
+                    {!inCart ? t("Add to cart"): t("Remove From cart")}
                   </button>
                 )}
                 <button
@@ -293,7 +296,7 @@ function ProductDetails() {
                   marginLeft: "0.5rem",
                 }}
               >
-                {all?"More Products":"Related Products"}
+                {all?t("More Products"):t("Related Products")}
               </h2>
                 <HomeSlider items={products} option="product" />
             </>

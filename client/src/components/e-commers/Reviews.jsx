@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Rating from '@mui/material/Rating';
-import EditIcon from '@mui/icons-material/Edit';
-import { useSelector } from 'react-redux';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Form from 'react-bootstrap/Form';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import './stylesheets/Reviews.css';
-import axios from 'axios';
+import React, { useState } from "react";
+import Avatar from "@mui/material/Avatar";
+import Rating from "@mui/material/Rating";
+import EditIcon from "@mui/icons-material/Edit";
+import { useSelector } from "react-redux";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Form from "react-bootstrap/Form";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import "./stylesheets/Reviews.css";
+import axios from "axios";
+import { useTranslation } from "react-i18next";
+import i18n from "../../../Language/translate";
 
 function Reviews({ review, setReviews, setTotalRating, customerReview }) {
+  const { t } = useTranslation();
   // console.log(customerReview);
   const { customer } = useSelector((state) => state.customer);
   const reviewCustomer = review?.customer?.username
@@ -31,7 +34,7 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
   function stringAvatar(name) {
     //console.log(review);
     return {
-      children: `${name?.split(' ')[0][0]}`,
+      children: `${name?.split(" ")[0][0]}`,
     };
   }
 
@@ -57,7 +60,7 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
   // Delete review from product
   async function deleteReview(customerId, reviewId) {
     await axios
-      .delete('/customers/review', {
+      .delete("/customers/review", {
         data: { customerId, reviewId, productId: review?.product },
       })
       .then((res) => {
@@ -74,7 +77,7 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
   // Update review in product
   async function editReview(productId, reviewId, comment, rating) {
     await axios
-      .put('/customers/review', { productId, reviewId, comment, rating })
+      .put("/customers/review", { productId, reviewId, comment, rating })
       .then((res) => {
         // console.log(res.data);
         setReviews((prevReviews) => {
@@ -113,7 +116,7 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
 
   return (
     <>
-      { inEditMode ? (
+      {inEditMode ? (
         <div className="productDetailUserReview">
           <div className="flex items-center mb-3">
             <div className="mr-3">
@@ -142,7 +145,7 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
                 as="textarea"
                 rows={3}
                 value={comment}
-                placeholder="Add your Review here......"
+                placeholder={t("Add your Review here......")}
                 onChange={(e) => setComment(e.target.value)}
               />
             </Form.Group>
@@ -151,13 +154,13 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
                 type="submit"
                 className="buttonForReview bg-slate-700 hover:bg-slate-800"
               >
-                Submit
+                {t("Submit")}
               </button>
               <button
                 onClick={handleEditReviewMode}
                 className="buttonForReview bg-red-600 hover:bg-red-700"
               >
-                Cancel
+                {t("Cancel")}
               </button>
             </div>
           </Form>
@@ -165,7 +168,7 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
       ) : (
         <div className="productDetailUserReview">
           <div className="flex items-center ">
-            <div className="mr-3">
+            <div className={`${i18n.language === "en" ? "mr-3" : "ml-3"}`}>
               <Avatar {...stringAvatar(reviewCustomer?.username)} />
             </div>
             <div className="">
@@ -180,7 +183,13 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
             </div>
             {/* for disblay menu item for user review */}
             {isUserReview ? (
-              <div className="ml-auto">
+              <div
+                className=""
+                style={{
+                  marginLeft: i18n.language === "en" ? "auto" : "0rem",
+                  marginRight: i18n.language === "ar" ? "auto" : "0rem",
+                }}
+              >
                 <IconButton onClick={handleMenuClick}>
                   <MoreVertIcon />
                 </IconButton>
@@ -191,13 +200,13 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
                 >
                   <MenuItem onClick={handleEditReviewMode}>
                     <button className="reviewMenuButton">
-                      <p className="text-xl">Edit</p>
+                      <p className="text-xl">{t("Edit")}</p>
                       <EditIcon className="ml-2" />
                     </button>
                   </MenuItem>
                   <MenuItem onClick={handleDeleteReview}>
                     <button className="reviewMenuButton">
-                      <p className="text-xl">Delete</p>
+                      <p className="text-xl">{t("Delete")}</p>
                       <DeleteForeverIcon className="ml-2" />
                     </button>
                   </MenuItem>

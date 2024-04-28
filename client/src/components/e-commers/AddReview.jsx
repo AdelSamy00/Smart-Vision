@@ -4,8 +4,11 @@ import Rating from '@mui/material/Rating';
 import { useSelector } from 'react-redux';
 import './stylesheets/Reviews.css';
 import { apiRequest } from '../../utils';
+import { useTranslation } from "react-i18next"; 
+import i18n from "../../../Language/translate";
 
 function AddReview({ productId, setReviews }) {
+  const { t } = useTranslation();
   const { customer } = useSelector((state) => state.customer);
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(5);
@@ -43,13 +46,13 @@ function AddReview({ productId, setReviews }) {
 
   return (
     <>
-      <h6 className="addReviewHeader">Add Review</h6>
+      <h6 className="addReviewHeader">{t("Add Review")}</h6>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Form.Group className="">
           <Rating
             name="rating"
             value={rating}
-            sx={{ fontSize: 25 }}
+            sx={{ fontSize: 25,direction:"ltr"}}
             onChange={(e) => setRating(Number(e.target.value))}
           />
           <Form.Control
@@ -59,7 +62,7 @@ function AddReview({ productId, setReviews }) {
             as="textarea"
             rows={3}
             value={review}
-            placeholder="Add your Review here......"
+            placeholder={t("Add your Review here......")}
             onChange={(e) => setReview(e.target.value)}
           />
         </Form.Group>
@@ -68,7 +71,7 @@ function AddReview({ productId, setReviews }) {
             type="submit"
             className="buttonForReview mt-3  bg-slate-700 hover:bg-slate-800"
           >
-            Submit
+            {t("Submit")}
           </button>
         </div>
       </Form>

@@ -126,7 +126,7 @@ function Productorder1Component({ order1, onUpdatedState1, isNew }) {
             lg={3}
             sx={{
               textAlign: { xs: 'start', sm: 'end', md: 'center' },
-              marginBottom: { xs: '1.5rem', md: '0rem' },
+              marginBottom: {xs: "0rem", sm: "1.5rem", md: "0rem" },
             }}
           >
             <Typography variant="body1">{t('Total Price')}</Typography>
@@ -142,7 +142,7 @@ function Productorder1Component({ order1, onUpdatedState1, isNew }) {
               display: 'flex',
               justifyContent: {
                 xs: 'flex-end',
-                md: 'center',
+                // md: 'center',
               },
             }}
           >

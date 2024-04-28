@@ -33,8 +33,8 @@ const Store = ({ selectedCategory, selectedPrice }) => {
   const [selectedPriceRanges, setSelectedPriceRanges] = useState(
     selectedPrice ? [{ min: "", max: selectedPrice }] : []
   );
-  const colors = [t("Red"), t("Gray"), t("Black"), t("Brown"), t("Off-White")];
-  const categories = [t("sofa"), t("chair"), t("bed"), t("table")];
+  const colors = ["Red", "Gray", "Black", "Brown", "Off-White"];
+  const categories = ["sofa", "chair", "bed", "table"];
   const [selectedCategories, setSelectedCategories] = useState([
     selectedCategory ? selectedCategory : "All",
   ]);
@@ -330,16 +330,16 @@ const Store = ({ selectedCategory, selectedPrice }) => {
         </div>
       ) : (
         <div
-          className="filters-container"
+          className="Store-filters-container "
           style={{
-            paddingTop: selectedCategory || selectedPrice ? "3rem" : "0rem",
             width: selectedCategory || selectedPrice ? "100%" : "90%",
+            paddingBottom: selectedCategory || selectedPrice ? "0rem" : "2rem",
           }}
         >
           {/* Category filter */}
           <div
             onClick={toggleCategoryDropdown}
-            className="Filter"
+            className="Store-Filter"
             tabIndex="0"
             ref={categoryDropdownRef}
             style={{
@@ -367,14 +367,14 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                   left:
                     i18n.language === "ar"
                       ? screenwidth >= 1280
-                        ? "-8rem"
+                        ? "-6rem"
                         : screenwidth >= 720
-                        ? "-10rem"
+                        ? "-8rem"
                         : screenwidth >= 585
-                        ? "-10rem"
+                        ? "-8rem"
                         : screenwidth >= 420
-                        ? "-14rem"
-                        : "-14rem"
+                        ? "-12rem"
+                        : "-12rem"
                       : "",
                 }}
               >
@@ -394,7 +394,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                       handleCategoryChange(category);
                     }}
                   >
-                    <span>{category}</span>
+                    <span>{t(category)}</span>
                     <input
                       style={{
                         cursor: "pointer",
@@ -413,7 +413,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
 
           <div
             onClick={togglePriceDropdown}
-            className="Filter"
+            className="Store-Filter"
             tabIndex="0"
             ref={priceDropdownRef}
             style={{
@@ -437,14 +437,14 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                   left:
                     i18n.language === "ar"
                       ? screenwidth >= 1280
-                        ? "-8rem"
+                        ? "-6rem"
                         : screenwidth >= 720
-                        ? "-9rem"
+                        ? "-8rem"
                         : screenwidth >= 580
-                        ? "-9rem"
+                        ? "-8rem"
                         : screenwidth >= 420
-                        ? "-13rem"
-                        : "-13rem"
+                        ? "-12rem"
+                        : "-12rem"
                       : "",
                 }}
               >
@@ -488,7 +488,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
           <div
             onClick={toggleSortDropdown}
             onBlur={() => setShowSortDropdown(false)}
-            className="Filter"
+            className="Store-Filter"
             tabIndex="0"
             ref={sortDropdownRef}
             style={{
@@ -510,11 +510,11 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                   left:
                     i18n.language === "ar"
                       ? screenwidth >= 1280
-                        ? "-7rem"
+                        ? "-6rem"
                         : screenwidth >= 720
-                        ? "-9rem"
+                        ? "-7rem"
                         : screenwidth >= 590
-                        ? "-9rem"
+                        ? "-7rem"
                         : screenwidth >= 420
                         ? "0rem"
                         : "0rem"
@@ -576,7 +576,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
           <div
             onClick={toggleColorDropdown}
             onBlur={() => setShowColorDropdown(false)}
-            className="Filter"
+            className="Store-Filter"
             tabIndex="0"
             ref={colorDropdownRef}
             style={{
@@ -597,9 +597,9 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                   left:
                     i18n.language === "ar"
                       ? screenwidth >= 1280
-                        ? "-8rem"
+                        ? "-6.5rem"
                         : screenwidth >= 800
-                        ? "-9.5rem"
+                        ? "-7.5rem"
                         : screenwidth >= 720
                         ? "0rem"
                         : "0rem"
@@ -615,18 +615,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                     <div
                       className="colorCircle"
                       style={{
-                        backgroundColor:
-                          color === "احمر"
-                            ? "red"
-                            : color === "بنى"
-                            ? "brown"
-                            : color === "اسود"
-                            ? "black"
-                            : color === "اوف وايت"
-                            ? "off-white"
-                            : color === "رمادى"
-                            ? "gray"
-                            : color,
+                        backgroundColor: color,
                         position: "relative",
                       }}
                     >
@@ -642,7 +631,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
                         </div>
                       )}
                     </div>
-                    <div>{color}</div>
+                    <div>{t(color)}</div>
                   </div>
                 ))}
               </div>
@@ -665,7 +654,7 @@ const Store = ({ selectedCategory, selectedPrice }) => {
               marginBottom: "3rem",
             }}
           >
-            No results found
+            {t("No results found")}
           </div>
         ) : (
           filterProducts().map((product, index) => (

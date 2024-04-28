@@ -3,14 +3,14 @@
   display: flex;
   justify-content: space-between;
 } */
-.Filter h2 {
+.Store-Filter h2 {
   background-color: #f8f9fa;
-  padding: 10px 20px;
-  border-radius: 30px;
+  padding: 10px 15px;
+  border-radius: 10px;
     font-size: 16px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);  
 }
-.Filter {
+.Store-filters-container .Store-Filter {
   position: relative;
   cursor: pointer;
   display: flex;
@@ -31,16 +31,16 @@
   overflow-y: auto;
   text-align: center;
 }
-.categorydropDown {
+.Store-filters-container .categorydropDown {
   left: 20%;
 }
-.pricedropDown {
+.Store-filters-container .pricedropDown {
   left: -5rem;
 }
-.sortdropDown {
+.Store-filters-container .sortdropDown {
   left: -10rem;
 }
-.colorDropDown {
+.Store-filters-container .colorDropDown {
   left: -14.4rem;
   max-height: 12rem;
 }
@@ -48,13 +48,13 @@
   width: 100%;
   position: relative;
 }
-.correctSign {
+.Store-filters-container .correctSign {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.filters-container {
+.Store-filters-container {
   position: sticky;
   top: 0;
   height: 100px;
@@ -68,13 +68,14 @@
   z-index: 1;
   border-bottom: 2px solid black;
   margin-bottom: 3rem;
+  padding-top:2rem;
 }
-.colorDropDown {
+.Store-filters-container .colorDropDown {
   display: flex;
   flex-wrap: wrap;
 }
-.categoryOption,
-.sortOption {
+.Store-filters-container .categoryOption,
+.Store-filters-container .sortOption {
   padding: 10px;
   cursor: pointer;
   display: flex;
@@ -92,7 +93,7 @@
   row-gap:2rem;
   margin-bottom: 2rem;
 }
-.colorOption {
+.Store-filters-container .colorOption {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,7 +102,7 @@
   text-align: center;
   margin-right: 0.5rem;
 }
-.circleContainer {
+.Store-filters-container .circleContainer {
   width: 20px;
   height: 20px;
   margin-right: 5px;
@@ -160,10 +161,10 @@
   display: none;
 }
 @media only screen and (min-width: 580px) {
-  .Filter {
+  .Store-filters-container .Store-Filter {
     margin-right: 2rem;
   }
-  .Filter h2 {
+  .Store-Filter h2 {
     padding: 10px 25px;
     font-weight: 600;
     font-size: 17px;
@@ -171,18 +172,17 @@
   .dropDown {
     width: 15rem;
   }
-  .categorydropDown {
+  .Store-filters-container .categorydropDown {
     left: 0rem;
   }
-  .pricedropDown {
+  .Store-filters-container .pricedropDown {
     left: 0rem;
   }
-  .sortdropDown {
+  .Store-filters-container .sortdropDown {
     left: 0rem;
   }
-  .colorDropDown {
+  .Store-filters-container .colorDropDown {
     left: -8rem;
-    max-height: 12rem;
   }
 }
 @media only screen and (min-width: 720px) {
@@ -195,9 +195,12 @@
   .products-container {
     justify-content: space-between;
   }
-  .filters-container{
+  .Store-filters-container{
     justify-content: flex-start;
   }
+  .Store-filters-container .colorDropDown {
+    left: 0rem;
+}
 }
 @media only screen and (min-width: 1280px) {
   .store-container .arrow {

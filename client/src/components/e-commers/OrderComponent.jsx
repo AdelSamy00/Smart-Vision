@@ -139,7 +139,7 @@ function OrderComponent({ order, reviews, setReviews }) {
             lg={3}
             sx={{
               textAlign: { xs: "start", sm: "end", md: "center" },
-              marginBottom: { xs: "0rem", sm: "1.5rem",md:"0rem" },
+              marginBottom: { xs: "0rem", sm: "1.5rem", md: "0rem" },
             }}
           >
             <Typography variant="body1">{t("Total Amount")}</Typography>
@@ -273,7 +273,7 @@ function OrderComponent({ order, reviews, setReviews }) {
                         showAddReviewToProductId === product?.product?._id ? (
                           <button
                             type="submit"
-                            className=" buttonForReview bg-red-500 hover:bg-red-600"
+                            className=" buttonForReview bg-red-500 hover:bg-red-600 "
                             onClick={() => setshowAddReviewToProductId(null)}
                           >
                             {t("cancel")}
@@ -281,7 +281,7 @@ function OrderComponent({ order, reviews, setReviews }) {
                         ) : (
                           <button
                             type="submit"
-                            className=" buttonForReview bg-slate-700 hover:bg-slate-800"
+                            className=" buttonForReview bg-slate-700 hover:bg-slate-800 fs-6 "
                             onClick={() =>
                               setshowAddReviewToProductId(product?.product?._id)
                             }

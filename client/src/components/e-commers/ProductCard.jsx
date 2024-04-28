@@ -91,7 +91,7 @@ function ProductCard({
             <Rating
               readOnly
               name="half-rating"
-              value={product?.totalRating}
+              value={product?.totalRating.toFixed(3)}
               precision={0.5}
               sx={{ fontSize: 30 }}
             />
@@ -112,7 +112,7 @@ function ProductCard({
               fontWeight: 'bold',
             }}
           >
-            Out of Stock
+            {t("Out of Stock")}
           </h2>
         ) : (
           <button

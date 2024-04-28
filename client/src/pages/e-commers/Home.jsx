@@ -16,12 +16,12 @@ function Homepage() {
   const { t } = useTranslation();
 
   const categories = [
-    { id: 1, name: t("bed"), imageUrl: "../beds.avif" },
-    { id: 6, name: t("closet"), imageUrl: "../closet.avif" },
-    { id: 2, name: t("sofa"), imageUrl: "../sofa.jpeg" },
-    { id: 3, name: t("chair"), imageUrl: "../chair.avif" },
-    { id: 4, name: t("kitchen"), imageUrl: "../kitchen.avif" },
-    { id: 5, name: t("table"), imageUrl: "../TABLE.jpg" },
+    { id: 1, name: "bed", imageUrl: "../beds.avif" },
+    { id: 6, name: "closet", imageUrl: "../closet.avif" },
+    { id: 2, name: "sofa", imageUrl: "../sofa.jpeg" },
+    { id: 3, name: "chair", imageUrl: "../chair.avif" },
+    { id: 4, name: "kitchen", imageUrl: "../kitchen.avif" },
+    { id: 5, name: "table", imageUrl: "../TABLE.jpg" },
     { id: 9, name: "Last", imageUrl: "" },
   ];
   const prices = [

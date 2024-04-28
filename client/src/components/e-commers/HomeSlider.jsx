@@ -268,7 +268,7 @@ function HomeSlider({ items, option, setSelectedOption }) {
         }}
       >
         <button
-          className="arrow left-arrow"
+          className="arrow left-arrow presenterarrow"
           onClick={scrollLeft}
           ref={leftArrowRef}
           style={{
@@ -279,7 +279,7 @@ function HomeSlider({ items, option, setSelectedOption }) {
           &#10094;
         </button>
         <button
-          className="arrow right-arrow"
+          className="arrow right-arrow presenterarrow "
           onClick={scrollRight}
           ref={rightArrowRef}
           style={{
