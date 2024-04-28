@@ -13,6 +13,7 @@ import {
   DialogTitle,
   Slide,
 } from '@mui/material';
+import i18next, { t } from 'i18next';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -28,6 +29,20 @@ function Card({ product, handelDelete }) {
     setshowDeleteMessage(false);
   };
 
+  function getCategoryName(category) {
+    switch (category) {
+      case 'sofa':
+        return t('sofa');
+      case 'chair':
+        return t('chair');
+      case 'bed':
+        return t('bed');
+      case 'table':
+        return t('table');
+      default:
+        break;
+    }
+  }
   return (
     <div className="productCard mb-12">
       <Link
@@ -51,8 +66,10 @@ function Card({ product, handelDelete }) {
         <div className="sbProductCardData">
           <div className="w-full">
             <h5>{product?.name}</h5>
-            <h6>{product?.category}</h6>
-            <p>{product?.price} EL</p>
+            <h6>{getCategoryName(product?.category)}</h6>
+            <p>
+              {product?.price} {t('EGP')}
+            </p>
           </div>
           <div className="sbProductCardDataRating">
             <Rating
@@ -73,8 +90,8 @@ function Card({ product, handelDelete }) {
           className="flex items-center text-xl bg-slate-700 hover:bg-slate-800 text-white py-1 px-2 rounded-xl"
           to={`/presenter/update/product/${product?._id}`}
         >
-          Edit
-          <EditIcon sx={{ fontSize: '20px', marginLeft: '5px' }} />
+          {t('edit')}
+          <EditIcon sx={{ fontSize: '20px', marginInline: '5px' }} />
         </Link>
         <button
           onClick={() => {
@@ -91,26 +108,41 @@ function Card({ product, handelDelete }) {
         onClose={handleDisagreeDeleteProductMessage}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle sx={{ fontSize: '25px', fontWeight: 'bold' }}>
-          Delete Product
+        <DialogTitle
+          sx={{
+            fontSize: '25px',
+            fontWeight: 'bold',
+            direction: i18next.language === 'ar' ? 'rtl' : 'ltr',
+          }}
+        >
+          {t('delete')}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Are you sure you want to proceed with the deletion of this product?
+          <DialogContentText
+            id="alert-dialog-slide-description"
+            sx={{
+              fontSize: '18px',
+              direction: i18next.language === 'ar' ? 'rtl' : 'ltr',
+            }}
+          >
+            {t('wantDeletionThisProduct')}
             <br />
             <br />
-            This action cannot be undone and will permanently remove the product
-            from the database.
+            {t('actionCannotUndone')}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={handleDisagreeDeleteProductMessage}
-            sx={{ marginRight: 'auto' }}
+            sx={{
+              marginRight: 'auto',
+            }}
           >
-            DISAGREE
+            {t('cancel')}
           </Button>
-          <Button onClick={handleAgreeDeleteProductMessage}>AGREE</Button>
+          <Button onClick={handleAgreeDeleteProductMessage}>
+            {t('agree')}
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

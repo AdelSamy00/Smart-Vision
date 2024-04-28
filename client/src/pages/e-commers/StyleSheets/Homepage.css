@@ -59,7 +59,7 @@
   height: auto;
 }
 
-.home-slider-container .overlay .arrow {
+.home-slider-container .overlay .presenterarrow {
   background-color: rgba(0, 0, 0, 1);
   color: white;
   border: none;
@@ -74,14 +74,14 @@
   align-items: center;
 }
 
-.overlay .arrow:hover {
+.overlay .presenterarrow:hover {
   background-color: rgba(0, 0, 0, 0.5);
 }
-.home-slider-container .arrow {
+.home-slider-container .presenterarrow {
   visibility: hidden;
 }
 
-.home-slider-container:hover .arrow {
+.home-slider-container:hover .presenterarrow {
   visibility: visible;
 }
 .line-container {

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import './StyleSheets/PresenterProductsView.css'; // Import custom CSS for advanced styling
 import Loading from '../../components/shared/Loading';
 import { apiRequest } from '../../utils';
+import { t } from 'i18next';
 
 function PresenterProductsView() {
   const { employee } = useSelector((state) => state?.employee);
@@ -47,10 +48,15 @@ function PresenterProductsView() {
         <Grid item>
           <Loading />
         </Grid>
-      ) : products.length > 0 ? (
+      ) : products?.length > 0 ? (
         <Grid item xs={12} sm={10} md={10}>
-          <Typography variant="h4" align="center" gutterBottom>
-            Products in Inventory
+          <Typography
+            variant="h4"
+            align="center"
+            gutterBottom
+            sx={{ marginBottom: '1rem' }}
+          >
+            {t('productsInInventory')}
           </Typography>
           <Grid
             container
@@ -59,10 +65,9 @@ function PresenterProductsView() {
             align="center"
             justifyContent="space-evenly"
           >
-            {products.map((product, index) => (
+            {products?.map((product, index) => (
               <Grid key={index} item xs={12} md={6} lg={4}>
                 <div className={`presenter-product-card`}>
-                  {' '}
                   <Typography
                     variant="h6"
                     align="center"
@@ -77,7 +82,7 @@ function PresenterProductsView() {
                     gutterBottom
                     className="presenter-product-info"
                   >
-                    Quantity: {product.quantity}
+                    {t('quantity')}: {product.quantity}
                   </Typography>
                   <Typography
                     variant="body2"
@@ -85,7 +90,7 @@ function PresenterProductsView() {
                     gutterBottom
                     className="presenter-product-description"
                   >
-                    Description: {product.description}
+                    {t('description')}: {product.description}
                   </Typography>
                   <div className="button-container">
                     {' '}
@@ -100,14 +105,12 @@ function PresenterProductsView() {
                         style={{
                           background:
                             'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-
                           textTransform: 'capitalize',
                           height: 34,
                           padding: '0px 15px',
                         }}
                       >
-                        {' '}
-                        Add to Store
+                        {t('addToStore')}
                       </Button>
                     </Link>
                   </div>
@@ -117,9 +120,24 @@ function PresenterProductsView() {
           </Grid>
         </Grid>
       ) : (
-        <Grid item xs={12} sm={8}>
-          <Typography variant="h5" align="center" gutterBottom>
-            All products in inventory have been added to the store.
+        <Grid item xs={12} sm={8} sx={{ display: 'flex' }}>
+          <Typography
+            variant="h5"
+            align="center"
+            gutterBottom
+            sx={{
+              padding: '20px',
+              backgroundColor: '#f0f0f0',
+              borderRadius: '5px',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              fontSize: '25px',
+              width: '80vw',
+              marginTop: '5rem ',
+              marginInline: 'auto',
+            }}
+          >
+            {t('allProductsAdded')}
           </Typography>
         </Grid>
       )}

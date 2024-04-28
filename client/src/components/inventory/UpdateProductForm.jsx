@@ -175,7 +175,7 @@ const UpdateProductForm = () => {
                   fontSize: '20px',
                 }}
               >
-                {t('add')}
+                {t('update')}
               </Button>
             </Grid>
           </Grid>

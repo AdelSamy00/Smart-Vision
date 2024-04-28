@@ -16,6 +16,8 @@ import {
   DialogTitle,
   Slide,
 } from '@mui/material';
+import { t } from 'i18next';
+import i18n from '../../../Language/translate';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -107,15 +109,26 @@ function ReviewPresenter({ review, deleteReview }) {
         onClose={handleDisagreeDeleteReviewMessage}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle sx={{ fontSize: '25px', fontWeight: 'bold' }}>
-          Delete Customer Review
+        <DialogTitle
+          sx={{
+            fontSize: '25px',
+            fontWeight: 'bold',
+            direction: i18n.language === 'ar' ? 'rtl' : 'ltr',
+          }}
+        >
+          {t('deleteCustomerReview')}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Are you sure you want to delete this review?
+          <DialogContentText
+            id="alert-dialog-slide-description"
+            sx={{
+              fontSize: '18px',
+              direction: i18n.language === 'ar' ? 'rtl' : 'ltr',
+            }}
+          >
+            {t('sureWantDeleteReview')}
             <br />
-            We are sad to see you leave, and hope you will come back in the
-            future.
+            {t('actionCannotUndone')}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -123,9 +136,9 @@ function ReviewPresenter({ review, deleteReview }) {
             onClick={handleDisagreeDeleteReviewMessage}
             sx={{ marginRight: 'auto' }}
           >
-            DISAGREE
+            {t('cancel')}
           </Button>
-          <Button onClick={handleAgreeDeleteReviewMessage}>AGREE</Button>
+          <Button onClick={handleAgreeDeleteReviewMessage}>{t('agree')}</Button>
         </DialogActions>
       </Dialog>
     </>

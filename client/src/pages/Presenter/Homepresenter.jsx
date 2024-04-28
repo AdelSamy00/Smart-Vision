@@ -7,6 +7,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
 import Loading from '../../components/shared/Loading';
 import { apiRequest } from '../../utils';
+import { t } from 'i18next';
 
 const HomePresenter = () => {
   const [products, setProducts] = useState([]);
@@ -50,24 +51,25 @@ const HomePresenter = () => {
 
     fetchProducts();
   }, []);
+
   const toggleCategoryDropdown = () => {
     setShowCategoryDropdown(!showCategoryDropdown);
   };
+
   const handleCategoryChange = (category) => {
     setSelectedCategories((prevCategories) => {
       const index = prevCategories.indexOf(category);
-
       if (index === -1) {
         const updatedCategories = prevCategories.includes('All')
           ? prevCategories.filter((cat) => cat !== 'All')
           : prevCategories;
-
         return [...updatedCategories, category];
       } else {
         return prevCategories.filter((cat) => cat !== category);
       }
     });
   };
+
   useEffect(() => {
     const handleCategoryClickOutside = (event) => {
       if (
@@ -83,6 +85,7 @@ const HomePresenter = () => {
       document.removeEventListener('mousedown', handleCategoryClickOutside);
     };
   }, []);
+
   const handleNameChange = (e) => {
     if (e && e.target) {
       setFilters({
@@ -91,6 +94,7 @@ const HomePresenter = () => {
       });
     }
   };
+
   const filterProducts = () => {
     return products.filter(
       (product) =>
@@ -101,6 +105,22 @@ const HomePresenter = () => {
           product.name.toLowerCase().includes(filters.name))
     );
   };
+
+  function getCategoryName(category) {
+    switch (category) {
+      case 'sofa':
+        return t('sofa');
+      case 'chair':
+        return t('chair');
+      case 'bed':
+        return t('bed');
+      case 'table':
+        return t('table');
+      default:
+        break;
+    }
+  }
+
   return (
     <>
       <div className="store-container">
@@ -113,23 +133,26 @@ const HomePresenter = () => {
             ref={categoryDropdownRef}
           >
             <h2>
-              {'Category '}
-              <span className="arrow">
+              {t('Category')}
+              <span className="presenterarrow mx-2">
                 <KeyboardArrowDownIcon />
               </span>
             </h2>
-
             {showCategoryDropdown && (
               <div
                 className="dropDown categorydropDown "
-                style={{ maxHeight: '200px' }}
+                style={{
+                  maxHeight: '200px',
+                  marginInline: '-50px',
+                  marginTop: '-16px',
+                }}
               >
                 {categories.map((category, index) => (
                   <div
                     key={index}
                     className="categoryOption"
                     style={{
-                      padding: '10px',
+                      padding: '2px 5px',
                       cursor: 'pointer',
                       display: 'flex',
                       justifyContent: 'space-between',
@@ -140,7 +163,7 @@ const HomePresenter = () => {
                       handleCategoryChange(category);
                     }}
                   >
-                    <span>{category}</span>
+                    <span>{getCategoryName(category)}</span>
                     <input
                       style={{
                         cursor: 'pointer',
@@ -156,28 +179,10 @@ const HomePresenter = () => {
               </div>
             )}
           </div>
-
           {/* Name filter */}
-          <input
-            type="text"
-            className="inline md:hidden"
-            value={filters.name}
-            onChange={(e) => handleNameChange(e)}
-            placeholder="Enter Product Name"
-            style={{
-              padding: '0.5rem',
-              borderRadius: '5px',
-              border: '1px solid #ccc',
-              fontSize: '1rem',
-              // width: "250px",
-            }}
-          />
           <div
-            className="hidden md:block"
             style={{
-              marginTop: '0px',
-              marginLeft: '0px',
-              minWidth: '500px',
+              minWidth: '310px',
               height: '50px',
               backgroundColor: 'gray',
               borderRadius: '35px',
@@ -204,13 +209,15 @@ const HomePresenter = () => {
               type="search"
               value={filters.name}
               onChange={(e) => handleNameChange(e)}
-              placeholder="Enter Product Name"
+              placeholder={t('productName')}
             ></input>
           </div>
         </div>
         {/* Product display */}
         {isLoading ? (
-          <Loading />
+          <div className="h-60">
+            <Loading />
+          </div>
         ) : (
           <div
             className="products-container"

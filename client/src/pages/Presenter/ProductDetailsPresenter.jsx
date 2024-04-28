@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Rating from '@mui/material/Rating';
 import ProgressBar from 'react-bootstrap/ProgressBar';
@@ -21,6 +21,8 @@ import '../e-commers/StyleSheets/ProductDetails.css';
 import ReviewPresenter from '../../components/Presenter/ReviewsPresenter';
 import Loading from '../../components/shared/Loading';
 import { apiRequest } from '../../utils';
+import { t } from 'i18next';
+import i18n from '../../../Language/translate';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -141,8 +143,23 @@ function ProductDetailsPresenter() {
     setshowDeleteMessage(false);
   };
 
+  function getCategoryName(category) {
+    switch (category) {
+      case 'sofa':
+        return t('sofa');
+      case 'chair':
+        return t('chair');
+      case 'bed':
+        return t('bed');
+      case 'table':
+        return t('table');
+      default:
+        break;
+    }
+  }
+
   return (
-    <main className="productDetailMain mt-4">
+    <main className="productDetailMain mt-4" style={{ direction: 'ltr' }}>
       {isLoading ? (
         <div className="flex h-56 ">
           <div className=" m-auto">
@@ -169,12 +186,15 @@ function ProductDetailsPresenter() {
                 })}
               </div>
             </div>
-            <div className="productDetailData">
+            <div
+              className="productDetailData"
+              style={{ direction: i18n?.language === 'ar' ? 'rtl' : 'ltr' }}
+            >
               <div>
                 <h1>{product?.name}</h1>
                 <div className="productDetailCategory">
-                  <h2>Category:</h2>
-                  <p>{product?.category}</p>
+                  <h2>{t('Category')}: </h2>
+                  <p className="mr-2"> {getCategoryName(product?.category)}</p>
                 </div>
                 <div className="productDetailRating">
                   <Rating
@@ -185,42 +205,46 @@ function ProductDetailsPresenter() {
                     sx={{ fontSize: 30 }}
                   />
                   <p>
-                    {totalRating} Based on {reviews?.length} Reviews.{' '}
+                    ({totalRating}) {t('basedOn')} ({reviews?.length}){' '}
+                    {t('review')}
                   </p>
                 </div>
-                <h3>Description:</h3>
+                <h3 className="text-xl font-bold">{t('description')}:</h3>
                 <p className="productDetailDescription">
                   {product?.description}
                 </p>
                 <div className="productDetailColors">
-                  <p>Color: </p>
+                  <p>{t('Color')}: </p>
                   {product?.colors.map((color, idx) => (
-                    <span key={idx} className="mr-3">
-                      {color}
-                    </span>
+                    <span key={idx}>{color} -</span>
                   ))}
                 </div>
-                <p className="productDetailsPrice">{product?.price} EL</p>
+                <p className="productDetailsPrice">
+                  {product?.price} {t('EGP')}
+                </p>
               </div>
               <div className="productDetailsDataFooter">
                 <Link
                   className="flex items-center text-xl bg-slate-700 hover:bg-slate-800 text-white py-2 px-3 rounded-xl"
                   to={`/presenter/update/product/${product?._id}`}
                 >
-                  Edit
+                  {t('edit')}
                   <EditIcon sx={{ fontSize: '20px', marginLeft: '5px' }} />
                 </Link>
                 <button onClick={() => setshowDeleteMessage(true)}>
-                  <Tooltip title="Delete" placement="top">
+                  <Tooltip title={t('delete')} placement="top">
                     <DeleteForeverIcon sx={{ fontSize: '40px' }} />
                   </Tooltip>
                 </button>
               </div>
             </div>
           </div>
-          <div className="productDetailReviews">
+          <div
+            className="productDetailReviews"
+            style={{ direction: i18n?.language === 'ar' ? 'rtl' : 'ltr' }}
+          >
             <div className="productDetailReviewsDetails">
-              <h4>Customer Reviews</h4>
+              <h4>{t('customerReviews')}</h4>
               <div className="productDetailRatingForReviews">
                 <Rating
                   readOnly
@@ -230,7 +254,8 @@ function ProductDetailsPresenter() {
                   sx={{ fontSize: 25 }}
                 />
                 <p>
-                  {totalRating} Based on {reviews?.length} Reviews{' '}
+                  ({totalRating}) {t('basedOn')} ({reviews?.length}){' '}
+                  {t('review')}
                 </p>
               </div>
               <div className="productDetailRatingAllBars">
@@ -256,14 +281,14 @@ function ProductDetailsPresenter() {
                 )}
               </div>
               <div className="productDetailReviewsFooter">
-                <h5>Share your thoughts</h5>
-                <p>
-                  If you have used this product, share your thoughts with other
-                  customers.
-                </p>
+                <h5>{t('shareyourthoughts')}</h5>
+                <p>{t('shareYourThoughts')}</p>
               </div>
             </div>
-            <div className="productDetailReviewsData">
+            <div
+              className="productDetailReviewsData"
+              style={{ direction: 'ltr' }}
+            >
               {reviews?.length ? (
                 reviews.map((review) => {
                   return (
@@ -276,7 +301,7 @@ function ProductDetailsPresenter() {
                 })
               ) : (
                 <div className="productDetailNoReviews">
-                  <h5>Currently, there are no reviews available</h5>
+                  <h5>{t('currentlyNoReviews')}</h5>
                 </div>
               )}
             </div>
@@ -288,27 +313,41 @@ function ProductDetailsPresenter() {
             onClose={handleDisagreeDeleteProductMessage}
             aria-describedby="alert-dialog-slide-description"
           >
-            <DialogTitle sx={{ fontSize: '25px', fontWeight: 'bold' }}>
-              Delete Product
+            <DialogTitle
+              sx={{
+                fontSize: '25px',
+                fontWeight: 'bold',
+                direction: i18n.language === 'ar' ? 'rtl' : 'ltr',
+              }}
+            >
+              {t('delete')}
             </DialogTitle>
             <DialogContent>
-              <DialogContentText id="alert-dialog-slide-description">
-                Are you sure you want to proceed with the deletion of this
-                product?
+              <DialogContentText
+                id="alert-dialog-slide-description"
+                sx={{
+                  fontSize: '18px',
+                  direction: i18n.language === 'ar' ? 'rtl' : 'ltr',
+                }}
+              >
+                {t('wantDeletionThisProduct')}
                 <br />
                 <br />
-                This action cannot be undone and will permanently remove the
-                product from the database.
+                {t('actionCannotUndone')}
               </DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button
                 onClick={handleDisagreeDeleteProductMessage}
-                sx={{ marginRight: 'auto' }}
+                sx={{
+                  marginRight: 'auto',
+                }}
               >
-                DISAGREE
+                {t('cancel')}
               </Button>
-              <Button onClick={handleAgreeDeleteProductMessage}>AGREE</Button>
+              <Button onClick={handleAgreeDeleteProductMessage}>
+                {t('agree')}
+              </Button>
             </DialogActions>
           </Dialog>
         </>

@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import InputColor from '../../components/Presenter/InputColor';
@@ -9,6 +8,7 @@ import { Alert, Snackbar } from '@mui/material';
 import { apiRequest, handleMultipleFilesUpload } from '../../utils';
 import Loading from '../../components/shared/Loading';
 import './StyleSheets/ProductForm.css';
+import { t } from 'i18next';
 function ProductForm({ product, method }) {
   const navigate = useNavigate();
   const { employee } = useSelector((state) => state?.employee);
@@ -67,6 +67,7 @@ function ProductForm({ product, method }) {
       console.log(error);
     }
   }
+
   async function editProduct(imagesUrl) {
     try {
       const res = await apiRequest({
@@ -150,16 +151,17 @@ function ProductForm({ product, method }) {
     reader.readAsDataURL(files[0]);
     setNumberOfImages(numberOfImages + 1);
   }
+
   return (
     <>
       {!isLoading ? (
         <main className="editProductMain">
-          <h1>{method === 'EDIT' ? 'Edit product' : 'Add product'}</h1>
+          <h1>{method === 'EDIT' ? t('edit') : t('add')}</h1>
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <div className="editProductFormMainDiv">
               {/* for images */}
               <Form.Group className="InputGroup editProductFormImages">
-                <Form.Label className="FormLabel">Images</Form.Label>
+                <Form.Label className="FormLabel">{t('images')}</Form.Label>
                 <div
                   className={
                     images?.length || newImages?.length
@@ -212,7 +214,7 @@ function ProductForm({ product, method }) {
                 {/* for product Name */}
                 <Form.Group className="InputGroup">
                   <Form.Label htmlFor="productName" className="FormLabel">
-                    Product Name
+                    {t('productName')}
                   </Form.Label>
                   <Form.Control
                     required
@@ -231,7 +233,7 @@ function ProductForm({ product, method }) {
                     htmlFor="productDescription"
                     className="FormLabel"
                   >
-                    Description
+                    {t('description')}
                   </Form.Label>
                   <Form.Control
                     required
@@ -250,7 +252,7 @@ function ProductForm({ product, method }) {
                   {/*for category */}
                   <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv ">
                     <Form.Label className="FormLabel" htmlFor="productCategory">
-                      Category
+                      {t('Category')}
                     </Form.Label>
                     <Form.Select
                       required
@@ -260,17 +262,17 @@ function ProductForm({ product, method }) {
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
                     >
-                      <option value="">Choose a category</option>
-                      <option value="sofa">Sofa</option>
-                      <option value="bed">Bed</option>
-                      <option value="chair">Chair</option>
-                      <option value="table">Table</option>
+                      <option value="">{t('ChooseOption')}</option>
+                      <option value="sofa">{t('sofa')}</option>
+                      <option value="bed">{t('bed')}</option>
+                      <option value="chair">{t('chair')}</option>
+                      <option value="table">{t('table')}</option>
                     </Form.Select>
                   </Form.Group>
                   {/* for Price */}
                   <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv">
                     <Form.Label htmlFor="productPrice" className="FormLabel">
-                      Price
+                      {t('Price')}
                     </Form.Label>
                     <Form.Control
                       required
@@ -287,13 +289,13 @@ function ProductForm({ product, method }) {
                 </div>
                 {/* for colors */}
                 <Form.Group className="InputGroup ">
-                  <Form.Label className="FormLabel">Colors</Form.Label>
+                  <Form.Label className="FormLabel">{t('Color')}</Form.Label>
                   <InputColor colors={colors} setColors={setColors} />
                 </Form.Group>
                 {/* for points */}
                 <Form.Group className="InputGroup ">
                   <Form.Label htmlFor="productPoints" className="FormLabel">
-                    Points
+                    {t('points')}
                   </Form.Label>
                   <Form.Control
                     required
@@ -321,17 +323,17 @@ function ProductForm({ product, method }) {
                       htmlFor="uploadFile"
                       className="uploadBtn text-gray-700 bg-gray-300 cursor-pointer"
                     >
-                      Upload picture
+                      {t('uploadPicture')}
                     </label>
-                    <p>Maximum 4 pictures</p>
+                    <p>{t('maximum4Pictures')}</p>
                   </Form.Group>
                 ) : (
                   <></>
                 )}
                 {/* for show */}
                 <Form.Group className="InputGroup flex items-center">
-                  <Form.Label htmlFor="productShow" className="FormLabel mr-4">
-                    Show
+                  <Form.Label htmlFor="productShow" className="FormLabel mx-4">
+                    {t('show')}
                   </Form.Label>
                   <input
                     type="checkbox"
@@ -352,7 +354,7 @@ function ProductForm({ product, method }) {
                 type="submit"
                 className="text-2xl bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-xl mb-4 h-16"
               >
-                Save
+                {t('save')}
               </button>
               <button
                 className="text-2xl bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded-xl mb-4 h-16"
@@ -361,7 +363,7 @@ function ProductForm({ product, method }) {
                   history.back();
                 }}
               >
-                Cancel
+                {t('cancel')}
               </button>
             </div>
           </Form>
@@ -382,7 +384,7 @@ function ProductForm({ product, method }) {
           variant="filled"
           sx={{ width: '100%' }}
         >
-          Include at least one picture and color.
+          {t('includeAtLeastOneColorAndImage')}
         </Alert>
       </Snackbar>
     </>
