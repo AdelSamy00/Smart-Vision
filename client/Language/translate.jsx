@@ -4,6 +4,9 @@ import enTranslations1 from './en.json';
 import arTranslations1 from './ar.json';
 import enTranslations2 from './en1.json';
 import arTranslations2 from './ar1.json';
+import arTranslationsD from './arD.json';
+import enTranslationsD from './enD.json';
+
 
 i18n
   .use(initReactI18next)
@@ -13,12 +16,14 @@ i18n
         translation: { 
           ...enTranslations1,
           ...enTranslations2,
+          ...enTranslationsD
         }
       },
       ar: { 
         translation: { 
           ...arTranslations1,
           ...arTranslations2,
+          ...arTranslationsD
         }
       },
     },

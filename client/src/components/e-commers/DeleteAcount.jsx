@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./stylesheets/DeleteAcount.css";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -8,9 +9,8 @@ import TextField from "@mui/material/TextField";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useTranslation } from "react-i18next"; // Import the useTranslation hook
-import i18n from "../../../Language/translate";
 const DeleteAccount = ({ onDelete }) => {
-  const { t } = useTranslation();
+  const { t ,i18n} = useTranslation();
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -25,7 +25,12 @@ const DeleteAccount = ({ onDelete }) => {
 
   return (
     <div className="delete-account-container">
-      <a href="./">{t("Account Home")}</a> <ArrowRightIcon />{" "}
+      <a href="./">{t("Account Home")}</a> 
+      {i18n.language === "ar" ? (
+        <ArrowLeftIcon />
+      ) : (
+        <ArrowRightIcon />
+      )}{" "}
       <span>{t("Delete Account")}</span>
       <h2 className="delete-account-heading">{t("Delete Account")}</h2>
       <p>
@@ -64,6 +69,7 @@ const DeleteAccount = ({ onDelete }) => {
             }}
             className="delete-account-input"
             label={t("password")}
+            dir={"ltr"}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">

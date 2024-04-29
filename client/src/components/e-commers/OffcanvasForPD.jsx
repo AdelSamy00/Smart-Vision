@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { SetCustomer } from '../../redux/CustomerSlice';
 import { apiRequest } from '../../utils';
+import { useTranslation } from "react-i18next"; 
+import i18n from 'i18next';
 
 function OffcanvasForPD({ ...props }) {
   const dispatch = useDispatch();
@@ -23,6 +25,8 @@ function OffcanvasForPD({ ...props }) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [validated, setValidated] = useState(false);
+  const { t } = useTranslation();
+
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
@@ -62,12 +66,12 @@ function OffcanvasForPD({ ...props }) {
         variant="outline-secondary"
         onClick={handleShow}
       >
-        <p className="inline text-2xl">Edit</p>
+        <p className="inline text-2xl">{t("Edit")}</p>
         <EditIcon className="ml-2" />
       </Button>
       <Offcanvas show={show} onHide={handleClose} {...props}>
         <Offcanvas.Header>
-          <Offcanvas.Title className="text-2xl">Edit profile</Offcanvas.Title>
+          <Offcanvas.Title className="text-2xl">{t("Edit profile")}</Offcanvas.Title>
           <button className="me-2" onClick={handleClose}>
             <CloseIcon sx={{ fontSize: 30 }} />
           </button>
@@ -75,7 +79,7 @@ function OffcanvasForPD({ ...props }) {
         <Offcanvas.Body>
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Form.Group className="InputGroup">
-              <Form.Label className="FormLabel">User Name</Form.Label>
+              <Form.Label className="FormLabel">{t("User Name")}</Form.Label>
               <Form.Control
                 className="InputField"
                 required
@@ -87,7 +91,7 @@ function OffcanvasForPD({ ...props }) {
             </Form.Group>
             <Form.Group className="InputGroup">
               <Form.Label className="FormLabel" htmlFor="disabledSelect">
-                Gender
+                {t("Gender")}
               </Form.Label>
               <Form.Select
                 className="InputField"
@@ -96,19 +100,19 @@ function OffcanvasForPD({ ...props }) {
                 onChange={(e) => setGender(e.target.value)}
               >
                 <option value="" disabled>
-                  Choose an option
+                  {t("Choose an option")}
                 </option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option value="Male">{t("Male")}</option>
+                <option value="Female">{t("Female")}</option>
               </Form.Select>
             </Form.Group>
             <Form.Group className="InputGroup">
-              <Form.Label className="FormLabel">Address</Form.Label>
+              <Form.Label className="FormLabel">{t("Address")}</Form.Label>
               <Form.Control
                 className="InputField"
                 type="text"
                 placeholder="Address"
-                value={address}
+                value={t("address")}
                 onChange={(e) => setAddress(e.target.value)}
               />
             </Form.Group>
@@ -117,7 +121,7 @@ function OffcanvasForPD({ ...props }) {
                 type="submit"
                 className="text-2xl bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-3xl w-full m-4 h-16"
               >
-                Save
+                {t("Save")}
               </button>
             </div>
           </Form>

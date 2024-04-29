@@ -144,7 +144,7 @@ function BookingServiceForm({ socket, setSocket }) {
                     label={t("Service Name")}
                     variant="outlined"
                     name="ServiceName"
-                    value={service.title}
+                    value={t(service.title)}
                     onChange={handleInputChange}
                     required
                   />
@@ -156,7 +156,7 @@ function BookingServiceForm({ socket, setSocket }) {
                     variant="outlined"
                     name="phoneNumber"
                     type="tel"
-                    value={formData.phoneNumber}
+                    value={t(formData.phoneNumber)}
                     onChange={handleInputChange}
                     required
                   />
