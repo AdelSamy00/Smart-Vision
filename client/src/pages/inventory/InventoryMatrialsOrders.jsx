@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setNotification } from '../../redux/NotificationSlice';
 import { Typography } from '@mui/material';
 import { t } from 'i18next';
+import toast, { Toaster } from 'react-hot-toast';
 
 const InventoryMatrialsOrders = ({ socket, setSocket }) => {
+  const { employee } = useSelector((state) => state?.employee);
   const [isLoading, setIsLoading] = useState(true);
   const [matrials, setMatrials] = useState([]);
   const { notification } = useSelector((state) => state?.notification);
@@ -17,17 +19,22 @@ const InventoryMatrialsOrders = ({ socket, setSocket }) => {
     async function fetchOrderHistory() {
       try {
         const response = await apiRequest({
-          method: 'get',
-          url: '/Employees/material-order',
-          data: {},
+          method: 'GET',
+          url: '/employees/inventory/materials',
+          token: employee?.token,
         });
-        setMatrials(response.data.materialOrders.reverse());
-        setIsLoading(false);
-        //console.log(response.data.materialOrders);
+        if (response?.data?.success) {
+          setMatrials(response.data.materialOrders.reverse());
+          setIsLoading(false);
+        } else {
+          toast.dismiss();
+          toast.error('Failed to get materials');
+          setIsLoading(false);
+        }
       } catch (error) {
         console.error(
           'Error fetching order history:',
-          error.response.data.message
+          error?.response?.data?.message
         );
       }
     }
@@ -45,6 +52,7 @@ const InventoryMatrialsOrders = ({ socket, setSocket }) => {
 
   return (
     <div>
+      <Toaster />
       {isLoading ? (
         <div className="mt-40">
           <Loading />

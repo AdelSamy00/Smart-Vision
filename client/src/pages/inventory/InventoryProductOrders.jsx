@@ -4,9 +4,12 @@ import ProductOrder from '../../components/inventory/ProductOrder';
 import { apiRequest } from '../../utils';
 import { Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
 
 const InventoryProductOrders = () => {
   const { t } = useTranslation();
+  const { employee } = useSelector((state) => state?.employee);
   const [isLoading, setIsLoading] = useState(true);
   const [orders, setorders] = useState([]);
 
@@ -14,17 +17,23 @@ const InventoryProductOrders = () => {
     async function fetchOrderHistory() {
       try {
         const response = await apiRequest({
-          method: 'get',
-          url: '/Employees/inventory',
-          data: {},
+          method: 'GET',
+          url: '/employees/inventory/products',
+          token: employee?.token,
         });
-        setorders(response.data.orders.reverse());
-        setIsLoading(false);
-        console.log(response.data.orders);
+        if (response?.data?.success) {
+          setorders(response.data.orders.reverse());
+          setIsLoading(false);
+          console.log(response?.data?.orders);
+        } else {
+          toast.dismiss();
+          toast.error('Failed to get orders');
+          setIsLoading(false);
+        }
       } catch (error) {
         console.error(
           'Error fetching order history:',
-          error.response.data.message
+          error?.response?.data?.message
         );
         setIsLoading(false);
       }
@@ -35,6 +44,7 @@ const InventoryProductOrders = () => {
 
   return (
     <div>
+      <Toaster />
       {isLoading ? (
         <div className="mt-40">
           <Loading />

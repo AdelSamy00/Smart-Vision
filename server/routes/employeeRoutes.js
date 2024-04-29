@@ -2,14 +2,12 @@ import express from 'express';
 import presenterRoute from './presenterRoutes.js';
 import actorRoute from './actorRoutes.js';
 import engineerRoute from './engineerRoute.js';
+import inventoryManagerRoute from './inventoryManagerRoute.js';
 import { getServiceById } from '../controllers/EmployeeControllers.js';
 
 import {
-  getAllTransactions,
   getConfirmedOrders,
   getMaterialOrders,
-  getMaterialTransactions,
-  getProductTransactions,
   sendOrderToShipped,
 } from '../controllers/InventoryManager.js';
 import {
@@ -47,16 +45,10 @@ router.use('/actor', actorRoute);
 
 router.use('/engineer', engineerRoute);
 
+router.use('/inventory', inventoryManagerRoute);
+
 //get Customization Order Details to Factory
 router.get('/customizationOrdersDetails', getCustomizationOrdersDetails);
-//#endregion
-
-router.get('/material-order', getMaterialOrders);
-
-//#region Transactions
-router.get('/transaction', getAllTransactions);
-router.get('/material-transactions', getMaterialTransactions);
-router.get('/product-transactions', getProductTransactions);
 //#endregion
 
 //#region Orders
@@ -74,7 +66,7 @@ router.put('/services', updateServiceOrderStatus); // to get services order to o
 //#endregion
 
 //#region Inventory Manager
-router.get('/inventory', getConfirmedOrders); // get confirmed order to inventory manager
+
 router.put('/inventory/shipped/:orderId', sendOrderToShipped);
 //#endregion
 
