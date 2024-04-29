@@ -90,3 +90,56 @@ export const handleMultipleFilesUpload = async (uploadFile) => {
     console.log(error);
   }
 };
+
+// to translation
+export function setOptionsForTranslate(texts) {
+  const data = texts?.map((item) => {
+    return { Text: item };
+  });
+  const options = {
+    method: 'POST',
+    url: 'https://microsoft-translator-text.p.rapidapi.com/translate',
+    params: {
+      'to[0]': 'ar',
+      'to[1]': 'en',
+      'api-version': '3.0',
+      profanityAction: 'NoAction',
+      textType: 'plain',
+    },
+    headers: {
+      'content-type': 'application/json',
+      'X-RapidAPI-Key': import.meta.env.VITE_APP_X_RapidAPI_Key,
+      'X-RapidAPI-Host': 'microsoft-translator-text.p.rapidapi.com',
+    },
+    data,
+  };
+  //console.log(options);
+  return options;
+}
+
+// to translation materials name
+export function setOptionsForTranslateMaterials(materials) {
+  const data = materials?.map((item) => {
+    return { Text: item.material };
+  });
+  
+  const options = {
+    method: 'POST',
+    url: 'https://microsoft-translator-text.p.rapidapi.com/translate',
+    params: {
+      'to[0]': 'ar',
+      'to[1]': 'en',
+      'api-version': '3.0',
+      profanityAction: 'NoAction',
+      textType: 'plain',
+    },
+    headers: {
+      'content-type': 'application/json',
+      'X-RapidAPI-Key': import.meta.env.VITE_APP_X_RapidAPI_Key,
+      'X-RapidAPI-Host': 'microsoft-translator-text.p.rapidapi.com',
+    },
+    data,
+  };
+  //console.log(options);
+  return options;
+}

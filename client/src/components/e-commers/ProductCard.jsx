@@ -91,7 +91,7 @@ function ProductCard({
             <Rating
               readOnly
               name="half-rating"
-              value={product?.totalRating.toFixed(3)}
+              value={+product?.totalRating.toFixed(3)}
               precision={0.5}
               sx={{ fontSize: 30 }}
             />

@@ -4,6 +4,7 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { Link, useParams } from 'react-router-dom';
 import { t } from 'i18next';
+import { setOptionsForTranslate } from '../../utils';
 
 const UpdateMatrialForm = () => {
   const { matrialId } = useParams();
@@ -37,8 +38,12 @@ const UpdateMatrialForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(matrialData);
+    //console.log(matrialData);
     try {
+      const translationRes = await axios.request(
+        setOptionsForTranslate([matrialData.name])
+      );
+      console.log(translationRes.data);
       const response = await axios.put(`/Materials/`, {
         id: matrialId,
         name: matrialData.name,
