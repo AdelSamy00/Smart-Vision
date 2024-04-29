@@ -50,10 +50,14 @@ function BookingServiceForm({ socket, setSocket }) {
     e.preventDefault();
     setLoading(true);
     try {
-      const translationRes = await axios.request(
-        setOptionsForTranslate([formData.description])
-      );
-      console.log(translationRes.data);
+      // const translationRes = await axios.request(
+      //   setOptionsForTranslate([formData.description])
+      // );
+      // // console.log(translationRes.data);
+      // const ARdescription = translationRes?.data[0]?.translations[0]?.text;
+      // const ENdescription = translationRes?.data[0]?.translations[1]?.text;
+      // console.log(ARdescription, ENdescription);
+
       const uploadedImages =
         images.length > 1 && (await handleMultipleFilesUpload(images));
       console.log('Uploaded Image URL:', uploadedImages);

@@ -51,10 +51,14 @@ const UpdateMatrialForm = () => {
     e.preventDefault();
     //console.log(matrialData);
     try {
-      const translationRes = await axios.request(
-        setOptionsForTranslate([matrialData.name])
-      );
-      console.log(translationRes.data);
+      // const translationRes = await axios.request(
+      //   setOptionsForTranslate([matrialData?.name])
+      // );
+      // console.log(translationRes.data);
+      // const ARname = translationRes?.data[0]?.translations[0]?.text;
+      // const ENname = translationRes?.data[0]?.translations[1]?.text;
+      // console.log(ARname, ENname);
+
       const response = await apiRequest({
         url: '/materials/',
         method: 'PUT',

@@ -28,6 +28,14 @@ const AddMatrialForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // const translationRes = await axios.request(
+      //   setOptionsForTranslate([productData?.name])
+      // );
+      // //console.log(translationRes?.data);
+      // const ARname = translationRes?.data[0]?.translations[0]?.text;
+      // const ENname = translationRes?.data[0]?.translations[1]?.text;
+      // console.log(ARname, ENname);
+
       const response = await apiRequest({
         url: '/materials/',
         method: 'POST',

@@ -61,6 +61,10 @@ function ProductForm({ product, method }) {
   async function addProduct(imagesUrl) {
     try {
       //const translationRes = await translateText();
+      // const ARname = translationRes[0].translations[0].text;
+      // const ENname = translationRes[0].translations[1].text;
+      // const ARdescription = translationRes[1].translations[0].text;
+      // const ENdescription = translationRes[1].translations[1].text;
       const res = await apiRequest({
         method: 'POST',
         url: `/employees/presenter/add-to-store/`,
@@ -97,8 +101,13 @@ function ProductForm({ product, method }) {
 
   async function editProduct(imagesUrl) {
     try {
-      //const translationRes = await translateText();
-      //console.log(translationRes);
+      // const translationRes = await translateText();
+      // //console.log(translationRes);
+      // const ARname = translationRes[0].translations[0].text;
+      // const ENname = translationRes[0].translations[1].text;
+      // const ARdescription = translationRes[1].translations[0].text;
+      // const ENdescription = translationRes[1].translations[1].text;
+      // console.log(ARname, ENname, ARdescription, ENdescription);
       const res = await apiRequest({
         url: `/products/${product?._id}`,
         method: 'PUT',
@@ -148,7 +157,7 @@ function ProductForm({ product, method }) {
       event.stopPropagation();
       setValidated(true);
     } else {
-      setIsLoading(true);
+      //setIsLoading(true);
       const files = getNewImagesFiles();
       const imagesUrl = newImages?.length
         ? await handleMultipleFilesUpload(files)
