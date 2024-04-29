@@ -7,6 +7,7 @@ import { apiRequest } from '../../utils';
 import Loading from '../../components/shared/Loading';
 import { setNotification } from '../../redux/NotificationSlice';
 import { useTranslation } from 'react-i18next';
+import toast, { Toaster } from 'react-hot-toast';
 
 function ViewCutomizedOrders({ socket, setSocket }) {
   const { t } = useTranslation();
@@ -22,15 +23,21 @@ function ViewCutomizedOrders({ socket, setSocket }) {
         const response = await apiRequest({
           method: 'GET',
           url: `/employees/engineer/${employee._id}`,
+          token: employee?.token,
         });
-        //console.log('API response:', response.data);
-        const filteredRequests = response.data.services.filter(
-          (request) => !request.date
-        );
-       // console.log(filteredRequests);
-        setRequests(filteredRequests);
+        if (response?.data?.success) {
+          //console.log('API response:', response.data);
+          const filteredRequests = response.data.services.filter(
+            (request) => !request.date
+          );
+          // console.log(filteredRequests);
+          setRequests(filteredRequests);
 
-        setIsLoading(false);
+          setIsLoading(false);
+        } else {
+          toast.dismiss();
+          toast.error(response?.message);
+        }
       } catch (error) {
         console.error('Error fetching products:', error.response);
       }
@@ -64,6 +71,7 @@ function ViewCutomizedOrders({ socket, setSocket }) {
       alignItems="center"
       className="presenter-products-container"
     >
+      <Toaster />
       {isLoading ? (
         <div className="h-96">
           <Loading />

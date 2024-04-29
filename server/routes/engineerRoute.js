@@ -1,5 +1,8 @@
 import express from 'express';
-import { getAssignedServices } from '../controllers/EngineerControllers.js';
+import {
+  getAssignedServices,
+  sendServiceDetails,
+} from '../controllers/EngineerControllers.js';
 import engineerAuth from '../middlewares/engineerMiddleware.js';
 import {
   assignedEnginerToService,
@@ -11,4 +14,6 @@ const router = express.Router();
 router.get('/', operatorAuth, getAllEngineers); //help operator to get all engineer.
 router.get('/:id', engineerAuth, getAssignedServices);
 router.post('/', operatorAuth, assignedEnginerToService);
+// send service details to factory
+router.post('/sendService', engineerAuth, sendServiceDetails); ///send-customization-details
 export default router;

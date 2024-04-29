@@ -3,10 +3,7 @@ import presenterRoute from './presenterRoutes.js';
 import actorRoute from './actorRoutes.js';
 import engineerRoute from './engineerRoute.js';
 import { getServiceById } from '../controllers/EmployeeControllers.js';
-import {
-  getAssignedServices,
-  sendCustomizationDetails,
-} from '../controllers/EngineerControllers.js';
+
 import {
   getAllTransactions,
   getConfirmedOrders,
@@ -49,9 +46,6 @@ router.use(`/presenter`, presenterRoute);
 router.use('/actor', actorRoute);
 
 router.use('/engineer', engineerRoute);
-
-// Customization Orders Details
-router.post('/customizationOrders', sendCustomizationDetails); ///send-customization-details
 
 //get Customization Order Details to Factory
 router.get('/customizationOrdersDetails', getCustomizationOrdersDetails);

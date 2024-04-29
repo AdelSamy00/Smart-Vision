@@ -71,8 +71,9 @@ function CustomizedOrderDetails({
         toast.error('Failed to get all engneers');
       }
     }
-
-    getAllEngineers();
+    if (employee?.jobTitle.toLowerCase() === 'operator') {
+      getAllEngineers();
+    }
   }, []);
 
   const handleSubmit = async (event) => {

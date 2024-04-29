@@ -73,7 +73,7 @@ export const getCustomizationOrdersById = async (req, res, next) => {
   }
 };
 
-export const sendCustomizationDetails = async (req, res, next) => {
+export const sendServiceDetails = async (req, res, next) => {
   try {
     const { serviceId, engineerId, materials, details } = req.body;
     const service = await ServicesOrders.findById({ _id: serviceId });

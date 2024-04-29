@@ -16,9 +16,12 @@ import { apiRequest, handleFileUpload } from '../../utils';
 import { useSelector } from 'react-redux';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useTranslation } from 'react-i18next';
+import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const CustomOrderForm = ({ socket, setSocket }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { requestId } = useParams();
   const [error, setError] = useState('');
   const { employee } = useSelector((state) => state.employee);
@@ -111,31 +114,39 @@ const CustomOrderForm = ({ socket, setSocket }) => {
       console.log(file);
       const response = await apiRequest({
         method: 'POST',
-        url: 'employees/customizationOrders/',
+        url: 'employees/engineer/sendService',
         data: {
           serviceId: requestId,
           engineerId: employee._id,
           materials: orderDetails.materials,
           details: file,
         },
+        token: employee?.token,
       });
-      setOrderDetails({
-        ...orderDetails,
-        materials: [],
-      });
-      console.log('Order placed successfully:', response.data);
-      socket?.emit('sendDetails', {
-        user: employee,
-        type: ['getMaterial', 'newOrderToFactory'],
-        materialOrder: response.data.materialOrder,
-        service: response.data.service,
-      });
+      if (response?.data?.success) {
+        setOrderDetails({
+          ...orderDetails,
+          materials: [],
+        });
+        console.log('Order placed successfully:', response.data);
+        socket?.emit('sendDetails', {
+          user: employee,
+          type: ['getMaterial', 'newOrderToFactory'],
+          materialOrder: response.data.materialOrder,
+          service: response.data.service,
+        });
+        navigate('/engineer/orders');
+        toast.success('send order details successfully to factory');
+      } else {
+        toast.error('failed to send order to factory');
+      }
     } catch (error) {
       console.error('Error placing order:', error.response);
     }
   };
   return (
     <form onSubmit={handleSubmit} className="custom-order-form">
+      <Toaster />
       <Grid container spacing={2}>
         <Grid item xs={12} container>
           <label htmlFor="customerName" className="mb-2 text-2xl">
@@ -214,10 +225,7 @@ const CustomOrderForm = ({ socket, setSocket }) => {
             justifyContent: 'flex-end',
           }}
         >
-          <Button
-            onClick={addMaterial}
-            style={{ marginLeft: 'auto' }}
-          >
+          <Button onClick={addMaterial} style={{ marginLeft: 'auto' }}>
             {t('add')}
           </Button>
         </Grid>
