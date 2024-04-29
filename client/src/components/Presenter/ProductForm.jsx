@@ -31,6 +31,9 @@ function ProductForm({ product, method }) {
   const [validated, setValidated] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [width, setwidth] = useState(product?.dimensions?.width || '');
+  const [weight, setweight] = useState(product?.dimensions?.weight || '');
+  const [height, setheight] = useState(product?.dimensions?.height || '');
 
   async function translateText() {
     try {
@@ -57,7 +60,7 @@ function ProductForm({ product, method }) {
 
   async function addProduct(imagesUrl) {
     try {
-      const translationRes = await translateText();
+      //const translationRes = await translateText();
       const res = await apiRequest({
         method: 'POST',
         url: `/employees/presenter/add-to-store/`,
@@ -71,6 +74,11 @@ function ProductForm({ product, method }) {
           points,
           colors,
           show,
+          dimensions: {
+            width,
+            weight,
+            height,
+          },
         },
         token: employee?.token,
       });
@@ -89,8 +97,8 @@ function ProductForm({ product, method }) {
 
   async function editProduct(imagesUrl) {
     try {
-      const translationRes = await translateText();
-      console.log(translationRes);
+      //const translationRes = await translateText();
+      //console.log(translationRes);
       const res = await apiRequest({
         url: `/products/${product?._id}`,
         method: 'PUT',
@@ -103,6 +111,11 @@ function ProductForm({ product, method }) {
           points,
           colors,
           show,
+          dimensions: {
+            width,
+            weight,
+            height,
+          },
         },
         token: employee?.token,
       });
@@ -269,6 +282,56 @@ function ProductForm({ product, method }) {
                     onChange={(e) => setDescription(e.target.value)}
                   />
                 </Form.Group>
+                <div className="editProductCategoryAndPriceDiv">
+                  <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv ">
+                    <Form.Label className="FormLabel" htmlFor="height">
+                      {t('height')}
+                    </Form.Label>
+                    <Form.Control
+                      required
+                      className="InputField"
+                      name="height"
+                      id="height"
+                      type="number"
+                      placeholder={t('height')}
+                      min={0}
+                      value={height}
+                      onChange={(e) => setheight(e.target.value)}
+                    />
+                  </Form.Group>
+                  <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv">
+                    <Form.Label htmlFor="width" className="FormLabel">
+                      {t('width')}
+                    </Form.Label>
+                    <Form.Control
+                      required
+                      className="InputField"
+                      name="width"
+                      id="width"
+                      type="number"
+                      placeholder={t('width')}
+                      min={0}
+                      value={width}
+                      onChange={(e) => setwidth(e.target.value)}
+                    />
+                  </Form.Group>
+                  <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv ">
+                    <Form.Label className="FormLabel" htmlFor="weight">
+                      {t('weight')}
+                    </Form.Label>
+                    <Form.Control
+                      required
+                      className="InputField"
+                      name="weight"
+                      id="weight"
+                      type="number"
+                      placeholder={t('weight')}
+                      min={0}
+                      value={weight}
+                      onChange={(e) => setweight(e.target.value)}
+                    />
+                  </Form.Group>
+                </div>
                 <div className="editProductCategoryAndPriceDiv">
                   {/*for category */}
                   <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv ">

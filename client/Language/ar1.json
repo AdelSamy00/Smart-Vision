@@ -123,5 +123,9 @@
     "Home": "الرئيسية",
     "Transactions": "المعاملات",
     "New products": "منتجات جديدة",
-    "Add Employee": "إضافة موظف"
+    "Add Employee": "إضافة موظف",
+    "dimensions": "الأبعاد",
+    "width": "العرض",
+    "height": "الارتفاع",
+    "weight": "الوزن"
 }

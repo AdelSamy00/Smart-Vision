@@ -209,10 +209,25 @@ function ProductDetailsPresenter() {
                     {t('review')}
                   </p>
                 </div>
-                <h3 className="text-xl font-bold">{t('description')}:</h3>
+                <h3 className="text-lg font-bold">{t('description')}:</h3>
                 <p className="productDetailDescription">
                   {product?.description}
                 </p>
+                <h3 className="text-lg font-bold">{t('dimensions')}:</h3>
+                <div className="flex gap-2 flex-wrap">
+                  <p className="productDetailDescription">
+                    {t('height')}: {product?.dimensions?.height}
+                    {t('cm')}
+                  </p>
+                  <p className="productDetailDescription">
+                    {t('width')}: {product?.dimensions?.width}
+                    {t('cm')}
+                  </p>
+                  <p className="productDetailDescription">
+                    {t('weight')}: {product?.dimensions?.weight}
+                    {t('kg')}
+                  </p>
+                </div>
                 <div className="productDetailColors">
                   <p>{t('Color')}: </p>
                   {product?.colors.map((color, idx) => (

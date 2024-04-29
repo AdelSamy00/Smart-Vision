@@ -1,18 +1,18 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import Rating from "@mui/material/Rating";
-import { useDispatch, useSelector } from "react-redux";
-import { SetCustomer } from "../../redux/CustomerSlice";
-import "./StyleSheets/ProductDetails.css";
-import AddReview from "../../components/e-commers/AddReview";
-import { setCart } from "../../redux/CartSlice";
-import Loading from "../../components/shared/Loading";
-import LoginMessage from "../../components/e-commers/LoginMessage";
-import HomeSlider from "../../components/e-commers/HomeSlider";
-import ReviewsSection from "../../components/e-commers/ReviewsSection";
-import { useTranslation } from "react-i18next"; 
-import i18n from "../../../Language/translate";
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import Rating from '@mui/material/Rating';
+import { useDispatch, useSelector } from 'react-redux';
+import { SetCustomer } from '../../redux/CustomerSlice';
+import './StyleSheets/ProductDetails.css';
+import AddReview from '../../components/e-commers/AddReview';
+import { setCart } from '../../redux/CartSlice';
+import Loading from '../../components/shared/Loading';
+import LoginMessage from '../../components/e-commers/LoginMessage';
+import HomeSlider from '../../components/e-commers/HomeSlider';
+import ReviewsSection from '../../components/e-commers/ReviewsSection';
+import { useTranslation } from 'react-i18next';
+import i18n from '../../../Language/translate';
 
 function ProductDetails() {
   const { t } = useTranslation();
@@ -36,7 +36,7 @@ function ProductDetails() {
   const handelFavorit = async (id, productId) => {
     if (customer?._id) {
       await axios
-        .post("/customers/favorite", { id, productId })
+        .post('/customers/favorite', { id, productId })
         .then((res) => {
           const newData = { ...res.data?.newCustomerData };
           dispatch(SetCustomer(newData));
@@ -90,7 +90,7 @@ function ProductDetails() {
         );
 
         if (filteredProducts.length === 0) {
-          const allProductsResponse = await axios.get("/products/");
+          const allProductsResponse = await axios.get('/products/');
           console.log(allProductsResponse.data);
           const allProducts = allProductsResponse.data.products;
           const filteredAllProducts = allProducts.filter(
@@ -104,7 +104,7 @@ function ProductDetails() {
         }
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching product details:", error);
+        console.error('Error fetching product details:', error);
         setIsLoading(false);
       }
     };
@@ -179,8 +179,8 @@ function ProductDetails() {
               <div>
                 <h1>{product?.name}</h1>
                 <div className="productDetailCategory">
-                  <h2>{t("Category")}:</h2>
-                  <h2 style={{fontWeight:"normal"}}>{product?.category}</h2>
+                  <h2>{t('Category')}:</h2>
+                  <h2 style={{ fontWeight: 'normal' }}>{product?.category}</h2>
                 </div>
                 <div className="productDetailRating">
                   <Rating
@@ -191,43 +191,61 @@ function ProductDetails() {
                     sx={{ fontSize: 30 }}
                   />
                   <p>
-                    {totalRating} {t("Based on")} {reviews?.length} {t("Reviews")}.{" "}
+                    {totalRating} {t('Based on')} {reviews?.length}{' '}
+                    {t('Reviews')}.{' '}
                   </p>
                 </div>
-                <h3>{t("Description")}:</h3>
+                <h3 className="text-lg font-bold">{t('Description')}:</h3>
                 <p className="productDetailDescription">
                   {product?.description}
                 </p>
+                <h3 className="text-lg font-bold">{t('dimensions')}:</h3>
+                <div className="flex gap-2 flex-wrap">
+                  <p className="productDetailDescription">
+                    {t('height')}: {product?.dimensions?.height}
+                    {t('cm')}
+                  </p>
+                  <p className="productDetailDescription">
+                    {t('width')}: {product?.dimensions?.width}
+                    {t('cm')}
+                  </p>
+                  <p className="productDetailDescription">
+                    {t('weight')}: {product?.dimensions?.weight}
+                    {t('kg')}
+                  </p>
+                </div>
                 <div className="productDetailColors">
-                  <p>{t("Color")}: </p>
+                  <p>{t('Color')}: </p>
                   {product?.colors.map((color, idx) => (
                     <span key={idx} className="mr-3">
                       {t(color)}
                     </span>
                   ))}
                 </div>
-                <p className="productDetailsPrice">{product?.price} {t("EGP")}</p>
+                <p className="productDetailsPrice">
+                  {product?.price} {t('EGP')}
+                </p>
               </div>
               <div className="productDetailsDataFooter">
                 {product?.quantity === 0 ? (
                   <h2
                     style={{
-                      backgroundColor: "#ff6347",
-                      color: "white",
-                      padding: "5px 10px",
-                      borderRadius: "10px",
-                      fontWeight: "bold",
-                      fontSize: "20px",
+                      backgroundColor: '#ff6347',
+                      color: 'white',
+                      padding: '5px 10px',
+                      borderRadius: '10px',
+                      fontWeight: 'bold',
+                      fontSize: '20px',
                     }}
                   >
-                    {t("Out of Stock")}
+                    {t('Out of Stock')}
                   </h2>
                 ) : (
                   <button
                     className={
                       !inCart
-                        ? " productDetailsAddToCart "
-                        : "productDetailsAddToCart bg-red-700 hover:bg-red-900"
+                        ? ' productDetailsAddToCart '
+                        : 'productDetailsAddToCart bg-red-700 hover:bg-red-900'
                     }
                     onClick={() =>
                       handelCart(
@@ -239,7 +257,7 @@ function ProductDetails() {
                       )
                     }
                   >
-                    {!inCart ? t("Add to cart"): t("Remove From cart")}
+                    {!inCart ? t('Add to cart') : t('Remove From cart')}
                   </button>
                 )}
                 <button
@@ -290,15 +308,15 @@ function ProductDetails() {
               <h2
                 style={{
                   fontWeight: 600,
-                  fontSize: "29px",
-                  marginTop: "3rem",
-                  marginBottom: "3rem",
-                  marginLeft: "0.5rem",
+                  fontSize: '29px',
+                  marginTop: '3rem',
+                  marginBottom: '3rem',
+                  marginLeft: '0.5rem',
                 }}
               >
-                {all?t("More Products"):t("Related Products")}
+                {all ? t('More Products') : t('Related Products')}
               </h2>
-                <HomeSlider items={products} option="product" />
+              <HomeSlider items={products} option="product" />
             </>
           )}
         </>

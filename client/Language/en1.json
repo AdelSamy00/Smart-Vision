@@ -121,8 +121,12 @@
     "Canceled": "Canceled",
     "Orders": "Orders",
     "History": "History",
-    "Home":"Home",
-    "Transactions":"Transactions",
-    "New products":"New products",
-    "Add Employee":"Add Employee"
+    "Home": "Home",
+    "Transactions": "Transactions",
+    "New products": "New products",
+    "Add Employee": "Add Employee",
+    "dimensions": "Dimensions",
+    "width": "Width",
+    "height": "Height",
+    "weight": "weight"
 }

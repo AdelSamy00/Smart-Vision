@@ -24,7 +24,7 @@ const productSchema = new mongoose.Schema(
     colors: [{ type: String }],
     totalRating: { type: Number, default: 0 },
     dimensions: {
-      length: { type: Number },
+      width: { type: Number },
       weight: { type: Number },
       height: { type: Number },
     },
