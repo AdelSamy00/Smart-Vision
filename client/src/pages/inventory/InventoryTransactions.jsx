@@ -5,9 +5,13 @@ import Table from 'react-bootstrap/Table';
 import './styleSheets/InventoryMaterialTransactions.css';
 import getTodayDate from '../../utils/dates';
 import { t } from 'i18next';
+import { apiRequest } from '../../utils';
+import { useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 
 function InventoryTransactions() {
   const todayDate = getTodayDate();
+  const { employee } = useSelector((state) => state?.employee);
   const [allTransactions, setallTransactions] = useState(null);
   const [filteredTransactions, setfilteredTransactions] = useState(null);
   const [transactionMethod, settransactionMethod] = useState('All');
@@ -20,17 +24,19 @@ function InventoryTransactions() {
   useEffect(() => {
     async function fetchOrderHistory() {
       try {
-        await axios
-          .get(`/employees/transaction`)
-          .then((res) => {
-            setallTransactions(res?.data?.transactions);
-            setfilteredTransactions(res?.data?.transactions);
-            res?.data?.transactions?.length > 0 && setfoundTransactions(true);
-            setIsLoading(false);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        const res = await apiRequest({
+          url: '/employees/inventory/transaction',
+          method: 'GET',
+          token: employee?.token,
+        });
+        if (res?.data?.success) {
+          setallTransactions(res?.data?.transactions);
+          setfilteredTransactions(res?.data?.transactions);
+          res?.data?.transactions?.length > 0 && setfoundTransactions(true);
+          setIsLoading(false);
+        } else {
+          toast.error('Failed to get transactions');
+        }
       } catch (error) {
         console.log(error);
       }

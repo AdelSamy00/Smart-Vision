@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+import { setOptionsForTranslate } from '../../utils';
 
 const AddMatrialForm = () => {
   const { t } = useTranslation();
@@ -24,6 +25,10 @@ const AddMatrialForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const translationRes = await axios.request(
+        setOptionsForTranslate([productData.name])
+      );
+      console.log(translationRes.data);
       const response = await axios.post('/Materials/', productData);
       setProductData({
         name: '',

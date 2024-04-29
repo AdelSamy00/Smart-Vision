@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import { t } from 'i18next';
 import InputColor from '../Presenter/InputColor';
+import { setOptionsForTranslate } from '../../utils';
 
 const Allcategorys = ['sofa', 'chair', 'bed', 'table'];
 const UpdateProductForm = () => {
@@ -67,6 +68,10 @@ const UpdateProductForm = () => {
     } else {
       productData.colors = colors;
       try {
+        const translationRes = await axios.request(
+          setOptionsForTranslate([productData.name, productData.description])
+        );
+        console.log(translationRes.data);
         const response = await axios.put(
           `/Products/updateDetails/${productId}`,
           productData

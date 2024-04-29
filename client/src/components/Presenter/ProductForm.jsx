@@ -5,10 +5,16 @@ import { useSelector } from 'react-redux';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import InputColor from '../../components/Presenter/InputColor';
 import { Alert, Snackbar } from '@mui/material';
-import { apiRequest, handleMultipleFilesUpload } from '../../utils';
+import {
+  apiRequest,
+  handleMultipleFilesUpload,
+  setOptionsForTranslate,
+} from '../../utils';
 import Loading from '../../components/shared/Loading';
 import './StyleSheets/ProductForm.css';
 import { t } from 'i18next';
+import axios from 'axios';
+
 function ProductForm({ product, method }) {
   const navigate = useNavigate();
   const { employee } = useSelector((state) => state?.employee);
@@ -26,6 +32,18 @@ function ProductForm({ product, method }) {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  async function translateText() {
+    try {
+      const response = await axios.request(
+        setOptionsForTranslate([productName, description])
+      );
+      // console.log(response.data);
+      return response?.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const handleOpenSnackbar = () => {
     setOpenSnackbar(true);
   };
@@ -39,6 +57,7 @@ function ProductForm({ product, method }) {
 
   async function addProduct(imagesUrl) {
     try {
+      const translationRes = await translateText();
       const res = await apiRequest({
         method: 'POST',
         url: `/employees/presenter/add-to-store/`,
@@ -55,9 +74,9 @@ function ProductForm({ product, method }) {
         },
         token: employee?.token,
       });
-      console.log(res);
+      //console.log(res);
       if (res?.data?.success === true) {
-        console.log(res);
+        // console.log(res);
         navigate('/presenter/home');
       } else {
         console.log(res.message);
@@ -70,6 +89,8 @@ function ProductForm({ product, method }) {
 
   async function editProduct(imagesUrl) {
     try {
+      const translationRes = await translateText();
+      console.log(translationRes);
       const res = await apiRequest({
         url: `/products/${product?._id}`,
         method: 'PUT',
@@ -86,10 +107,10 @@ function ProductForm({ product, method }) {
         token: employee?.token,
       });
       if (res?.data?.success) {
-        console.log(res.data);
+        // console.log(res.data);
         navigate('/presenter/home');
       } else {
-        console.log(res?.message);
+        //console.log(res?.message);
         isLoading(false);
       }
     } catch (error) {

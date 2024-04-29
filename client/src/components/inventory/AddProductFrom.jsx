@@ -12,7 +12,7 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import InputColor from '../Presenter/InputColor';
-import { useNavigate } from 'react-router-dom';
+import { setOptionsForTranslate } from '../../utils';
 const Allcategorys = ['sofa', 'chair', 'bed', 'table'];
 const AddProductForm = () => {
   const { t } = useTranslation();
@@ -52,6 +52,10 @@ const AddProductForm = () => {
     } else {
       productData.colors = colors;
       try {
+        const translationRes = await axios.request(
+          setOptionsForTranslate([productData.name, productData.description])
+        );
+        console.log(translationRes.data)
         const response = await axios.post('/Products/', productData);
         setProductData({
           name: '',
@@ -62,8 +66,8 @@ const AddProductForm = () => {
         });
         setColors([]);
         toast.dismiss();
-        toast.success(t("addSuccessfully"));
-        // console.log(response);
+        toast.success(t('addSuccessfully'));
+        console.log(response);
       } catch (error) {
         console.error('Error adding product:', error);
         toast.error(t('FailedToAddProduct'));
