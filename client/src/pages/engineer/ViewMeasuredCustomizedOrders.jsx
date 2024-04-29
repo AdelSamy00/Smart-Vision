@@ -7,6 +7,7 @@ import { apiRequest } from '../../utils';
 import Loading from '../../components/shared/Loading';
 import { setNotification } from '../../redux/NotificationSlice';
 import { useTranslation } from 'react-i18next';
+import toast, { Toaster } from 'react-hot-toast';
 
 function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
   const { t } = useTranslation();
@@ -22,14 +23,20 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
         const response = await apiRequest({
           method: 'GET',
           url: `/employees/engineer/${employee._id}`,
+          token: employee?.token,
         });
-        //console.log('API response:', response.data);
-        const filteredRequests = response.data.services.filter(
-          (request) => request.date
-        );
+        if (response?.data?.success) {
+          //console.log('API response:', response.data);
+          const filteredRequests = response.data.services.filter(
+            (request) => request.date
+          );
 
-        setRequests(filteredRequests);
-        setIsLoading(false);
+          setRequests(filteredRequests);
+          setIsLoading(false);
+        } else {
+          toast.dismiss();
+          toast.error(response?.message);
+        }
       } catch (error) {
         console.error('Error fetching products:', error.response);
       }
@@ -61,6 +68,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
       alignItems="center"
       className="presenter-products-container"
     >
+      <Toaster />
       {isLoading ? (
         <Grid item>
           <Loading />

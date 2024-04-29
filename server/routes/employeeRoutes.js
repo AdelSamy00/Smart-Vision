@@ -1,6 +1,7 @@
 import express from 'express';
 import presenterRoute from './presenterRoutes.js';
 import actorRoute from './actorRoutes.js';
+import engineerRoute from './engineerRoute.js';
 import { getServiceById } from '../controllers/EmployeeControllers.js';
 import {
   getAssignedServices,
@@ -47,13 +48,7 @@ router.use(`/presenter`, presenterRoute);
 
 router.use('/actor', actorRoute);
 
-//#region Engineer
-router.get('/engineer', getAllEngineers); //help operator to get all engineer.
-//get Assigned Customization Orders to Engineer
-router.get('/engineer/:id', getAssignedServices);
-// Assigned Engineer to Services
-router.post('/engineer', assignedEnginerToService);
-//#endregion
+router.use('/engineer', engineerRoute);
 
 // Customization Orders Details
 router.post('/customizationOrders', sendCustomizationDetails); ///send-customization-details

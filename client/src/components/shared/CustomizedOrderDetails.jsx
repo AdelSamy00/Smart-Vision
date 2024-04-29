@@ -12,6 +12,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useSelector } from 'react-redux';
 import AlertDialog from '../e-commers/Dialog';
 import { useTranslation } from 'react-i18next';
+import { apiRequest } from '../../utils';
+import toast, { Toaster } from 'react-hot-toast';
 
 // const tempImages = [
 //   'https://res.cloudinary.com/dkep2voqw/image/upload/v1705848315/Smart%20Vision/vojtech-bruzek-Yrxr3bsPdS0-unsplash_ekmimc.jpg',
@@ -56,14 +58,18 @@ function CustomizedOrderDetails({
 
   useEffect(() => {
     async function getAllEngineers() {
-      await axios
-        .get(`/employees/engineer`)
-        .then((res) => {
-          setallEngineers(res?.data?.engineers);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      const res = await apiRequest({
+        url: '/employees/engineer',
+        method: 'GET',
+        token: employee?.token,
+      });
+      console.log(res);
+      if (res?.data?.success) {
+        setallEngineers(res?.data?.engineers);
+      } else {
+        toast.dismiss();
+        toast.error('Failed to get all engneers');
+      }
     }
 
     getAllEngineers();
@@ -76,42 +82,39 @@ function CustomizedOrderDetails({
       event.stopPropagation();
       setValidated(true);
     } else {
-      await axios
-        .post(
-          `/employees/engineer`,
-          measuringDate
-            ? {
-                engineerId: assignedEngineer,
-                serviceId: order?._id,
-                date: {
-                  day: measuringDate,
-                  time: measuringTime,
-                },
-              }
-            : {
-                engineerId: assignedEngineer,
-                serviceId: order?._id,
-              }
-        )
-        .then((res) => {
-          console.log(res.data);
-          // console.log({ assignedEngineer });
-          console.log(res?.data?.service?.assignedEngineer);
-          console.log(res.data.service);
-          setassignedEngineer(res?.data?.service?.assignedEngineer);
-          setIsAssigned(true);
-          socket?.emit('assignEngineer', {
-            user: employee,
-            to: res?.data?.sercice?.assignedEngineer._id,
-            type: 'assignEngineerToCustomizationOrder',
-            serviceOrder: res.data.service,
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-          setMsg('engineer ' + error.response.data.message);
-          setDialogOpen(true);
+      const res = await apiRequest({
+        url: '/employees/engineer',
+        method: 'POST',
+        data: measuringDate
+          ? {
+              engineerId: assignedEngineer,
+              serviceId: order?._id,
+              date: {
+                day: measuringDate,
+                time: measuringTime,
+              },
+            }
+          : { engineerId: assignedEngineer, serviceId: order?._id },
+        token: employee?.token,
+      });
+      if (res?.data?.success) {
+        console.log(res.data);
+        // console.log({ assignedEngineer });
+        console.log(res?.data?.service?.assignedEngineer);
+        console.log(res.data.service);
+        setassignedEngineer(res?.data?.service?.assignedEngineer);
+        setIsAssigned(true);
+        socket?.emit('assignEngineer', {
+          user: employee,
+          to: res?.data?.sercice?.assignedEngineer._id,
+          type: 'assignEngineerToCustomizationOrder',
+          serviceOrder: res.data.service,
         });
+      } else {
+        toast.error('Failed to assign engineer to this services');
+        setMsg('engineer ' + res?.message);
+        setDialogOpen(true);
+      }
     }
   };
 
@@ -148,6 +151,7 @@ function CustomizedOrderDetails({
 
   return (
     <>
+      <Toaster />
       <Accordion
         defaultActiveKey={['0', '1']}
         alwaysOpen
