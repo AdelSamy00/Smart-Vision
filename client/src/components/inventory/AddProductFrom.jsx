@@ -12,10 +12,12 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import InputColor from '../Presenter/InputColor';
-import { setOptionsForTranslate } from '../../utils';
+import { apiRequest, setOptionsForTranslate } from '../../utils';
+import { useSelector } from 'react-redux';
 const Allcategorys = ['sofa', 'chair', 'bed', 'table'];
 const AddProductForm = () => {
   const { t } = useTranslation();
+  const { employee } = useSelector((state) => state?.employee);
   const [productData, setProductData] = useState({
     name: '',
     quantity: '',
@@ -55,19 +57,29 @@ const AddProductForm = () => {
         const translationRes = await axios.request(
           setOptionsForTranslate([productData.name, productData.description])
         );
-        console.log(translationRes.data)
-        const response = await axios.post('/Products/', productData);
-        setProductData({
-          name: '',
-          quantity: '',
-          description: '',
-          category: '',
-          colors: [],
+        console.log(translationRes.data);
+        const response = await apiRequest({
+          url: '/products/',
+          method: 'POST',
+          data: productData,
+          token: employee?.token,
         });
-        setColors([]);
-        toast.dismiss();
-        toast.success(t('addSuccessfully'));
-        console.log(response);
+        if (response?.data?.success) {
+          setProductData({
+            name: '',
+            quantity: '',
+            description: '',
+            category: '',
+            colors: [],
+          });
+          setColors([]);
+          toast.dismiss();
+          toast.success(t('addSuccessfully'));
+          console.log(response);
+        } else {
+          toast.dismiss();
+          toast.error(t('FailedToAddProduct'));
+        }
       } catch (error) {
         console.error('Error adding product:', error);
         toast.error(t('FailedToAddProduct'));

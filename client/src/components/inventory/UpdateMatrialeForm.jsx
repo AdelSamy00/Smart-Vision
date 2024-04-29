@@ -4,10 +4,12 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { Link, useParams } from 'react-router-dom';
 import { t } from 'i18next';
-import { setOptionsForTranslate } from '../../utils';
+import { apiRequest, setOptionsForTranslate } from '../../utils';
+import { useSelector } from 'react-redux';
 
 const UpdateMatrialForm = () => {
   const { matrialId } = useParams();
+  const { employee } = useSelector((state) => state?.employee);
   const [matrialData, setMatrialData] = useState({
     id: matrialId,
     name: '',
@@ -17,9 +19,18 @@ const UpdateMatrialForm = () => {
   useEffect(() => {
     const fetchMaterialDetails = async () => {
       try {
-        const response = await axios.get(`/Materials/${matrialId}`);
-        setMatrialData(response.data.material);
-        //console.log(response.data.material);
+        const response = await apiRequest({
+          url: `/materials/${matrialId}`,
+          method: 'GET',
+          token: employee?.token,
+        });
+        if (response?.data?.success) {
+          setMatrialData(response.data.material);
+          //console.log(response.data.material);
+        } else {
+          toast.dismiss();
+          toast.error('Failed to get this material');
+        }
       } catch (error) {
         console.error('Error fetching material details:', error);
       }
@@ -44,13 +55,22 @@ const UpdateMatrialForm = () => {
         setOptionsForTranslate([matrialData.name])
       );
       console.log(translationRes.data);
-      const response = await axios.put(`/Materials/`, {
-        id: matrialId,
-        name: matrialData.name,
-        quantity: matrialData.quantity,
+      const response = await apiRequest({
+        url: '/materials/',
+        method: 'PUT',
+        data: {
+          id: matrialId,
+          name: matrialData.name,
+          quantity: matrialData.quantity,
+        },
+        token: employee?.token,
       });
-      toast.dismiss();
-      toast.success(t('addSuccessfully'));
+      if (response?.data?.success) {
+        toast.dismiss();
+        toast.success(t('addSuccessfully'));
+      } else {
+        toast.error('Failed to update material');
+      }
     } catch (error) {
       console.error('Error updating material:', error);
       toast.error(t('FailedTryAgain'));

@@ -4,7 +4,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
@@ -15,20 +15,31 @@ import {
   IconButton,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { apiRequest } from '../../utils';
+import { useSelector } from 'react-redux';
 function MatrialComponnent({ AllMaterials }) {
   const { t } = useTranslation();
   const [Matrials, setMatrials] = useState(AllMaterials);
+  const { employee } = useSelector((state) => state?.employee);
 
   const handleDelete = async (matrialId) => {
     try {
-      const response = await axios.delete('/Materials/', {
+      const response = await apiRequest({
+        url: '/materials/',
+        method: 'DELETE',
         data: { id: matrialId },
+        token: employee?.token,
       });
-      setMatrials((prevMatrials) =>
-        prevMatrials.filter((Matrial) => Matrial._id !== matrialId)
-      );
-      toast.dismiss();
-      toast.success(response.data.message);
+      if (response?.data?.success) {
+        setMatrials((prevMatrials) =>
+          prevMatrials.filter((Matrial) => Matrial._id !== matrialId)
+        );
+        toast.dismiss();
+        toast.success(response?.data?.message);
+      } else {
+        toast.dismiss();
+        toast.error('Failed to delete material');
+      }
     } catch (error) {
       console.error('Error deleting matrial:', error);
       toast.error('Failed to delete matrial. Please try again.');
@@ -42,6 +53,7 @@ function MatrialComponnent({ AllMaterials }) {
       alignItems="center"
       className="presenter-products-container"
     >
+      <Toaster />
       {Matrials?.length > 0 ? (
         <Grid item xs={12} sm={10} md={10}>
           <Grid

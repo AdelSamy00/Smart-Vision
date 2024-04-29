@@ -13,6 +13,7 @@ import {
   updateProductDetails,
 } from '../controllers/productControlles.js';
 import AbilityToChangeProductDetails from '../middlewares/ProductMiddleware.js';
+import inventoryManagerAuth from '../middlewares/inventoryManagerMiddleware.js';
 const router = express.Router();
 
 //to help inventory manager
@@ -21,7 +22,7 @@ router.put('/transaction', productsTransaction);
 
 // CRUD Product -- RESTFULL API
 router.get('/', getShowProducts);
-router.post('/', addProduct);
+router.post('/', inventoryManagerAuth, addProduct);
 router.get('/all', getAllProducts);
 router.get('/:id', getProductById);
 router.put('/:id', AbilityToChangeProductDetails, updateProduct);

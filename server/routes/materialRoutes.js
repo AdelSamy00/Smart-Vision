@@ -11,11 +11,11 @@ import { changeStateToShipped } from '../controllers/InventoryManager.js';
 import inventoryManagerAuth from '../middlewares/inventoryManagerMiddleware.js';
 
 const router = express.Router();
-router.post('/', addMaterial);
+router.post('/', inventoryManagerAuth, addMaterial);
 router.get('/', inventoryManagerAuth, getMaterials);
-router.delete('/', deleteMaterial);
+router.delete('/', inventoryManagerAuth, deleteMaterial);
 router.put('/transaction', inventoryManagerAuth, materialsTransaction);
-router.put('/', updateMaterial);
-router.get('/:id', getMaterialById);
+router.put('/', inventoryManagerAuth, updateMaterial);
+router.get('/:id', inventoryManagerAuth, getMaterialById);
 router.put('/changetoshipped', inventoryManagerAuth, changeStateToShipped);
 export default router;

@@ -9,10 +9,14 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { apiRequest } from '../../utils';
+import toast, { Toaster } from 'react-hot-toast';
+import { useSelector } from 'react-redux';
 
 const InventoryHome = () => {
   // const [showOrder, setshowOrder] = useState(true);
   const { t } = useTranslation();
+  const { employee } = useSelector((state) => state?.employee);
   const [dataType, setDataType] = useState('products');
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -40,14 +44,23 @@ const InventoryHome = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-    
         const url = dataType === 'products' ? '/products/all' : '/materials/';
-        const response = await axios.get(url);
-        setData(response.data[dataType]);
-        setIsLoading(false);
-        console.log(response.data[dataType]);
+        const response = await apiRequest({
+          url: url,
+          method: 'GET',
+          token: employee?.token,
+        });
+        if (response?.data?.success) {
+          setData(response?.data[dataType]);
+          setIsLoading(false);
+          console.log(response?.data[dataType]);
+        } else {
+          toast.error(`Error fetching ${dataType}`);
+          isLoading(false);
+        }
       } catch (error) {
         console.error(`Error fetching ${dataType}:`, error);
+        isLoading(false);
       }
     };
 
@@ -57,6 +70,7 @@ const InventoryHome = () => {
   //console.log(products);
   return (
     <div>
+      <Toaster />
       <h2
         className="text-center text-3xl font-bold"
         style={{ marginBlock: '1rem' }}

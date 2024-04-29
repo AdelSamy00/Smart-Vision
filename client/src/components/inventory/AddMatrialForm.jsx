@@ -5,9 +5,12 @@ import { Link } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { setOptionsForTranslate } from '../../utils';
+import { apiRequest } from '../../utils';
+import { useSelector } from 'react-redux';
 
 const AddMatrialForm = () => {
   const { t } = useTranslation();
+  const { employee } = useSelector((state) => state?.employee);
   const [productData, setProductData] = useState({
     name: '',
     quantity: '',
@@ -25,17 +28,22 @@ const AddMatrialForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const translationRes = await axios.request(
-        setOptionsForTranslate([productData.name])
-      );
-      console.log(translationRes.data);
-      const response = await axios.post('/Materials/', productData);
-      setProductData({
-        name: '',
-        quantity: '',
+      const response = await apiRequest({
+        url: '/materials/',
+        method: 'POST',
+        data: productData,
+        token: employee?.token,
       });
-      toast.dismiss();
-      toast.success(t('addSuccessfully'));
+      if (response?.data?.success) {
+        setProductData({
+          name: '',
+          quantity: '',
+        });
+        toast.dismiss();
+        toast.success(t('addSuccessfully'));
+      } else {
+        toast.error(t('FailedToAddMaterial'));
+      }
     } catch (error) {
       console.error('Error adding product:', error);
       toast.error(t('FailedToAddMaterial'));

@@ -18,12 +18,15 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../../Language/translate';
+import { apiRequest } from '../../utils';
+import { useSelector } from 'react-redux';
 
 const ExpandMore = ({ expand, ...other }) => <IconButton {...other} />;
 
 function HomeComponent({ Allproducts }) {
   // const [displayedOrders, setDisplayedOrders] = useState(1);
   const { t } = useTranslation();
+  const { employee } = useSelector((state) => state?.employee);
   const [products, setProducts] = useState(Allproducts);
   const [expandedStates, setExpandedStates] = useState({});
 
@@ -36,12 +39,22 @@ function HomeComponent({ Allproducts }) {
 
   const handleDelete = async (productId) => {
     try {
-      const response = await axios.delete('/products', { data: { productId } });
-      setProducts((prevProducts) =>
-        prevProducts.filter((product) => product._id !== productId)
-      );
-      toast.dismiss();
-      toast.success(response.data.message);
+      const response = await apiRequest({
+        url: '/products/',
+        method: 'DELETE',
+        data: { productId },
+        token: employee?.token,
+      });
+      if (response?.data?.success) {
+        setProducts((prevProducts) =>
+          prevProducts.filter((product) => product._id !== productId)
+        );
+        toast.dismiss();
+        toast.success(response?.data?.message);
+      } else {
+        toast.dismiss();
+        toast.error('Failed to delete product. Please try again.');
+      }
     } catch (error) {
       console.error('Error deleting product:', error);
       toast.error('Failed to delete product. Please try again.');
