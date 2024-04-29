@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Grid, Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { apiRequest } from '../../utils';
 import toast, { Toaster } from 'react-hot-toast';
 import { t } from 'i18next';
 
 function MaterialOrder({ matrial, setMaterialls }) {
   const [showOrder, setShowOrder] = useState(false);
+  const { employee } = useSelector((state) => state.employee);
 
   const handleStateChange = async () => {
     try {
@@ -16,16 +18,18 @@ function MaterialOrder({ matrial, setMaterialls }) {
         data: {
           orderId: matrial._id,
         },
+        token: employee?.token,
       });
 
       if (response.data.success) {
+        toast.dismiss();
         toast.success(t('productExportedSuccessfully'));
         matrial.state = 'SHIPPED';
         setMaterialls((prevOrders) => {
           return prevOrders.filter((item) => item._id !== matrial._id);
         });
       } else {
-        toast.error(response?.data?.message);
+        toast.error('Failed to change material order state');
       }
     } catch (error) {
       console.error('Error changing material order state:', error);

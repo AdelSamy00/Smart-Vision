@@ -23,7 +23,7 @@ export const addMaterial = async (req, res, next) => {
   }
 };
 
-export const getMaterial = async (req, res, next) => {
+export const getMaterials = async (req, res, next) => {
   try {
     const materials = await Materials.find();
     if (materials.length === 0) {

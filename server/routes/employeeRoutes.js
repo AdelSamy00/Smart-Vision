@@ -6,11 +6,6 @@ import inventoryManagerRoute from './inventoryManagerRoute.js';
 import { getServiceById } from '../controllers/EmployeeControllers.js';
 
 import {
-  getConfirmedOrders,
-  getMaterialOrders,
-  sendOrderToShipped,
-} from '../controllers/InventoryManager.js';
-import {
   getCustomizationOrdersDetails,
   updateServiceOrderStateToManufactured,
 } from '../controllers/FactoryControllers.js';
@@ -63,11 +58,6 @@ router.get('/services', getAllServices);
 router.get('/services/:serviceId', getServiceById);
 router.put('/services', updateServiceOrderStatus); // to get services order to operator
 
-//#endregion
-
-//#region Inventory Manager
-
-router.put('/inventory/shipped/:orderId', sendOrderToShipped);
 //#endregion
 
 router.put('/update_state', updateServiceOrderStateToManufactured);

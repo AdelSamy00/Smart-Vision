@@ -33,9 +33,18 @@ function TransactionMComponent() {
   useEffect(() => {
     const fetchMaterials = async () => {
       try {
-        const response = await axios.get(`/Materials/`);
-        setAllMatrials(response.data.materials);
-        //console.log(response.data.materials);
+        const response = await apiRequest({
+          url: '/materials/',
+          method: 'GET',
+          token: employee?.token,
+        });
+        if (response?.data?.success) {
+          setAllMatrials(response.data.materials);
+          //console.log(response.data.materials);
+        } else {
+          toast.dismiss();
+          toast.error('Failed to get materials');
+        }
       } catch (error) {
         console.error('Error fetching materials:', error);
       }
@@ -110,15 +119,16 @@ function TransactionMComponent() {
       const managerId = employee._id;
       console.log(transactions);
       const response = await apiRequest({
-        method: 'put',
-        url: '/Materials/transaction',
+        method: 'PUT',
+        url: '/materials/transaction',
         data: {
           managerId,
           materials: Matrials,
           method,
         },
+        token: employee?.token,
       });
-      if (response.data.success) {
+      if (response?.data?.success) {
         toast.success(t('addSuccessfully'));
         setTransactions([]);
         setOrderDetails({
@@ -147,7 +157,7 @@ function TransactionMComponent() {
       }
     }
   };
-  
+
   const removeMaterial = (index) => {
     const materials = [...orderDetails.materials];
     materials.splice(index, 1);
@@ -162,7 +172,6 @@ function TransactionMComponent() {
       className="presenter-products-container"
       spacing={2}
     >
-      {' '}
       <Toaster
         toastOptions={{
           style: {

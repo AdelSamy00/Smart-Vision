@@ -29,9 +29,8 @@ function ProductOrder({ order, setOrders }) {
           managerId: employee?._id,
           products: products,
         },
+        token: employee?.token,
       });
-      //console.log(response.data.order);
-      // console.log('Updated order state:', response.data.order.state);
       if (response?.data?.success) {
         toast.success(t('productExportedSuccessfully'));
         order.state = 'Shipped';
@@ -40,7 +39,7 @@ function ProductOrder({ order, setOrders }) {
         });
       } else {
         //console.log(response.data.message);
-        toast.error(response?.data?.message);
+        toast.error('Failed to change order state');
       }
     } catch (error) {
       // console.error('Error updating order status:', error);
