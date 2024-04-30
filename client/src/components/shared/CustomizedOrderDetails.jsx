@@ -277,8 +277,7 @@ function CustomizedOrderDetails({
                   <span>{t('email')}: </span> {customer?.email}
                 </p>
                 <p>
-                  <span>{t('phone')}:</span> 0{customer?.phone} - 0
-                  {order?.phone}
+                  <span>{t('phone')}:</span> 0{customer?.phone} 
                 </p>
                 <p>
                   <span>{t('address')}:</span> {order?.address}

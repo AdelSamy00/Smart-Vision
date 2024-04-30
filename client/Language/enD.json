@@ -25,6 +25,11 @@
   "Choose an option": "Choose an option",
   "Male": "Male",
   "Female": "Female",
-  "Save": "Save"
+  "Save": "Save",
+  "Login":"Login",
+  "favorites":"favorites",
+  "Social Media":"Social Media",
+  "All right reserved.":"All right reserved.",
+   "Resources":"Resources"
 
 }

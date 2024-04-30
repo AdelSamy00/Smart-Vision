@@ -106,7 +106,7 @@ function Favourites() {
             {favoritProducts.length > 0 ? (
               favoritProducts.map((product) => {
                 return (
-                  <div key={product._id} className="favoriteProducteDiv">
+                  <div key={product._id} className="favoriteProducteDiv" style={{paddingBottom:"30px"}}>
                     <ProductCard
                       product={product}
                       favoriteList={customer?.favoriteList}

@@ -195,7 +195,7 @@ const Header = () => {
                 setTimeout(() => {
                   setsearchValue("");
                   setshowSearchResults(false);
-                }, 200);
+                }, 300);
               }}
             />
             {showSearchResults ? (

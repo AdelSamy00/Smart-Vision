@@ -13,7 +13,7 @@ import "./stylesheets/Reviews.css";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import i18n from "../../../Language/translate";
-
+import { apiRequest } from "../../utils";
 function Reviews({ review, setReviews, setTotalRating, customerReview }) {
   const { t } = useTranslation();
   // console.log(customerReview);
@@ -57,44 +57,46 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
     }
     setInEditMode(!inEditMode);
   };
-  // Delete review from product
+
   async function deleteReview(customerId, reviewId) {
-    await axios
-      .delete("/customers/review", {
+    try {
+      const res = await apiRequest({
+        method: 'delete',
+        url: '/customers/review',
         data: { customerId, reviewId, productId: review?.product },
-      })
-      .then((res) => {
-        setReviews((prevReviews) => {
-          return prevReviews.filter((review) => review._id !== reviewId);
-        });
-        setTotalRating(res.data.totalRating);
-      })
-      .catch((e) => {
-        console.log(e);
+        token: customer?.token,
       });
+      setReviews((prevReviews) => {
+        return prevReviews.filter((review) => review._id !== reviewId);
+      });
+      setTotalRating(res.data.totalRating);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  // Update review in product
   async function editReview(productId, reviewId, comment, rating) {
-    await axios
-      .put("/customers/review", { productId, reviewId, comment, rating })
-      .then((res) => {
-        // console.log(res.data);
-        setReviews((prevReviews) => {
-          return prevReviews.map((review) => {
-            if (review?._id === reviewId) {
-              return { ...review, comment: comment, rating: rating };
-            } else {
-              return review;
-            }
-          });
-        });
-        setTotalRating(res.data.totalRating);
-      })
-      .catch((e) => {
-        console.log(e);
+    try {
+      const res = await apiRequest({
+        method: 'put',
+        url: '/customers/review',
+        data: { productId, reviewId, comment, rating  },
+        token: customer?.token,
       });
-  }
+      setReviews((prevReviews) => {
+        return prevReviews.map((review) => {
+          if (review?._id === reviewId) {
+            return { ...review, comment: comment, rating: rating };
+          } else {
+            return review;
+          }
+        });
+      });
+      setTotalRating(res.data.totalRating);
+    } catch (error) {
+      console.log(error);
+    }
+  }  
   //handel Delete Review by the user
   const handleDeleteReview = () => {
     handleMenuClose();
