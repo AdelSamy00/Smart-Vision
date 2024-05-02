@@ -347,7 +347,7 @@ export const cancelOrder = async (req, res, next) => {
     }
     const order = await Orders.findById({ _id: orderId });
     if (order.state !== 'CANCELED') {
-      if (order.cancelOrderExpiresAt.getDate() > new Date().getDate()) {
+      if (order.cancelOrderExpiresAt > new Date()) {
         const updatedOrder = await Orders.findByIdAndUpdate(
           { _id: orderId },
           {
@@ -629,7 +629,7 @@ export const cancelService = async (req, res, next) => {
     const service = await ServicesOrders.findById({ _id: serviceId });
     if (service.state !== 'CANCELED') {
       if (
-        service.cancelServiceOrderExpiresAt.getDate() > new Date().getDate()
+        service.cancelServiceOrderExpiresAt > new Date()
       ) {
         const updatedServiceOrder = await ServicesOrders.findByIdAndUpdate(
           { _id: serviceId },

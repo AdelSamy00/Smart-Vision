@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import Loading from '../../components/shared/Loading';
 import { apiRequest } from '../../utils';
 import { t } from 'i18next';
-
+import { useSelector } from 'react-redux';
 const HomePresenter = () => {
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState({ category: '', name: '' });
@@ -17,23 +17,22 @@ const HomePresenter = () => {
   const categoryDropdownRef = useRef(null);
   const [selectedCategories, setSelectedCategories] = useState(['All']);
   const categories = ['sofa', 'chair', 'bed', 'table'];
-
+  const { employee } = useSelector((state) => state?.employee);
+  
   async function handelDeleteProduct(productId) {
-    await axios
-      .delete('/products/', { data: { productId } })
-      .then((res) => {
-        //console.log(res.data);
-        setProducts(
-          products.filter((item) => {
-            return item._id !== productId;
-          })
-        );
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    try {
+      await apiRequest({
+        method: "delete",
+        url: "/products/",
+        data: { productId },
+        token:employee?.token
+      });  
+      setProducts(products.filter((item) => item._id !== productId));
+    } catch (error) {
+      console.error(error);
+    }
   }
-
+  
   useEffect(() => {
     const fetchProducts = async () => {
       try {

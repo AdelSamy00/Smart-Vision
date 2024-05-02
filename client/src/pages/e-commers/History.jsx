@@ -7,6 +7,7 @@ import Loading from "../../components/shared/Loading";
 import { Alert, Snackbar } from "@mui/material";
 import { useTranslation } from "react-i18next"; // Import the useTranslation hook
 import i18n from "../../../Language/translate";
+import { apiRequest } from "../../utils";
 const History = () => {
   const { t } = useTranslation();
   const { customer } = useSelector((state) => state.customer);
@@ -68,9 +69,12 @@ const History = () => {
 
   const cancelService = async (serviceId) => {
     try {
-      const response = await axios.delete("/customers/service", {
-        data: { id: customer._id, serviceId },
-      });
+      const response = await apiRequest({
+        method:"DELETE",
+        url:"/customers/service",
+        data: { id: customer._id, serviceId:serviceId },
+        token:customer?.token
+      })
       if (response?.data?.success) {
         setOrderServiceHistory((prevOrderServiceHistory) =>
           prevOrderServiceHistory.map((entry) =>
