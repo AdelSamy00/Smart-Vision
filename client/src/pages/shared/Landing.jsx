@@ -2,7 +2,10 @@ import React from 'react';
 import './StyleSheets/Landing.css';
 import { Link, NavLink } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useTranslation } from 'react-i18next';
+import i18n from '../../../Language/translate.jsx';
 function Landing() {
+  const { t } = useTranslation();
   return (
     <div className="landding flex text-center text-white bg-dark">
       <div className=" w-full flex w-100 h-100 p-3 mx-auto flex-col">
@@ -15,13 +18,13 @@ function Landing() {
                 className="nav-links active"
                 aria-current="pages"
               >
-                Home
+                {t("Home")}
               </NavLink>
               <NavLink to={'/login'} className="nav-links text-gray-400">
-                Login
+                {t("Login")}
               </NavLink>
               <NavLink to={'/register'} className="nav-links text-gray-400">
-                Register
+                {t("Register")}
               </NavLink>
             </nav>
           </div>
@@ -29,15 +32,14 @@ function Landing() {
         <div className="px-3">
           <h1 className="text-4xl">Smart Vision</h1>
           <p className="lead">
-            Welcome to Smart Vision! <br /> Jump right in and explore our many
-            products. <br />
-            Feel free to share some of your own and comment on others!
+           {t("Welcome to")} Smart Vision  <br /> {t("Jump right in and explore our many products.")} <br />
+            {t("Feel free to share some of your own and comment on others!")}
           </p>
           <Link
             to="/store"
             className="btn btn-lg btn-secondary font-bold  text-white mt-4"
           >
-            View Product
+            {t("View Products")}
           </Link>
         </div>
 

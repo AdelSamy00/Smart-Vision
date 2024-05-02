@@ -51,5 +51,10 @@
   "Username is required":"اسم المستخدم مطلوب",
   "Passwords don't match":"كلمات المرور غير متطابقه",
   "Password length should be greater than 6 character": "يجب أن تكون كلمة المرور أطول من ٦ أحرف"  ,
-  "Please enter your phone": "الرجاء إدخال رقم الهاتف الخاص بك"
+  "Please enter your phone": "الرجاء إدخال رقم الهاتف الخاص بك",
+  "Register": "التسجيل",
+  "Welcome to": "مرحبًا بك في",
+  "Jump right in and explore our many products.": "انغمس واستكشف منتجاتنا المتعددة.",
+  "Feel free to share some of your own and comment on others!": "لا تتردد في مشاركة بعض منتجاتك الخاصة والتعليق على منتجات الآخرين!",
+  "View Products": "عرض المنتجات"
 }

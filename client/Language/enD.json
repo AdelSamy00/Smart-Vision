@@ -51,7 +51,11 @@
    "Username is required":"Username is required",
    "Passwords don't match":"Passwords don't match",
    "Password length should be greater than 6 character": "Password length should be greater than 6 characters",
-   "Please enter your phone": "Please enter your phone"
-
+   "Please enter your phone": "Please enter your phone",
+   "Register": "Register",
+   "Welcome to": "Welcome to",
+   "Jump right in and explore our many products.": "Jump right in and explore our many products.",
+   "Feel free to share some of your own and comment on others!": "Feel free to share some of your own and comment on others!",
+   "View Products": "View Products"
 
 }

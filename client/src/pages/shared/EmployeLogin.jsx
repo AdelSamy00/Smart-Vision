@@ -6,8 +6,10 @@ import Loading from '../../components/shared/Loading';
 import { useDispatch } from 'react-redux';
 import { SetEmployee } from '../../redux/EmployeeSlice';
 import { apiRequest } from '../../utils';
-
+import { useTranslation } from 'react-i18next';
+import i18n from '../../../Language/translate.jsx';
 function EmployeLogin() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
@@ -74,11 +76,11 @@ function EmployeLogin() {
         onSubmit={handleSubmit(handleSubmitForm)}
       >
         <div className="title_container ">
-          <p className="title">Login to your Account</p>
+          <p className="title">{t("Login to your Account")}</p>
         </div>
         <div className="input_container">
           <label className="input_label" htmlFor="email_field">
-            Email
+            {t("Email")}
           </label>
           {errors.email && (
             <div className="text-red-500">{errors.email.message}</div>
@@ -107,7 +109,7 @@ function EmployeLogin() {
           </svg>
           <input
             {...register('email', {
-              required: 'Email Address is required',
+              required: t('Email Address is required'),
               validate: (value) => {
                 if (!value.includes('@')) {
                   return 'Email must include @';
@@ -115,7 +117,7 @@ function EmployeLogin() {
                 return true;
               },
             })}
-            placeholder="name@mail.com"
+            placeholder={t("name@mail.com")}
             title="email"
             name="email"
             type="text"
@@ -125,7 +127,7 @@ function EmployeLogin() {
         </div>
         <div className="input_container">
           <label className="input_label" htmlFor="password_field">
-            Password
+            {t("Password")}
           </label>
           {errors.password && (
             <div className="text-red-500">{errors.password.message}</div>
@@ -158,9 +160,9 @@ function EmployeLogin() {
           </svg>
           <input
             {...register('password', {
-              required: 'password is required',
+              required: t('Password is required'),
             })}
-            placeholder="Password"
+            placeholder={t("Password")}
             title="password"
             name="password"
             type="password"
@@ -177,7 +179,7 @@ function EmployeLogin() {
             type="submit"
             className="py-2 px-4 bg-blue-700 hover:bg-blue-900 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
           >
-            <span>Sign In</span>
+            <span>{t("Sign In")}</span>
           </button>
         )}
         {errors.root && (
