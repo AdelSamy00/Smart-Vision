@@ -5,7 +5,10 @@ import { useForm } from 'react-hook-form';
 import Loading from '../../components/shared/Loading';
 import toast, { Toaster } from 'react-hot-toast';
 import { apiRequest } from '../../utils';
+import { useTranslation } from 'react-i18next';
+import i18n from '../../../Language/translate.jsx';
 function Register() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const {
     register,
@@ -64,7 +67,7 @@ function Register() {
                 className="font-semibold text-sm text-gray-600 pb-1 block"
                 htmlFor="username"
               >
-                Username
+                {t("Username")}
               </label>
               <input
                 className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
@@ -72,7 +75,7 @@ function Register() {
                 id="username"
                 name="username"
                 {...register('username', {
-                  required: 'Username is required',
+                  required: t('Username is required'),
                 })}
               />
               {errors.username && (
@@ -86,7 +89,7 @@ function Register() {
                 className="font-semibold text-sm text-gray-600 pb-1 block"
                 htmlFor="email"
               >
-                Email
+                {t("Email")}
               </label>
               <input
                 className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
@@ -94,7 +97,7 @@ function Register() {
                 id="email"
                 name="email"
                 {...register('email', {
-                  required: 'Email Address is required',
+                  required: t('Email Address is required'),
                   validate: (value) => {
                     if (!value.includes('@')) {
                       return 'Email must include @';
@@ -112,7 +115,7 @@ function Register() {
                 className="font-semibold text-sm text-gray-600 pb-1 block"
                 htmlFor="password"
               >
-                Password
+                {t("Password")}
               </label>
               <input
                 className="border rounded-lg px-3 py-2 mt-1 text-sm w-full "
@@ -120,11 +123,11 @@ function Register() {
                 id="password"
                 name="password"
                 {...register('password', {
-                  required: 'Password is required',
+                  required: t('Password is required'),
                   minLength: {
                     value: 7,
                     message:
-                      'Password length should be greater than 6 character',
+                      t('Password length should be greater than 6 character'),
                   },
                 })}
               />
@@ -139,7 +142,7 @@ function Register() {
                 className="font-semibold text-sm text-gray-600 pb-1 block"
                 htmlFor="password"
               >
-                Confirm Password
+                {t("Confirm Password")}
               </label>
               <input
                 className="border rounded-lg px-3 py-2 mt-1 text-sm w-full "
@@ -150,7 +153,7 @@ function Register() {
                   validate: (value) => {
                     const { password } = getValues();
                     if (password !== value) {
-                      return "Passwords don't match";
+                      return t("Passwords don't match");
                     }
                   },
                 })}
@@ -166,7 +169,7 @@ function Register() {
                 className="font-semibold text-sm text-gray-600 pb-1 block"
                 htmlFor="phone"
               >
-                Phone
+                {t("Phone")}
               </label>
               <input
                 className="border rounded-lg px-3 py-2 mt-1  text-sm w-full"
@@ -174,7 +177,7 @@ function Register() {
                 id="phone"
                 name="phone"
                 {...register('phone', {
-                  required: 'Please enter your phone',
+                  required: t('Please enter your phone'),
                 })}
               />
               {errors.phone && (
@@ -186,7 +189,7 @@ function Register() {
                 className="font-semibold text-sm text-gray-600 pb-1 block"
                 htmlFor="gender"
               >
-                Gender
+                {t("Gender")}
               </label>
               <select
                 className="border rounded-lg px-3 py-2 mt-1 text-sm w-full"
@@ -196,8 +199,8 @@ function Register() {
                   required: 'please select you gender',
                 })}
               >
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option value="Male">{t("Male")}</option>
+                <option value="Female">{t("Female")}</option>
               </select>
               {errors.gender && (
                 <div className="text-red-500 mb-3">{errors.gender.message}</div>
@@ -214,7 +217,7 @@ function Register() {
                 type="submit"
                 className="py-2 px-4 bg-blue-700 hover:bg-blue-900 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
               >
-                <span>Sign up</span>
+                <span>{t("Sign up")}</span>
               </button>
             )}
             {errors.root && (
@@ -227,12 +230,12 @@ function Register() {
               to={'/login'}
               className="text-xs text-black uppercase hover:underline"
             >
-              have an account? Log in
+              {t("have an account? Log in")}
             </Link>
             <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
           </div>
           <p className="note flex justify-center my-3">
-            Terms of use &amp; Conditions
+            {t("Terms of use")} &amp; {t("Conditions")}
           </p>
         </form>
       </div>

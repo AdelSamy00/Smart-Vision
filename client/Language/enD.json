@@ -30,6 +30,28 @@
   "favorites":"favorites",
   "Social Media":"Social Media",
   "All right reserved.":"All right reserved.",
-   "Resources":"Resources"
+   "Resources":"Resources",
+   
+   "Login to your Account": "Login to your Account",
+   "Get started with our app, just create an account and enjoy the experience.": "Get started with our app, just create an account and enjoy the experience.",
+   "Email Address is required": "Email Address is required",
+   "Email must include @": "Email must include @",
+   "Password": "Password",
+   "Password is required": "Password is required",
+   "Sign In": "Sign In",
+   "haven't an account? SginUp": "haven't an account? SginUp",
+   "An unexpected error occurred. Please try again later.": "An unexpected error occurred. Please try again later.",
+   "Terms of use":"Terms of use",
+   "Conditions":"Conditions",
+   "name@mail.com":"name@mail.com",
+   "Username": "Username",
+   "Confirm Password": "Confirm Password",
+   "Sign up": "Sign up",
+   "have an account? Log in": "have an account? Log in",
+   "Username is required":"Username is required",
+   "Passwords don't match":"Passwords don't match",
+   "Password length should be greater than 6 character": "Password length should be greater than 6 characters",
+   "Please enter your phone": "Please enter your phone"
+
 
 }

@@ -50,12 +50,15 @@
 
 .subtitle {
   font-size: 0.725rem;
-  max-width: 80%;
+  max-width: 85%;
   text-align: center;
   line-height: 1.1rem;
   color: #8B8E98
 }
-
+.arabic-subtitle{
+  font-size: 0.825rem;
+  padding: 0px 60px;
+}
 .input_container {
   width: 100%;
   height: fit-content;
