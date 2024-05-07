@@ -5,18 +5,6 @@ import engineerRoute from './engineerRoute.js';
 import inventoryManagerRoute from './inventoryManagerRoute.js';
 import factoryRoute from './factoryRoutes.js';
 import operatorRoute from './operatorRoutes.js';
-import { getServiceById } from '../controllers/EmployeeControllers.js';
-
-import {
-  assignedEnginerToService,
-  getAllEngineers,
-  getAllOrders,
-  getAllServices,
-  getOrderById,
-  sentProductOrderToInventory,
-  updateOrderStatus,
-  updateServiceOrderStatus,
-} from '../controllers/OperatorController.js';
 
 const router = express.Router();
 
@@ -43,15 +31,5 @@ router.use('/inventory', inventoryManagerRoute);
 router.use('/factory', factoryRoute);
 
 router.use('/operator', operatorRoute);
-//#region Orders
-
-//#endregion
-
-//#region services
-router.get('/services', getAllServices);
-router.get('/services/:serviceId', getServiceById);
-router.put('/services', updateServiceOrderStatus); // to get services order to operator
-
-//#endregion
 
 export default router;

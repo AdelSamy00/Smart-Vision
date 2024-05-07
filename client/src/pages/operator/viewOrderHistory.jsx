@@ -5,8 +5,12 @@ import Table from 'react-bootstrap/Table';
 import getTodayDate from '../../utils/dates';
 import { Link } from 'react-router-dom';
 import { t } from 'i18next';
+import { apiRequest } from '../../utils';
+import { useSelector } from 'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
 
 function ProductOrderHistory() {
+  const { employee } = useSelector((state) => state?.employee);
   const todayDate = getTodayDate();
   const [data, setData] = useState([]);
   const [dataType, setDataType] = useState('orders');
@@ -20,8 +24,18 @@ function ProductOrderHistory() {
     async function fetchData() {
       setIsLoading(true);
       try {
-        const res = await axios.get(`/employees/${dataType}`);
-        setData(res?.data[dataType]);
+        const res = await apiRequest({
+          url: `/employees/operator/${dataType}`,
+          method: 'GET',
+          token: employee?.token,
+        });
+        if (res?.data?.success) {
+          setData(res?.data[dataType]);
+        } else {
+          toast.dismiss();
+          toast.error(`Failed to get ${dataType} history`);
+          setIsLoading(false);
+        }
       } catch (error) {
         console.error(`Error fetching ${dataType} history:`, error);
       } finally {

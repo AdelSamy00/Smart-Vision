@@ -24,6 +24,7 @@ import { setNotification } from '../../redux/NotificationSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { t } from 'i18next';
 import i18n from '../../../Language/translate';
+import toast, { Toaster } from 'react-hot-toast';
 const ExpandMore = ({ expand, ...other }) => <IconButton {...other} />;
 
 const ViewServiceOrders = ({ socket, setSoket }) => {
@@ -33,6 +34,7 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [serviceType, setServiceType] = useState('All');
   const { notification } = useSelector((state) => state?.notification);
+  const { employee } = useSelector((state) => state?.employee);
   const [serviceNotifications, setServiceNotifications] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -40,16 +42,26 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
   useEffect(() => {
     async function fetchOrderHistory() {
       try {
-        const response = await axios.get(`/employees/services`);
-        const sortedOrders = response.data.services
-          .filter((order) => !(order.state === 'Delivered'))
-          .sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
-          });
-        setProductOrders(sortedOrders);
-        // setProductOrders(response.data.services);
-        setIsLoading(false);
-        console.log(response.data.services);
+        const response = await apiRequest({
+          url: '/employees/operator/services',
+          method: 'GET',
+          token: employee?.token,
+        });
+        if (response?.data?.success) {
+          const sortedOrders = response?.data?.services
+            .filter((order) => !(order.state === 'Delivered'))
+            .sort((a, b) => {
+              return new Date(b.createdAt) - new Date(a.createdAt);
+            });
+          setProductOrders(sortedOrders);
+          // setProductOrders(response.data.services);
+          setIsLoading(false);
+          console.log(response?.data?.services);
+        } else {
+          toast.dismiss();
+          toast.error('Failed to get all services orders');
+          setIsLoading(false);
+        }
       } catch (error) {
         console.error(
           'Error fetching order history:',
@@ -113,6 +125,7 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
       alignItems="center"
       className="presenter-products-container"
     >
+      <Toaster />
       {isLoading ? (
         <Grid item>
           <div className="h-96">
