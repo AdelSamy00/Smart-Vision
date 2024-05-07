@@ -3,11 +3,12 @@ import presenterRoute from './presenterRoutes.js';
 import actorRoute from './actorRoutes.js';
 import engineerRoute from './engineerRoute.js';
 import inventoryManagerRoute from './inventoryManagerRoute.js';
+import factoryRoute from './factoryRoutes.js';
 import { getServiceById } from '../controllers/EmployeeControllers.js';
 
 import {
   getCustomizationOrdersDetails,
-  updateServiceOrderStateToManufactured,
+  updateServiceOrderStateToShipped,
 } from '../controllers/FactoryControllers.js';
 import {
   assignedEnginerToService,
@@ -41,10 +42,7 @@ router.use('/actor', actorRoute);
 router.use('/engineer', engineerRoute);
 
 router.use('/inventory', inventoryManagerRoute);
-
-//get Customization Order Details to Factory
-router.get('/customizationOrdersDetails', getCustomizationOrdersDetails);
-//#endregion
+router.use('/factory', factoryRoute);
 
 //#region Orders
 router.get('/orders', getAllOrders);
@@ -60,5 +58,4 @@ router.put('/services', updateServiceOrderStatus); // to get services order to o
 
 //#endregion
 
-router.put('/update_state', updateServiceOrderStateToManufactured);
 export default router;

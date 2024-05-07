@@ -19,7 +19,7 @@ export const getCustomizationOrdersDetails = async (req, res, next) => {
   }
 };
 
-export const updateServiceOrderStateToManufactured = async (req, res, next) => {
+export const updateServiceOrderStateToShipped = async (req, res, next) => {
   try {
     const { orderId } = req.body; // Assuming the order ID is passed in the request parameters
 
@@ -37,15 +37,15 @@ export const updateServiceOrderStateToManufactured = async (req, res, next) => {
       });
     }
 
-    // Update the state to "Manufactured"
-    serviceOrder.state = 'Manufactured';
+    // Update the state to "Shipped"
+    serviceOrder.state = 'Shipped';
 
     // Save the updated service order to the database
     await serviceOrder.save();
 
     res.status(200).json({
       success: true,
-      message: 'Service order state updated to Manufactured',
+      message: 'Service order state updated to Shipped',
       serviceOrder: serviceOrder,
     });
   } catch (error) {
