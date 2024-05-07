@@ -14,6 +14,8 @@ import ProductOrderComponent from '../../components/Operator/ProductOrderCompone
 import { useDispatch, useSelector } from 'react-redux';
 import { setNotification } from '../../redux/NotificationSlice';
 import { t } from 'i18next';
+import { apiRequest } from '../../utils';
+import toast, { Toaster } from 'react-hot-toast';
 
 const ViewProductOrders = ({ socket, setSocket }) => {
   const [productOrders, setProductOrders] = useState([]);
@@ -21,6 +23,7 @@ const ViewProductOrders = ({ socket, setSocket }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const { notification } = useSelector((state) => state?.notification);
+  const { employee } = useSelector((state) => state?.employee);
   const dispatch = useDispatch();
   const [ordersNotification, setOrdersNotification] = useState([]);
   const [updatedState1, setUpdatedState1] = useState('');
@@ -29,15 +32,25 @@ const ViewProductOrders = ({ socket, setSocket }) => {
     async function fetchOrderHistory() {
       // setIsLoading(true);
       try {
-        const response = await axios.get(`/employees/orders`);
-        const sortedOrders = response.data.orders
-          .filter(
-            (order) =>
-              !(order.state === 'CANCELED' || order.state === 'Delivered')
-          )
-          .sort((a, b) => b.orderNumber - a.orderNumber);
-        setProductOrders(sortedOrders);
-        setIsLoading(false);
+        const response = await apiRequest({
+          url: '/employees/operator/orders',
+          method: 'GET',
+          token: employee?.token,
+        });
+        if (response?.data?.success) {
+          const sortedOrders = response.data.orders
+            .filter(
+              (order) =>
+                !(order.state === 'CANCELED' || order.state === 'Delivered')
+            )
+            .sort((a, b) => b.orderNumber - a.orderNumber);
+          setProductOrders(sortedOrders);
+          setIsLoading(false);
+        } else {
+          toast.dismiss();
+          toast.error('Failed to get all order');
+          setIsLoading(false);
+        }
       } catch (error) {
         console.error(
           'Error fetching order history:',
@@ -86,6 +99,7 @@ const ViewProductOrders = ({ socket, setSocket }) => {
 
   return (
     <div>
+      <Toaster />
       <Typography variant="h4" align="center" gutterBottom>
         {t('productOrders')}
       </Typography>

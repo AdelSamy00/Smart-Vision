@@ -4,12 +4,9 @@ import actorRoute from './actorRoutes.js';
 import engineerRoute from './engineerRoute.js';
 import inventoryManagerRoute from './inventoryManagerRoute.js';
 import factoryRoute from './factoryRoutes.js';
+import operatorRoute from './operatorRoutes.js';
 import { getServiceById } from '../controllers/EmployeeControllers.js';
 
-import {
-  getCustomizationOrdersDetails,
-  updateServiceOrderStateToShipped,
-} from '../controllers/FactoryControllers.js';
 import {
   assignedEnginerToService,
   getAllEngineers,
@@ -42,13 +39,12 @@ router.use('/actor', actorRoute);
 router.use('/engineer', engineerRoute);
 
 router.use('/inventory', inventoryManagerRoute);
+
 router.use('/factory', factoryRoute);
 
+router.use('/operator', operatorRoute);
 //#region Orders
-router.get('/orders', getAllOrders);
-router.get('/orders/:orderId', getOrderById);
-router.put('/orders', updateOrderStatus);
-router.put('/orders/:orderId', sentProductOrderToInventory);
+
 //#endregion
 
 //#region services

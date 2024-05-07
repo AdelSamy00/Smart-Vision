@@ -3,8 +3,12 @@ import { Grid, Button, Typography } from '@mui/material';
 import axios from 'axios';
 import NewReleasesIcon from '@mui/icons-material/NewReleases';
 import { t } from 'i18next';
+import { useSelector } from 'react-redux';
+import { apiRequest } from '../../utils';
+import toast, { Toaster } from 'react-hot-toast';
 
 function Productorder1Component({ order1, onUpdatedState1, isNew }) {
+  const { employee } = useSelector((state) => state?.employee);
   const [showorder1, setShoworder1] = useState(false);
   const [showButton, setShowButton] = useState(true);
   const [isnew, setIsNew] = useState(isNew);
@@ -20,13 +24,23 @@ function Productorder1Component({ order1, onUpdatedState1, isNew }) {
   const handleDoneButtonClick = async () => {
     onUpdatedState1('');
     try {
-      const response = await axios.put(`/employees/orders`, {
-        orderId: order1?._id,
-        newStatus: 'Delivered',
+      const response = await apiRequest({
+        url: '/employees/operator/orders',
+        method: 'PUT',
+        data: {
+          orderId: order1?._id,
+          newStatus: 'Delivered',
+        },
+        token: employee?.token,
       });
-      setShowWholeorder1(false);
-      onUpdatedState1(response.data.order.state);
-      console.log(response);
+      if (response?.data?.success) {
+        setShowWholeorder1(false);
+        onUpdatedState1(response?.data?.order?.state);
+        console.log(response);
+      } else {
+        toast.dismiss();
+        toast.error('Failed to update order status');
+      }
     } catch (error) {
       console.error('Error updating order1 status:', error.message);
     }
@@ -36,11 +50,20 @@ function Productorder1Component({ order1, onUpdatedState1, isNew }) {
     setUpdatedState(order1?.state);
     onUpdatedState1('');
     try {
-      const response = await axios.put(`/employees/orders/${order1._id}`);
-      console.log('Request sent to inventory:', response.data);
-      setShowButton(false);
-      onUpdatedState1(response.data.order.state);
-      setUpdatedState(response.data.order.state);
+      const response = await apiRequest({
+        url: `/employees/operator/orders/${order1._id}`,
+        method: 'PUT',
+        token: employee?.token,
+      });
+      if (response?.data?.success) {
+        console.log('Request sent to inventory:', response.data);
+        setShowButton(false);
+        onUpdatedState1(response.data.order.state);
+        setUpdatedState(response.data.order.state);
+      } else {
+        toast.dismiss();
+        toast.error('Failed to send request to inventory');
+      }
     } catch (error) {
       console.error('Error sending request to inventory:', error.message);
     }
@@ -48,6 +71,7 @@ function Productorder1Component({ order1, onUpdatedState1, isNew }) {
 
   return showWholeorder1 ? (
     <Grid container className="order1-container" sx={{ marginBottom: '2rem' }}>
+      <Toaster />
       <Grid
         item
         xs={11}
@@ -126,7 +150,7 @@ function Productorder1Component({ order1, onUpdatedState1, isNew }) {
             lg={3}
             sx={{
               textAlign: { xs: 'start', sm: 'end', md: 'center' },
-              marginBottom: {xs: "0rem", sm: "1.5rem", md: "0rem" },
+              marginBottom: { xs: '0rem', sm: '1.5rem', md: '0rem' },
             }}
           >
             <Typography variant="body1">{t('Total Price')}</Typography>

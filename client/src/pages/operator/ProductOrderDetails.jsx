@@ -5,30 +5,42 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Loading from '../../components/shared/Loading';
 import { t } from 'i18next';
+import { apiRequest } from '../../utils';
+import { useDispatch, useSelector } from 'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
 
 const ProductOrderDetails = () => {
+  const { employee } = useSelector((state) => state?.employee);
   const { orderId } = useParams();
   const [order, setorder] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function getCustomizedOrderDetail() {
-      await axios
-        .get(`/employees/orders/${orderId}`)
-        .then((res) => {
-          setorder(res?.data?.order);
-          console.log(res?.data.order);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      const response = await apiRequest({
+        url: `/employees/operator/orders/${orderId}`,
+        method: 'GET',
+        token: employee?.token,
+      });
+      if (response?.data?.success) {
+        setorder(response?.data?.order);
+        console.log(response?.data.order);
+        setIsLoading(false);
+      } else {
+        toast.dismiss();
+        toast.error('Failed to get order details');
+        //setIsLoading(false);
+      }
     }
     getCustomizedOrderDetail();
   }, []);
 
   if (isLoading) {
-    return <div className="h-96"><Loading /></div>;
+    return (
+      <div className="h-96">
+        <Loading />
+      </div>
+    );
   }
   return (
     <div
@@ -40,6 +52,7 @@ const ProductOrderDetails = () => {
         marginTop: '2rem',
       }}
     >
+      <Toaster />
       <h1
         style={{ fontSize: '30px', fontWeight: 'bold', marginBottom: '1.5rem' }}
       >
