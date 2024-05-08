@@ -3,9 +3,10 @@ import Materials from '../models/Material.js';
 import IventoryTransactions from '../models/inventoryTransaction.js';
 export const addMaterial = async (req, res, next) => {
   try {
-    const { name, quantity } = req.body;
+    const { name, ARName, quantity } = req.body;
     const newMaterial = await Materials.create({
       name,
+      ARName,
       quantity,
     });
 
@@ -80,12 +81,12 @@ export const getMaterialById = async (req, res, next) => {
 export const updateMaterial = async (req, res, next) => {
   try {
     const { id } = req.body;
-    const { name, quantity } = req.body;
+    const { name, ARName, quantity } = req.body;
 
     // Find the material by ID and update its fields
     const updatedMaterial = await Materials.findByIdAndUpdate(
       id,
-      { name, quantity },
+      { name, ARName, quantity },
       { new: true }
     );
     if (!updatedMaterial) {

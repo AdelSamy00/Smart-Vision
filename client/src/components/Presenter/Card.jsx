@@ -19,6 +19,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 function Card({ product, handelDelete }) {
+  const language = JSON.parse(window?.localStorage.getItem('language'));
   const [showDeleteMessage, setshowDeleteMessage] = useState(false);
   const handleAgreeDeleteProductMessage = () => {
     handelDelete(product?._id);
@@ -65,7 +66,7 @@ function Card({ product, handelDelete }) {
         )}
         <div className="sbProductCardData">
           <div className="w-full">
-            <h5>{product?.name}</h5>
+            <h5>{language === 'en' ? product?.name : product?.ARName}</h5>
             <h6>{getCategoryName(product?.category)}</h6>
             <p>
               {product?.price} {t('EGP')}

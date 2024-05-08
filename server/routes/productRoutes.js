@@ -17,7 +17,7 @@ import inventoryManagerAuth from '../middlewares/inventoryManagerMiddleware.js';
 const router = express.Router();
 
 //to help inventory manager
-router.put('/updateDetails/:id', updateProductDetails);
+router.put('/updateDetails/:id', inventoryManagerAuth, updateProductDetails);
 router.put('/transaction', productsTransaction);
 
 // CRUD Product -- RESTFULL API

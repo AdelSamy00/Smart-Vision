@@ -24,7 +24,7 @@ function BookingServiceForm({ socket, setSocket }) {
   const [loading, setLoading] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({
-    ServiceName: '',
+    ServiceName: service?.title,
     phoneNumber: customer?.phone,
     address: customer?.address,
     description: '',
@@ -50,17 +50,18 @@ function BookingServiceForm({ socket, setSocket }) {
     e.preventDefault();
     setLoading(true);
     try {
-      // const translationRes = await axios.request(
-      //   setOptionsForTranslate([formData.description])
-      // );
-      // // console.log(translationRes.data);
-      // const ARdescription = translationRes?.data[0]?.translations[0]?.text;
-      // const ENdescription = translationRes?.data[0]?.translations[1]?.text;
-      // console.log(ARdescription, ENdescription);
+      const translationRes = await axios.request(
+        setOptionsForTranslate([formData.description])
+      );
+      // console.log(translationRes.data);
+      const ARdescription = translationRes?.data[0]?.translations[0]?.text;
+      const ENdescription = translationRes?.data[0]?.translations[1]?.text;
+      console.log(ARdescription, ENdescription);
 
       const uploadedImages =
         images.length > 1 && (await handleMultipleFilesUpload(images));
       console.log('Uploaded Image URL:', uploadedImages);
+      console.log(formData);
       if (uploadedImages) {
         const response = await apiRequest({
           method: 'POST',
@@ -68,7 +69,8 @@ function BookingServiceForm({ socket, setSocket }) {
           data: {
             id: customer._id,
             service: service.title,
-            description: formData.description,
+            description: ENdescription,
+            ARDescription: ARdescription,
             images: uploadedImages,
             phone: formData.phoneNumber,
             address: formData.address,
@@ -76,7 +78,7 @@ function BookingServiceForm({ socket, setSocket }) {
           },
           token: customer?.token,
         });
-        if (response.data.success) {
+        if (response?.data?.success) {
           const newData = {
             token: localStorage?.getItem('token'),
             ...response.data?.customer,
@@ -99,14 +101,15 @@ function BookingServiceForm({ socket, setSocket }) {
           data: {
             id: customer._id,
             service: service.title,
-            description: formData.description,
+            description: ENdescription,
+            ARDescription: ARdescription,
             phone: formData.phoneNumber,
             address: formData.address,
             measuring: formData.measuring,
           },
           token: customer?.token,
         });
-        if (response.data.success) {
+        if (response?.data?.success) {
           const newData = {
             token: localStorage?.getItem('token'),
             ...response.data?.customer,

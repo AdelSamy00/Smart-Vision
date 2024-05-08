@@ -25,6 +25,7 @@ const ExpandMore = ({ expand, ...other }) => <IconButton {...other} />;
 
 function HomeComponent({ Allproducts }) {
   // const [displayedOrders, setDisplayedOrders] = useState(1);
+  const language = JSON.parse(window?.localStorage.getItem('language'));
   const { t } = useTranslation();
   const { employee } = useSelector((state) => state?.employee);
   const [products, setProducts] = useState(Allproducts);
@@ -91,7 +92,8 @@ function HomeComponent({ Allproducts }) {
                       fontSize: '18px',
                     }}
                   >
-                    {t('name')}: {product.name}
+                    {t('name')}:{' '}
+                    {language === 'en' ? product.name : product?.ARName}
                   </CardContent>
                   <CardContent style={{ marginTop: '-20px' }}>
                     {t('quantity')}: {product?.quantity}
@@ -140,7 +142,9 @@ function HomeComponent({ Allproducts }) {
                         variant="body2"
                         style={{ marginBottom: '5px', fontSize: '15px' }}
                       >
-                        {product?.description}
+                        {language === 'en'
+                          ? product?.description
+                          : product?.ARDescription}
                       </Typography>
                       <Typography
                         variant="body2"

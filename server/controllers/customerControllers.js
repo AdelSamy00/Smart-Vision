@@ -582,6 +582,7 @@ export const makeService = async (req, res, next) => {
       next('Provide Required Fields!');
       return;
     }
+    console.log(serviceData);
     const customer = await Customers.findById({ _id: serviceData.id });
     //make service order
     const serviceOrder = await ServicesOrders.create({
@@ -628,9 +629,7 @@ export const cancelService = async (req, res, next) => {
     }
     const service = await ServicesOrders.findById({ _id: serviceId });
     if (service.state !== 'CANCELED') {
-      if (
-        service.cancelServiceOrderExpiresAt > new Date()
-      ) {
+      if (service.cancelServiceOrderExpiresAt > new Date()) {
         const updatedServiceOrder = await ServicesOrders.findByIdAndUpdate(
           { _id: serviceId },
           {

@@ -8,6 +8,7 @@ import { apiRequest } from '../../utils';
 import { t } from 'i18next';
 
 function PresenterProductsView() {
+  const language = JSON.parse(window?.localStorage.getItem('language'));
   const { employee } = useSelector((state) => state?.employee);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -74,7 +75,7 @@ function PresenterProductsView() {
                     gutterBottom
                     className="presenter-product-title"
                   >
-                    {product.name}
+                    {language === 'en' ? product?.name : product?.ARName}
                   </Typography>
                   <Typography
                     variant="body2"
@@ -90,7 +91,10 @@ function PresenterProductsView() {
                     gutterBottom
                     className="presenter-product-description"
                   >
-                    {t('description')}: {product.description}
+                    {t('description')}:{' '}
+                    {language === 'en'
+                      ? product.description
+                      : product?.ARDescription}
                   </Typography>
                   <div className="button-container">
                     {' '}

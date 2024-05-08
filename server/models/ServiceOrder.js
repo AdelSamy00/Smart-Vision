@@ -14,6 +14,10 @@ const serviceOrderSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Description is Required!'],
     },
+    ARDescription: {
+      type: String,
+      /* required: [true, 'Arabic Description is Required!'], */
+    },
     address: {
       type: String,
     },
@@ -37,6 +41,9 @@ const serviceOrderSchema = new mongoose.Schema(
       {
         quantity: { type: Number },
         material: {
+          type: String,
+        },
+        ARMaterial: {
           type: String,
         },
       },

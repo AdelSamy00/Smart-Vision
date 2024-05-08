@@ -5,6 +5,10 @@ const materialSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Name is Required!'],
     },
+    ARName: {
+      type: String,
+      required: [true, 'Arabic Name is Required!'],
+    },
     quantity: { type: Number },
   },
   {

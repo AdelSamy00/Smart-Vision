@@ -18,21 +18,21 @@ const HomePresenter = () => {
   const [selectedCategories, setSelectedCategories] = useState(['All']);
   const categories = ['sofa', 'chair', 'bed', 'table'];
   const { employee } = useSelector((state) => state?.employee);
-  
+
   async function handelDeleteProduct(productId) {
     try {
       await apiRequest({
-        method: "delete",
-        url: "/products/",
+        method: 'delete',
+        url: '/products/',
         data: { productId },
-        token:employee?.token
-      });  
+        token: employee?.token,
+      });
       setProducts(products.filter((item) => item._id !== productId));
     } catch (error) {
       console.error(error);
     }
   }
-  
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {

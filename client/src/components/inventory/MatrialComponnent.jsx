@@ -19,6 +19,7 @@ import { apiRequest } from '../../utils';
 import { useSelector } from 'react-redux';
 function MatrialComponnent({ AllMaterials }) {
   const { t } = useTranslation();
+  const language = JSON.parse(window?.localStorage.getItem('language'));
   const [Matrials, setMatrials] = useState(AllMaterials);
   const { employee } = useSelector((state) => state?.employee);
 
@@ -70,7 +71,7 @@ function MatrialComponnent({ AllMaterials }) {
                   style={{ backgroundColor: '#eaf4f4' }}
                 >
                   <CardHeader
-                    title={matrial?.name}
+                    title={language === 'en' ? matrial?.name : matrial?.ARName}
                     style={{ marginTop: '10px' }}
                   />
                   <CardContent style={{ marginTop: '-20px' }}>

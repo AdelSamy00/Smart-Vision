@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -16,12 +16,17 @@ import { t } from 'i18next';
 import axios from 'axios';
 
 function ProductForm({ product, method }) {
+  const language = JSON.parse(window?.localStorage.getItem('language'));
   const navigate = useNavigate();
   const { employee } = useSelector((state) => state?.employee);
-  const [description, setDescription] = useState(product?.description || '');
+  const [description, setDescription] = useState(
+    language === 'en' ? product?.description : product?.ARDescription || ''
+  );
   const [images, setImages] = useState(product?.images || '');
   const [newImages, setNewImages] = useState([]);
-  const [productName, setProductName] = useState(product?.name || '');
+  const [productName, setProductName] = useState(
+    language === 'en' ? product?.name : product?.ARName || ''
+  );
   const [category, setCategory] = useState(product?.category || '');
   const [colors, setColors] = useState(product?.colors);
   const [price, setPrice] = useState(product?.price || '');
@@ -34,7 +39,6 @@ function ProductForm({ product, method }) {
   const [width, setwidth] = useState(product?.dimensions?.width || '');
   const [weight, setweight] = useState(product?.dimensions?.weight || '');
   const [height, setheight] = useState(product?.dimensions?.height || '');
-
   async function translateText() {
     try {
       const response = await axios.request(
@@ -60,18 +64,20 @@ function ProductForm({ product, method }) {
 
   async function addProduct(imagesUrl) {
     try {
-      //const translationRes = await translateText();
-      // const ARname = translationRes[0].translations[0].text;
-      // const ENname = translationRes[0].translations[1].text;
-      // const ARdescription = translationRes[1].translations[0].text;
-      // const ENdescription = translationRes[1].translations[1].text;
+      const translationRes = await translateText();
+      const ARname = translationRes[0].translations[0].text;
+      const ENname = translationRes[0].translations[1].text;
+      const ARdescription = translationRes[1].translations[0].text;
+      const ENdescription = translationRes[1].translations[1].text;
       const res = await apiRequest({
         method: 'POST',
         url: `/employees/presenter/add-to-store/`,
         data: {
           _id: product._id,
-          name: productName,
-          description,
+          name: ENname,
+          ARName: ARname,
+          description: ENdescription,
+          ARDescription: ARdescription,
           images: [...images, ...imagesUrl],
           category,
           price,
@@ -101,19 +107,21 @@ function ProductForm({ product, method }) {
 
   async function editProduct(imagesUrl) {
     try {
-      // const translationRes = await translateText();
-      // //console.log(translationRes);
-      // const ARname = translationRes[0].translations[0].text;
-      // const ENname = translationRes[0].translations[1].text;
-      // const ARdescription = translationRes[1].translations[0].text;
-      // const ENdescription = translationRes[1].translations[1].text;
-      // console.log(ARname, ENname, ARdescription, ENdescription);
+      const translationRes = await translateText();
+      //console.log(translationRes);
+      const ARname = translationRes[0].translations[0].text;
+      const ENname = translationRes[0].translations[1].text;
+      const ARdescription = translationRes[1].translations[0].text;
+      const ENdescription = translationRes[1].translations[1].text;
+      console.log(ARname, ENname, ARdescription, ENdescription);
       const res = await apiRequest({
         url: `/products/${product?._id}`,
         method: 'PUT',
         data: {
-          name: productName,
-          description,
+          name: ENname,
+          ARName: ARname,
+          description: ENdescription,
+          ARDescription: ARdescription,
           images: [...images, ...imagesUrl],
           category,
           price,

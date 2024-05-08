@@ -13,7 +13,8 @@ import { useParams } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import { t } from 'i18next';
 import InputColor from '../Presenter/InputColor';
-import { setOptionsForTranslate } from '../../utils';
+import { apiRequest, setOptionsForTranslate } from '../../utils';
+import { useSelector } from 'react-redux';
 
 const Allcategorys = ['sofa', 'chair', 'bed', 'table'];
 const UpdateProductForm = () => {
@@ -25,6 +26,7 @@ const UpdateProductForm = () => {
     category: '',
     colors: '',
   });
+  const { employee } = useSelector((state) => state?.employee);
   const [colors, setColors] = useState([]);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const handleOpenSnackbar = () => {
@@ -68,24 +70,36 @@ const UpdateProductForm = () => {
     } else {
       productData.colors = colors;
       try {
-        // const translationRes = await axios.request(
-        //   setOptionsForTranslate([productData.name, productData.description])
-        // );
-        // console.log(translationRes.data);
-        // const ARname = translationRes?.data[0]?.translations[0]?.text;
-        // const ENname = translationRes?.data[0]?.translations[1]?.text;
-        // const ARdescription = translationRes?.data[1]?.translations[0]?.text;
-        // const ENdescription = translationRes?.data[1]?.translations[1]?.text;
-        // console.log(ARname, ENname, ARdescription, ENdescription);
-        const response = await axios.put(
-          `/Products/updateDetails/${productId}`,
-          productData
+        const translationRes = await axios.request(
+          setOptionsForTranslate([productData.name, productData.description])
         );
-        toast.dismiss();
-        toast.success(t('addSuccessfully'));
+        console.log(translationRes.data);
+        const ARname = translationRes?.data[0]?.translations[0]?.text;
+        const ENname = translationRes?.data[0]?.translations[1]?.text;
+        const ARdescription = translationRes?.data[1]?.translations[0]?.text;
+        const ENdescription = translationRes?.data[1]?.translations[1]?.text;
+        console.log(ARname, ENname, ARdescription, ENdescription);
+
+        const response = await apiRequest({
+          url: `/Products/updateDetails/${productId}`,
+          method: 'PUT',
+          data: {
+            ...productData,
+            name: ENname,
+            ARName: ARname,
+            description: ENdescription,
+            ARDescription: ARdescription,
+          },
+          token: employee?.token,
+        });
+        if (response?.data?.success) {
+          toast.dismiss();
+          toast.success(t('addSuccessfully'));
+        } else {
+          toast.error(t('FailedToAddProduct'));
+        }
       } catch (error) {
         console.error('Error updating product:', error);
-        toast.error(t('FailedToAddProduct'));
       }
     }
   };

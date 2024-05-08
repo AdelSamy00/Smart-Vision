@@ -67,6 +67,7 @@ export const addProduct = async (req, res, next) => {
     // validation
     if (
       !productData.name ||
+      !productData.ARName ||
       !productData.quantity ||
       !productData.description ||
       !productData.category
@@ -237,14 +238,30 @@ export const getNotShownProducts = async (req, res, next) => {
 export const updateProductDetails = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name, description, quantity, category, colors } = req.body;
-    if (!name || !quantity || !description || !category || !colors.length) {
+    const {
+      name,
+      ARName,
+      description,
+      ARDescription,
+      quantity,
+      category,
+      colors,
+    } = req.body;
+    if (
+      !name ||
+      !ARName ||
+      !quantity ||
+      !description ||
+      !ARDescription ||
+      !category ||
+      !colors.length
+    ) {
       next('Please Provide needed fields');
       return;
     }
     const product = await Products.findByIdAndUpdate(
       { _id: id },
-      { name, description, quantity, category, colors },
+      { name, ARName, description, ARDescription, quantity, category, colors },
       { new: true }
     );
     res.status(200).json({

@@ -28,6 +28,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function ProductDetailsPresenter() {
+  const language = JSON.parse(window?.localStorage.getItem('language'));
   const { employee } = useSelector((state) => state?.employee);
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
@@ -191,7 +192,7 @@ function ProductDetailsPresenter() {
               style={{ direction: i18n?.language === 'ar' ? 'rtl' : 'ltr' }}
             >
               <div>
-                <h1>{product?.name}</h1>
+                <h1>{language === 'en' ? product?.name : product?.ARName}</h1>
                 <div className="productDetailCategory">
                   <h2>{t('Category')}: </h2>
                   <p className="mr-2"> {getCategoryName(product?.category)}</p>
@@ -211,7 +212,9 @@ function ProductDetailsPresenter() {
                 </div>
                 <h3 className="text-lg font-bold">{t('description')}:</h3>
                 <p className="productDetailDescription">
-                  {product?.description}
+                  {language === 'en'
+                    ? product?.description
+                    : product?.ARDescription}
                 </p>
                 <h3 className="text-lg font-bold">{t('dimensions')}:</h3>
                 <div className="flex gap-2 flex-wrap">

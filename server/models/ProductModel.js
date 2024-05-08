@@ -6,7 +6,14 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Product name is Required!'],
     },
+    ARName: {
+      type: String,
+      required: [true, 'Arabic Product Name is Required!'],
+    },
     description: {
+      type: String,
+    },
+    ARDescription: {
       type: String,
     },
     quantity: {

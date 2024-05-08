@@ -49,7 +49,8 @@ const CustomOrderForm = ({ socket, setSocket }) => {
       try {
         const response = await apiRequest({
           method: 'GET',
-          url: `/employees/services/${requestId}`,
+          url: `/employees/engineer/services/${requestId}`,
+          token: employee?.token,
         });
         orderDetails.customerName =
           response.data.service[0]?.customer?.username;
@@ -121,26 +122,27 @@ const CustomOrderForm = ({ socket, setSocket }) => {
       const file =
         orderDetails.details && (await handleFileUpload(orderDetails.details));
       console.log(file);
-      // const translationRes = await axios.request(
-      //   setOptionsForTranslateMaterials(orderDetails.materials)
-      // );
-      // // console.log(translationRes?.data);
-      // const convertedMaterials = orderDetails.materials.map((item, idx) => {
-      //   return {
-      //     ARmaterial: translationRes?.data[idx]?.translations[0]?.text,
-      //     ENmaterial: translationRes?.data[idx]?.translations[1]?.text,
-      //     quantity: item.quantity,
-      //   };
-      // });
-      // console.log(convertedMaterials)
-      // console.log(orderDetails.materials)
+      const translationRes = await axios.request(
+        setOptionsForTranslateMaterials(orderDetails.materials)
+      );
+      // console.log(translationRes?.data);
+      const convertedMaterials = orderDetails.materials.map((item, idx) => {
+        return {
+          ARMaterial: translationRes?.data[idx]?.translations[0]?.text,
+          material: translationRes?.data[idx]?.translations[1]?.text,
+          quantity: item.quantity,
+        };
+      });
+      console.log(convertedMaterials);
+      console.log(orderDetails.materials);
+
       const response = await apiRequest({
         method: 'POST',
         url: 'employees/engineer/sendService',
         data: {
           serviceId: requestId,
           engineerId: employee._id,
-          materials: orderDetails.materials,
+          materials: convertedMaterials,
           details: file,
         },
         token: employee?.token,

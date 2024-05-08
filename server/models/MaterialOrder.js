@@ -16,6 +16,9 @@ const materialOrderSchema = new mongoose.Schema(
         material: {
           type: String,
         },
+        ARMaterial: {
+          type: String,
+        },
       },
     ],
   },

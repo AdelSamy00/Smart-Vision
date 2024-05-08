@@ -54,19 +54,25 @@ const AddProductForm = () => {
     } else {
       productData.colors = colors;
       try {
-        // const translationRes = await axios.request(
-        //   setOptionsForTranslate([productData.name, productData.description])
-        // );
-        // //console.log(translationRes?.data);
-        // const ARname = translationRes?.data[0]?.translations[0]?.text;
-        // const ENname = translationRes?.data[0]?.translations[1]?.text;
-        // const ARdescription = translationRes?.data[1]?.translations[0]?.text;
-        // const ENdescription = translationRes?.data[1]?.translations[1]?.text;
-        // console.log(ARname, ENname, ARdescription, ENdescription);
+        const translationRes = await axios.request(
+          setOptionsForTranslate([productData.name, productData.description])
+        );
+        //console.log(translationRes?.data);
+        const ARName = translationRes?.data[0]?.translations[0]?.text;
+        const ENname = translationRes?.data[0]?.translations[1]?.text;
+        const ARDescription = translationRes?.data[1]?.translations[0]?.text;
+        const ENdescription = translationRes?.data[1]?.translations[1]?.text;
+        console.log(ARName, ENname, ARDescription, ENdescription);
         const response = await apiRequest({
           url: '/products/',
           method: 'POST',
-          data: productData,
+          data: {
+            ...productData,
+            name: ENname,
+            ARName: ARName,
+            description: ENdescription,
+            ARDescription: ARDescription,
+          },
           token: employee?.token,
         });
         if (response?.data?.success) {
