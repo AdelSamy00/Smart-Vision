@@ -9,18 +9,18 @@ const id = urlParams.get('id');
 console.log(id);
 
 const card = document.querySelector('.card');
-const statusIcon = document.getElementById('statusIcon'); // Corrected
-const statusMessage = document.getElementById('statusMessage'); // Corrected
+const statusIcon = document.getElementById('statusIcon');
+const statusMessage = document.getElementById('statusMessage');
 const form = document.getElementById('form');
-const formsend = document.querySelector('.send'); // Corrected
+const formsend = document.querySelector('.send');
 formsend.addEventListener('submit', async (e) => {
   e.preventDefault();
   const formData = new FormData(formsend);
-  formData.append('userId', id);
+  formData.append('customerId', id);
   formData.delete('cPassword');
   const data = Object.fromEntries(formData);
   console.log(data);
-  fetch('/users/reset-password', {
+  fetch('/customers/reset-password', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -29,7 +29,11 @@ formsend.addEventListener('submit', async (e) => {
   })
     .then((res) => {
       console.log(res);
-      alert('Change Succssefully');
+      const message = 'Password successfully reset.';
+      location.replace(
+        `/customers/resetPassword?status=success&message=${message}`
+      );
+      alert('change successfully');
     })
     .catch((err) => {
       console.log(err);

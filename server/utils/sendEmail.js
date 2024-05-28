@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { v4 as uuidv4 } from 'uuid';
 import { hashString } from './index.js';
 import Verifications from '../models/EmailVerification.js';
+import PasswordReset from '../models/PasswordReset.js';
 //import PasswordReset from '../models/passwordReset.js';
 
 dotenv.config();
@@ -72,11 +73,11 @@ export const sendVerificationEmail = async (customer, res) => {
     res.status(404).json({ message: 'something went wrong' });
   }
 };
-/* 
-export const resetPasswordLink = async (user, res) => {
-  const { _id, email } = user;
+
+export const resetPasswordLink = async (customer, res) => {
+  const { _id, email } = customer;
   const token = _id + uuidv4();
-  const link = APP_URL + 'users/reset-password/' + _id + '/' + token;
+  const link = APP_URL + 'customers/reset-password/' + _id + '/' + token;
   const mailOptions = {
     from: AUTH_EMAIL,
     to: email,
@@ -95,7 +96,7 @@ export const resetPasswordLink = async (user, res) => {
   try {
     const hashedToken = await hashString(token);
     const resetEmail = await PasswordReset.create({
-      userId: _id,
+      customerId: _id,
       email,
       token: hashedToken,
       createdAt: Date.now(),
@@ -119,4 +120,4 @@ export const resetPasswordLink = async (user, res) => {
     console.log(error);
     res.status(404).json({ message: 'Something went wrong' });
   }
-}; */
+};

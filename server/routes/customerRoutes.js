@@ -7,12 +7,15 @@ import {
   changePassword,
   deleteAccount,
   deleteReview,
+  forgetPassword,
   getFavoriteList,
   getOrderHistory,
   getServiceHistory,
   makeFavorite,
   makeOrder,
   makeService,
+  requestPasswordReset,
+  resetPassword,
   saveContactMesseage,
   updateCustomer,
   updateReview,
@@ -60,4 +63,11 @@ router.post('/service', customerAuth, makeService);
 router.delete('/service', customerAuth, cancelService);
 router.get('/service/:id', getServiceHistory);
 
+// forget password
+router.post('/request-passwordreset', requestPasswordReset);
+router.get('/reset-password/:customerId/:token', resetPassword);
+router.post('/reset-password', forgetPassword);
+router.get('/resetPassword', (req, res) => {
+  res.sendFile(path.join(__dirname, './views/build', 'resetPassword.html'));
+});
 export default router;
