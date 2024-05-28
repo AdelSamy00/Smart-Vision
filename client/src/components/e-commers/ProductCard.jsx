@@ -3,8 +3,7 @@ import Rating from '@mui/material/Rating';
 import './stylesheets/ProductCard.css';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useTranslation } from "react-i18next"; // Import the useTranslation hook
-import i18n from "../../../Language/translate";
+import { useTranslation } from 'react-i18next'; // Import the useTranslation hook
 function ProductCard({
   product,
   favoriteList = [],
@@ -14,6 +13,8 @@ function ProductCard({
   const { t } = useTranslation();
   const { customer } = useSelector((state) => state.customer);
   const { cart } = useSelector((state) => state.cart);
+  const language = JSON.parse(window?.localStorage.getItem('language'));
+
   const isFavorit = () => {
     const fav = favoriteList.find((favId) => {
       return favId === product?._id;
@@ -83,20 +84,22 @@ function ProductCard({
         )}
         <div className="sbProductCardData">
           <div className="w-full">
-            <h5>{product?.name}</h5>
-            <h6>{product?.category}</h6>
-            <p>{product?.price} {t("EGP")}</p>
+            <h5>{language === 'en' ? product?.name : product?.ARName}</h5>
+            <h6>{t(product?.category)}</h6>
+            <p>
+              {product?.price} {t('EGP')}
+            </p>
           </div>
           <div className="sbProductCardDataRating">
             <Rating
               readOnly
               name="half-rating"
-              value={+product?.totalRating.toFixed(3)}
+              value={+product?.totalRating.toFixed(1)}
               precision={0.5}
               sx={{ fontSize: 30 }}
             />
             <p>
-              {product?.totalRating} ({product?.reviews?.length})
+              {+product?.totalRating.toFixed(1)} ({product?.reviews?.length})
             </p>
           </div>
         </div>
@@ -112,7 +115,7 @@ function ProductCard({
               fontWeight: 'bold',
             }}
           >
-            {t("Out of Stock")}
+            {t('Out of Stock')}
           </h2>
         ) : (
           <button

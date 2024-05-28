@@ -234,7 +234,7 @@ function ProductDetailsPresenter() {
                 <div className="productDetailColors">
                   <p>{t('Color')}: </p>
                   {product?.colors.map((color, idx) => (
-                    <span key={idx}>{color} -</span>
+                    <span key={idx}>{t(color)} -</span>
                   ))}
                 </div>
                 <p className="productDetailsPrice">

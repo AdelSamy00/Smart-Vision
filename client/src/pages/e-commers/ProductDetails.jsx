@@ -5,19 +5,18 @@ import Rating from '@mui/material/Rating';
 import { useDispatch, useSelector } from 'react-redux';
 import { SetCustomer } from '../../redux/CustomerSlice';
 import './StyleSheets/ProductDetails.css';
-import AddReview from '../../components/e-commers/AddReview';
 import { setCart } from '../../redux/CartSlice';
 import Loading from '../../components/shared/Loading';
 import LoginMessage from '../../components/e-commers/LoginMessage';
 import HomeSlider from '../../components/e-commers/HomeSlider';
 import ReviewsSection from '../../components/e-commers/ReviewsSection';
 import { useTranslation } from 'react-i18next';
-import i18n from '../../../Language/translate';
 
 function ProductDetails() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { productId } = useParams();
+  const language = JSON.parse(window?.localStorage.getItem('language'));
   const { customer } = useSelector((state) => state.customer);
   const { cart } = useSelector((state) => state.cart);
   const [product, setProduct] = useState(null);
@@ -177,10 +176,13 @@ function ProductDetails() {
             </div>
             <div className="productDetailData">
               <div>
-                <h1>{product?.name}</h1>
+                <h1>{language === 'en' ? product?.name : product?.ARName}</h1>
                 <div className="productDetailCategory">
                   <h2>{t('Category')}:</h2>
-                  <h2 style={{ fontWeight: 'normal' }}>{product?.category}</h2>
+                  <h2 style={{ fontWeight: 'normal', marginInline: '5px' }}>
+                    {' '}
+                    {t(product?.category)}
+                  </h2>
                 </div>
                 <div className="productDetailRating">
                   <Rating
@@ -197,7 +199,9 @@ function ProductDetails() {
                 </div>
                 <h3 className="text-lg font-bold">{t('Description')}:</h3>
                 <p className="productDetailDescription">
-                  {product?.description}
+                  {language === 'en'
+                    ? product?.description
+                    : product?.ARDescription}
                 </p>
                 <h3 className="text-lg font-bold">{t('dimensions')}:</h3>
                 <div className="flex gap-2 flex-wrap">
@@ -217,9 +221,7 @@ function ProductDetails() {
                 <div className="productDetailColors">
                   <p>{t('Color')}: </p>
                   {product?.colors.map((color, idx) => (
-                    <span key={idx} className="mr-3">
-                      {t(color)}
-                    </span>
+                    <span key={idx}>{t(color)} -</span>
                   ))}
                 </div>
                 <p className="productDetailsPrice">

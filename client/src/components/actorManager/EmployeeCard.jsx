@@ -1,8 +1,6 @@
 import * as React from "react";
-import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
@@ -81,7 +79,7 @@ export default function EmployeeCard({ employee, t }) {
         }
         subheader={
           <Typography
-            style={{ textAlign: "start", fontSize: "14px", color: "gray" }}
+            style={{ textAlign: "start", fontSize: "12px", color: "gray" }}
           >
             {employee.email}
           </Typography>
@@ -128,7 +126,7 @@ export default function EmployeeCard({ employee, t }) {
                 textTransform: "capitalize",
               }}
             >
-              {employee?.jobTitle}
+              {t(employee?.jobTitle)}
             </Typography>
           </Grid>
           <Grid xs={4} item>
