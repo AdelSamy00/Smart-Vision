@@ -71,24 +71,24 @@ function OrderComponent({ order, reviews, setReviews }) {
   }
 
   return (
-    <Grid container className="order-container" sx={{ marginBottom: "2rem" }}>
+    <Grid container className="order-container" sx={{ marginBottom: '2rem' }}>
       <Grid
         item
         xs={11}
         sm={9}
         md={9}
         lg={7}
-        sx={{ margin: "auto", border: "2px solid #ddd", borderRadius: "10px" }}
+        sx={{ margin: 'auto', border: '2px solid #ddd', borderRadius: '10px' }}
       >
         <Grid
           container
           sx={{
-            borderBottom: showOrder ? "2px solid #ddd" : "none",
-            borderStartEndRadius: "10px",
-            borderStartStartRadius: "10px",
-            padding: "20px 30px",
-            backgroundColor: "#f2f2f2",
-            alignItems: "center",
+            borderBottom: showOrder ? '2px solid #ddd' : 'none',
+            borderStartEndRadius: '10px',
+            borderStartStartRadius: '10px',
+            padding: '20px 30px',
+            backgroundColor: '#f2f2f2',
+            alignItems: 'center',
           }}
         >
           <Grid
@@ -98,16 +98,16 @@ function OrderComponent({ order, reviews, setReviews }) {
             md={3}
             lg={3}
             sx={{
-              marginBottom: { xs: "1.5rem", md: "0rem" },
+              marginBottom: { xs: '1.5rem', md: '0rem' },
               textAlign: {
-                xs: "start",
+                xs: 'start',
                 // md: "start",
               },
             }}
           >
-            <Typography variant="body1">{t("Date Placed")}</Typography>
+            <Typography variant="body1">{t('Date Placed')}</Typography>
             <Typography variant="body2">
-              {order?.createdAt.substring(0, 10).split("-").reverse().join("-")}
+              {order?.createdAt.substring(0, 10).split('-').reverse().join('-')}
             </Typography>
           </Grid>
           <Grid
@@ -117,16 +117,16 @@ function OrderComponent({ order, reviews, setReviews }) {
             md={3}
             lg={3}
             sx={{
-              textAlign: { xs: "end", sm: "center" },
-              marginBottom: { xs: "1.5rem", md: "0rem" },
+              textAlign: { xs: 'end', sm: 'center' },
+              marginBottom: { xs: '1.5rem', md: '0rem' },
               // marginTop: { xs: '-1.5rem', md: '0rem' },
               // backgroundColor:"red"
             }}
           >
-            <Typography variant="body1">{t("Order Number")}</Typography>
+            <Typography variant="body1">{t('Order Number')}</Typography>
             <Typography
               variant="body2"
-              sx={{ textAlign: { xs: "end", sm: "center" } }}
+              sx={{ textAlign: { xs: 'end', sm: 'center' } }}
             >
               {updatedOrder?.orderNumber}
             </Typography>
@@ -138,11 +138,11 @@ function OrderComponent({ order, reviews, setReviews }) {
             md={3}
             lg={3}
             sx={{
-              textAlign: { xs: "start", sm: "end", md: "center" },
-              marginBottom: { xs: "0rem", sm: "1.5rem", md: "0rem" },
+              textAlign: { xs: 'start', sm: 'end', md: 'center' },
+              marginBottom: { xs: '0rem', sm: '1.5rem', md: '0rem' },
             }}
           >
-            <Typography variant="body1">{t("Total Amount")}</Typography>
+            <Typography variant="body1">{t('Total Amount')}</Typography>
             <Typography variant="body2">{order?.totalPrice}</Typography>
           </Grid>
           <Grid
@@ -152,9 +152,9 @@ function OrderComponent({ order, reviews, setReviews }) {
             md={3}
             lg={3}
             sx={{
-              display: "flex",
+              display: 'flex',
               justifyContent: {
-                xs: "flex-end",
+                xs: 'flex-end',
                 // md: "end",
               },
             }}
@@ -163,15 +163,15 @@ function OrderComponent({ order, reviews, setReviews }) {
               onClick={toggleOrder}
               variant="contained"
               sx={{
-                backgroundColor: "#009688",
-                color: "white",
-                borderRadius: "5px",
-                ":hover": {
-                  backgroundColor: "#009688",
+                backgroundColor: '#009688',
+                color: 'white',
+                borderRadius: '5px',
+                ':hover': {
+                  backgroundColor: '#009688',
                 },
               }}
             >
-              {showOrder ? t("close") : t("Details")}
+              {showOrder ? t('close') : t('Details')}
             </Button>
           </Grid>
         </Grid>
@@ -180,8 +180,8 @@ function OrderComponent({ order, reviews, setReviews }) {
             container
             item
             sx={{
-              borderTop: "none",
-              padding: "20px",
+              borderTop: 'none',
+              padding: '20px',
             }}
           >
             {/* {console.log(order)} */}
@@ -191,10 +191,10 @@ function OrderComponent({ order, reviews, setReviews }) {
                 item
                 xs={12}
                 sx={{
-                  border: "2px solid #ddd",
-                  borderRadius: "5px",
-                  marginBottom: "20px",
-                  padding: "20px",
+                  border: '2px solid #ddd',
+                  borderRadius: '5px',
+                  marginBottom: '20px',
+                  padding: '20px',
                 }}
               >
                 <Grid container spacing={2}>
@@ -203,9 +203,9 @@ function OrderComponent({ order, reviews, setReviews }) {
                       src={product?.product?.images[0]}
                       alt={product?.product?.name}
                       style={{
-                        width: "100%",
-                        height: "150px",
-                        borderRadius: "5px",
+                        width: '100%',
+                        height: '150px',
+                        borderRadius: '5px',
                       }}
                     />
                   </Grid>
@@ -214,14 +214,14 @@ function OrderComponent({ order, reviews, setReviews }) {
                       item
                       container
                       sx={{
-                        fontSize: "18px",
-                        fontWeight: "bold",
-                        color: "gray",
-                        alignItems: "flex-start",
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                        color: 'gray',
+                        alignItems: 'flex-start',
                       }}
                     >
                       <Grid item xs={12} md={8} variant="body1">
-                        <span style={{ color: "" }}>
+                        <span style={{ color: '' }}>
                           {product?.product?.name}
                         </span>
                       </Grid>
@@ -231,44 +231,44 @@ function OrderComponent({ order, reviews, setReviews }) {
                         xs={12}
                         md={4}
                         sx={{
-                          marginTop: { xs: "1rem", md: "0rem" },
-                          display: "flex",
-                          alignItems: "end",
-                          justifyContent: { md: "end" },
+                          marginTop: { xs: '1rem', md: '0rem' },
+                          display: 'flex',
+                          alignItems: 'end',
+                          justifyContent: { md: 'end' },
                         }}
                       >
                         <span>
-                          {product?.product?.price} {t("EGP")}
+                          {product?.product?.price} {t('EGP')}
                         </span>
                       </Grid>
                     </Grid>
                     <Typography
                       variant="body2"
-                      style={{ marginTop: "1rem", fontSize: { xs: "10px" } }}
+                      style={{ marginTop: '1rem', fontSize: { xs: '10px' } }}
                     >
-                      <span style={{ fontWeight: "bold", fontSize: "17px" }}>
-                        {t("Description")}:
-                      </span>{" "}
+                      <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                        {t('Description')}:
+                      </span>{' '}
                       {product?.product?.description}
                     </Typography>
                     <div
                       style={{
-                        marginTop: "1rem",
-                        fontSize: { xs: "10px" },
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
+                        marginTop: '1rem',
+                        fontSize: { xs: '10px' },
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
                       }}
                     >
                       <div>
-                        <span style={{ fontWeight: "bold", fontSize: "17px" }}>
-                          {t("Quantity")}:
-                        </span>{" "}
-                        <span style={{ fontSize: "18px" }}>
+                        <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                          {t('Quantity')}:
+                        </span>{' '}
+                        <span style={{ fontSize: '18px' }}>
                           {product?.quantity}
                         </span>
                       </div>
-                      {order?.state?.toLowerCase() === "pending" &&
+                      {order?.state?.toLowerCase() === 'delivered' &&
                       doNothaveReview(product?.product?._id) ? (
                         showAddReviewToProductId === product?.product?._id ? (
                           <button
@@ -276,7 +276,7 @@ function OrderComponent({ order, reviews, setReviews }) {
                             className=" buttonForReview bg-red-500 hover:bg-red-600 "
                             onClick={() => setshowAddReviewToProductId(null)}
                           >
-                            {t("cancel")}
+                            {t('cancel')}
                           </button>
                         ) : (
                           <button
@@ -286,7 +286,7 @@ function OrderComponent({ order, reviews, setReviews }) {
                               setshowAddReviewToProductId(product?.product?._id)
                             }
                           >
-                            {t("Add Review")}
+                            {t('Add Review')}
                           </button>
                         )
                       ) : null}
@@ -311,17 +311,17 @@ function OrderComponent({ order, reviews, setReviews }) {
               item
               xs={12}
               sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
               <Typography variant="body1" xs={6}>
-                <span style={{ fontWeight: "bold" }}>{t("State")}: </span>{" "}
+                <span style={{ fontWeight: 'bold' }}>{t('State')}: </span>{' '}
                 {updatedOrder?.state}
               </Typography>
               <Typography variant="body1" xs={6}>
-                {updatedOrder.state !== "CANCELED" &&
+                {updatedOrder.state !== 'CANCELED' &&
                 order?.cancelOrderExpiresAt?.substring(0, 10) >=
                   getTodayDate() ? ( //to check if can cancel order
                   <Button
@@ -331,15 +331,15 @@ function OrderComponent({ order, reviews, setReviews }) {
                     }}
                     variant="contained"
                     sx={{
-                      backgroundColor: "#009688",
-                      color: "white",
-                      borderRadius: "5px",
-                      ":hover": {
-                        backgroundColor: "#009688",
+                      backgroundColor: '#009688',
+                      color: 'white',
+                      borderRadius: '5px',
+                      ':hover': {
+                        backgroundColor: '#009688',
                       },
                     }}
                   >
-                    {t("Cancel Order")}
+                    {t('Cancel Order')}
                   </Button>
                 ) : null}
               </Typography>
@@ -347,9 +347,9 @@ function OrderComponent({ order, reviews, setReviews }) {
             <Grid
               xs={12}
               item
-              sx={{ display: "flex", justifyContent: "flex-end", color: "red" }}
+              sx={{ display: 'flex', justifyContent: 'flex-end', color: 'red' }}
             >
-              {" "}
+              {' '}
               <Typography xs={12}>{deleteMessage}</Typography>
             </Grid>
           </Grid>

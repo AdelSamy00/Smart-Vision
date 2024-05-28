@@ -232,7 +232,7 @@ export default function Checkout({ socket, setSocket }) {
       setOrderNumber(res.data.order.orderNumber);
       setActiveStep(activeStep + 1);
     } catch (error) {
-      console.error("Error placing order:", error.response.data.message);
+      console.error("Error placing order:", error);
     }
   };
 
