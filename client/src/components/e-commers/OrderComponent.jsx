@@ -1,16 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Grid, Button, Typography } from '@mui/material';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import getTodayDate from '../../utils/dates';
 import AddReview from './AddReview';
 import Reviews from './Reviews';
 import { apiRequest } from '../../utils';
 import { useTranslation } from 'react-i18next'; // Import the useTranslation hook
-import i18n from '../../../Language/translate';
 function OrderComponent({ order, reviews, setReviews }) {
+  const language = JSON.parse(window?.localStorage.getItem('language'));
   const { t } = useTranslation();
-  //console.log(order);
+  console.log(order);
   const [showOrder, setShowOrder] = useState(false);
   const [updatedOrder, setUpdatedOrder] = useState(order);
   const [deleteMessage, setDeletemessage] = useState(null);
@@ -222,7 +221,10 @@ function OrderComponent({ order, reviews, setReviews }) {
                     >
                       <Grid item xs={12} md={8} variant="body1">
                         <span style={{ color: '' }}>
-                          {product?.product?.name}
+                          {console.log(product?.product)}
+                          {language === 'en'
+                            ? product?.product?.name
+                            : product?.product?.ARName}
                         </span>
                       </Grid>
                       <Grid
@@ -249,7 +251,9 @@ function OrderComponent({ order, reviews, setReviews }) {
                       <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                         {t('Description')}:
                       </span>{' '}
-                      {product?.product?.description}
+                      {language === 'en'
+                        ? product?.product?.description
+                        : product?.product?.ARDescription}
                     </Typography>
                     <div
                       style={{
@@ -320,10 +324,10 @@ function OrderComponent({ order, reviews, setReviews }) {
             >
               <Typography variant="body1" xs={6}>
                 <span style={{ fontWeight: 'bold' }}>{t('State')}: </span>{' '}
-                {updatedOrder?.state}
+                {t(updatedOrder?.state?.toLowerCase())}
               </Typography>
               <Typography variant="body1" xs={6}>
-                {updatedOrder.state !== 'CANCELED' &&
+                {updatedOrder.state === 'PENDING' &&
                 order?.cancelOrderExpiresAt?.substring(0, 10) >=
                   getTodayDate() ? ( //to check if can cancel order
                   <Button

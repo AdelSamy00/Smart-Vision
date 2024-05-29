@@ -35,28 +35,28 @@ function ServiceHistory({ orderServiceHistory, cancelService }) {
         <Grid
           container
           className="order-container"
-          sx={{ marginBottom: "2rem" }}
+          sx={{ marginBottom: '2rem' }}
         >
           <Grid
             item
             xs={10}
             sm={10}
-            md={7}           
+            md={7}
             sx={{
-              margin: "auto",
-              border: "2px solid #ddd",
-              borderRadius: "10px",
+              margin: 'auto',
+              border: '2px solid #ddd',
+              borderRadius: '10px',
             }}
           >
             <Grid
               container
               sx={{
-                borderBottom: "2px solid #ddd",
-                borderStartEndRadius: "10px",
-                borderStartStartRadius: "10px",
-                padding: "10px 40px",
-                backgroundColor: "#f2f2f2",
-                alignItems: "center",
+                borderBottom: '2px solid #ddd',
+                borderStartEndRadius: '10px',
+                borderStartStartRadius: '10px',
+                padding: '10px 40px',
+                backgroundColor: '#f2f2f2',
+                alignItems: 'center',
               }}
             >
               <Grid
@@ -65,18 +65,18 @@ function ServiceHistory({ orderServiceHistory, cancelService }) {
                 // md={4}
                 // lg={3}
                 sx={{
-                  textAlign: { xs: "start" },
-                  padding: "10px 0px",
+                  textAlign: { xs: 'start' },
+                  padding: '10px 0px',
                 }}
               >
                 <Typography
                   variant="body1"
                   sx={{
                     // fontWeight: "bold",
-                    fontSize: { xs: "16px", md: "20px" },
+                    fontSize: { xs: '16px', md: '20px' },
                   }}
                 >
-                  {t("Service History")}
+                  {t('Service History')}
                 </Typography>
               </Grid>
               <Grid
@@ -85,22 +85,22 @@ function ServiceHistory({ orderServiceHistory, cancelService }) {
                 // md={4}
                 // lg={3}
                 sx={{
-                  display: "flex",
-                  justifyContent: { xs: "flex-end" },
+                  display: 'flex',
+                  justifyContent: { xs: 'flex-end' },
                 }}
               >
                 <Typography
                   variant="body1"
                   sx={{
-                    marginRight: "1rem",
-                    fontSize: { xs: "16px", md: "20px" },
+                    marginRight: '1rem',
+                    fontSize: { xs: '16px', md: '20px' },
                   }}
                 >
-                  {t("Total Orders")}:{" "}
+                  {t('Total Orders')}:{' '}
                 </Typography>
                 <Typography
                   variant="body2"
-                  sx={{ fontSize: { xs: "16px", md: "19px" } }}
+                  sx={{ fontSize: { xs: '16px', md: '19px' } }}
                 >
                   {orderServiceHistory.length}
                 </Typography>
@@ -109,8 +109,8 @@ function ServiceHistory({ orderServiceHistory, cancelService }) {
             <Grid
               container
               sx={{
-                borderTop: "none",
-                padding: "20px",
+                borderTop: 'none',
+                padding: '20px',
               }}
             >
               {orderServiceHistory
@@ -121,10 +121,10 @@ function ServiceHistory({ orderServiceHistory, cancelService }) {
                     item
                     xs={12}
                     sx={{
-                      border: "2px solid #ddd",
-                      borderRadius: "5px",
-                      marginBottom: "20px",
-                      padding: "20px",
+                      border: '2px solid #ddd',
+                      borderRadius: '5px',
+                      marginBottom: '20px',
+                      padding: '20px',
                     }}
                   >
                     <Grid container spacing={4}>
@@ -132,11 +132,11 @@ function ServiceHistory({ orderServiceHistory, cancelService }) {
                         {historyEntry?.images?.length === 0 ? (
                           <p
                             style={{
-                              height: "150px",
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              border: "1px solid",
+                              height: '150px',
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              border: '1px solid',
                             }}
                           >
                             No images uploaded
@@ -145,7 +145,7 @@ function ServiceHistory({ orderServiceHistory, cancelService }) {
                           <img
                             src={historyEntry.images[0]}
                             alt={`Image 1`}
-                            style={{ width: "100%", height: "150px" }}
+                            style={{ width: '100%', height: '150px' }}
                           />
                         ) : (
                           <Slider {...settings}>
@@ -154,7 +154,7 @@ function ServiceHistory({ orderServiceHistory, cancelService }) {
                                 <img
                                   src={image}
                                   alt={`Image ${index + 1}`}
-                                  style={{ width: "100%", height: "150px" }}
+                                  style={{ width: '100%', height: '150px' }}
                                 />
                               </div>
                             ))}
@@ -164,44 +164,46 @@ function ServiceHistory({ orderServiceHistory, cancelService }) {
                       <Grid item xs={12} md={7} sm={7}>
                         <Typography
                           variant="body2"
-                          style={{ marginTop: "1rem", fontSize: "20px" }}
+                          style={{ marginTop: '1rem', fontSize: '20px' }}
                         >
-                          <span style={{ fontWeight: "bold" }}>
-                            {t("Service Name")} :
-                          </span>{" "}
+                          <span style={{ fontWeight: 'bold' }}>
+                            {t('Service Name')} :
+                          </span>{' '}
                           {t(historyEntry?.service)}
                         </Typography>
                         <Typography
                           variant="body2"
-                          style={{ marginTop: "1rem", fontSize: "20px" }}
+                          style={{ marginTop: '1rem', fontSize: '20px' }}
                         >
-                          <span style={{ fontWeight: "bold" }}>
-                            {t("Date Placed")}:
-                          </span>{" "}
+                          <span style={{ fontWeight: 'bold' }}>
+                            {t('Date Placed')}:
+                          </span>{' '}
                           {historyEntry?.createdAt
                             .substring(0, 10)
-                            .split("-")
+                            .split('-')
                             .reverse()
-                            .join("-")}
+                            .join('-')}
                         </Typography>
                         <Typography
                           variant="body2"
-                          style={{ marginTop: "1rem", fontSize: "20px" }}
+                          style={{ marginTop: '1rem', fontSize: '20px' }}
                         >
-                          <span style={{ fontWeight: "bold" }}>
-                            {t("Description")}:
-                          </span>{" "}
-                          {i18n.language === "ar" ? historyEntry?.ARDescription : historyEntry?.description}
+                          <span style={{ fontWeight: 'bold' }}>
+                            {t('Description')}:
+                          </span>{' '}
+                          {i18n.language === 'ar'
+                            ? historyEntry?.ARDescription
+                            : historyEntry?.description}
                         </Typography>
                       </Grid>
                       <Grid
                         item
                         xs={12}
                         sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          textAlign: "center",
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          textAlign: 'center',
                           // backgroundColor:"red",
                           // paddingTop:"0"
                         }}
@@ -209,14 +211,14 @@ function ServiceHistory({ orderServiceHistory, cancelService }) {
                         <Typography
                           variant="body2"
                           // xs={6}
-                          style={{ fontSize: "16px", paddingTop: "0" }}
+                          style={{ fontSize: '16px', paddingTop: '0' }}
                         >
-                          <span style={{ color: "#222", fontWeight: "bold" }}>
-                            {t("State")}:
-                          </span>{" "}
-                          {historyEntry.state}
+                          <span style={{ color: '#222', fontWeight: 'bold' }}>
+                            {t('State')}:
+                          </span>{' '}
+                          {t(historyEntry?.state?.toLowerCase())}
                         </Typography>
-                        {historyEntry.state !== "CANCELED" &&
+                        {historyEntry.state === 'PENDING' &&
                           AddDaysToDate(historyEntry?.createdAt, 3) >=
                             getTodayDate() && (
                             <Button
@@ -225,16 +227,16 @@ function ServiceHistory({ orderServiceHistory, cancelService }) {
                               color="error"
                               xs={4}
                               sx={{
-                                backgroundColor: "#009688",
-                                color: "white",
-                                borderRadius: "5px",
+                                backgroundColor: '#009688',
+                                color: 'white',
+                                borderRadius: '5px',
                                 // paddingTop:"0",
-                                ":hover": {
-                                  backgroundColor: "#008688",
+                                ':hover': {
+                                  backgroundColor: '#008688',
                                 },
                               }}
                             >
-                              {t("cancel")}
+                              {t('cancel')}
                             </Button>
                           )}
                       </Grid>
@@ -246,13 +248,13 @@ function ServiceHistory({ orderServiceHistory, cancelService }) {
                   <Typography
                     variant="body2"
                     style={{
-                      cursor: "pointer",
-                      fontSize: "19px",
-                      textDecoration: "underline",
+                      cursor: 'pointer',
+                      fontSize: '19px',
+                      textDecoration: 'underline',
                     }}
                     onClick={handleShowMore}
                   >
-                    {t("Show All")}
+                    {t('Show All')}
                   </Typography>
                 </Grid>
               )}
@@ -264,17 +266,17 @@ function ServiceHistory({ orderServiceHistory, cancelService }) {
       ) : (
         <p
           style={{
-            textAlign: "center",
-            fontWeight: "bold",
-            fontSize: "20px",
-            width: "65%",
-            border: "2px solid",
-            margin: "auto",
-            padding: "20px",
-            marginBottom: "5rem",
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: '20px',
+            width: '65%',
+            border: '2px solid',
+            margin: 'auto',
+            padding: '20px',
+            marginBottom: '5rem',
           }}
         >
-          {t("Your service history is empty")}.
+          {t('Your service history is empty')}.
         </p>
       )}
     </>
