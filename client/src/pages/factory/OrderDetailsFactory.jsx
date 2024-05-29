@@ -5,34 +5,44 @@ import Loading from '../../components/shared/Loading';
 import './StyleSheets/OrderDetailsFactory.css';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { apiRequest } from '../../utils';
+import { useSelector } from 'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
 
 function OrderDetailsFactory() {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
+  const { employee } = useSelector((state) => state?.employee);
   const [order, setorder] = useState();
   const [orderNumber, setorderNumber] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const { orderId } = useParams();
 
   async function getCustomizedOrderDetail() {
-    await axios
-      .get(`/employees/services/${orderId}`)
-      .then((res) => {
-        setorder(res?.data?.service[0]);
-        const First8IdDigets = res?.data?.service[0]?._id?.substring(0, 8); //to get first 8 diget in _Id
-        setorderNumber(First8IdDigets);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const response = await apiRequest({
+      method: 'GET',
+      url: `/employees/operator/services/${orderId}`,
+      token: employee?.token,
+    });
+    console.log(response);
+    if (response?.data?.success) {
+      setorder(response?.data?.service[0]);
+      const First8IdDigets = response?.data?.service[0]?._id?.substring(0, 8); //to get first 8 diget in _Id
+      setorderNumber(First8IdDigets);
+      setIsLoading(false);
+    } else if (response) {
+      toast.dismiss();
+      toast.error('Faild to get customization orders');
+      setIsLoading(false);
+    }
   }
 
   useEffect(() => {
     getCustomizedOrderDetail();
   }, []);
-  
+
   return (
     <>
+      <Toaster />
       {!isLoading ? (
         <main className="OrderDetailsFactoryMain">
           <h1>

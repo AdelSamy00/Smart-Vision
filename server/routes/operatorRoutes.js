@@ -9,6 +9,7 @@ import {
 } from '../controllers/OperatorController.js';
 import operatorAuth from '../middlewares/operatorMiddleware.js';
 import { getServiceById } from '../controllers/EmployeeControllers.js';
+import getServicePermission from '../middlewares/getServiceMiddleware.js';
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.put('/orders', operatorAuth, updateOrderStatus);
 router.put('/orders/:orderId', operatorAuth, sentProductOrderToInventory);
 
 router.get('/services', operatorAuth, getAllServices);
-router.get('/services/:serviceId', operatorAuth, getServiceById);
+router.get('/services/:serviceId', getServicePermission, getServiceById);
 router.put('/services', operatorAuth, updateServiceOrderStatus); // to get services order to operator
 
 export default router;
