@@ -13,7 +13,7 @@ const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 import { useTranslation } from 'react-i18next';
 import i18n from '../../../Language/translate';
 import axios from 'axios';
-
+import { useEffect } from 'react';
 function BookingServiceForm({ socket, setSocket }) {
   const { t } = useTranslation();
   const { state } = useLocation();
@@ -32,6 +32,14 @@ function BookingServiceForm({ socket, setSocket }) {
     measuring: false,
   });
 
+  useEffect(() => {
+    if (service?.title === "Measuring Service") {
+      setFormData((prevData) => ({
+        ...prevData,
+        measuring: true,
+      }));
+    }
+  }, [service]);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -45,6 +53,9 @@ function BookingServiceForm({ socket, setSocket }) {
       measuring: e.target.checked,
     }));
   };
+
+  const isMeasuringService = service?.title === 'Measuring Service';
+  const showCheckbox = !['Delivery services', 'Packing Service'].includes(service?.title);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -245,23 +256,26 @@ function BookingServiceForm({ socket, setSocket }) {
                     </div>
                   </div>
                 </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  style={{
-                    marginTop: '20px',
-                    marginLeft: '10px',
-                    fontSize: '20px',
-                  }}
-                >
-                  {t('Need Measuring ?')}
-                  <Checkbox
-                    checked={formData.measuring}
-                    onChange={handleCheckboxChange}
-                    inputProps={{ 'aria-label': 'controlled' }}
-                    style={{ color: '#3c6e71' }}
-                  />
-                </Grid>
+                {showCheckbox && (
+                  <Grid
+                    item
+                    xs={12}
+                    style={{
+                      marginTop: '20px',
+                      marginLeft: '10px',
+                      fontSize: '20px',
+                    }}
+                  >
+                    {t('Need Measuring ?')}
+                    <Checkbox
+                      checked={formData.measuring}
+                      onChange={handleCheckboxChange}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                      style={{ color: '#3c6e71' }}
+                      disabled={isMeasuringService}
+                    />
+                  </Grid>
+                )}
               </Grid>
 
               <div
