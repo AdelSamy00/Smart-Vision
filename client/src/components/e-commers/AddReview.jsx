@@ -24,7 +24,7 @@ function AddReview({ productId, setReviews }) {
         token: customer?.token,
       });
       setReviews((prevReviews) => {
-        return [...prevReviews, res.data.review];
+        return [...prevReviews, res?.data?.review];
       });
     } catch (error) {
       console.log(error);

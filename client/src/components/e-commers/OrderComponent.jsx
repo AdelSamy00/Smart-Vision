@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import { Grid, Button, Typography } from "@mui/material";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import getTodayDate from "../../utils/dates";
-import AddReview from "./AddReview";
-import Reviews from "./Reviews";
-import { apiRequest } from "../../utils";
-import { useTranslation } from "react-i18next"; // Import the useTranslation hook
-import i18n from "../../../Language/translate";
+import { useEffect, useState } from 'react';
+import { Grid, Button, Typography } from '@mui/material';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import getTodayDate from '../../utils/dates';
+import AddReview from './AddReview';
+import Reviews from './Reviews';
+import { apiRequest } from '../../utils';
+import { useTranslation } from 'react-i18next'; // Import the useTranslation hook
+import i18n from '../../../Language/translate';
 function OrderComponent({ order, reviews, setReviews }) {
   const { t } = useTranslation();
-  console.log(order);
+  //console.log(order);
   const [showOrder, setShowOrder] = useState(false);
   const [updatedOrder, setUpdatedOrder] = useState(order);
   const [deleteMessage, setDeletemessage] = useState(null);
@@ -25,8 +25,8 @@ function OrderComponent({ order, reviews, setReviews }) {
   const cancelOrder = async (orderId) => {
     try {
       const response = await apiRequest({
-        method: "DELETE",
-        url: "/customers/order",
+        method: 'DELETE',
+        url: '/customers/order',
         data: {
           id: customer._id,
           orderId: orderId,
@@ -267,7 +267,7 @@ function OrderComponent({ order, reviews, setReviews }) {
                         <span style={{ fontSize: '18px' }}>
                           {product?.quantity}
                         </span>
-                      </div>
+                      </div>{' '}
                       {order?.state?.toLowerCase() === 'delivered' &&
                       doNothaveReview(product?.product?._id) ? (
                         showAddReviewToProductId === product?.product?._id ? (
@@ -295,15 +295,17 @@ function OrderComponent({ order, reviews, setReviews }) {
                 </Grid>
                 {product?.product?.reviews &&
                   getProductReviews(product?.product?._id)}
-                {addReviewToProduct(
-                  product?.product?._id,
-                  showAddReviewToProductId
-                ) && (
-                  <AddReview
-                    productId={showAddReviewToProductId}
-                    setReviews={setReviews}
-                  />
-                )}
+                {doNothaveReview(product?.product?._id)
+                  ? addReviewToProduct(
+                      product?.product?._id,
+                      showAddReviewToProductId
+                    ) && (
+                      <AddReview
+                        productId={showAddReviewToProductId}
+                        setReviews={setReviews}
+                      />
+                    )
+                  : null}
               </Grid>
             ))}
 

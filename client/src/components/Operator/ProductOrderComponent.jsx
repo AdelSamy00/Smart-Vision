@@ -8,6 +8,7 @@ import { apiRequest } from '../../utils';
 import toast, { Toaster } from 'react-hot-toast';
 
 function Productorder1Component({ order1, onUpdatedState1, isNew }) {
+    const language = JSON.parse(window?.localStorage.getItem('language'));
   const { employee } = useSelector((state) => state?.employee);
   const [showorder1, setShoworder1] = useState(false);
   const [showButton, setShowButton] = useState(true);
@@ -290,7 +291,9 @@ function Productorder1Component({ order1, onUpdatedState1, isNew }) {
                     >
                       <Grid item xs={12} md={8} variant="body1">
                         <span style={{ textTransform: 'capitalize' }}>
-                          {product?.product?.name}
+                          {language === 'en'
+                            ? product?.product?.name
+                            : product?.product?.ARName}
                         </span>
                       </Grid>
                       <Grid
@@ -318,7 +321,9 @@ function Productorder1Component({ order1, onUpdatedState1, isNew }) {
                       <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                         {t('description')}:
                       </span>{' '}
-                      {product?.product?.description}
+                      {language === 'en'
+                        ? product?.product?.description
+                        : product?.product?.ARDescription}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -367,7 +372,7 @@ function Productorder1Component({ order1, onUpdatedState1, isNew }) {
                   variant="body1"
                   sx={{ fontSize: { xs: '16px', md: '19px', color: 'gray' } }}
                 >
-                  {updatedState}
+                  {t(updatedState.toLowerCase())}
                 </Typography>
               </Grid>
               {updatedState === 'PENDING' && showButton && (

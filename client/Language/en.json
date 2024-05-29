@@ -226,5 +226,11 @@
   "Thank you! We will get in touch with you in a few days": "Thank you! We will get in touch with you in a few days.",
   "For booking this service, you need to log in first": "For booking this service, you need to log in first.",
   "Log in": "Log in",
-  "Book Now": "Book Now"
+  "Book Now": "Book Now",
+  "pending":"pending",
+  "confirmed":"confirmed",
+  "shipped":"shipped",
+  "manfacturing":"manfacturing",
+  "canceled":"canceled",
+  "delivered":"delivered"
 }

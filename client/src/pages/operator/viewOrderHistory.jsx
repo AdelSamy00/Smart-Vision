@@ -172,7 +172,7 @@ function ProductOrderHistory() {
                     <td>
                       {dataType === 'orders' ? item.orderNumber : item.service}
                     </td>
-                    <td>{item.state}</td>
+                    <td>{t(item.state.toLowerCase())}</td>
                     <td>
                       {dataType === 'orders'
                         ? item.customerData?.firstName +

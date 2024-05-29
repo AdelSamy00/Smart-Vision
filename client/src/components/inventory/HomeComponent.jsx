@@ -129,14 +129,16 @@ function HomeComponent({ Allproducts }) {
                         variant="body2"
                         style={{ marginBottom: '5px', fontSize: '15px' }}
                       >
-                        {t('Category')}: {product.category}
+                        {t('Category')}: {t(product.category)}
                       </Typography>
                       <Typography
                         variant="body2"
                         style={{ marginBottom: '5px', fontSize: '15px' }}
                       >
                         {t('Color')}:{' '}
-                        {product?.colors ? product.colors.join(' , ') : ''}
+                        {product?.colors?.map((color) => {
+                          return <span>{t(color)} , </span>
+                        }) }
                       </Typography>
                       <Typography
                         variant="body2"
