@@ -227,10 +227,13 @@
   "For booking this service, you need to log in first": "For booking this service, you need to log in first.",
   "Log in": "Log in",
   "Book Now": "Book Now",
-  "pending":"pending",
-  "confirmed":"confirmed",
-  "shipped":"shipped",
-  "manfacturing":"manfacturing",
-  "canceled":"canceled",
-  "delivered":"delivered"
+  "pending": "pending",
+  "confirmed": "confirmed",
+  "shipped": "shipped",
+  "manfacturing": "manfacturing",
+  "canceled": "canceled",
+  "delivered": "delivered",
+  "Useful links": "Useful links",
+  "For you": "For you",
+  "Customer service": "For you"
 }
