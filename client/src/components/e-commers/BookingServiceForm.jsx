@@ -59,7 +59,7 @@ function BookingServiceForm({ socket, setSocket }) {
       console.log(ARdescription, ENdescription);
 
       const uploadedImages =
-        images.length > 1 && (await handleMultipleFilesUpload(images));
+        images.length > 0 && (await handleMultipleFilesUpload(images));
       console.log('Uploaded Image URL:', uploadedImages);
       console.log(formData);
       if (uploadedImages) {

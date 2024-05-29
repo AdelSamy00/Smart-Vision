@@ -112,7 +112,7 @@ function OffcanvasForPD({ ...props }) {
                 className="InputField"
                 type="text"
                 placeholder="Address"
-                value={t("address")}
+                value={address}
                 onChange={(e) => setAddress(e.target.value)}
               />
             </Form.Group>

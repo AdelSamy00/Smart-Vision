@@ -169,7 +169,7 @@ function ServiceHistory({ orderServiceHistory, cancelService }) {
                           <span style={{ fontWeight: "bold" }}>
                             {t("Service Name")} :
                           </span>{" "}
-                          {historyEntry?.service}
+                          {t(historyEntry?.service)}
                         </Typography>
                         <Typography
                           variant="body2"
@@ -191,7 +191,7 @@ function ServiceHistory({ orderServiceHistory, cancelService }) {
                           <span style={{ fontWeight: "bold" }}>
                             {t("Description")}:
                           </span>{" "}
-                          {historyEntry?.description}
+                          {i18n.language === "ar" ? historyEntry?.ARDescription : historyEntry?.description}
                         </Typography>
                       </Grid>
                       <Grid
