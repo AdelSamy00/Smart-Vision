@@ -124,7 +124,7 @@ function TransactionMComponent() {
         data: {
           managerId,
           materials: Matrials,
-          method,
+          method: method,
         },
         token: employee?.token,
       });

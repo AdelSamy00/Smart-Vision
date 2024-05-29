@@ -114,23 +114,29 @@ export const existMaterials = async (id) => {
   }
 };
 
-export const decreaseMaterialQuantity = async (name, quantity, next) => {
+export const checkMaterialQuantity = async (name, quantity, next) => {
   try {
     // Find the material by ID
     const material = await Materials.findOne({ name: name });
     // Check if the requested quantity to decrease is negative or exceeds the current quantity
     if (quantity <= 0 || quantity > material.quantity) {
-      next('Sorry, not enough quantity available to decrease');
-      return;
+      next(`Sorry, not enough quantity available in ${name} to decrease`);
+      return false;
+    } else {
+      return true;
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const decreaseMaterialQuantity = async (name, quantity, next) => {
+  try {
+    // Find the material by ID
+    const material = await Materials.findOne({ name: name });
     // Decrease the quantity by the specified amount
     material.quantity -= quantity;
     await material.save();
-    /* res.status(200).json({
-        success: true,
-        message: 'Material quantity decreased successfully',
-        material,
-      }); */
+    return true;
   } catch (error) {
     console.log(error);
   }
@@ -170,14 +176,26 @@ export const materialsTransaction = async (req, res, next) => {
         }
       })
     );
+    let success = true;
     if (flag) {
       if (method === 'Export') {
-        materials.map(async (material) => {
-          await decreaseMaterialQuantity(
-            material.materialName,
-            material.quantity
-          );
-        });
+        await Promise.all(
+          materials.map(async (material) => {
+            success = await checkMaterialQuantity(
+              material.materialName,
+              material.quantity,
+              next
+            );
+          })
+        );
+        if (success === true) {
+          materials.map(async (material) => {
+            await decreaseMaterialQuantity(
+              material.materialName,
+              material.quantity
+            );
+          });
+        }
       } else if (method === 'Import') {
         materials.map(async (material) => {
           await increaseMaterialQuantity(
@@ -188,16 +206,19 @@ export const materialsTransaction = async (req, res, next) => {
       }
 
       //make transaction
-      const transaction = await IventoryTransactions.create({
-        category: 'Materials',
-        inventoryManager: managerId,
-        transaction: method,
-        materials: materials,
-      });
-      res.status(200).json({
-        success: true,
-        message: 'the Transaction has been made successfully',
-      });
+
+      if (success) {
+        const transaction = await IventoryTransactions.create({
+          category: 'Materials',
+          inventoryManager: managerId,
+          transaction: method,
+          materials: materials,
+        });
+        res.status(200).json({
+          success: true,
+          message: 'the Transaction has been made successfully',
+        });
+      }
     } else {
       res.status(404).json({
         success: false,

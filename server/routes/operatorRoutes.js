@@ -1,7 +1,9 @@
 import express from 'express';
 import {
+  deleteContactUs,
   getAllOrders,
   getAllServices,
+  getContactUs,
   getOrderById,
   sentProductOrderToInventory,
   updateOrderStatus,
@@ -21,5 +23,8 @@ router.put('/orders/:orderId', operatorAuth, sentProductOrderToInventory);
 router.get('/services', operatorAuth, getAllServices);
 router.get('/services/:serviceId', getServicePermission, getServiceById);
 router.put('/services', operatorAuth, updateServiceOrderStatus); // to get services order to operator
+
+router.get('/contactUs', getContactUs);
+router.delete('/contactUs/:contactUsId', deleteContactUs);
 
 export default router;

@@ -1,4 +1,5 @@
 import AssignedDateTable from '../models/AssignedDate.js';
+import ContactUs from '../models/ContactUs.js';
 import Employees from '../models/Employee.js';
 import Orders from '../models/OrderModel.js';
 import ServicesOrders from '../models/ServiceOrder.js';
@@ -156,13 +157,17 @@ export const assignedEnginerToService = async (req, res, next) => {
           { _id: serviceId },
           { assignedEngineer: engineerId, date: date },
           { new: true }
-        ).populate([{
-          path: 'customer',
-          select: '_id username email gender phone verified address -password',
-        },{
-          path: 'assignedEngineer',
-          select: '_id username email -password',
-        },]);
+        ).populate([
+          {
+            path: 'customer',
+            select:
+              '_id username email gender phone verified address -password',
+          },
+          {
+            path: 'assignedEngineer',
+            select: '_id username email -password',
+          },
+        ]);
         await AssignedDateTable.create({
           engineer: engineerId,
           date: date,
@@ -178,13 +183,16 @@ export const assignedEnginerToService = async (req, res, next) => {
         { _id: serviceId },
         { assignedEngineer: engineerId },
         { new: true }
-      ).populate([{
-        path: 'customer',
-        select: '_id username email gender phone verified address -password',
-      },{
-        path: 'assignedEngineer',
-        select: '_id username email -password',
-      },]);
+      ).populate([
+        {
+          path: 'customer',
+          select: '_id username email gender phone verified address -password',
+        },
+        {
+          path: 'assignedEngineer',
+          select: '_id username email -password',
+        },
+      ]);
     }
     res.status(200).json({
       success: true,
@@ -287,6 +295,43 @@ export const sentProductOrderToInventory = async (req, res, next) => {
     res.status(500).json({
       success: false,
       message: 'Failed to retrieve the order',
+    });
+  }
+};
+
+export const getContactUs = async (req, res, next) => {
+  try {
+    const contactUs = await ContactUs.find({});
+    if (contactUs.length === 0) {
+      next('No engineers found');
+      return;
+    }
+    res.status(200).json({
+      success: true,
+      message: 'Get all contactUs',
+      contactUs,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get all contactUs',
+    });
+  }
+};
+
+export const deleteContactUs = async (req, res, next) => {
+  try {
+    const { contactUsId } = req.params;
+    console.log(contactUsId);
+    await ContactUs.findByIdAndDelete({ _id: contactUsId });
+    res.status(200).json({
+      success: true,
+      message: 'delete the contactUs',
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete contactUs',
     });
   }
 };
