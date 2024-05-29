@@ -7,6 +7,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { t } from 'i18next';
 
 function MaterialOrder({ matrial, setMaterialls }) {
+  const language = JSON.parse(window?.localStorage.getItem('language'));
   const [showOrder, setShowOrder] = useState(false);
   const { employee } = useSelector((state) => state.employee);
 
@@ -202,7 +203,9 @@ function MaterialOrder({ matrial, setMaterialls }) {
                           variant="body2"
                           sx={{ fontSize: { xs: '16px', md: '20px' } }}
                         >
-                          {material?.material}
+                          {language === 'en'
+                            ? material?.material
+                            : material?.ARMaterial}
                         </Typography>
                       </Grid>
                       <Grid

@@ -6,6 +6,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { t } from 'i18next';
 
 function ProductOrder({ order, setOrders }) {
+  const language = JSON.parse(window?.localStorage.getItem('language'));
   const { employee } = useSelector((state) => state.employee);
   const [showOrder, setShowOrder] = useState(false);
   const [products, setProducts] = useState([{ product: '', quantity: '' }]);
@@ -196,7 +197,9 @@ function ProductOrder({ order, setOrders }) {
                           variant="body2"
                           sx={{ fontSize: { xs: '16px', md: '20px' } }}
                         >
-                          {product?.product?.name}
+                          {language === 'en'
+                            ? product?.product?.name
+                            : product?.product?.ARName}
                         </Typography>
                       </Grid>
                       <Grid
