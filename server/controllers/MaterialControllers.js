@@ -163,6 +163,7 @@ export const materialsTransaction = async (req, res, next) => {
   try {
     let flag = true;
     const { managerId, materials, method } = req.body;
+    console.log(materials)
     if (!managerId || !materials.length || !method) {
       next('Provide Required Fields!');
       return;
@@ -170,7 +171,7 @@ export const materialsTransaction = async (req, res, next) => {
     // to make sure that products in cart elready exist
     await Promise.all(
       materials.map(async (material) => {
-        const exist = await existMaterials(material.material);
+        const exist = await existMaterials(material._id);
         if (!exist) {
           flag = false;
         }

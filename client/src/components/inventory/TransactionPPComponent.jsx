@@ -50,7 +50,9 @@ function TransactionPPComponent() {
           (product) => product.name === selectedProduct.product
         );
         return {
+          _id: product?._id,
           productName: product?.name,
+          productARName: product?.ARName,
           quantity: selectedProduct.quantity,
         };
       }
@@ -160,6 +162,7 @@ function TransactionPPComponent() {
       className="presenter-products-container"
       spacing={2}
     >
+      {console.log(products)}
       <Toaster
         toastOptions={{
           style: {

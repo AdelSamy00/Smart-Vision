@@ -12,12 +12,14 @@ const inventoryTransactionSchema = new mongoose.Schema(
     materials: [
       {
         materialName: { type: String },
+        materialARName: { type: String },
         quantity: { type: Number },
       },
     ],
     products: [
       {
         productName: { type: String },
+        productARName: { type: String },
         quantity: { type: Number },
       },
     ],

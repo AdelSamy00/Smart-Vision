@@ -60,7 +60,9 @@ function TransactionMComponent() {
           (material) => material.name === selectedMaterial.material
         );
         return {
+          _id: material?._id,
           materialName: material?.name,
+          materialARName: material?.ARName,
           quantity: selectedMaterial.quantity,
         };
       }

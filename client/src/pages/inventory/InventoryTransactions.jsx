@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 
 function InventoryTransactions() {
+  const language = JSON.parse(window?.localStorage.getItem('language'));
   const todayDate = getTodayDate();
   const { employee } = useSelector((state) => state?.employee);
   const [allTransactions, setallTransactions] = useState(null);
@@ -176,8 +177,12 @@ function InventoryTransactions() {
                         </td>
                         <td>
                           {element?.materialName
-                            ? element?.materialName
-                            : element?.productName}
+                            ? language === 'en'
+                              ? element?.materialName
+                              : element?.materialARName
+                            : language === 'en'
+                            ? element?.productName
+                            : element?.productARName}
                         </td>
                         <td>{isExport ? element?.quantity : ''}</td>
                         <td>{!isExport ? element?.quantity : ''}</td>

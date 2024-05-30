@@ -307,7 +307,7 @@ export const productsTransaction = async (req, res, next) => {
     // to make sure that products in cart elready exist
     await Promise.all(
       products.map(async (prod) => {
-        const exist = await existProduct(prod.product);
+        const exist = await existProduct(prod._id);
         if (!exist) {
           flag = false;
         }
