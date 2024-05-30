@@ -28,14 +28,9 @@ import toast, { Toaster } from 'react-hot-toast';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-function CustomizedOrderDetails({
-  order,
-  employeeType,
-  socket,
-  setSocket,
-  from,
-}) {
-  //console.log(order);
+function CustomizedOrderDetails({ order, employeeType, socket, setSocket }) {
+  console.log(order);
+  const language = JSON.parse(window?.localStorage.getItem('language'));
   const { t } = useTranslation();
   let current = new Date();
   const images = order?.images;
@@ -75,6 +70,21 @@ function CustomizedOrderDetails({
       getAllEngineers();
     }
   }, []);
+
+  function showAssignEngineer() {
+    const service = order?.service;
+    if (
+      employeeType === 'OPERATOR' &&
+      !engineer &&
+      !isAssigned &&
+      (service === 'Customization Service' ||
+        service === 'Measuring Service' ||
+        service === 'Desgins services')
+    ) {
+      return true;
+    }
+    return false;
+  }
 
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
@@ -171,13 +181,13 @@ function CustomizedOrderDetails({
           <Accordion.Body>
             <p className="mb-6">
               <span className="block">{t('description')}: </span>
-              {order?.description}
+              {language === 'en' ? order?.description : order?.ARDescription}
             </p>
             <p>
               <span>{t('date')}:</span> {orderDate}
             </p>
             <p>
-              <span>{t('state')}:</span> {order?.state.toLowerCase()}.
+              <span>{t('state')}:</span> {t(order?.state.toLowerCase())}.
             </p>
           </Accordion.Body>
         </Accordion.Item>
@@ -232,7 +242,7 @@ function CustomizedOrderDetails({
                   {t('noPhotoAttacked')}
                 </div>
               )}
-              {employeeType === 'FACTORY' ? (
+              {employeeType === 'FACTORY' && pdf ? (
                 <div className="customizedOrderDetailsPdfButton flex ">
                   <Link to={pdf}>{t('downLoad')} PDF</Link>
                 </div>
@@ -256,7 +266,11 @@ function CustomizedOrderDetails({
                   {order?.requiredMaterials?.map((order, index) => (
                     <tr key={index}>
                       <td>{index + 1}</td>
-                      <td>{order?.material}</td>
+                      <td>
+                        {language === 'en'
+                          ? order?.material
+                          : order?.ARMaterial}
+                      </td>
                       <td>{order?.quantity}</td>
                     </tr>
                   ))}
@@ -277,7 +291,7 @@ function CustomizedOrderDetails({
                   <span>{t('email')}: </span> {customer?.email}
                 </p>
                 <p>
-                  <span>{t('phone')}:</span> 0{customer?.phone} 
+                  <span>{t('phone')}:</span> 0{customer?.phone}
                 </p>
                 <p>
                   <span>{t('address')}:</span> {order?.address}
@@ -307,10 +321,7 @@ function CustomizedOrderDetails({
             </Accordion.Body>
           </Accordion.Item>
         ) : null}
-        {from !== 'Servishistory' &&
-        employeeType === 'OPERATOR' &&
-        !engineer &&
-        !isAssigned ? (
+        {showAssignEngineer() ? (
           <Accordion.Item eventKey="5">
             <Accordion.Header>{t('assignEngineer')}</Accordion.Header>
             <Accordion.Body>

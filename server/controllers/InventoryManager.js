@@ -44,9 +44,9 @@ export const getAllTransactions = async (req, res, next) => {
   }
 };
 
-export const getConfirmedOrders = async (req, res, next) => {
+export const getOrders = async (req, res, next) => {
   try {
-    const confirmedOrders = await Orders.find({ state: 'Confirmed' }).populate([
+    const confirmedOrders = await Orders.find({ state: 'PENDING' }).populate([
       {
         path: 'customer',
         select: '_id username email -password',

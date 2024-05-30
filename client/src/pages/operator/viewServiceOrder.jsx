@@ -49,7 +49,10 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
         });
         if (response?.data?.success) {
           const sortedOrders = response?.data?.services
-            .filter((order) => !(order.state === 'Delivered'))
+            .filter(
+              (order) =>
+                !(order.state === 'Delivered' || order.state === 'Done')
+            )
             .sort((a, b) => {
               return new Date(b.createdAt) - new Date(a.createdAt);
             });
@@ -287,6 +290,9 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
                         navigate(`/operator/servise-details/${order?._id}`);
                       }}
                     >
+                      <div className="">
+                        <p>{order?.customer?.username}</p>
+                      </div>
                       {`${t('date')}:  ${order.createdAt
                         .substring(0, 10)
                         .split('-')

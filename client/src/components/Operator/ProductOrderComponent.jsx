@@ -8,7 +8,7 @@ import { apiRequest } from '../../utils';
 import toast, { Toaster } from 'react-hot-toast';
 
 function Productorder1Component({ order1, onUpdatedState1, isNew }) {
-    const language = JSON.parse(window?.localStorage.getItem('language'));
+  const language = JSON.parse(window?.localStorage.getItem('language'));
   const { employee } = useSelector((state) => state?.employee);
   const [showorder1, setShoworder1] = useState(false);
   const [showButton, setShowButton] = useState(true);
@@ -375,35 +375,6 @@ function Productorder1Component({ order1, onUpdatedState1, isNew }) {
                   {t(updatedState.toLowerCase())}
                 </Typography>
               </Grid>
-              {updatedState === 'PENDING' && showButton && (
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  sx={{
-                    textAlign: { xs: 'start', md: 'end' },
-                    // justifyContent: "flex-start",
-                    height: '100%',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    onClick={sendRequestToInventory}
-                    sx={{
-                      backgroundColor: '#009688',
-                      color: 'white',
-                      textTransform: 'capitalize',
-                      border1Radius: '5px',
-                      ':hover': {
-                        backgroundColor: '#009688',
-                      },
-                    }}
-                  >
-                    {t('sendRequestToInventory')}
-                  </Button>
-                </Grid>
-              )}
               {updatedState === 'Shipped' && (
                 <Grid
                   item
