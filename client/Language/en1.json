@@ -128,5 +128,9 @@
     "dimensions": "Dimensions",
     "width": "Width",
     "height": "Height",
-    "weight": "weight"
+    "weight": "weight",
+    "Forgot Password?": "Forgot Your Password?",
+    "Enter your email address to receive a password reset link.":"Enter your email address to receive a password reset link.",
+    "Reset password":"Reset password",
+    "Back to Login":"Back to Login"
 }

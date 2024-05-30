@@ -85,6 +85,7 @@ import { useEffect, useState } from 'react';
 import ProductOrderHistory from './pages/operator/viewOrderHistory.jsx';
 import ProductOrderDetails from './pages/operator/ProductOrderDetails.jsx';
 import i18n from '../Language/translate.jsx';
+import ForgotPassword from './pages/shared/ForgetPassword.jsx';
 
 function App() {
   const location = useLocation();
@@ -135,6 +136,7 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/login/employee" element={<EmployeLogin />} />
         <Route path="/home" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />

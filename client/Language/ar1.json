@@ -127,5 +127,9 @@
     "dimensions": "الأبعاد",
     "width": "العرض",
     "height": "الارتفاع",
-    "weight": "الوزن"
+    "weight": "الوزن",
+    "Forgot Password?":"هل نسيت كلمة المرور؟",
+    "Enter your email address to receive a password reset link.":"ادخل عنوان البريد الالكترونى الخاص بك لاستلام رابط أعادة تعيين كلمة المرور.",
+    "Reset Password":" أعادة تعيين كلمة المرور",
+    "Back to Login":"العودة الى صفحة تسجيل الدخول"
 }
