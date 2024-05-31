@@ -108,7 +108,7 @@
     "new": "جديد",
     "Delivery": "توصيل",
     "Packing": "تغليف",
-    "Customization": "تخصيص",
+    "Customization": "تفصيل",
     "Assembly": "تجميع",
     "Measuring": "قياس",
     "history": "سجل",
@@ -131,5 +131,10 @@
     "Forgot Password?":"هل نسيت كلمة المرور؟",
     "Enter your email address to receive a password reset link.":"ادخل عنوان البريد الالكترونى الخاص بك لاستلام رابط أعادة تعيين كلمة المرور.",
     "Reset Password":" أعادة تعيين كلمة المرور",
-    "Back to Login":"العودة الى صفحة تسجيل الدخول"
+    "Back to Login":"العودة الى صفحة تسجيل الدخول",
+    "Unavailable Products":"المنتجات غير المتوفرة",
+    "Unavailable Time":"الوقت غير المتاح",
+    "Hello there!":"!مرحبًا بك",
+    "Ready to unlock a world of convenience and savings?":"هل أنت مستعد لفتح عالم من الراحة والتوفير؟",
+    "Log in to your account to browse, shop, and enjoy personalized perks tailored just for you.":".سجّل الدخول إلى حسابك للتصفح والتسوق والاستمتاع بامتيازات مخصصة لك فقط"
 }

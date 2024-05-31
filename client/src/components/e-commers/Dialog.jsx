@@ -13,7 +13,7 @@ export default function AlertDialog({ open, onClose, products, msg }) {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
-        {products ? "Unavailable Products" : "Unavailable Time"}
+        {products ? t("Unavailable Products") : t("Unavailable Time")}
       </DialogTitle>
       <DialogContent>
         <Typography style={{ textTransform: "capitalize" }}>{msg}</Typography>

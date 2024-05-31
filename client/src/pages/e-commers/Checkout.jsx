@@ -166,7 +166,7 @@ export default function Checkout({ socket, setSocket }) {
       // Fetch all products from the inventory
       const response = await axios.get("/products/");
       const allProducts = response.data.products;
-
+      console.log(allProducts);
       // Check quantity availability for each product in the cart
       const unavailableProducts = cart.filter((cartProduct) => {
         const inventoryProduct = allProducts.find(
@@ -176,6 +176,12 @@ export default function Checkout({ socket, setSocket }) {
         return (
           !inventoryProduct || cartProduct.quantity > inventoryProduct.quantity
         );
+      })
+      .map((cartProduct) => {
+        const inventoryProduct = allProducts.find(
+          (product) => product._id === cartProduct._id
+        );
+        return inventoryProduct ? { ...inventoryProduct, cartQuantity: cartProduct.quantity } : cartProduct;
       });
       console.log(unavailableProducts);
       // Fetch the actual product details for unavailable products
@@ -288,12 +294,9 @@ export default function Checkout({ socket, setSocket }) {
               } else {
                 return `${
                   // i18n.language === "en"
-                     `${t("The quantity you entered for")} ${product.name} ${t(
-                        "is not available right now"
-                      )}`
-                    // : `${t("is not available right now")} تربيزة ${t(
-                    //     "The quantity you entered for"
-                    //   )}`
+                  `${t("The quantity you entered for")} ${
+                    i18n.language === "ar" ? product?.ARName : product?.name
+                  } ${t("is not available right now")}`
                 }.`;
               }
             })

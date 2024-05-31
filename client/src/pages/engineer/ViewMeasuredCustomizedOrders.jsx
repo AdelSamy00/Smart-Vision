@@ -65,8 +65,8 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
   const handleButtonClick = async (order) => {
     try {
       const response = await apiRequest({
-        method: 'POST',
-        url: 'employees/engineer/sendService',
+        method: "POST",
+        url: "employees/engineer/sendService",
         data: {
           serviceId: order._id,
           engineerId: employee._id,
@@ -75,13 +75,15 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
       });
       if (response?.data?.success) {
         // Remove the order from the list
-        setRequests((prevRequests) => prevRequests.filter(req => req._id !== order._id));
-        toast.success(t('Request successful!'));
+        setRequests((prevRequests) =>
+          prevRequests.filter((req) => req._id !== order._id)
+        );
+        toast.success(t("Request successful!"));
       } else {
         // toast.error(response?.data?.message || t('Request failed!'));
       }
     } catch (error) {
-      console.error('Error making API request:', error);
+      console.error("Error making API request:", error);
     }
   };
   return (
@@ -168,25 +170,45 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                         </Typography>
                         <div className="button-container">
                           {" "}
-                          <Link
-                            to={`/engineer/send-order/${request.serviceOrder?._id}`}
-                            className="link-style"
-                          >
-                            <Button
-                              variant="contained"
-                              color="primary"
-                              className="add-to-store-button"
-                              style={{
-                                background:
-                                  "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
-                                textTransform: "capitalize",
-                                height: 38,
-                                padding: "0px 15px",
-                              }}
+                          {request?.service === "Customization Service" ? (
+                            <Link
+                              to={`/engineer/send-order/${request?._id}`}
+                              className="link-style"
                             >
-                              {t("sendOrderToFactory")}
-                            </Button>
-                          </Link>
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                className="add-to-store-button"
+                                style={{
+                                  background:
+                                    "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+                                  textTransform: "capitalize",
+                                  height: 38,
+                                  padding: "0px 15px",
+                                }}
+                              >
+                                {t("sendOrderToFactory")}
+                              </Button>
+                            </Link>
+                          ) : (
+                            <div>
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                // className="add-to-store-button"
+                                style={{
+                                  background:
+                                    "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+                                  textTransform: "capitalize",
+                                  height: 38,
+                                  padding: "0px 15px",
+                                }}
+                                onClick={() => handleButtonClick(request)}
+                              >
+                                {t("Done")}
+                              </Button>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </Grid>

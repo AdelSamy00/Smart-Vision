@@ -9,7 +9,7 @@ import {
   DialogTitle,
   Slide,
 } from '@mui/material';
-
+import { t } from "i18next";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -25,14 +25,13 @@ function LoginMessage({ showLoginMessage, setshowLoginMessage }) {
       aria-describedby="alert-dialog-slide-description"
     >
       <DialogTitle sx={{ fontSize: '25px', fontWeight: 'bold' }}>
-        Hello there!
+        {t("Hello there!")}
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-slide-description">
-          Ready to unlock a world of convenience and savings?
+          {t("Ready to unlock a world of convenience and savings?")}
           <br />
-          Log in to your account to browse, shop, and enjoy personalized
-          perks tailored just for you.
+          {t("Log in to your account to browse, shop, and enjoy personalized perks tailored just for you.")}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -40,9 +39,9 @@ function LoginMessage({ showLoginMessage, setshowLoginMessage }) {
           onClick={() => setshowLoginMessage(false)}
           sx={{ marginRight: 'auto' }}
         >
-          Cancel
+          {t("Cancel")}
         </Button>
-        <Button onClick={() => navigate('/login')}>Login</Button>
+        <Button onClick={() => navigate('/login')}>{t("Login")}</Button>
       </DialogActions>
     </Dialog>
   );

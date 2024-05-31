@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Grid, Typography, Button } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import './StyleSheets/PresenterProductsView.css'; // Import custom CSS for advanced styling
-import Loading from '../../components/shared/Loading';
-import { apiRequest } from '../../utils';
-import { t } from 'i18next';
+import React, { useState, useEffect } from "react";
+import { Grid, Typography, Button } from "@mui/material";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import "./StyleSheets/PresenterProductsView.css"; // Import custom CSS for advanced styling
+import Loading from "../../components/shared/Loading";
+import { apiRequest } from "../../utils";
+import { t } from "i18next";
 
 function PresenterProductsView() {
-  const language = JSON.parse(window?.localStorage.getItem('language'));
+  const language = JSON.parse(window?.localStorage.getItem("language"));
   const { employee } = useSelector((state) => state?.employee);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,15 +18,15 @@ function PresenterProductsView() {
     const fetchProducts = async () => {
       try {
         const response = await apiRequest({
-          url: '/employees/presenter/not-shown/',
-          method: 'GET',
+          url: "/employees/presenter/not-shown/",
+          method: "GET",
           token: employee?.token,
         });
-        console.log('API response:', response.data.products);
+        console.log("API response:", response.data.products);
         setProducts(response.data.products);
         setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching products:', error.response.data.message);
+        console.error("Error fetching products:", error.response.data.message);
       }
     };
 
@@ -43,7 +43,7 @@ function PresenterProductsView() {
       alignItems="center"
       className="presenter-products-container"
     >
-      {' '}
+      {" "}
       {/* Apply advanced styling class */}
       {isLoading ? (
         <Grid item>
@@ -55,9 +55,9 @@ function PresenterProductsView() {
             variant="h4"
             align="center"
             gutterBottom
-            sx={{ marginBottom: '1rem' }}
+            sx={{ marginBottom: "1rem" }}
           >
-            {t('productsInInventory')}
+            {t("productsInInventory")}
           </Typography>
           <Grid
             container
@@ -75,7 +75,7 @@ function PresenterProductsView() {
                     gutterBottom
                     className="presenter-product-title"
                   >
-                    {language === 'en' ? product?.name : product?.ARName}
+                    {language === "en" ? product?.name : product?.ARName}
                   </Typography>
                   <Typography
                     variant="body2"
@@ -83,21 +83,26 @@ function PresenterProductsView() {
                     gutterBottom
                     className="presenter-product-info"
                   >
-                    {t('quantity')}: {product.quantity}
+                    {t("quantity")}: {product.quantity}
                   </Typography>
                   <Typography
                     variant="body2"
                     align="center"
                     gutterBottom
                     className="presenter-product-description"
+                    style={{
+                      maxHeight: "140px",
+                      minHeight: "140px",
+                      overflowY: "auto",
+                    }}
                   >
-                    {t('description')}:{' '}
-                    {language === 'en'
+                    {t("description")}:{" "}
+                    {language === "en"
                       ? product.description
                       : product?.ARDescription}
                   </Typography>
                   <div className="button-container">
-                    {' '}
+                    {" "}
                     <Link
                       to={`/presenter/add-to-store/product/${product?._id}`}
                       className="link-style"
@@ -108,13 +113,13 @@ function PresenterProductsView() {
                         className="add-to-store-button"
                         style={{
                           background:
-                            'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-                          textTransform: 'capitalize',
+                            "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+                          textTransform: "capitalize",
                           height: 34,
-                          padding: '0px 15px',
+                          padding: "0px 15px",
                         }}
                       >
-                        {t('addToStore')}
+                        {t("addToStore")}
                       </Button>
                     </Link>
                   </div>
@@ -124,24 +129,24 @@ function PresenterProductsView() {
           </Grid>
         </Grid>
       ) : (
-        <Grid item xs={12} sm={8} sx={{ display: 'flex' }}>
+        <Grid item xs={12} sm={8} sx={{ display: "flex" }}>
           <Typography
             variant="h5"
             align="center"
             gutterBottom
             sx={{
-              padding: '20px',
-              backgroundColor: '#f0f0f0',
-              borderRadius: '5px',
-              textAlign: 'center',
-              fontWeight: 'bold',
-              fontSize: '25px',
-              width: '80vw',
-              marginTop: '5rem ',
-              marginInline: 'auto',
+              padding: "20px",
+              backgroundColor: "#f0f0f0",
+              borderRadius: "5px",
+              textAlign: "center",
+              fontWeight: "bold",
+              fontSize: "25px",
+              width: "80vw",
+              marginTop: "5rem ",
+              marginInline: "auto",
             }}
           >
-            {t('allProductsAdded')}
+            {t("allProductsAdded")}
           </Typography>
         </Grid>
       )}
