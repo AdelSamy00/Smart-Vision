@@ -59,6 +59,7 @@ const HomePresenter = () => {
   const handleCategoryChange = (category) => {
     setSelectedCategories((prevCategories) => {
       const index = prevCategories.indexOf(category);
+
       if (index === -1) {
         const updatedCategories = prevCategories.includes("All")
           ? prevCategories.filter((cat) => cat !== "All")
@@ -68,6 +69,7 @@ const HomePresenter = () => {
         return prevCategories.filter((cat) => cat !== category);
       }
     });
+    console.log(selectedCategories);
   };
 
   useEffect(() => {
@@ -96,15 +98,16 @@ const HomePresenter = () => {
   };
 
   const filterProducts = () => {
-    return products.filter((product) =>
-      (selectedCategories.length === 0 ||
-        selectedCategories.includes("All") ||
-        selectedCategories.includes(product.category)) &&
-      i18n.language === "ar"
-        ? filters.name === "" ||
-          product.ARName.toLowerCase().includes(filters.name)
-        : filters.name === "" ||
-          product.name.toLowerCase().includes(filters.name)
+    return products.filter(
+      (product) =>
+        (selectedCategories.length === 0 ||
+          selectedCategories.includes("All") ||
+          selectedCategories.includes(product.category)) &&
+        (i18n.language === "ar"
+          ? filters.name === "" ||
+            product.ARName.toLowerCase().includes(filters.name)
+          : filters.name === "" ||
+            product.name.toLowerCase().includes(filters.name))
     );
   };
 
@@ -228,13 +231,30 @@ const HomePresenter = () => {
               justifyContent: "space-evenly",
             }}
           >
-            {filterProducts().map((product, index) => (
-              <Card
-                key={index}
-                product={product}
-                handelDelete={handelDeleteProduct}
-              />
-            ))}
+            {filterProducts().length >0? (
+              filterProducts().map((product, index) => (
+                <Card
+                  key={index}
+                  product={product}
+                  handelDelete={handelDeleteProduct}
+                />
+              ))
+             ) : (
+              <p
+                style={{
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  fontSize: "25px",
+                  width: "65%",
+                  margin: "auto",
+                  padding: "20px",
+                  color: "#a8a8a8",
+                  marginTop: "3rem",
+                }}
+              >
+                {t("noResultsFound")}
+              </p>
+            )} 
           </div>
         )}
       </div>
