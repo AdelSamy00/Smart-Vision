@@ -42,6 +42,7 @@ import {
   TransactionsPage,
   InventoryTransactions,
   AllInventoryOrders,
+  AddPage
 } from './pages/inventory/index.js';
 import {
   EmployeLogin,
@@ -61,6 +62,7 @@ import {
   ViewProductOrders,
   ViewServiceOrder,
   ServiseDetailsOperator,
+  ContactUsPage
 } from './pages/operator/index.js';
 
 import {
@@ -175,6 +177,7 @@ function App() {
           <Route path="/inventory/add/product" element={<AddProductForm />} />
           <Route path="/inventory/add/matrial" element={<AddMatrialForm />} />
           <Route path="/inventory/orders" element={<AllInventoryOrders />} />
+          <Route path="/inventory/Add" element={<AddPage />} />
           <Route
             path="/inventory/update/product/:productId"
             element={<UpdateProductForm />}
@@ -265,6 +268,10 @@ function App() {
           <Route
             path="/operator/order-details/:orderId"
             element={<ProductOrderDetails />}
+          />
+         <Route
+            path="/operator/contactUs"
+            element={<ContactUsPage />}
           />
         </Route>
         {/* Private actor manager Routes */}

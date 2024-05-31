@@ -1,45 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import HomeComponent from '../../components/inventory/HomeComponent';
-import MatrialComponnent from '../../components/inventory/matrialComponnent';
+import MatrialComponnent from '../../components/inventory/MatrialComponnent';
 import Loading from '../../components/shared/Loading';
-import axios from 'axios';
 import Box from '@mui/material/Box';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import SpeedDialAction from '@mui/material/SpeedDialAction';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { apiRequest } from '../../utils';
 import toast, { Toaster } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
-
+import { useNavigate } from 'react-router-dom';
 const InventoryHome = () => {
-  // const [showOrder, setshowOrder] = useState(true);
   const { t } = useTranslation();
   const { employee } = useSelector((state) => state?.employee);
   const [dataType, setDataType] = useState('products');
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
-  const actions = [
-    {
-      icon: (
-        <Link to={'/inventory/add/matrial'}>
-          <SpeedDialIcon />
-        </Link>
-      ),
-      name: `${t('add')} ${t('materials')}`,
-    },
-    {
-      icon: (
-        <Link to={'/inventory/add/product'}>
-          <SpeedDialIcon />
-        </Link>
-      ),
-      name: `${t('add')} ${t('products')}`,
-    },
-  ];
-
+  const handleClick = () => {
+    navigate('/inventory/Add');
+  };
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -66,8 +47,6 @@ const InventoryHome = () => {
 
     fetchData();
   }, [dataType]);
-
-  //console.log(products);
   return (
     <div>
       <Toaster />
@@ -119,14 +98,8 @@ const InventoryHome = () => {
           ariaLabel="SpeedDial basic example"
           sx={{ position: 'absolute', bottom: 16, right: 16 }}
           icon={<SpeedDialIcon />}
+          onClick={handleClick}
         >
-          {actions.map((action) => (
-            <SpeedDialAction
-              key={action.name}
-              icon={action.icon}
-              tooltipTitle={action.name}
-            />
-          ))}
         </SpeedDial>
       </Box>
     </div>

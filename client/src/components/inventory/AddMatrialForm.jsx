@@ -78,10 +78,10 @@ const AddMatrialForm = () => {
           },
         }}
       />
-      <Grid container spacing={2} sx={{ marginTop: '6rem' }}>
+      <Grid container spacing={2} sx={{ marginTop: '.5rem' }}>
         <Grid item xs={12} sm={6}>
           <label className="mb-2" htmlFor="name">
-            {t('productName')} *
+            {t('MaterialName')} *
           </label>
           <TextField
             fullWidth

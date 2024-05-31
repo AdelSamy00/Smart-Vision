@@ -52,6 +52,11 @@ const OPERATOR = [
     path: '/operator/orders/history',
     title: 'History',
   },
+  {
+    path: '/operator/contactUs',
+    title: 'Customers Problems',
+  }
+  
 ];
 const INVENTORY = [
   {
@@ -70,6 +75,10 @@ const INVENTORY = [
   {
     path: '/inventory/history',
     title: 'History',
+  },
+  {
+    path: '/inventory/Add',
+    title: 'add',
   },
 ];
 const ACTOR = [

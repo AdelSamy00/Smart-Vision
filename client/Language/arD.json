@@ -56,5 +56,13 @@
   "Welcome to": "مرحبًا بك في",
   "Jump right in and explore our many products.": "انغمس واستكشف منتجاتنا المتعددة.",
   "Feel free to share some of your own and comment on others!": "لا تتردد في مشاركة بعض منتجاتك الخاصة والتعليق على منتجات الآخرين!",
-  "View Products": "عرض المنتجات"
+  "View Products": "عرض المنتجات",
+  "Customers Questions And Problems":"اسئله العملاء واستفساراتهم",
+  "Customers Problems":"مشاكل العملاء",
+  "Total Problems":"اجالى المشاكل",
+  "No images uploaded":"لا توجد صور",
+  "Customer Name":"اسم العميل",
+  "MaterialName":"اسم الماده",
+  "product":"منتج",
+  "material":"ماده"
 }

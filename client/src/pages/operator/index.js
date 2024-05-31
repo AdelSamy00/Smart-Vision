@@ -6,6 +6,7 @@ import EditCustomer from './EditCustomer'
 import ViewCustomers from "./ViewCustomers"
 import ProductOrderDetails from "./ProductOrderDetails"
 import ProductOrderHistory from "./viewOrderHistory"
+import ContactUsPage from "./viewContactUs"
 export {
     ViewProductOrders,
     ViewServiceOrder,
@@ -14,5 +15,6 @@ export {
     EditCustomer,
     ViewCustomers ,
     ProductOrderDetails,
-    ProductOrderHistory
+    ProductOrderHistory,
+    ContactUsPage
 }
