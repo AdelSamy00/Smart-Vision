@@ -190,7 +190,7 @@ function ContactUs({ contactUs }) {
             marginBottom: '5rem',
           }}
         >
-          {t('there is no problem at this moment')}.
+          {t('there is no problems at this moment')}.
         </p>
       )}
     </>

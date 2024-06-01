@@ -56,10 +56,10 @@ const History = () => {
         `/customers/${dataType}/${customer._id}`
       );
       if (dataType === "order") {
-        setOrderHistory(response.data.history);
+        setOrderHistory(response.data.history.reverse());
         setupReviews(response?.data?.history);
       } else {
-        setOrderServiceHistory(response.data.history);
+        setOrderServiceHistory(response.data.history.reverse());
       }
       setIsLoading(false); // Set loading to false when data is fetched
     } catch (error) {

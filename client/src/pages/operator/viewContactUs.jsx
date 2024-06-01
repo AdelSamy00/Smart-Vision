@@ -20,7 +20,7 @@ const ViewContactUs = () => {
           method: 'GET',
           token: employee?.token,
         });
-        setContacts(response.data.contactUs);
+        setContacts(response.data.contactUs.reverse());
         console.log(response.data.contactUs);
         setLoading(false);
       } catch (err) {
