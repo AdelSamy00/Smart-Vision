@@ -19,5 +19,5 @@ router.post('/', operatorAuth, assignedEnginerToService);
 // send service details to factory
 router.post('/sendService', engineerAuth, sendServiceDetails); ///send-customization-details
 router.get('/services/:serviceId', engineerAuth, getServiceById);
-router.get('/services/:serviceId', engineerAuth, updateServiceOrderStatus);
+router.put('/services', engineerAuth, updateServiceOrderStatus);
 export default router;

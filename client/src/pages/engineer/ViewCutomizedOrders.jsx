@@ -66,11 +66,11 @@ function ViewCutomizedOrders({ socket, setSocket }) {
   const handleButtonClick = async (order) => {
     try {
       const response = await apiRequest({
-        method: "POST",
-        url: "employees/engineer/sendService",
+        method: 'PUT',
+        url: 'employees/engineer/services',
         data: {
-          serviceId: order._id,
-          engineerId: employee._id,
+          orderId: order._id,
+          newState: 'Done',
         },
         token: employee?.token,
       });
@@ -79,12 +79,12 @@ function ViewCutomizedOrders({ socket, setSocket }) {
         setRequests((prevRequests) =>
           prevRequests.filter((req) => req._id !== order._id)
         );
-        toast.success(t("Request successful!"));
+        toast.success(t('Request successful!'));
       } else {
         // toast.error(response?.data?.message || t('Request failed!'));
       }
     } catch (error) {
-      console.error("Error making API request:", error);
+      console.error('Error making API request:', error);
     }
   };
   return (
@@ -119,6 +119,14 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                     <Grid key={index} item xs={12} md={6} lg={4}>
                       <div className={`presenter-product-card`}>
                         {/* {console.log(request)} */}
+                        <Typography
+                          variant="body2"
+                          align="center"
+                          gutterBottom
+                          className="presenter-product-info"
+                        >
+                          {t('Service')}: {t(request.service)}
+                        </Typography>
                         <Typography
                           variant="body2"
                           align="center"
@@ -161,45 +169,45 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                         </Typography>
                         <div className="button-container">
                           {' '}
-                          {request?.service === "Customization Service" ? (
-                        <Link
-                          to={`/engineer/send-order/${request?._id}`}
-                          className="link-style"
-                        >
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            className="add-to-store-button"
-                            style={{
-                              background:
-                                "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
-                              textTransform: "capitalize",
-                              height: 38,
-                              padding: "0px 15px",
-                            }}
-                          >
-                            {t("sendOrderToFactory")}
-                          </Button>
-                        </Link>
-                      ) : (
-                        <div>
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            // className="add-to-store-button"
-                            style={{
-                              background:
-                                "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
-                              textTransform: "capitalize",
-                              height: 38,
-                              padding: "0px 15px",
-                            }}
-                            onClick={() => handleButtonClick(request)}
-                          >
-                            {t("Done")}
-                          </Button>
-                        </div>
-                      )}
+                          {request?.service === 'Customization Service' ? (
+                            <Link
+                              to={`/engineer/send-order/${request?._id}`}
+                              className="link-style"
+                            >
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                className="add-to-store-button"
+                                style={{
+                                  background:
+                                    'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                                  textTransform: 'capitalize',
+                                  height: 38,
+                                  padding: '0px 15px',
+                                }}
+                              >
+                                {t('sendOrderToFactory')}
+                              </Button>
+                            </Link>
+                          ) : (
+                            <div>
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                // className="add-to-store-button"
+                                style={{
+                                  background:
+                                    'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                                  textTransform: 'capitalize',
+                                  height: 38,
+                                  padding: '0px 15px',
+                                }}
+                                onClick={() => handleButtonClick(request)}
+                              >
+                                {t('Done')}
+                              </Button>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </Grid>
@@ -224,6 +232,14 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                 <Grid key={index} item xs={12} md={6} lg={4}>
                   <div className={`presenter-product-card`}>
                     {/* {console.log(request)} */}
+                    <Typography
+                      variant="body2"
+                      align="center"
+                      gutterBottom
+                      className="presenter-product-info"
+                    >
+                      {t('Service')}: {t(request.service)}
+                    </Typography>
                     <Typography
                       variant="body2"
                       align="center"
@@ -262,7 +278,7 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                       </Link>
                     </Typography>
                     <div className="button-container">
-                    {request?.service === "Customization Service" ? (
+                      {request?.service === 'Customization Service' ? (
                         <Link
                           to={`/engineer/send-order/${request?._id}`}
                           className="link-style"
@@ -273,13 +289,13 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                             className="add-to-store-button"
                             style={{
                               background:
-                                "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
-                              textTransform: "capitalize",
+                                'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                              textTransform: 'capitalize',
                               height: 38,
-                              padding: "0px 15px",
+                              padding: '0px 15px',
                             }}
                           >
-                            {t("sendOrderToFactory")}
+                            {t('sendOrderToFactory')}
                           </Button>
                         </Link>
                       ) : (
@@ -290,14 +306,14 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                             // className="add-to-store-button"
                             style={{
                               background:
-                                "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
-                              textTransform: "capitalize",
+                                'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                              textTransform: 'capitalize',
                               height: 38,
-                              padding: "0px 15px",
+                              padding: '0px 15px',
                             }}
                             onClick={() => handleButtonClick(request)}
                           >
-                            {t("Done")}
+                            {t('Done')}
                           </Button>
                         </div>
                       )}

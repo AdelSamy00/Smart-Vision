@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Grid, Typography, Button } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import "../Presenter/StyleSheets/PresenterProductsView.css";
-import { apiRequest } from "../../utils";
-import Loading from "../../components/shared/Loading";
-import { setNotification } from "../../redux/NotificationSlice";
-import { useTranslation } from "react-i18next";
-import toast, { Toaster } from "react-hot-toast";
+import React, { useState, useEffect } from 'react';
+import { Grid, Typography, Button } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import '../Presenter/StyleSheets/PresenterProductsView.css';
+import { apiRequest } from '../../utils';
+import Loading from '../../components/shared/Loading';
+import { setNotification } from '../../redux/NotificationSlice';
+import { useTranslation } from 'react-i18next';
+import toast, { Toaster } from 'react-hot-toast';
 
 function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
   const { t } = useTranslation();
@@ -21,7 +21,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
     const fetchProducts = async () => {
       try {
         const response = await apiRequest({
-          method: "GET",
+          method: 'GET',
           url: `/employees/engineer/${employee._id}`,
           token: employee?.token,
         });
@@ -39,14 +39,14 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
           toast.error(response?.message);
         }
       } catch (error) {
-        console.error("Error fetching products:", error.response);
+        console.error('Error fetching products:', error.response);
       }
     };
 
     fetchProducts();
   }, [notification]);
   useEffect(() => {
-    socket?.on("notifications", (data) => {
+    socket?.on('notifications', (data) => {
       //console.log(data);
       //let number = getNumberOfNotifications(notification);
       dispatch(setNotification([...notification, data]));
@@ -56,7 +56,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
     setNewAssignOrders(
       notification.filter(
         (notify) =>
-          notify.type === "assignEngineerToCustomizationOrder" &&
+          notify.type === 'assignEngineerToCustomizationOrder' &&
           notify.serviceOrder?.date
       )
     );
@@ -65,11 +65,11 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
   const handleButtonClick = async (order) => {
     try {
       const response = await apiRequest({
-        method: "POST",
-        url: "employees/engineer/sendService",
+        method: 'PUT',
+        url: 'employees/engineer/services',
         data: {
-          serviceId: order._id,
-          engineerId: employee._id,
+          orderId: order._id,
+          newState: 'Done',
         },
         token: employee?.token,
       });
@@ -78,12 +78,12 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
         setRequests((prevRequests) =>
           prevRequests.filter((req) => req._id !== order._id)
         );
-        toast.success(t("Request successful!"));
+        toast.success(t('Request successful!'));
       } else {
         // toast.error(response?.data?.message || t('Request failed!'));
       }
     } catch (error) {
-      console.error("Error making API request:", error);
+      console.error('Error making API request:', error);
     }
   };
   return (
@@ -105,7 +105,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
             {newAssignOrders?.length >= 1 && (
               <Grid item xs={12} sm={10} md={10}>
                 <Typography variant="h4" align="center" gutterBottom>
-                  {t("newServiceRequestsMeasuring")}
+                  {t('newServiceRequestsMeasuring')}
                 </Typography>
                 <Grid
                   container
@@ -123,7 +123,15 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                           gutterBottom
                           className="presenter-product-info"
                         >
-                          {t("customerName")}:{" "}
+                          {t('Service')}: {t(request.service)}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          align="center"
+                          gutterBottom
+                          className="presenter-product-info"
+                        >
+                          {t('customerName')}:{' '}
                           {request.serviceOrder.customer?.username}
                         </Typography>
                         <Typography
@@ -132,7 +140,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                           gutterBottom
                           className="presenter-product-description"
                         >
-                          {t("customerNumber")}:{" 0"}
+                          {t('customerNumber')}:{' 0'}
                           {request.serviceOrder.customer?.phone}
                         </Typography>
                         <Typography>
@@ -142,18 +150,18 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                             <Button
                               variant="text"
                               sx={{
-                                textDecoration: "underline",
-                                textTransform: "capitalize",
-                                fontSize: "19px",
+                                textDecoration: 'underline',
+                                textTransform: 'capitalize',
+                                fontSize: '19px',
                                 padding: 0,
-                                "&:hover": {
-                                  backgroundColor: "white",
-                                  color: "black",
-                                  textDecoration: "underline",
+                                '&:hover': {
+                                  backgroundColor: 'white',
+                                  color: 'black',
+                                  textDecoration: 'underline',
                                 },
                               }}
                             >
-                              {t("serviceDetails")}
+                              {t('serviceDetails')}
                             </Button>
                           </Link>
                         </Typography>
@@ -163,14 +171,14 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                           gutterBottom
                           className="presenter-product-description"
                         >
-                          {t("day")}: {request.serviceOrder?.date?.day}
-                          <span style={{ marginInline: "1.5rem" }}>
-                            {t("hour")}: {request.serviceOrder?.date?.time}
+                          {t('day')}: {request.serviceOrder?.date?.day}
+                          <span style={{ marginInline: '1.5rem' }}>
+                            {t('hour')}: {request.serviceOrder?.date?.time}
                           </span>
                         </Typography>
                         <div className="button-container">
-                          {" "}
-                          {request?.service === "Customization Service" ? (
+                          {' '}
+                          {request?.service === 'Customization Service' ? (
                             <Link
                               to={`/engineer/send-order/${request?._id}`}
                               className="link-style"
@@ -181,13 +189,13 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                                 className="add-to-store-button"
                                 style={{
                                   background:
-                                    "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
-                                  textTransform: "capitalize",
+                                    'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                                  textTransform: 'capitalize',
                                   height: 38,
-                                  padding: "0px 15px",
+                                  padding: '0px 15px',
                                 }}
                               >
-                                {t("sendOrderToFactory")}
+                                {t('sendOrderToFactory')}
                               </Button>
                             </Link>
                           ) : (
@@ -198,14 +206,14 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                                 // className="add-to-store-button"
                                 style={{
                                   background:
-                                    "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
-                                  textTransform: "capitalize",
+                                    'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                                  textTransform: 'capitalize',
                                   height: 38,
-                                  padding: "0px 15px",
+                                  padding: '0px 15px',
                                 }}
                                 onClick={() => handleButtonClick(request)}
                               >
-                                {t("Done")}
+                                {t('Done')}
                               </Button>
                             </div>
                           )}
@@ -220,7 +228,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
           {/* Old Services */}
           <Grid item xs={12} sm={10} md={10}>
             <Typography variant="h4" align="center" gutterBottom>
-              {t("serviceRequestsMeasuring")}
+              {t('serviceRequestsMeasuring')}
             </Typography>
             <Grid
               container
@@ -238,7 +246,15 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                       gutterBottom
                       className="presenter-product-info"
                     >
-                      {t("customerName")}: {request.customer?.username}
+                      {t('Service')}: {t(request.service)}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      align="center"
+                      gutterBottom
+                      className="presenter-product-info"
+                    >
+                      {t('customerName')}: {request.customer?.username}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -246,7 +262,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                       gutterBottom
                       className="presenter-product-description"
                     >
-                      {t("customerNumber")}:{" 0"}
+                      {t('customerNumber')}:{' 0'}
                       {request.customer?.phone}
                     </Typography>
                     <Typography>
@@ -254,18 +270,18 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                         <Button
                           variant="text"
                           sx={{
-                            textDecoration: "underline",
-                            textTransform: "capitalize",
-                            fontSize: "19px",
+                            textDecoration: 'underline',
+                            textTransform: 'capitalize',
+                            fontSize: '19px',
                             padding: 0,
-                            "&:hover": {
-                              backgroundColor: "white",
-                              color: "black",
-                              textDecoration: "underline",
+                            '&:hover': {
+                              backgroundColor: 'white',
+                              color: 'black',
+                              textDecoration: 'underline',
                             },
                           }}
                         >
-                          {t("serviceDetails")}
+                          {t('serviceDetails')}
                         </Button>
                       </Link>
                     </Typography>
@@ -275,14 +291,14 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                       gutterBottom
                       className="presenter-product-description"
                     >
-                      {t("day")}: {request?.date?.day}
-                      <span style={{ marginInline: "1.5rem" }}>
-                        {t("hour")}: {request?.date?.time}
+                      {t('day')}: {request?.date?.day}
+                      <span style={{ marginInline: '1.5rem' }}>
+                        {t('hour')}: {request?.date?.time}
                       </span>
                     </Typography>
                     <div className="button-container">
-                      {" "}
-                      {request?.service === "Customization Service" ? (
+                      {' '}
+                      {request?.service === 'Customization Service' ? (
                         <Link
                           to={`/engineer/send-order/${request?._id}`}
                           className="link-style"
@@ -293,13 +309,13 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                             className="add-to-store-button"
                             style={{
                               background:
-                                "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
-                              textTransform: "capitalize",
+                                'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                              textTransform: 'capitalize',
                               height: 38,
-                              padding: "0px 15px",
+                              padding: '0px 15px',
                             }}
                           >
-                            {t("sendOrderToFactory")}
+                            {t('sendOrderToFactory')}
                           </Button>
                         </Link>
                       ) : (
@@ -310,14 +326,14 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                             // className="add-to-store-button"
                             style={{
                               background:
-                                "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
-                              textTransform: "capitalize",
+                                'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                              textTransform: 'capitalize',
                               height: 38,
-                              padding: "0px 15px",
+                              padding: '0px 15px',
                             }}
                             onClick={() => handleButtonClick(request)}
                           >
-                            {t("Done")}
+                            {t('Done')}
                           </Button>
                         </div>
                       )}
@@ -332,7 +348,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
         <Grid item xs={12} sm={8}>
           <Typography variant="h5" align="center" gutterBottom>
             <div className="text-gray-400 mt-20">
-              {t("noRequestsAtTheMoment")}
+              {t('noRequestsAtTheMoment')}
             </div>
           </Typography>
         </Grid>
