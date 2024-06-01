@@ -9,6 +9,10 @@ const contactUsSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Email is Required!'],
     },
+    phone: {
+      type: Number,
+      required: [true, 'phone is Required!'],
+    },
     message: {
       type: String,
       required: [true, 'Message is Required!'],
