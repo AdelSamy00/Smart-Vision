@@ -155,7 +155,7 @@ export const decreseQuantityUsingProductName = async (name, quantity) => {
     const product = await Products.findOne({ name: name });
     product.quantity -= quantity;
     const updatedpProduct = await Products.findByIdAndUpdate(
-      { _id: id },
+      { _id: product._id },
       product,
       { new: true }
     );
@@ -169,7 +169,7 @@ export const increaseQuantityUsingProductName = async (name, quantity) => {
     const product = await Products.findOne({ name: name });
     product.quantity += quantity;
     const updatedpProduct = await Products.findByIdAndUpdate(
-      { _id: id },
+      { _id: product._id },
       product,
       { new: true }
     );
