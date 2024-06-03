@@ -14,7 +14,7 @@ import i18n from "../../../Language/translate";
 
 function Homepage() {
   const { t } = useTranslation();
-
+  const storeRef = useRef(null);
   const categories = [
     { id: 1, name: "bed", imageUrl: "../beds.avif" },
     { id: 6, name: "closet", imageUrl: "../closet.avif" },
@@ -83,6 +83,11 @@ function Homepage() {
 
     fetchProducts();
   }, []);
+  useEffect(() => {
+    if (selectedCategory || selectedPrice) {
+      storeRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [selectedCategory, selectedPrice]);
   return (
     <div className="Home">
       <div
@@ -137,15 +142,17 @@ function Homepage() {
           <HomeSlider items={products} option="product" />
         </>
       )}
-      {(selectedCategory || selectedPrice) && (
-        <Store
-          key={selectedCategory}
-          selectedCategory={
-            selectedCategory ? selectedCategory?.toLowerCase() : "All"
-          }
-          selectedPrice={selectedPrice}
-        />
-      )}
+      <div ref={storeRef}>
+        {(selectedCategory || selectedPrice) && (
+          <Store
+            key={selectedCategory}
+            selectedCategory={
+              selectedCategory ? selectedCategory?.toLowerCase() : "All"
+            }
+            selectedPrice={selectedPrice}
+          />
+        )}
+      </div>
 
       <div
         className="mt-10 w-full  flex flex-col md:flex-row bg-slate-200 justify-between overflow-hidden rounded-lg "
@@ -162,11 +169,7 @@ function Homepage() {
           <h2 className="text-3xl text-blue-500 text-center ">
             {t("OurVision")}
           </h2>
-          <p className="text-black">
-            {t(
-              "SmartVisionMessage"
-            )}
-          </p>
+          <p className="text-black">{t("SmartVisionMessage")}</p>
         </div>
         <div className="md:w-1/3 flex flex-col p-10 hover:bg-slate-100 transition ease-in duration-800">
           <img
@@ -177,11 +180,7 @@ function Homepage() {
             className="self-center"
           />
           <h2 className="text-3xl text-blue-500 text-center">{t("Mission")}</h2>
-          <p className="text-black">
-          {t(
-              "SmartVisionMessage1"
-            )}
-          </p>
+          <p className="text-black">{t("SmartVisionMessage1")}</p>
         </div>
         <div className="md:w-1/3 flex flex-col  bg-slate-300  p-10 hover:bg-slate-100 transition ease-in duration-800">
           <img
@@ -191,12 +190,10 @@ function Homepage() {
             height={60}
             className="self-center"
           />
-          <h2 className="text-3xl text-blue-500 text-center">{t("Commitment")}</h2>
-          <p className="text-black">
-          {t(
-              "SmartVisionMessage2"
-            )}
-          </p>
+          <h2 className="text-3xl text-blue-500 text-center">
+            {t("Commitment")}
+          </h2>
+          <p className="text-black">{t("SmartVisionMessage2")}</p>
         </div>
       </div>
     </div>

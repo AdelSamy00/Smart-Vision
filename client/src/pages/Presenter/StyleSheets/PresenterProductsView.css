@@ -78,23 +78,3 @@
     color: black;
   }
   
-  /* Styling for content inside the card */
-  .presenter-product-card .presenter-product-title {
-    font-size: 22px;
-    font-weight: bold;
-    color: #333333;
-    font-family: "Roboto", Arial, sans-serif; 
-  }
-  
-  .presenter-product-card .presenter-product-info {
-    font-size: 19px;
-    color: #666666;
-    font-family: "Roboto", Arial, sans-serif; 
-  }
-  
-  .presenter-product-card .presenter-product-description {
-    font-size: 15px;
-    color: #999999;
-    font-family: "Roboto", Arial, sans-serif; 
-  }
-  

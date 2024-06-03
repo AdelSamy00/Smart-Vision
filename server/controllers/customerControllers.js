@@ -494,7 +494,7 @@ export const getOrderHistory = async (req, res, next) => {
             populate: {
               path: 'reviews',
             },
-            select: 'name images description price category reviews',
+            select: 'name ARName images description ARDescription price category reviews',
           },
         },
       })

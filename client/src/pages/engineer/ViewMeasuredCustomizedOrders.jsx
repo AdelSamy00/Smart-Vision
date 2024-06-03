@@ -213,7 +213,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                                 }}
                                 onClick={() => handleButtonClick(request)}
                               >
-                                {t('Done')}
+                                {t('done')}
                               </Button>
                             </div>
                           )}
@@ -333,7 +333,7 @@ function ViewMeasuredCutomizedOrders({ socket, setSocket }) {
                             }}
                             onClick={() => handleButtonClick(request)}
                           >
-                            {t('Done')}
+                            {t('done')}
                           </Button>
                         </div>
                       )}

@@ -106,7 +106,7 @@ function OrderDetailsEnginer() {
                   }}
                   onClick={() => handleButtonClick(order)}
                 >
-                  {t('Done')}
+                  {t('done')}
                 </Button>
               </div>
             )}

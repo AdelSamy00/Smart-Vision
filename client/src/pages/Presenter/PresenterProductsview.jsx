@@ -12,7 +12,7 @@ function PresenterProductsView() {
   const { employee } = useSelector((state) => state?.employee);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  // const [displayedProducts, setDisplayedProducts] = useState(3); // Show initial 3 orders
+  const [isExpanded, setIsExpanded] = useState({}); 
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -32,9 +32,22 @@ function PresenterProductsView() {
 
     fetchProducts();
   }, []);
-  // const handleShowMore = () => {
-  //   setDisplayedProducts(products.length); // Show all orders when "Show All" is clicked
-  // };
+
+ // Function to truncate text
+ const truncateText = (text, length) => {
+  if (text?.length <= length) {
+    return text;
+  }
+  return text?.substring(0, length) + '...';
+};
+
+// Function to handle the toggling of the description
+const handleToggle = (index) => {
+  setIsExpanded((prev) => ({
+    ...prev,
+    [index]: !prev[index],
+  }));
+};
 
   return (
     <Grid
@@ -90,16 +103,36 @@ function PresenterProductsView() {
                     align="center"
                     gutterBottom
                     className="presenter-product-description"
-                    style={{
-                      maxHeight: "140px",
-                      minHeight: "140px",
-                      overflowY: "auto",
-                    }}
                   >
                     {t("description")}:{" "}
-                    {language === "en"
-                      ? product.description
-                      : product?.ARDescription}
+                    {isExpanded[index]
+                        ? language === 'en'
+                          ? product?.description
+                          : product?.ARDescription
+                        : truncateText(
+                            language === 'en'
+                              ? product?.description
+                              : product?.ARDescription,
+                            150
+                          )}
+                      {(
+                        (language === 'en'
+                          ? product?.description
+                          : product?.ARDescription
+                        )?.length > 170) && (
+                        <span
+                          onClick={() => handleToggle(index)}
+                          style={{ color: 'blue', cursor: 'pointer' }}
+                          onMouseOver={(e) =>
+                            (e.target.style.textDecoration = 'underline')
+                          }
+                          onMouseOut={(e) =>
+                            (e.target.style.textDecoration = 'none')
+                          }
+                        >
+                          {isExpanded[index] ? t(' show less') : t(' read more')}
+                        </span>
+                      )}
                   </Typography>
                   <div className="button-container">
                     {" "}

@@ -204,7 +204,7 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                                 }}
                                 onClick={() => handleButtonClick(request)}
                               >
-                                {t('Done')}
+                                {t('done')}
                               </Button>
                             </div>
                           )}
@@ -313,7 +313,7 @@ function ViewCutomizedOrders({ socket, setSocket }) {
                             }}
                             onClick={() => handleButtonClick(request)}
                           >
-                            {t('Done')}
+                            {t('done')}
                           </Button>
                         </div>
                       )}

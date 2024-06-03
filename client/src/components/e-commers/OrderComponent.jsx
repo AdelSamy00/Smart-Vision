@@ -16,7 +16,7 @@ function OrderComponent({ order, reviews, setReviews }) {
   const { customer } = useSelector((state) => state.customer);
   const [showAddReviewToProductId, setshowAddReviewToProductId] =
     useState(null);
-
+    const [isExpanded, setIsExpanded] = useState({}); 
   const toggleOrder = () => {
     setShowOrder(!showOrder);
   };
@@ -68,7 +68,21 @@ function OrderComponent({ order, reviews, setReviews }) {
         />
       ));
   }
+ // Function to truncate text
+ const truncateText = (text, length) => {
+  if (text?.length <= length) {
+    return text;
+  }
+  return text?.substring(0, length) + '...';
+};
 
+// Function to handle the toggling of the description
+const handleToggle = (index) => {
+  setIsExpanded((prev) => ({
+    ...prev,
+    [index]: !prev[index],
+  }));
+};
   return (
     <Grid container className="order-container" sx={{ marginBottom: '2rem' }}>
       <Grid
@@ -251,9 +265,34 @@ function OrderComponent({ order, reviews, setReviews }) {
                       <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                         {t('Description')}:
                       </span>{' '}
-                      {language === 'en'
-                        ? product?.product?.description
-                        : product?.product?.ARDescription}
+                      {isExpanded[index]
+                        ? language === 'en'
+                          ? product?.product?.description
+                          : product?.product?.ARDescription
+                        : truncateText(
+                            language === 'en'
+                              ? product?.product?.description
+                              : product?.product?.ARDescription,
+                            170
+                          )}
+                      {(
+                        (language === 'en'
+                          ? product?.product?.description
+                          : product?.product?.ARDescription
+                        )?.length > 170) && (
+                        <span
+                          onClick={() => handleToggle(index)}
+                          style={{ color: 'blue', cursor: 'pointer' }}
+                          onMouseOver={(e) =>
+                            (e.target.style.textDecoration = 'underline')
+                          }
+                          onMouseOut={(e) =>
+                            (e.target.style.textDecoration = 'none')
+                          }
+                        >
+                          {isExpanded[index] ? t(' show less') : t(' read more')}
+                        </span>
+                      )}
                     </Typography>
                     <div
                       style={{
