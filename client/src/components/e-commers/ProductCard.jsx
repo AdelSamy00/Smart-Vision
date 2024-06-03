@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import Rating from '@mui/material/Rating';
-import './stylesheets/ProductCard.css';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next'; // Import the useTranslation hook
+import React, { useState } from "react";
+import Rating from "@mui/material/Rating";
+import "./stylesheets/ProductCard.css";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next"; // Import the useTranslation hook
 function ProductCard({
   product,
   favoriteList = [],
@@ -13,7 +13,7 @@ function ProductCard({
   const { t } = useTranslation();
   const { customer } = useSelector((state) => state.customer);
   const { cart } = useSelector((state) => state.cart);
-  const language = JSON.parse(window?.localStorage.getItem('language'));
+  const language = JSON.parse(window?.localStorage.getItem("language"));
 
   const isFavorit = () => {
     const fav = favoriteList.find((favId) => {
@@ -84,10 +84,10 @@ function ProductCard({
         )}
         <div className="sbProductCardData">
           <div className="w-full">
-            <h5>{language === 'en' ? product?.name : product?.ARName}</h5>
+            <h5>{language === "en" ? product?.name : product?.ARName}</h5>
             <h6>{t(product?.category)}</h6>
             <p>
-              {product?.price} {t('EGP')}
+              {product?.price} {t("EGP")}
             </p>
           </div>
           <div className="sbProductCardDataRating">
@@ -107,15 +107,18 @@ function ProductCard({
       <div className="sbProductCardFooter ">
         {product?.quantity === 0 ? (
           <h2
+            className="outOfStock"
             style={{
-              backgroundColor: '#ff6347',
-              color: 'white',
-              padding: '4px 8px',
-              borderRadius: '10px',
-              fontWeight: 'bold',
+              backgroundColor: "#ff6347",
+              color: "white",
+              padding: "8px 8px",
+              borderRadius: "10px",
+              fontWeight: "bold",
+              height: "35px",
+              fontSize:"15px",
             }}
           >
-            {t('Out of Stock')}
+            {t("Out of Stock")}
           </h2>
         ) : (
           <button
