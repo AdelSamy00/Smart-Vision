@@ -20,7 +20,7 @@ let transporter = nodemailer.createTransport({
 export const sendVerificationEmail = async (customer, res) => {
   const { _id, email, username } = customer;
   const token = _id + uuidv4();
-  const link = APP_URL + 'customers/verify/' + _id + '/' + token;
+  const link = APP_URL + '/customers/verify/' + _id + '/' + token;
   const mailOptions = {
     from: AUTH_EMAIL,
     to: email,
@@ -77,7 +77,7 @@ export const sendVerificationEmail = async (customer, res) => {
 export const resetPasswordLink = async (customer, res) => {
   const { _id, email } = customer;
   const token = _id + uuidv4();
-  const link = APP_URL + 'customers/reset-password/' + _id + '/' + token;
+  const link = APP_URL + '/customers/reset-password/' + _id + '/' + token;
   const mailOptions = {
     from: AUTH_EMAIL,
     to: email,
