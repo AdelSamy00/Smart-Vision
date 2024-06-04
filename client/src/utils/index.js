@@ -2,6 +2,7 @@ import axios from 'axios';
 
 
 const API_URL = import.meta.env.VITE_APP_SERVER_URL;
+console.log(API_URL)
 const CLOUDINARY_ID = import.meta.env.VITE_APP_CLOUDINARY_ID;
 export const getCustomerInfo = async (token) => {
   try {

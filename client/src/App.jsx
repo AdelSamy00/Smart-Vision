@@ -94,7 +94,7 @@ function App() {
   const { customer } = useSelector((state) => state.customer);
   const { employee } = useSelector((state) => state.employee);
 
-  axios.defaults.baseURL = 'http://localhost:3000';
+  axios.defaults.baseURL = import.meta.env.VITE_APP_SERVER_URL;
   axios.defaults.headers = {
     'Content-Type': 'application/json',
     Authorization: customer?.token ? `Bearer ${customer?.token}` : '',
