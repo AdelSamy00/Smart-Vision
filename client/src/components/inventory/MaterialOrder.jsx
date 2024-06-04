@@ -24,7 +24,7 @@ function MaterialOrder({ matrial, setMaterialls }) {
 
       if (response.data.success) {
         toast.dismiss();
-        toast.success(t('productExportedSuccessfully'));
+        toast.success(t('TheMaterialsShippedSuccessfully'));
         matrial.state = 'SHIPPED';
         setMaterialls((prevOrders) => {
           return prevOrders.filter((item) => item._id !== matrial._id);
@@ -44,7 +44,7 @@ function MaterialOrder({ matrial, setMaterialls }) {
 
   return (
     <Grid container className="order-container" sx={{ marginBottom: '2rem' }}>
-      <Toaster
+      {/* <Toaster
         toastOptions={{
           style: {
             duration: 3000,
@@ -57,7 +57,7 @@ function MaterialOrder({ matrial, setMaterialls }) {
             textAlign: 'center',
           },
         }}
-      />
+      /> */}
       <Grid
         item
         xs={11}

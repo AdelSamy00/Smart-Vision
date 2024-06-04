@@ -119,7 +119,7 @@ function TransactionPPComponent() {
         },
       });
       if (response.data.success) {
-        toast.success(t('addSuccessfully'));
+        toast.success(t('Successful Transaction'));
         setTransactions([]);
         setOrderDetails({
           products: [],
@@ -163,7 +163,7 @@ function TransactionPPComponent() {
       spacing={2}
     >
       {console.log(products)}
-      <Toaster
+      {/* <Toaster
         toastOptions={{
           style: {
             duration: 3000,
@@ -176,7 +176,7 @@ function TransactionPPComponent() {
             textAlign: 'center',
           },
         }}
-      />
+      /> */}
       <Grid item xs={12}>
         <Typography
           variant="h5"

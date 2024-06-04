@@ -24,7 +24,11 @@ const InventoryMatrialsOrders = ({ socket, setSocket }) => {
           token: employee?.token,
         });
         if (response?.data?.success) {
-          setMatrials(response.data.materialOrders.reverse());
+          const filteredMaterials = response.data.materialOrders
+            .filter((order) => order.state !== 'SHIPPED')
+            .reverse();
+          setMatrials(filteredMaterials);
+          console.log(filteredMaterials);
           setIsLoading(false);
         } else {
           toast.dismiss();
@@ -36,19 +40,20 @@ const InventoryMatrialsOrders = ({ socket, setSocket }) => {
           'Error fetching order history:',
           error?.response?.data?.message
         );
+        toast.dismiss();
+        toast.error('Error fetching order history');
+        setIsLoading(false);
       }
     }
 
     fetchOrderHistory();
-  }, []);
+  }, [employee?.token]);
 
   useEffect(() => {
     socket?.on('notifications', (data) => {
-      ///console.log(data);
-      //let number = getNumberOfNotifications(notification);
       dispatch(setNotification([...notification, data]));
     });
-  }, [socket]);
+  }, [socket, notification, dispatch]);
 
   return (
     <div>

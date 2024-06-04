@@ -94,7 +94,7 @@ const UpdateProductForm = () => {
         });
         if (response?.data?.success) {
           toast.dismiss();
-          toast.success(t('addSuccessfully'));
+          toast.success(t('UpdatedSuccessfully'));
         } else {
           toast.error(t('FailedToAddProduct'));
         }

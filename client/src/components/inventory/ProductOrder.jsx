@@ -55,7 +55,7 @@ function ProductOrder({ order, setOrders }) {
 
   return (
     <Grid container className="order-container" sx={{ marginBottom: '2rem' }}>
-      <Toaster
+      {/* <Toaster
         toastOptions={{
           style: {
             duration: 3000,
@@ -68,7 +68,7 @@ function ProductOrder({ order, setOrders }) {
             textAlign: 'center',
           },
         }}
-      />
+      /> */}
       <Grid
         item
         xs={11}

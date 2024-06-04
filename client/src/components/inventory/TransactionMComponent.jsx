@@ -131,7 +131,7 @@ function TransactionMComponent() {
         token: employee?.token,
       });
       if (response?.data?.success) {
-        toast.success(t('addSuccessfully'));
+        toast.success(t('Successful Transaction'));
         setTransactions([]);
         setOrderDetails({
           materials: [],
