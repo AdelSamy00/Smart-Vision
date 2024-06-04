@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ServicesCard from '../../components/e-commers/ServicesCard';
-import { useTranslation } from "react-i18next"; 
-import i18n from "../../../Language/translate";
+import { useTranslation } from 'react-i18next';
+import i18n from '../../../Language/translate';
 function Services() {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -12,42 +12,42 @@ function Services() {
       title: 'Assembly service',
       link: '/',
       description:
-        'Our products are specifically designed to be simple to assemble, so that our customers can easily do it themselves. However, if you need an extra hand, we can provide a service for the assembly of your smart vision furniture in your home.',
+        'We offer a professional assembly service for your furniture,  ensuring a seamless experience tailored to your preferences.',
     },
     {
       image_url: '/deliveryServices.png',
       title: 'Delivery services',
       link: '/',
       description:
-        'Most of our products are flat packed and designed in such a way that they can easily fit in your car. However, if you prefer to have your purchase delivered, you can choose among our range of delivery options.',
+        'If you want to move your home furniture from one place to another, We offer a convenient furniture delivery service to get your belongings exactly where you need them.',
     },
     {
       image_url: '/kitchenServices.png',
       title: 'Desgins services',
       link: '/',
       description:
-        'Our kitchen planning specialists will help you plan your dream kitchen. They can do this in the store or by visiting your home to measure and plan, then pick, deliver and install your new kitchen.',
+        'The design service offers expert guidance to transform your vision into reality. We collaborate closely with you to understand your needs and preferences, crafting a customized design plan that maximizes functionality and aesthetics. Whether you need a complete overhaul or a refresh for a specific area, our experienced designers are here to bring your dream space to life.',
     },
     {
       image_url: '/installationService.png',
       title: 'Customization Service',
       link: '/',
       description:
-        'Terms and conditions Includes installation within Egypt only Goods can be delivered for an added fee No alterations can be made to smart vision lighting fixtures smart vision blinds  rods Patching and painting are not included in the service.',
+        'The customization service empowers you to create furniture that perfectly meets your unique style. Choose from a wide range of options, including materials, finishes, and even configurations, to design a piece that reflects your individual taste.  This service allows you to personalize your furniture and create a truly one-of-a-kind statement piece for your home.',
     },
     {
       image_url: '/measuringService.png',
       title: 'Measuring Service',
       link: '/',
       description:
-        'We’ll arrange for an experienced professional to visit your home and measure your space and windows. Then you’ll be sure to get the precise measurements that are so crucial to your new kitchen, curtains, PAX wardrobe, or BESTÅ storage',
+        'The measuring service ensures accuracy and efficiency in calculating the dimensions of your chosen area. The price of this service is determined by the location and dimensions of the area that needs to be measured. This ensures you receive a fair and transparent quote based on your specific needs.',
     },
     {
       image_url: '/pickingService.png',
       title: 'Packing Service',
       link: '/',
       description:
-        'Our co-workers will find and pick the items you wish to purchase from their location in the store. So all you need to do is make a list of the items you wish to buy and place the order with a co-worker who will arrange to have your furniture picked up.',
+        'Ensure a smooth and stress-free move with our comprehensive packing service. Our experienced team uses high-quality materials and expert packing techniques to keep your belongings safe during transport.',
     },
   ];
 
@@ -60,9 +60,11 @@ function Services() {
   return (
     <section className="container">
       <div className="mb-5">
-        <h2 className="text-3xl font-bold mt-5 mb-3">{t("Our services")}</h2>
+        <h2 className="text-3xl font-bold mt-5 mb-3">{t('Our services')}</h2>
         <p className="text-gray-600 md:w-2/4">
-          {t("You can do everything yourself, but you don’t have to. We offer a range of services to make your life easier")}.
+          {t(
+            'The company provides a variety of options; choose the service that best fits your needs.'
+          )}
         </p>
       </div>
       {/* Services Cards */}
