@@ -1,24 +1,24 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import Loading from '../../components/shared/Loading';
-import Table from 'react-bootstrap/Table';
-import './styleSheets/InventoryMaterialTransactions.css';
-import getTodayDate from '../../utils/dates';
-import { t } from 'i18next';
-import { apiRequest } from '../../utils';
-import { useSelector } from 'react-redux';
-import toast from 'react-hot-toast';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import Loading from "../../components/shared/Loading";
+import Table from "react-bootstrap/Table";
+import "./StyleSheets/InventoryMaterialTransactions.css";
+import getTodayDate from "../../utils/dates";
+import { t } from "i18next";
+import { apiRequest } from "../../utils";
+import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 function InventoryTransactions() {
-  const language = JSON.parse(window?.localStorage.getItem('language'));
+  const language = JSON.parse(window?.localStorage.getItem("language"));
   const todayDate = getTodayDate();
   const { employee } = useSelector((state) => state?.employee);
   const [allTransactions, setallTransactions] = useState(null);
   const [filteredTransactions, setfilteredTransactions] = useState(null);
-  const [transactionMethod, settransactionMethod] = useState('All');
-  const [type, setType] = useState('Materials');
-  const [startDate, setstartDate] = useState('');
-  const [endtDate, setendDate] = useState('');
+  const [transactionMethod, settransactionMethod] = useState("All");
+  const [type, setType] = useState("Materials");
+  const [startDate, setstartDate] = useState("");
+  const [endtDate, setendDate] = useState("");
   const [foundTransactions, setfoundTransactions] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   //console.log(allTransactions);
@@ -26,8 +26,8 @@ function InventoryTransactions() {
     async function fetchOrderHistory() {
       try {
         const res = await apiRequest({
-          url: '/employees/inventory/transaction',
-          method: 'GET',
+          url: "/employees/inventory/transaction",
+          method: "GET",
           token: employee?.token,
         });
         if (res?.data?.success) {
@@ -36,7 +36,7 @@ function InventoryTransactions() {
           res?.data?.transactions?.length > 0 && setfoundTransactions(true);
           setIsLoading(false);
         } else {
-          toast.error('Failed to get transactions');
+          toast.error("Failed to get transactions");
         }
       } catch (error) {
         console.log(error);
@@ -49,7 +49,7 @@ function InventoryTransactions() {
     const filtered = allTransactions?.filter((transaction) => {
       console.log(transaction);
       const isTransactionTypeMatch =
-        transactionMethod === 'All' ||
+        transactionMethod === "All" ||
         transaction.transaction === transactionMethod;
 
       if (startDate && endtDate) {
@@ -74,35 +74,35 @@ function InventoryTransactions() {
         <main className="materialTransactionsMain">
           <div
             className="materialTransactionsFilterNavbarItem mt-4"
-            style={{ marginBottom: '1.5rem' }}
+            style={{ marginBottom: "1.5rem" }}
           >
-            <label htmlFor="transactionType">{t('selectType')}:</label>
+            <label htmlFor="transactionType">{t("selectType")}:</label>
             <select
               name="transactionType"
               id="transactionType"
               onChange={(e) => setType(e.target.value)}
               value={type}
             >
-              <option value={'Products'}>{t('products')}</option>
-              <option value={'Materials'}>{t('materials')}</option>
+              <option value={"Products"}>{t("products")}</option>
+              <option value={"Materials"}>{t("materials")}</option>
             </select>
           </div>
           <h2 className="mb-2">{t(type.toLowerCase())}</h2>
           <div className="materialTransactionsFilterNavbar">
             <div className="materialTransactionsFilterNavbarItem ">
-              <label htmlFor="transactionMethod">{t('transactionType')}:</label>
+              <label htmlFor="transactionMethod">{t("transactionType")}:</label>
               <select
                 name="transactionMethod"
                 id="transactionMethod"
                 onChange={(e) => settransactionMethod(e.target.value)}
               >
-                <option value="All">{t('all')}</option>
-                <option value="Export">{t('export')}</option>
-                <option value="Import">{t('import')}</option>
+                <option value="All">{t("all")}</option>
+                <option value="Export">{t("export")}</option>
+                <option value="Import">{t("import")}</option>
               </select>
             </div>
             <div className="materialTransactionsFilterNavbarItem">
-              <label htmlFor="startDate">{t('startDate')}:</label>
+              <label htmlFor="startDate">{t("startDate")}:</label>
               <input
                 type="date"
                 id="startDate"
@@ -113,7 +113,7 @@ function InventoryTransactions() {
               />
             </div>
             <div className="materialTransactionsFilterNavbarItem">
-              <label htmlFor="endtDate">{t('endDate')}:</label>
+              <label htmlFor="endtDate">{t("endDate")}:</label>
               <input
                 type="date"
                 id="endtDate"
@@ -127,23 +127,23 @@ function InventoryTransactions() {
                 type="submit"
                 className="text-xl bg-slate-700 hover:bg-slate-800 text-white py-1 px-2 rounded-xl "
                 onClick={() => {
-                  settransactionMethod('All');
+                  settransactionMethod("All");
                   setendDate(todayDate);
                   setstartDate(todayDate);
                 }}
               >
-                <span className="flex mb-1">{t('today')}</span>
+                <span className="flex mb-1">{t("today")}</span>
               </button>
               <button
                 type="submit"
                 className="text-xl mx-3 bg-slate-700 hover:bg-slate-800 text-white py-1 px-2 rounded-xl "
                 onClick={() => {
-                  settransactionMethod('All');
-                  setendDate('');
-                  setstartDate('');
+                  settransactionMethod("All");
+                  setendDate("");
+                  setstartDate("");
                 }}
               >
-                <span className="flex mb-1">{t('clear')}</span>
+                <span className="flex mb-1">{t("clear")}</span>
               </button>
             </div>
           </div>
@@ -151,21 +151,21 @@ function InventoryTransactions() {
             <Table striped bordered hover responsive>
               <thead className="materialTransactionsTableHead">
                 <tr>
-                  <th>{t('date')}</th>
-                  <th>{t('name')}</th>
-                  <th>{t('export')}</th>
-                  <th>{t('import')}</th>
+                  <th>{t("date")}</th>
+                  <th>{t("name")}</th>
+                  <th>{t("export")}</th>
+                  <th>{t("import")}</th>
                 </tr>
               </thead>
               <tbody className="materialTransactionsTableBody">
                 {filteredTransactions?.map((transaction) => {
                   let transactionType;
                   {
-                    type === 'Materials'
+                    type === "Materials"
                       ? (transactionType = transaction?.materials)
                       : (transactionType = transaction?.products);
                   }
-                  const isExport = transaction?.transaction === 'Export';
+                  const isExport = transaction?.transaction === "Export";
                   return transactionType?.map((element, idx) => {
                     {
                       console.log(element);
@@ -177,15 +177,15 @@ function InventoryTransactions() {
                         </td>
                         <td>
                           {element?.materialName
-                            ? language === 'en'
+                            ? language === "en"
                               ? element?.materialName
                               : element?.materialARName
-                            : language === 'en'
+                            : language === "en"
                             ? element?.productName
                             : element?.productARName}
                         </td>
-                        <td>{isExport ? element?.quantity : ''}</td>
-                        <td>{!isExport ? element?.quantity : ''}</td>
+                        <td>{isExport ? element?.quantity : ""}</td>
+                        <td>{!isExport ? element?.quantity : ""}</td>
                       </tr>
                     );
                   });
@@ -195,7 +195,7 @@ function InventoryTransactions() {
           </div>
           {!foundTransactions && (
             <div className="materialTransactionsNotfound">
-              <p className="m-auto">{t('noTransactionFound')}</p>
+              <p className="m-auto">{t("noTransactionFound")}</p>
             </div>
           )}
         </main>

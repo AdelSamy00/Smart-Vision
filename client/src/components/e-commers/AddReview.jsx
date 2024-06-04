@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import Form from 'react-bootstrap/Form';
-import Rating from '@mui/material/Rating';
-import { useSelector } from 'react-redux';
-import './stylesheets/Reviews.css';
-import { apiRequest } from '../../utils';
-import { useTranslation } from "react-i18next"; 
+import React, { useState } from "react";
+import Form from "react-bootstrap/Form";
+import Rating from "@mui/material/Rating";
+import { useSelector } from "react-redux";
+import "./StyleSheets/Reviews.css";
+import { apiRequest } from "../../utils";
+import { useTranslation } from "react-i18next";
 import i18n from "../../../Language/translate";
 
 function AddReview({ productId, setReviews }) {
   const { t } = useTranslation();
   const { customer } = useSelector((state) => state.customer);
-  const [review, setReview] = useState('');
+  const [review, setReview] = useState("");
   const [rating, setRating] = useState(5);
   const [validated, setValidated] = useState(false);
 
@@ -18,8 +18,8 @@ function AddReview({ productId, setReviews }) {
   async function addReview(customerId, rating, comment) {
     try {
       const res = await apiRequest({
-        url: '/customers/review',
-        method: 'POST',
+        url: "/customers/review",
+        method: "POST",
         data: { customerId, productId, comment, rating },
         token: customer?.token,
       });
@@ -40,7 +40,7 @@ function AddReview({ productId, setReviews }) {
     } else {
       addReview(customer._id, rating, review);
       setRating(5);
-      setReview('');
+      setReview("");
     }
   };
 
@@ -52,7 +52,7 @@ function AddReview({ productId, setReviews }) {
           <Rating
             name="rating"
             value={rating}
-            sx={{ fontSize: 25,direction:"ltr"}}
+            sx={{ fontSize: 25, direction: "ltr" }}
             onChange={(e) => setRating(Number(e.target.value))}
           />
           <Form.Control

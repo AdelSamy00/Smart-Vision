@@ -1,44 +1,44 @@
-import React, { useEffect, useState } from 'react';
-import Form from 'react-bootstrap/Form';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import InputColor from '../../components/Presenter/InputColor';
-import { Alert, Snackbar } from '@mui/material';
+import React, { useEffect, useState } from "react";
+import Form from "react-bootstrap/Form";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import InputColor from "../../components/Presenter/InputColor";
+import { Alert, Snackbar } from "@mui/material";
 import {
   apiRequest,
   handleMultipleFilesUpload,
   setOptionsForTranslate,
-} from '../../utils';
-import Loading from '../../components/shared/Loading';
-import './StyleSheets/ProductForm.css';
-import { t } from 'i18next';
-import axios from 'axios';
+} from "../../utils";
+import Loading from "../../components/shared/Loading";
+import "./StyleSheets/ProductForm.css";
+import { t } from "i18next";
+import axios from "axios";
 
 function ProductForm({ product, method }) {
-  const language = JSON.parse(window?.localStorage.getItem('language'));
+  const language = JSON.parse(window?.localStorage.getItem("language"));
   const navigate = useNavigate();
   const { employee } = useSelector((state) => state?.employee);
   const [description, setDescription] = useState(
-    language === 'en' ? product?.description : product?.ARDescription || ''
+    language === "en" ? product?.description : product?.ARDescription || ""
   );
-  const [images, setImages] = useState(product?.images || '');
+  const [images, setImages] = useState(product?.images || "");
   const [newImages, setNewImages] = useState([]);
   const [productName, setProductName] = useState(
-    language === 'en' ? product?.name : product?.ARName || ''
+    language === "en" ? product?.name : product?.ARName || ""
   );
-  const [category, setCategory] = useState(product?.category || '');
+  const [category, setCategory] = useState(product?.category || "");
   const [colors, setColors] = useState(product?.colors);
-  const [price, setPrice] = useState(product?.price || '');
-  const [points, setPoints] = useState(product?.points || '');
+  const [price, setPrice] = useState(product?.price || "");
+  const [points, setPoints] = useState(product?.points || "");
   const [show, setShow] = useState(product?.show);
   const [numberOfImages, setNumberOfImages] = useState(product?.images?.length);
   const [validated, setValidated] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [width, setwidth] = useState(product?.dimensions?.width || '');
-  const [weight, setweight] = useState(product?.dimensions?.weight || '');
-  const [height, setheight] = useState(product?.dimensions?.height || '');
+  const [width, setwidth] = useState(product?.dimensions?.width || "");
+  const [weight, setweight] = useState(product?.dimensions?.weight || "");
+  const [height, setheight] = useState(product?.dimensions?.height || "");
   async function translateText() {
     try {
       const response = await axios.request(
@@ -56,7 +56,7 @@ function ProductForm({ product, method }) {
   };
 
   const handleCloseSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setOpenSnackbar(false);
@@ -70,7 +70,7 @@ function ProductForm({ product, method }) {
       const ARdescription = translationRes[1].translations[0].text;
       const ENdescription = translationRes[1].translations[1].text;
       const res = await apiRequest({
-        method: 'POST',
+        method: "POST",
         url: `/employees/presenter/add-to-store/`,
         data: {
           _id: product._id,
@@ -95,7 +95,7 @@ function ProductForm({ product, method }) {
       //console.log(res);
       if (res?.data?.success === true) {
         // console.log(res);
-        navigate('/presenter/home');
+        navigate("/presenter/home");
       } else {
         console.log(res.message);
         setIsLoading(false);
@@ -116,7 +116,7 @@ function ProductForm({ product, method }) {
       console.log(ARname, ENname, ARdescription, ENdescription);
       const res = await apiRequest({
         url: `/products/${product?._id}`,
-        method: 'PUT',
+        method: "PUT",
         data: {
           name: ENname,
           ARName: ARname,
@@ -138,7 +138,7 @@ function ProductForm({ product, method }) {
       });
       if (res?.data?.success) {
         // console.log(res.data);
-        navigate('/presenter/home');
+        navigate("/presenter/home");
       } else {
         //console.log(res?.message);
         isLoading(false);
@@ -170,7 +170,7 @@ function ProductForm({ product, method }) {
       const imagesUrl = newImages?.length
         ? await handleMultipleFilesUpload(files)
         : [];
-      method === 'EDIT' ? editProduct(imagesUrl) : addProduct(imagesUrl);
+      method === "EDIT" ? editProduct(imagesUrl) : addProduct(imagesUrl);
     }
   };
 
@@ -207,17 +207,17 @@ function ProductForm({ product, method }) {
     <>
       {!isLoading ? (
         <main className="editProductMain">
-          <h1>{method === 'EDIT' ? t('edit') : t('add')}</h1>
+          <h1>{method === "EDIT" ? t("edit") : t("add")}</h1>
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <div className="editProductFormMainDiv">
               {/* for images */}
               <Form.Group className="InputGroup editProductFormImages">
-                <Form.Label className="FormLabel">{t('images')}</Form.Label>
+                <Form.Label className="FormLabel">{t("images")}</Form.Label>
                 <div
                   className={
                     images?.length || newImages?.length
-                      ? 'editProductFromImagesDiv'
-                      : 'editProductFromImagesDiv h-60'
+                      ? "editProductFromImagesDiv"
+                      : "editProductFromImagesDiv h-60"
                   }
                 >
                   {images?.map((image, idx) => {
@@ -230,7 +230,7 @@ function ProductForm({ product, method }) {
                         <div className="editProductFormDeleteImage">
                           <DeleteForeverIcon
                             sx={{
-                              fontSize: '45px',
+                              fontSize: "45px",
                             }}
                           />
                         </div>
@@ -248,7 +248,7 @@ function ProductForm({ product, method }) {
                         <div className="editProductFormDeleteImage">
                           <DeleteForeverIcon
                             sx={{
-                              fontSize: '45px',
+                              fontSize: "45px",
                             }}
                           />
                         </div>
@@ -265,7 +265,7 @@ function ProductForm({ product, method }) {
                 {/* for product Name */}
                 <Form.Group className="InputGroup">
                   <Form.Label htmlFor="productName" className="FormLabel">
-                    {t('productName')}
+                    {t("productName")}
                   </Form.Label>
                   <Form.Control
                     required
@@ -284,7 +284,7 @@ function ProductForm({ product, method }) {
                     htmlFor="productDescription"
                     className="FormLabel"
                   >
-                    {t('description')}
+                    {t("description")}
                   </Form.Label>
                   <Form.Control
                     required
@@ -302,7 +302,7 @@ function ProductForm({ product, method }) {
                 <div className="editProductCategoryAndPriceDiv">
                   <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv ">
                     <Form.Label className="FormLabel" htmlFor="height">
-                      {t('height')}
+                      {t("height")}
                     </Form.Label>
                     <Form.Control
                       required
@@ -310,7 +310,7 @@ function ProductForm({ product, method }) {
                       name="height"
                       id="height"
                       type="number"
-                      placeholder={t('height')}
+                      placeholder={t("height")}
                       min={0}
                       value={height}
                       onChange={(e) => setheight(e.target.value)}
@@ -318,7 +318,7 @@ function ProductForm({ product, method }) {
                   </Form.Group>
                   <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv">
                     <Form.Label htmlFor="width" className="FormLabel">
-                      {t('width')}
+                      {t("width")}
                     </Form.Label>
                     <Form.Control
                       required
@@ -326,7 +326,7 @@ function ProductForm({ product, method }) {
                       name="width"
                       id="width"
                       type="number"
-                      placeholder={t('width')}
+                      placeholder={t("width")}
                       min={0}
                       value={width}
                       onChange={(e) => setwidth(e.target.value)}
@@ -334,7 +334,7 @@ function ProductForm({ product, method }) {
                   </Form.Group>
                   <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv ">
                     <Form.Label className="FormLabel" htmlFor="weight">
-                      {t('weight')}
+                      {t("weight")}
                     </Form.Label>
                     <Form.Control
                       required
@@ -342,7 +342,7 @@ function ProductForm({ product, method }) {
                       name="weight"
                       id="weight"
                       type="number"
-                      placeholder={t('weight')}
+                      placeholder={t("weight")}
                       min={0}
                       value={weight}
                       onChange={(e) => setweight(e.target.value)}
@@ -353,7 +353,7 @@ function ProductForm({ product, method }) {
                   {/*for category */}
                   <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv ">
                     <Form.Label className="FormLabel" htmlFor="productCategory">
-                      {t('Category')}
+                      {t("Category")}
                     </Form.Label>
                     <Form.Select
                       required
@@ -363,17 +363,17 @@ function ProductForm({ product, method }) {
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
                     >
-                      <option value="">{t('ChooseOption')}</option>
-                      <option value="sofa">{t('sofa')}</option>
-                      <option value="bed">{t('bed')}</option>
-                      <option value="chair">{t('chair')}</option>
-                      <option value="table">{t('table')}</option>
+                      <option value="">{t("ChooseOption")}</option>
+                      <option value="sofa">{t("sofa")}</option>
+                      <option value="bed">{t("bed")}</option>
+                      <option value="chair">{t("chair")}</option>
+                      <option value="table">{t("table")}</option>
                     </Form.Select>
                   </Form.Group>
                   {/* for Price */}
                   <Form.Group className="InputGroup suEditProductCategoryAndPriceDiv">
                     <Form.Label htmlFor="productPrice" className="FormLabel">
-                      {t('Price')}
+                      {t("Price")}
                     </Form.Label>
                     <Form.Control
                       required
@@ -390,13 +390,13 @@ function ProductForm({ product, method }) {
                 </div>
                 {/* for colors */}
                 <Form.Group className="InputGroup ">
-                  <Form.Label className="FormLabel">{t('Color')}</Form.Label>
+                  <Form.Label className="FormLabel">{t("Color")}</Form.Label>
                   <InputColor colors={colors} setColors={setColors} />
                 </Form.Group>
                 {/* for points */}
                 <Form.Group className="InputGroup ">
                   <Form.Label htmlFor="productPoints" className="FormLabel">
-                    {t('points')}
+                    {t("points")}
                   </Form.Label>
                   <Form.Control
                     required
@@ -424,9 +424,9 @@ function ProductForm({ product, method }) {
                       htmlFor="uploadFile"
                       className="uploadBtn text-gray-700 bg-gray-300 cursor-pointer"
                     >
-                      {t('uploadPicture')}
+                      {t("uploadPicture")}
                     </label>
-                    <p>{t('maximum4Pictures')}</p>
+                    <p>{t("maximum4Pictures")}</p>
                   </Form.Group>
                 ) : (
                   <></>
@@ -434,7 +434,7 @@ function ProductForm({ product, method }) {
                 {/* for show */}
                 <Form.Group className="InputGroup flex items-center">
                   <Form.Label htmlFor="productShow" className="FormLabel mx-4">
-                    {t('show')}
+                    {t("show")}
                   </Form.Label>
                   <input
                     type="checkbox"
@@ -455,7 +455,7 @@ function ProductForm({ product, method }) {
                 type="submit"
                 className="text-2xl bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded-xl mb-4 h-16"
               >
-                {t('save')}
+                {t("save")}
               </button>
               <button
                 className="text-2xl bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded-xl mb-4 h-16"
@@ -464,7 +464,7 @@ function ProductForm({ product, method }) {
                   history.back();
                 }}
               >
-                {t('cancel')}
+                {t("cancel")}
               </button>
             </div>
           </Form>
@@ -483,9 +483,9 @@ function ProductForm({ product, method }) {
           onClose={handleCloseSnackbar}
           severity="error"
           variant="filled"
-          sx={{ width: '100%' }}
+          sx={{ width: "100%" }}
         >
-          {t('includeAtLeastOneColorAndImage')}
+          {t("includeAtLeastOneColorAndImage")}
         </Alert>
       </Snackbar>
     </>

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Loading from "../../components/shared/Loading";
 import { Button, FormControlLabel, Switch } from "@mui/material";
-import TransactionComponent from "../../components/inventory/Transactioncomponent";
+import TransactionComponent from "../../components/inventory/TransactionComponent";
 const TransactionHistory = () => {
   const [transactiontHistory, setTransactionHistory] = useState([]);
   const [showOrderHistory, setShowOrderHistory] = useState(true);

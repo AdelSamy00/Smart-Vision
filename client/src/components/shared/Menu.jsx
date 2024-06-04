@@ -105,14 +105,18 @@ const Menu = () => {
                   marginTop: "1rem",
                   fontWeight: "600",
                   textAlign: i18n.language === "ar" ? "end" : "start",
-                  paddingRight:"40px"
+                  paddingRight: "40px",
                 }}
               >
                 <li>
                   <NavLink
                     to="/home"
                     onClick={handleClose}
-                    style={{ display: "flex", justifyContent: i18n.language === "ar" ?"flex-end":"flex-start" }}
+                    style={{
+                      display: "flex",
+                      justifyContent:
+                        i18n.language === "ar" ? "flex-end" : "flex-start",
+                    }}
                   >
                     <HomeIcon
                       style={{

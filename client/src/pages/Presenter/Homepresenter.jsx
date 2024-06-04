@@ -231,7 +231,7 @@ const HomePresenter = () => {
               justifyContent: "space-evenly",
             }}
           >
-            {filterProducts().length >0? (
+            {filterProducts().length > 0 ? (
               filterProducts().map((product, index) => (
                 <Card
                   key={index}
@@ -239,7 +239,7 @@ const HomePresenter = () => {
                   handelDelete={handelDeleteProduct}
                 />
               ))
-             ) : (
+            ) : (
               <p
                 style={{
                   textAlign: "center",
@@ -254,7 +254,7 @@ const HomePresenter = () => {
               >
                 {t("noResultsFound")}
               </p>
-            )} 
+            )}
           </div>
         )}
       </div>

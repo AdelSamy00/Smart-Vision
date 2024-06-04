@@ -1,5 +1,5 @@
-import React from 'react';
-import './StyleSheets/Loading.css';
+import React from "react";
+import "./StyleSheets/Loading.css";
 const Loading = () => {
   return (
     <div className="dots-container ">

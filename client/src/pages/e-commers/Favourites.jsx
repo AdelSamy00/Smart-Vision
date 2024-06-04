@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import ProductCard from '../../components/e-commers/ProductCard.jsx';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { SetCustomer } from '../../redux/CustomerSlice.js';
-import toast, { Toaster } from 'react-hot-toast';
-import './StyleSheets/Favorites.css';
-import Loading from '../../components/shared/Loading.jsx';
-import { setCart } from '../../redux/CartSlice.js';
-import { useTranslation } from "react-i18next"; 
+import React, { useEffect, useState } from "react";
+import ProductCard from "../../components/e-commers/ProductCard.jsx";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { SetCustomer } from "../../redux/CustomerSlice.js";
+import toast, { Toaster } from "react-hot-toast";
+import "./StyleSheets/Favorites.css";
+import Loading from "../../components/shared/Loading.jsx";
+import { setCart } from "../../redux/CartSlice.js";
+import { useTranslation } from "react-i18next";
 import i18n from "../../../Language/translate";
 
 function Favourites() {
@@ -34,10 +34,10 @@ function Favourites() {
   async function handelFavorit(productId) {
     //console.log(id, productId);
     await axios
-      .post('/customers/favorite', { id: customer._id, productId })
+      .post("/customers/favorite", { id: customer._id, productId })
       .then((res) => {
         const newData = {
-          token: localStorage?.getItem('token'),
+          token: localStorage?.getItem("token"),
           ...res.data?.newCustomerData,
         };
         dispatch(SetCustomer(newData));
@@ -46,7 +46,7 @@ function Favourites() {
             return prevfavlist.filter((t) => t._id !== productId);
           });
           toast.dismiss();
-          toast('Removed successfully');
+          toast("Removed successfully");
         }, 500);
       })
       .catch((e) => {
@@ -74,7 +74,7 @@ function Favourites() {
   useEffect(() => {
     getFavorits(customer?._id);
   }, []);
-  
+
   return (
     <>
       <main className="favoritesMain">
@@ -82,31 +82,35 @@ function Favourites() {
           toastOptions={{
             style: {
               duration: 3000,
-              backgroundColor: '#65B741',
-              padding: '16px',
-              color: 'white',
-              fontWeight: 'Bold',
-              marginTop: '65px',
-              textAlign: 'center',
+              backgroundColor: "#65B741",
+              padding: "16px",
+              color: "white",
+              fontWeight: "Bold",
+              marginTop: "65px",
+              textAlign: "center",
             },
           }}
         />
-        <h1>{t('Favorites')}</h1>
+        <h1>{t("Favorites")}</h1>
         {isLoading ? (
           <Loading />
         ) : (
           <div
             className={
               favoritProducts.length > 0
-                ? 'favoritesProductes'
-                : 'EmptyfavoriteProducte'
+                ? "favoritesProductes"
+                : "EmptyfavoriteProducte"
             }
-            style={{ display: 'flex', justifyContent: 'center' }}
+            style={{ display: "flex", justifyContent: "center" }}
           >
             {favoritProducts.length > 0 ? (
               favoritProducts.map((product) => {
                 return (
-                  <div key={product._id} className="favoriteProducteDiv" style={{paddingBottom:"30px"}}>
+                  <div
+                    key={product._id}
+                    className="favoriteProducteDiv"
+                    style={{ paddingBottom: "30px" }}
+                  >
                     <ProductCard
                       product={product}
                       favoriteList={customer?.favoriteList}
@@ -117,7 +121,7 @@ function Favourites() {
                 );
               })
             ) : (
-              <h2>{t('Your favorite list is empty.')}</h2>
+              <h2>{t("Your favorite list is empty.")}</h2>
             )}
           </div>
         )}

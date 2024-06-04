@@ -1,34 +1,36 @@
-import { Link, useNavigate } from 'react-router-dom';
-import './StyleSheets/Profile.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { Logout } from '../../redux/CustomerSlice';
-import { useTranslation } from "react-i18next"; 
-import i18n from 'i18next';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { Link, useNavigate } from "react-router-dom";
+import "./StyleSheets/Profile.css";
+import { useDispatch, useSelector } from "react-redux";
+import { Logout } from "../../redux/CustomerSlice";
+import { useTranslation } from "react-i18next";
+import i18n from "i18next";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 function Profile({ socket, setSocket }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { customer } = useSelector((state) => state.customer);
-  const isArabic = i18n.language === 'ar';
+  const isArabic = i18n.language === "ar";
   return (
     <>
       {console.log(socket?.id)}
       <section className="Profile">
         <div className="sbProfileHeader">
-          <h1>{t("He!")} {customer.username}</h1>
+          <h1>
+            {t("He!")} {customer.username}
+          </h1>
           <p>
             {t("Need to change account?")}
             <button
               onClick={() => {
                 if (socket) {
                   console.log(socket);
-                  socket.emit('close', { socketId: socket.id });
+                  socket.emit("close", { socketId: socket.id });
                   setSocket(null);
                 }
                 dispatch(Logout());
-                navigate('/');
+                navigate("/");
               }}
               className="font-bold"
             >
@@ -49,9 +51,14 @@ function Profile({ socket, setSocket }) {
               <h3>{t("Your profile")}</h3>
               <ul>
                 <li>
-                  <Link to={'/profile/details'} className="profileLinks">
+                  <Link to={"/profile/details"} className="profileLinks">
                     <div className="sbProfileLink">
-                      <svg  className={`sbProfileLinkIcon ${isArabic ? 'arabic' : ''}`} viewBox="0 0 16 16">
+                      <svg
+                        className={`sbProfileLinkIcon ${
+                          isArabic ? "arabic" : ""
+                        }`}
+                        viewBox="0 0 16 16"
+                      >
                         <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
                       </svg>
                       <div className="sbProfileLinkContant">
@@ -71,10 +78,15 @@ function Profile({ socket, setSocket }) {
                 <li>
                   <Link
                     className="profileLinks"
-                    to={'/profile/change-password'}
+                    to={"/profile/change-password"}
                   >
                     <div className="sbProfileLink">
-                      <svg viewBox="0 0 24 24"  className={`sbProfileLinkIcon ${isArabic ? 'arabic' : ''}`}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        className={`sbProfileLinkIcon ${
+                          isArabic ? "arabic" : ""
+                        }`}
+                      >
                         <path d="M19,8V7A7,7,0,0,0,5,7V8H2V21a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V8ZM7,7A5,5,0,0,1,17,7V8H7ZM20,21a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V10H20Z" />
                         <rect x="11" y="14" width="2" height="4" />
                       </svg>
@@ -93,13 +105,17 @@ function Profile({ socket, setSocket }) {
                   </Link>
                 </li>
                 <li>
-                  <Link className="profileLinks" to={'/profile/delete-account'}>
+                  <Link className="profileLinks" to={"/profile/delete-account"}>
                     <div className="sbProfileLink">
-                      <svg viewBox="0 0 24 24" className={`sbProfileLinkIcon ${isArabic ? 'arabic' : ''}`}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        className={`sbProfileLinkIcon ${
+                          isArabic ? "arabic" : ""
+                        }`}
+                      >
                         <path d="M22,4H17V2a2,2,0,0,0-2-2H9A2,2,0,0,0,7,2V4H2V6H4V21a3,3,0,0,0,3,3H17a3,3,0,0,0,3-3V6h2ZM9,2h6V4H9Zm9,19a1,1,0,0,1-1,1H7a1,1,0,0,1-1-1V6H18Z" />
                         <rect x="9" y="10" width="2" height="8" />
                         <rect x="13" y="10" width="2" height="8" />
-                        
                       </svg>
                       <div className="sbProfileLinkContant">
                         <h4>{t("Delete account")}</h4>

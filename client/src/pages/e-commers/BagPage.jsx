@@ -170,7 +170,8 @@ const Bag = () => {
                           onClick={() => handleRemoveFromCart(item._id)}
                           style={{
                             marginTop: "15px",
-                            marginLeft: i18n.language === "en" ? "1rem" : "0rem",
+                            marginLeft:
+                              i18n.language === "en" ? "1rem" : "0rem",
                             marginRight:
                               i18n.language === "ar" ? "1rem" : "0rem",
                           }}

@@ -74,7 +74,7 @@ function Register() {
 
       <div
         className="flex items-center justify-center m-auto"
-        style={{ maxWidth: "600px",marginTop:"2rem",minHeight: "80vh" }}
+        style={{ maxWidth: "600px", marginTop: "2rem", minHeight: "80vh" }}
       >
         <Toaster
           toastOptions={{

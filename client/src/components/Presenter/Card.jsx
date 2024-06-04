@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import Rating from '@mui/material/Rating';
-import '../e-commers/StyleSheets/ProductCard.css';
-import { Link } from 'react-router-dom';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import React, { useState } from "react";
+import Rating from "@mui/material/Rating";
+import "../e-commers/StyleSheets/ProductCard.css";
+import { Link } from "react-router-dom";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {
   Button,
   Dialog,
@@ -12,14 +12,14 @@ import {
   DialogContentText,
   DialogTitle,
   Slide,
-} from '@mui/material';
-import i18next, { t } from 'i18next';
+} from "@mui/material";
+import i18next, { t } from "i18next";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 function Card({ product, handelDelete }) {
-  const language = JSON.parse(window?.localStorage.getItem('language'));
+  const language = JSON.parse(window?.localStorage.getItem("language"));
   const [showDeleteMessage, setshowDeleteMessage] = useState(false);
   const handleAgreeDeleteProductMessage = () => {
     handelDelete(product?._id);
@@ -32,14 +32,14 @@ function Card({ product, handelDelete }) {
 
   function getCategoryName(category) {
     switch (category) {
-      case 'sofa':
-        return t('sofa');
-      case 'chair':
-        return t('chair');
-      case 'bed':
-        return t('bed');
-      case 'table':
-        return t('table');
+      case "sofa":
+        return t("sofa");
+      case "chair":
+        return t("chair");
+      case "bed":
+        return t("bed");
+      case "table":
+        return t("table");
       default:
         break;
     }
@@ -66,10 +66,10 @@ function Card({ product, handelDelete }) {
         )}
         <div className="sbProductCardData">
           <div className="w-full">
-            <h5>{language === 'en' ? product?.name : product?.ARName}</h5>
+            <h5>{language === "en" ? product?.name : product?.ARName}</h5>
             <h6>{getCategoryName(product?.category)}</h6>
             <p>
-              {product?.price} {t('EGP')}
+              {product?.price} {t("EGP")}
             </p>
           </div>
           <div className="sbProductCardDataRating">
@@ -91,15 +91,15 @@ function Card({ product, handelDelete }) {
           className="flex items-center text-xl bg-slate-700 hover:bg-slate-800 text-white py-1 px-2 rounded-xl"
           to={`/presenter/update/product/${product?._id}`}
         >
-          {t('edit')}
-          <EditIcon sx={{ fontSize: '20px', marginInline: '5px' }} />
+          {t("edit")}
+          <EditIcon sx={{ fontSize: "20px", marginInline: "5px" }} />
         </Link>
         <button
           onClick={() => {
             setshowDeleteMessage(true);
           }}
         >
-          <DeleteForeverIcon sx={{ fontSize: '32px' }} />
+          <DeleteForeverIcon sx={{ fontSize: "32px" }} />
         </button>
       </div>
       <Dialog
@@ -111,38 +111,38 @@ function Card({ product, handelDelete }) {
       >
         <DialogTitle
           sx={{
-            fontSize: '25px',
-            fontWeight: 'bold',
-            direction: i18next.language === 'ar' ? 'rtl' : 'ltr',
+            fontSize: "25px",
+            fontWeight: "bold",
+            direction: i18next.language === "ar" ? "rtl" : "ltr",
           }}
         >
-          {t('delete')}
+          {t("delete")}
         </DialogTitle>
         <DialogContent>
           <DialogContentText
             id="alert-dialog-slide-description"
             sx={{
-              fontSize: '18px',
-              direction: i18next.language === 'ar' ? 'rtl' : 'ltr',
+              fontSize: "18px",
+              direction: i18next.language === "ar" ? "rtl" : "ltr",
             }}
           >
-            {t('wantDeletionThisProduct')}
+            {t("wantDeletionThisProduct")}
             <br />
             <br />
-            {t('actionCannotUndone')}
+            {t("actionCannotUndone")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={handleDisagreeDeleteProductMessage}
             sx={{
-              marginRight: 'auto',
+              marginRight: "auto",
             }}
           >
-            {t('cancel')}
+            {t("cancel")}
           </Button>
           <Button onClick={handleAgreeDeleteProductMessage}>
-            {t('agree')}
+            {t("agree")}
           </Button>
         </DialogActions>
       </Dialog>

@@ -1,12 +1,12 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import Rating from '@mui/material/Rating';
-import ProgressBar from 'react-bootstrap/ProgressBar';
-import StarIcon from '@mui/icons-material/Star';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Rating from "@mui/material/Rating";
+import ProgressBar from "react-bootstrap/ProgressBar";
+import StarIcon from "@mui/icons-material/Star";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {
   Button,
   Dialog,
@@ -16,19 +16,19 @@ import {
   DialogTitle,
   Slide,
   Tooltip,
-} from '@mui/material';
-import '../e-commers/StyleSheets/ProductDetails.css';
-import ReviewPresenter from '../../components/Presenter/ReviewsPresenter';
-import Loading from '../../components/shared/Loading';
-import { apiRequest } from '../../utils';
-import { t } from 'i18next';
-import i18n from '../../../Language/translate';
+} from "@mui/material";
+import "../e-commers/StyleSheets/ProductDetails.css";
+import ReviewPresenter from "../../components/Presenter/ReviewsPresenter";
+import Loading from "../../components/shared/Loading";
+import { apiRequest } from "../../utils";
+import { t } from "i18next";
+import i18n from "../../../Language/translate";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 function ProductDetailsPresenter() {
-  const language = JSON.parse(window?.localStorage.getItem('language'));
+  const language = JSON.parse(window?.localStorage.getItem("language"));
   const { employee } = useSelector((state) => state?.employee);
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
@@ -82,8 +82,8 @@ function ProductDetailsPresenter() {
   //handel remove product
   const handelDeleteProduct = async (productId) => {
     const res = await apiRequest({
-      url: '/products/',
-      method: 'DELETE',
+      url: "/products/",
+      method: "DELETE",
       data: { productId: productId },
       token: employee?.token,
     });
@@ -119,8 +119,8 @@ function ProductDetailsPresenter() {
   // Delete review from product
   async function deleteReview(customerId, reviewId) {
     const res = await apiRequest({
-      url: '/employees/presenter/delete-review',
-      method: 'DELETE',
+      url: "/employees/presenter/delete-review",
+      method: "DELETE",
       data: { customerId, reviewId, productId },
       token: employee?.token,
     });
@@ -146,21 +146,21 @@ function ProductDetailsPresenter() {
 
   function getCategoryName(category) {
     switch (category) {
-      case 'sofa':
-        return t('sofa');
-      case 'chair':
-        return t('chair');
-      case 'bed':
-        return t('bed');
-      case 'table':
-        return t('table');
+      case "sofa":
+        return t("sofa");
+      case "chair":
+        return t("chair");
+      case "bed":
+        return t("bed");
+      case "table":
+        return t("table");
       default:
         break;
     }
   }
 
   return (
-    <main className="productDetailMain mt-4" style={{ direction: 'ltr' }}>
+    <main className="productDetailMain mt-4" style={{ direction: "ltr" }}>
       {isLoading ? (
         <div className="flex h-56 ">
           <div className=" m-auto">
@@ -189,12 +189,12 @@ function ProductDetailsPresenter() {
             </div>
             <div
               className="productDetailData"
-              style={{ direction: i18n?.language === 'ar' ? 'rtl' : 'ltr' }}
+              style={{ direction: i18n?.language === "ar" ? "rtl" : "ltr" }}
             >
               <div>
-                <h1>{language === 'en' ? product?.name : product?.ARName}</h1>
+                <h1>{language === "en" ? product?.name : product?.ARName}</h1>
                 <div className="productDetailCategory">
-                  <h2>{t('Category')}: </h2>
+                  <h2>{t("Category")}: </h2>
                   <p className="mr-2"> {getCategoryName(product?.category)}</p>
                 </div>
                 <div className="productDetailRating">
@@ -206,39 +206,39 @@ function ProductDetailsPresenter() {
                     sx={{ fontSize: 30 }}
                   />
                   <p>
-                    ({totalRating}) {t('basedOn')} ({reviews?.length}){' '}
-                    {t('review')}
+                    ({totalRating}) {t("basedOn")} ({reviews?.length}){" "}
+                    {t("review")}
                   </p>
                 </div>
-                <h3 className="text-lg font-bold">{t('description')}:</h3>
+                <h3 className="text-lg font-bold">{t("description")}:</h3>
                 <p className="productDetailDescription">
-                  {language === 'en'
+                  {language === "en"
                     ? product?.description
                     : product?.ARDescription}
                 </p>
-                <h3 className="text-lg font-bold">{t('dimensions')}:</h3>
+                <h3 className="text-lg font-bold">{t("dimensions")}:</h3>
                 <div className="flex gap-2 flex-wrap">
                   <p className="productDetailDescription">
-                    {t('height')}: {product?.dimensions?.height}
-                    {t('cm')}
+                    {t("height")}: {product?.dimensions?.height}
+                    {t("cm")}
                   </p>
                   <p className="productDetailDescription">
-                    {t('width')}: {product?.dimensions?.width}
-                    {t('cm')}
+                    {t("width")}: {product?.dimensions?.width}
+                    {t("cm")}
                   </p>
                   <p className="productDetailDescription">
-                    {t('weight')}: {product?.dimensions?.weight}
-                    {t('kg')}
+                    {t("weight")}: {product?.dimensions?.weight}
+                    {t("kg")}
                   </p>
                 </div>
                 <div className="productDetailColors">
-                  <p>{t('Color')}: </p>
+                  <p>{t("Color")}: </p>
                   {product?.colors.map((color, idx) => (
                     <span key={idx}>{t(color)} -</span>
                   ))}
                 </div>
                 <p className="productDetailsPrice">
-                  {product?.price} {t('EGP')}
+                  {product?.price} {t("EGP")}
                 </p>
               </div>
               <div className="productDetailsDataFooter">
@@ -246,12 +246,12 @@ function ProductDetailsPresenter() {
                   className="flex items-center text-xl bg-slate-700 hover:bg-slate-800 text-white py-2 px-3 rounded-xl"
                   to={`/presenter/update/product/${product?._id}`}
                 >
-                  {t('edit')}
-                  <EditIcon sx={{ fontSize: '20px', marginLeft: '5px' }} />
+                  {t("edit")}
+                  <EditIcon sx={{ fontSize: "20px", marginLeft: "5px" }} />
                 </Link>
                 <button onClick={() => setshowDeleteMessage(true)}>
-                  <Tooltip title={t('delete')} placement="top">
-                    <DeleteForeverIcon sx={{ fontSize: '40px' }} />
+                  <Tooltip title={t("delete")} placement="top">
+                    <DeleteForeverIcon sx={{ fontSize: "40px" }} />
                   </Tooltip>
                 </button>
               </div>
@@ -259,10 +259,10 @@ function ProductDetailsPresenter() {
           </div>
           <div
             className="productDetailReviews"
-            style={{ direction: i18n?.language === 'ar' ? 'rtl' : 'ltr' }}
+            style={{ direction: i18n?.language === "ar" ? "rtl" : "ltr" }}
           >
             <div className="productDetailReviewsDetails">
-              <h4>{t('customerReviews')}</h4>
+              <h4>{t("customerReviews")}</h4>
               <div className="productDetailRatingForReviews">
                 <Rating
                   readOnly
@@ -272,8 +272,8 @@ function ProductDetailsPresenter() {
                   sx={{ fontSize: 25 }}
                 />
                 <p>
-                  ({totalRating}) {t('basedOn')} ({reviews?.length}){' '}
-                  {t('review')}
+                  ({totalRating}) {t("basedOn")} ({reviews?.length}){" "}
+                  {t("review")}
                 </p>
               </div>
               <div className="productDetailRatingAllBars">
@@ -283,7 +283,7 @@ function ProductDetailsPresenter() {
                       <div className="productDetailRatingBar" key={idx}>
                         <div className="flex">
                           <p className="mr-1">{bar.number}</p>
-                          <StarIcon sx={{ color: '#ffbb00', fontSize: 20 }} />
+                          <StarIcon sx={{ color: "#ffbb00", fontSize: 20 }} />
                         </div>
                         <ProgressBar
                           now={bar.progres}
@@ -299,13 +299,13 @@ function ProductDetailsPresenter() {
                 )}
               </div>
               <div className="productDetailReviewsFooter">
-                <h5>{t('shareyourthoughts')}</h5>
-                <p>{t('shareYourThoughts')}</p>
+                <h5>{t("shareyourthoughts")}</h5>
+                <p>{t("shareYourThoughts")}</p>
               </div>
             </div>
             <div
               className="productDetailReviewsData"
-              style={{ direction: 'ltr' }}
+              style={{ direction: "ltr" }}
             >
               {reviews?.length ? (
                 reviews.map((review) => {
@@ -319,7 +319,7 @@ function ProductDetailsPresenter() {
                 })
               ) : (
                 <div className="productDetailNoReviews">
-                  <h5>{t('currentlyNoReviews')}</h5>
+                  <h5>{t("currentlyNoReviews")}</h5>
                 </div>
               )}
             </div>
@@ -333,38 +333,38 @@ function ProductDetailsPresenter() {
           >
             <DialogTitle
               sx={{
-                fontSize: '25px',
-                fontWeight: 'bold',
-                direction: i18n.language === 'ar' ? 'rtl' : 'ltr',
+                fontSize: "25px",
+                fontWeight: "bold",
+                direction: i18n.language === "ar" ? "rtl" : "ltr",
               }}
             >
-              {t('delete')}
+              {t("delete")}
             </DialogTitle>
             <DialogContent>
               <DialogContentText
                 id="alert-dialog-slide-description"
                 sx={{
-                  fontSize: '18px',
-                  direction: i18n.language === 'ar' ? 'rtl' : 'ltr',
+                  fontSize: "18px",
+                  direction: i18n.language === "ar" ? "rtl" : "ltr",
                 }}
               >
-                {t('wantDeletionThisProduct')}
+                {t("wantDeletionThisProduct")}
                 <br />
                 <br />
-                {t('actionCannotUndone')}
+                {t("actionCannotUndone")}
               </DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button
                 onClick={handleDisagreeDeleteProductMessage}
                 sx={{
-                  marginRight: 'auto',
+                  marginRight: "auto",
                 }}
               >
-                {t('cancel')}
+                {t("cancel")}
               </Button>
               <Button onClick={handleAgreeDeleteProductMessage}>
-                {t('agree')}
+                {t("agree")}
               </Button>
             </DialogActions>
           </Dialog>

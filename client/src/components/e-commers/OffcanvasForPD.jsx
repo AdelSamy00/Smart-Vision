@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import CloseIcon from '@mui/icons-material/Close';
-import EditIcon from '@mui/icons-material/Edit';
-import Offcanvas from 'react-bootstrap/Offcanvas';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './stylesheets/OffcanvasForPD.css';
-import Form from 'react-bootstrap/Form';
-import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
-import { SetCustomer } from '../../redux/CustomerSlice';
-import { apiRequest } from '../../utils';
-import { useTranslation } from "react-i18next"; 
-import i18n from 'i18next';
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
+import Offcanvas from "react-bootstrap/Offcanvas";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./StyleSheets/OffcanvasForPD.css";
+import Form from "react-bootstrap/Form";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { SetCustomer } from "../../redux/CustomerSlice";
+import { apiRequest } from "../../utils";
+import { useTranslation } from "react-i18next";
+import i18n from "i18next";
 
 function OffcanvasForPD({ ...props }) {
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ function OffcanvasForPD({ ...props }) {
   const [username, setUserName] = useState(customer?.username);
   const [gender, setGender] = useState(customer?.gender);
   const [address, setAddress] = useState(
-    customer?.address ? customer?.address : ''
+    customer?.address ? customer?.address : ""
   );
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -35,8 +35,8 @@ function OffcanvasForPD({ ...props }) {
       setValidated(true);
     } else {
       await apiRequest({
-        url: '/customers/',
-        method: 'PUT',
+        url: "/customers/",
+        method: "PUT",
         data: {
           customerId: customer?._id,
           username,
@@ -47,7 +47,7 @@ function OffcanvasForPD({ ...props }) {
       })
         .then((res) => {
           const newData = {
-            token: localStorage.getItem('token'),
+            token: localStorage.getItem("token"),
             ...res.data?.customer,
           };
           dispatch(SetCustomer(newData));
@@ -71,7 +71,9 @@ function OffcanvasForPD({ ...props }) {
       </Button>
       <Offcanvas show={show} onHide={handleClose} {...props}>
         <Offcanvas.Header>
-          <Offcanvas.Title className="text-2xl">{t("Edit profile")}</Offcanvas.Title>
+          <Offcanvas.Title className="text-2xl">
+            {t("Edit profile")}
+          </Offcanvas.Title>
           <button className="me-2" onClick={handleClose}>
             <CloseIcon sx={{ fontSize: 30 }} />
           </button>

@@ -1,8 +1,8 @@
-import React from 'react';
-import { Icon } from '@iconify/react';
-import './StyleSheets/ContactUs.css';
-import ContactUsForm from '../../components/e-commers/ContactUsForm';
-import { useTranslation } from 'react-i18next';
+import React from "react";
+import { Icon } from "@iconify/react";
+import "./StyleSheets/ContactUs.css";
+import ContactUsForm from "../../components/e-commers/ContactUsForm";
+import { useTranslation } from "react-i18next";
 
 function ContactUs() {
   const { t } = useTranslation();
@@ -13,11 +13,11 @@ function ContactUs() {
       <div className="container px-5 py-10 mx-auto">
         <div className="flex flex-col text-center w-full mb-8">
           <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
-            {t('Contact Us')}
+            {t("Contact Us")}
           </h1>
           <p className="lg:w-2/3 mx-auto leading-relaxed text-base ">
             {t(
-              'If you have any problem or anythink you can contact with us easily'
+              "If you have any problem or anythink you can contact with us easily"
             )}
           </p>
         </div>

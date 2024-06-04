@@ -5,7 +5,7 @@ import InventoryProductOrders from './InventoryProductOrders';
 import InventoryMatrialsOrders from './InventoryMatrialsOrders';
 import InventoryTransactions from './InventoryTransactions';
 import AllInventoryOrders from './AllInventoryOrders';
-import AddPage from './addPage';
+import AddPage from './AddPage';
 export {
   InventoryHome,
   TransactionsPage,

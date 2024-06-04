@@ -1,89 +1,88 @@
-import React, { useEffect, useState } from 'react';
-import CloseIcon from '@mui/icons-material/Close';
-import Offcanvas from 'react-bootstrap/Offcanvas';
-import LogoutIcon from '@mui/icons-material/Logout';
-import DehazeIcon from '@mui/icons-material/Dehaze';
-import './StyleSheets/EmployeeHeader.css';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Tooltip } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { Logout } from '../../redux/EmployeeSlice';
-import Badge from '@mui/material/Badge';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { clearNotification } from '../../redux/NotificationSlice';
-import { useTranslation } from 'react-i18next';
-import { t } from 'i18next';
+import React, { useEffect, useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import Offcanvas from "react-bootstrap/Offcanvas";
+import LogoutIcon from "@mui/icons-material/Logout";
+import DehazeIcon from "@mui/icons-material/Dehaze";
+import "./StyleSheets/EmployeeHeader.css";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Tooltip } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { Logout } from "../../redux/EmployeeSlice";
+import Badge from "@mui/material/Badge";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { clearNotification } from "../../redux/NotificationSlice";
+import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 const ENGINEER = [
   {
-    path: '/engineer/orders',
-    title: 'Orders',
+    path: "/engineer/orders",
+    title: "Orders",
   },
   {
-    path: '/engineer/measuring',
-    title: 'Measuring',
+    path: "/engineer/measuring",
+    title: "Measuring",
   },
 ];
 const FACTORY = [
   {
-    path: '/factory/view',
-    title: 'Home',
+    path: "/factory/view",
+    title: "Home",
   },
 ];
 const PRESENTER = [
   {
-    path: '/presenter/home',
-    title: 'Home',
+    path: "/presenter/home",
+    title: "Home",
   },
   {
-    path: '/presenter/view',
-    title: 'New products',
+    path: "/presenter/view",
+    title: "New products",
   },
 ];
 const OPERATOR = [
   {
-    path: '/operator/orders/product',
-    title: 'Orders',
+    path: "/operator/orders/product",
+    title: "Orders",
   },
   {
-    path: '/operator/orders/service',
-    title: 'Services',
+    path: "/operator/orders/service",
+    title: "Services",
   },
   {
-    path: '/operator/orders/history',
-    title: 'History',
+    path: "/operator/orders/history",
+    title: "History",
   },
   {
-    path: '/operator/contactUs',
-    title: 'Customers Problems',
-  }
-  
+    path: "/operator/contactUs",
+    title: "Customers Problems",
+  },
 ];
 const INVENTORY = [
   {
-    path: '/inventory/home',
-    title: 'Home',
+    path: "/inventory/home",
+    title: "Home",
   },
   {
-    path: '/inventory/orders',
-    title: 'Orders',
+    path: "/inventory/orders",
+    title: "Orders",
   },
 
   {
-    path: '/inventory/transaction',
-    title: 'Transactions',
+    path: "/inventory/transaction",
+    title: "Transactions",
   },
   {
-    path: '/inventory/history',
-    title: 'History',
+    path: "/inventory/history",
+    title: "History",
   },
   {
-    path: '/inventory/Add',
-    title: 'add',
+    path: "/inventory/Add",
+    title: "add",
   },
 ];
 const ACTOR = [
-  { path: '/actor/employees', title: 'Home' },
-  { path: '/actor/add-employee', title: 'Add Employee' },
+  { path: "/actor/employees", title: "Home" },
+  { path: "/actor/add-employee", title: "Add Employee" },
 ];
 
 function EmployeeHeader({ props }) {
@@ -101,20 +100,20 @@ function EmployeeHeader({ props }) {
   const handleShow = () => setShow(true);
   function handleLogout() {
     dispatch(Logout());
-    navigate('/login/employee');
+    navigate("/login/employee");
   }
   function setNavLinksWithEmployeeType() {
-    if (jobTitle === 'engineer') {
+    if (jobTitle === "engineer") {
       setnavLinks(ENGINEER);
-    } else if (jobTitle === 'factory') {
+    } else if (jobTitle === "factory") {
       setnavLinks(FACTORY);
-    } else if (jobTitle === 'inventory manager') {
+    } else if (jobTitle === "inventory manager") {
       setnavLinks(INVENTORY);
-    } else if (jobTitle === 'operator') {
+    } else if (jobTitle === "operator") {
       setnavLinks(OPERATOR);
-    } else if (jobTitle === 'presenter') {
+    } else if (jobTitle === "presenter") {
       setnavLinks(PRESENTER);
-    } else if (jobTitle === 'actor manager') {
+    } else if (jobTitle === "actor manager") {
       setnavLinks(ACTOR);
     }
   }
@@ -133,23 +132,23 @@ function EmployeeHeader({ props }) {
     let msg;
     //console.log(notification);
     switch (notification?.type) {
-      case 'addOrder':
+      case "addOrder":
         msg = `${notification.user.firstName} ${notification.user.lastName} place new order`;
         break;
-      case 'addService':
+      case "addService":
         msg = `${notification.serviceOrder.customer.username} place new Service order`;
         break;
-      case 'assignEngineerToCustomizationOrder':
+      case "assignEngineerToCustomizationOrder":
         msg = `${notification.user.username} assign you to new customization order`;
         break;
-      case 'getMaterial':
+      case "getMaterial":
         msg = `${notification.user.username} add new Material order`;
         break;
-      case 'newOrderToFactory':
+      case "newOrderToFactory":
         msg = `${notification.user.username} add new product to manfacturing`;
         break;
       default:
-        msg = 'wrong';
+        msg = "wrong";
         break;
     }
     return (
@@ -163,11 +162,11 @@ function EmployeeHeader({ props }) {
     setnumberOfNotifications(0);
     setOpen(!open);
   };
-const toggleLanguage = () => {
-  const newLanguage = i18n.language === 'en' ? 'ar' : 'en';
-  i18n.changeLanguage(newLanguage);
-  window.localStorage.setItem('language', JSON.stringify(newLanguage));
-};
+  const toggleLanguage = () => {
+    const newLanguage = i18n.language === "en" ? "ar" : "en";
+    i18n.changeLanguage(newLanguage);
+    window.localStorage.setItem("language", JSON.stringify(newLanguage));
+  };
   return (
     <>
       <header className="employeeHeaderMain">
@@ -183,8 +182,8 @@ const toggleLanguage = () => {
               </NavLink>
             );
           })}
-          <button onClick={toggleLanguage} className='ml-auto mr-2'>
-            {i18n.language === 'en' ? 'العربية' : 'English'}
+          <button onClick={toggleLanguage} className="ml-auto mr-2">
+            {i18n.language === "en" ? "العربية" : "English"}
           </button>
         </div>
         <button
@@ -201,11 +200,11 @@ const toggleLanguage = () => {
         </button>
         <button className="employeeHeaderLogoutIcon" onClick={handleLogout}>
           <Tooltip title="Logout">
-            <LogoutIcon sx={{ fontSize: '25px' }} />
+            <LogoutIcon sx={{ fontSize: "25px" }} />
           </Tooltip>
         </button>
         <button className="employeeHeaderDehazeIcon ml-0" onClick={handleShow}>
-          <DehazeIcon sx={{ fontSize: '30px' }} />
+          <DehazeIcon sx={{ fontSize: "30px" }} />
         </button>
         {open && (
           <div className="notifications border-2 ">
@@ -237,7 +236,7 @@ const toggleLanguage = () => {
           </div>
           <button className="text-2xl font-bold" onClick={handleLogout}>
             Logout
-            <LogoutIcon sx={{ fontSize: '25px', marginLeft: '.5rem' }} />
+            <LogoutIcon sx={{ fontSize: "25px", marginLeft: ".5rem" }} />
           </button>
         </Offcanvas.Body>
       </Offcanvas>

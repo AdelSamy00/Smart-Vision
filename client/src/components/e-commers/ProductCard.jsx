@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Rating from "@mui/material/Rating";
-import "./stylesheets/ProductCard.css";
+import "./StyleSheets/ProductCard.css";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next"; // Import the useTranslation hook
@@ -115,7 +115,7 @@ function ProductCard({
               borderRadius: "10px",
               fontWeight: "bold",
               height: "35px",
-              fontSize:"15px",
+              fontSize: "15px",
             }}
           >
             {t("Out of Stock")}

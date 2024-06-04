@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import CustomizedOrderDetails from '../../components/shared/CustomizedOrderDetails';
-import axios from 'axios';
-import Loading from '../../components/shared/Loading';
-import '../factory/StyleSheets/OrderDetailsFactory.css';
-import { Button } from '@mui/material';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { apiRequest } from '../../utils';
-import { useSelector } from 'react-redux';
-import toast, { Toaster } from 'react-hot-toast';
+import React, { useEffect, useState } from "react";
+import CustomizedOrderDetails from "../../components/shared/CustomizedOrderDetails";
+import axios from "axios";
+import Loading from "../../components/shared/Loading";
+import "../factory/StyleSheets/OrderDetailsFactory.css";
+import { Button } from "@mui/material";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { apiRequest } from "../../utils";
+import { useSelector } from "react-redux";
+import toast, { Toaster } from "react-hot-toast";
 
 function OrderDetailsEnginer() {
   const { t } = useTranslation();
@@ -22,7 +22,7 @@ function OrderDetailsEnginer() {
   async function getCustomizedOrderDetail() {
     const res = await apiRequest({
       url: `/employees/engineer/services/${orderId}`,
-      method: 'GET',
+      method: "GET",
       token: employee?.token,
     });
     if (res?.data?.success) {
@@ -33,7 +33,7 @@ function OrderDetailsEnginer() {
       setIsLoading(false);
     } else {
       toast.dismiss();
-      toast.error('Failed to get service order');
+      toast.error("Failed to get service order");
     }
   }
 
@@ -44,22 +44,22 @@ function OrderDetailsEnginer() {
   const handleButtonClick = async (order) => {
     try {
       const response = await apiRequest({
-        method: 'PUT',
-        url: 'employees/engineer/services',
+        method: "PUT",
+        url: "employees/engineer/services",
         data: {
           orderId: order._id,
-          newState: 'Done',
+          newState: "Done",
         },
         token: employee?.token,
       });
       if (response?.data?.success) {
         // Remove the order from the list
-        navigate('/engineer/measuring');
+        navigate("/engineer/measuring");
       } else {
         // toast.error(response?.data?.message || t('Request failed!'));
       }
     } catch (error) {
-      console.error('Error making API request:', error);
+      console.error("Error making API request:", error);
     }
   };
   return (
@@ -69,9 +69,9 @@ function OrderDetailsEnginer() {
         <main className="OrderDetailsFactoryMain">
           <div className="flex flex-wrap justify-between my-4">
             <h1>
-              {t('orderId')}: <span>{orderNumber}</span>
+              {t("orderId")}: <span>{orderNumber}</span>
             </h1>
-            {order?.service === 'Customization Service' ? (
+            {order?.service === "Customization Service" ? (
               <Link
                 to={`/engineer/send-order/${order?._id}`}
                 className="link-style"
@@ -82,13 +82,13 @@ function OrderDetailsEnginer() {
                   className="add-to-store-button"
                   style={{
                     background:
-                      'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-                    textTransform: 'capitalize',
+                      "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+                    textTransform: "capitalize",
                     height: 38,
-                    padding: '0px 15px',
+                    padding: "0px 15px",
                   }}
                 >
-                  {t('sendOrderToFactory')}
+                  {t("sendOrderToFactory")}
                 </Button>
               </Link>
             ) : (
@@ -99,19 +99,19 @@ function OrderDetailsEnginer() {
                   // className="add-to-store-button"
                   style={{
                     background:
-                      'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-                    textTransform: 'capitalize',
+                      "linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)",
+                    textTransform: "capitalize",
                     height: 38,
-                    padding: '0px 15px',
+                    padding: "0px 15px",
                   }}
                   onClick={() => handleButtonClick(order)}
                 >
-                  {t('done')}
+                  {t("done")}
                 </Button>
               </div>
             )}
           </div>
-          <CustomizedOrderDetails order={order} employeeType={'ENGINEER'} />
+          <CustomizedOrderDetails order={order} employeeType={"ENGINEER"} />
         </main>
       ) : (
         <div className="h-screen">

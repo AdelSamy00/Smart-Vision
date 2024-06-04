@@ -75,7 +75,7 @@ function ForgotPassword() {
       >
         <form
           className="form_container"
-          style={{boxShadow:"0px 8px 10px 2px rgba(0, 0, 0, 0.2)"}}
+          style={{ boxShadow: "0px 8px 10px 2px rgba(0, 0, 0, 0.2)" }}
           onSubmit={handleSubmit(handleSubmitForm)}
         >
           <div className="title_container">

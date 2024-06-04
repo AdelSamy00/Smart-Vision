@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import Loading from "../shared/Loading";
-import "./styleSheets/CustomerForm.css";
+import "./StyleSheets/CustomerForm.css";
 import toast, { Toaster } from "react-hot-toast";
 
 function CustomerForm() {
@@ -187,7 +187,6 @@ function CustomerForm() {
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                 />
-                
               </Form.Group>
               {console.log(userName)}
               <Form.Group className="InputGroup">

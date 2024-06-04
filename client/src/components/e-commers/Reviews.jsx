@@ -9,7 +9,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Form from "react-bootstrap/Form";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import "./stylesheets/Reviews.css";
+import "./StyleSheets/Reviews.css";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import i18n from "../../../Language/translate";
@@ -61,8 +61,8 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
   async function deleteReview(customerId, reviewId) {
     try {
       const res = await apiRequest({
-        method: 'delete',
-        url: '/customers/review',
+        method: "delete",
+        url: "/customers/review",
         data: { customerId, reviewId, productId: review?.product },
         token: customer?.token,
       });
@@ -78,9 +78,9 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
   async function editReview(productId, reviewId, comment, rating) {
     try {
       const res = await apiRequest({
-        method: 'put',
-        url: '/customers/review',
-        data: { productId, reviewId, comment, rating  },
+        method: "put",
+        url: "/customers/review",
+        data: { productId, reviewId, comment, rating },
         token: customer?.token,
       });
       setReviews((prevReviews) => {
@@ -96,7 +96,7 @@ function Reviews({ review, setReviews, setTotalRating, customerReview }) {
     } catch (error) {
       console.log(error);
     }
-  }  
+  }
   //handel Delete Review by the user
   const handleDeleteReview = () => {
     handleMenuClose();

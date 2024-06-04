@@ -1,13 +1,13 @@
-import React from 'react';
-import './StyleSheets/Login.css';
-import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import Loading from '../../components/shared/Loading';
-import { useDispatch } from 'react-redux';
-import { SetEmployee } from '../../redux/EmployeeSlice';
-import { apiRequest } from '../../utils';
-import { useTranslation } from 'react-i18next';
-import i18n from '../../../Language/translate.jsx';
+import React from "react";
+import "./StyleSheets/Login.css";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import Loading from "../../components/shared/Loading";
+import { useDispatch } from "react-redux";
+import { SetEmployee } from "../../redux/EmployeeSlice";
+import { apiRequest } from "../../utils";
+import { useTranslation } from "react-i18next";
+import i18n from "../../../Language/translate.jsx";
 function EmployeLogin() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -21,23 +21,23 @@ function EmployeLogin() {
 
   function rdirectEmployeeAfterLogin(employee) {
     switch (employee?.jobTitle?.toLowerCase()) {
-      case 'operator':
-        navigate('/operator/orders/product');
+      case "operator":
+        navigate("/operator/orders/product");
         break;
-      case 'engineer':
-        navigate('/engineer/orders');
+      case "engineer":
+        navigate("/engineer/orders");
         break;
-      case 'factory':
-        navigate('/factory/view');
+      case "factory":
+        navigate("/factory/view");
         break;
-      case 'inventory manager':
-        navigate('/inventory/home');
+      case "inventory manager":
+        navigate("/inventory/home");
         break;
-      case 'presenter':
-        navigate('/presenter/home');
+      case "presenter":
+        navigate("/presenter/home");
         break;
-      case 'actor manager':
-        navigate('/actor/employees');
+      case "actor manager":
+        navigate("/actor/employees");
         break;
       default:
         break;
@@ -47,58 +47,58 @@ function EmployeLogin() {
   const handleSubmitForm = async (data) => {
     try {
       const res = await apiRequest({
-        url: '/auth/employee-login',
-        method: 'POST',
+        url: "/auth/employee-login",
+        method: "POST",
         data: { ...data },
       });
       // .then(() => {
       // console.log(res.data);
       if (res?.status !== false) {
-        localStorage.setItem('token', res?.data?.token);
+        localStorage.setItem("token", res?.data?.token);
         const newData = { token: res?.data?.token, ...res?.data?.employee };
         dispatch(SetEmployee(newData));
         rdirectEmployeeAfterLogin(newData);
       } else {
-        setError('root', {
+        setError("root", {
           message: `${res?.message}`,
         });
       }
     } catch (error) {
-      setError('root', {
+      setError("root", {
         message: `${error.message}`,
       });
     }
   };
   const toggleLanguage = () => {
-    const newLanguage = i18n.language === 'en' ? 'ar' : 'en';
+    const newLanguage = i18n.language === "en" ? "ar" : "en";
     i18n.changeLanguage(newLanguage);
-    window.localStorage.setItem('language', JSON.stringify(newLanguage));
+    window.localStorage.setItem("language", JSON.stringify(newLanguage));
   };
   return (
     <>
       <div
         style={{
-          direction: 'rtl',
-          margin: 'auto',
-          marginTop: '2rem',
-          justifyContent: 'center',
-          paddingRight: '2rem',
-          marginBottom: '2rem',
-          maxWidth: '1300px',
-          fontFamily: 'revert-layer',
+          direction: "rtl",
+          margin: "auto",
+          marginTop: "2rem",
+          justifyContent: "center",
+          paddingRight: "2rem",
+          marginBottom: "2rem",
+          maxWidth: "1300px",
+          fontFamily: "revert-layer",
           // backgroundColor:"red"
         }}
       >
         <button
           onClick={toggleLanguage}
           style={{
-            fontSize: '19px',
-            border: '1px solid',
-            borderRadius: '5px',
-            padding: '2px 5px',
+            fontSize: "19px",
+            border: "1px solid",
+            borderRadius: "5px",
+            padding: "2px 5px",
           }}
         >
-          {i18n.language === 'en' ? 'العربية' : 'English'}
+          {i18n.language === "en" ? "العربية" : "English"}
         </button>
       </div>
       <div className="h-full flex items-center justify-center m-auto">
@@ -107,11 +107,11 @@ function EmployeLogin() {
           onSubmit={handleSubmit(handleSubmitForm)}
         >
           <div className="title_container ">
-            <p className="title">{t('Login to your Account')}</p>
+            <p className="title">{t("Login to your Account")}</p>
           </div>
           <div className="input_container">
             <label className="input_label" htmlFor="email_field">
-              {t('Email')}
+              {t("Email")}
             </label>
             {errors.email && (
               <div className="text-red-500">{errors.email.message}</div>
@@ -139,16 +139,16 @@ function EmployeLogin() {
               ></path>
             </svg>
             <input
-              {...register('email', {
-                required: t('Email Address is required'),
+              {...register("email", {
+                required: t("Email Address is required"),
                 validate: (value) => {
-                  if (!value.includes('@')) {
-                    return 'Email must include @';
+                  if (!value.includes("@")) {
+                    return "Email must include @";
                   }
                   return true;
                 },
               })}
-              placeholder={t('name@mail.com')}
+              placeholder={t("name@mail.com")}
               title="email"
               name="email"
               type="text"
@@ -158,7 +158,7 @@ function EmployeLogin() {
           </div>
           <div className="input_container">
             <label className="input_label" htmlFor="password_field">
-              {t('Password')}
+              {t("Password")}
             </label>
             {errors.password && (
               <div className="text-red-500">{errors.password.message}</div>
@@ -190,10 +190,10 @@ function EmployeLogin() {
               ></path>
             </svg>
             <input
-              {...register('password', {
-                required: t('Password is required'),
+              {...register("password", {
+                required: t("Password is required"),
               })}
-              placeholder={t('Password')}
+              placeholder={t("Password")}
               title="password"
               name="password"
               type="password"
@@ -210,7 +210,7 @@ function EmployeLogin() {
               type="submit"
               className="py-2 px-4 bg-blue-700 hover:bg-blue-900 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
             >
-              <span>{t('Sign In')}</span>
+              <span>{t("Sign In")}</span>
             </button>
           )}
           {errors.root && (

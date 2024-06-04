@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Rating from '@mui/material/Rating';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import '../e-commers/stylesheets/Reviews.css';
+import React, { useState } from "react";
+import Avatar from "@mui/material/Avatar";
+import Rating from "@mui/material/Rating";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import "../e-commers/StyleSheets/Reviews.css";
 import {
   Button,
   Dialog,
@@ -15,9 +15,9 @@ import {
   DialogContentText,
   DialogTitle,
   Slide,
-} from '@mui/material';
-import { t } from 'i18next';
-import i18n from '../../../Language/translate';
+} from "@mui/material";
+import { t } from "i18next";
+import i18n from "../../../Language/translate";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -31,7 +31,7 @@ function ReviewPresenter({ review, deleteReview }) {
   //make avatar to comment
   function stringAvatar(name) {
     return {
-      children: `${name?.split(' ')[0][0]}`,
+      children: `${name?.split(" ")[0][0]}`,
     };
   }
 
@@ -111,34 +111,34 @@ function ReviewPresenter({ review, deleteReview }) {
       >
         <DialogTitle
           sx={{
-            fontSize: '25px',
-            fontWeight: 'bold',
-            direction: i18n.language === 'ar' ? 'rtl' : 'ltr',
+            fontSize: "25px",
+            fontWeight: "bold",
+            direction: i18n.language === "ar" ? "rtl" : "ltr",
           }}
         >
-          {t('deleteCustomerReview')}
+          {t("deleteCustomerReview")}
         </DialogTitle>
         <DialogContent>
           <DialogContentText
             id="alert-dialog-slide-description"
             sx={{
-              fontSize: '18px',
-              direction: i18n.language === 'ar' ? 'rtl' : 'ltr',
+              fontSize: "18px",
+              direction: i18n.language === "ar" ? "rtl" : "ltr",
             }}
           >
-            {t('sureWantDeleteReview')}
+            {t("sureWantDeleteReview")}
             <br />
-            {t('actionCannotUndone')}
+            {t("actionCannotUndone")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={handleDisagreeDeleteReviewMessage}
-            sx={{ marginRight: 'auto' }}
+            sx={{ marginRight: "auto" }}
           >
-            {t('cancel')}
+            {t("cancel")}
           </Button>
-          <Button onClick={handleAgreeDeleteReviewMessage}>{t('agree')}</Button>
+          <Button onClick={handleAgreeDeleteReviewMessage}>{t("agree")}</Button>
         </DialogActions>
       </Dialog>
     </>
