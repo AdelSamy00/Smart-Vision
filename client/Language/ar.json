@@ -206,8 +206,8 @@
     "No results found": "لم يتم العثور على نتائج",
     "Our services": "خدماتنا",
     "Assembly service": "خدمة التجميع",
-    "Delivery services": "خدمات التوصيل",
-    "Desgins services": "خدمات التصميم",
+    "Delivery services": "خدمة التوصيل",
+    "Desgins services": "خدمة التصميم",
     "Customization Service": "خدمة التفصيل",
     "Measuring Service": "خدمة القياس",
     "Packing Service": "خدمة التغليف",
@@ -232,5 +232,6 @@
     "delivered": "تم التسليم",
     "Useful links": "روابط مفيدة",
     "For you": "من اجلك",
-    "Customer service": "خدمة العملاء"
+    "Customer service": "خدمة العملاء",
+    "For Employees": "للموظفين"
 }

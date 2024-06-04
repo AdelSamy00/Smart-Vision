@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import "./StyleSheets/Login.css";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import Loading from "../../components/shared/Loading";
-import { useDispatch, useSelector } from "react-redux";
-import { SetCustomer } from "../../redux/CustomerSlice";
-import { apiRequest } from "../../utils/index.js";
-import { useTranslation } from "react-i18next";
-import i18n from "../../../Language/translate.jsx";
+import React, { useState } from 'react';
+import './StyleSheets/Login.css';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import Loading from '../../components/shared/Loading';
+import { useDispatch, useSelector } from 'react-redux';
+import { SetCustomer } from '../../redux/CustomerSlice';
+import { apiRequest } from '../../utils/index.js';
+import { useTranslation } from 'react-i18next';
+import i18n from '../../../Language/translate.jsx';
 function Login() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const isArabic = i18n.language === "ar";
+  const isArabic = i18n.language === 'ar';
   const {
     register,
     handleSubmit,
@@ -23,75 +23,75 @@ function Login() {
   const handleSubmitForm = async (data) => {
     try {
       const response = await apiRequest({
-        url: "/auth/login",
+        url: '/auth/login',
         data: data,
-        method: "POST",
+        method: 'POST',
       });
       if (response?.status === 200) {
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem('token', response.data.token);
         const newData = {
           token: response.data.token,
           ...response.data.customer,
         };
         dispatch(SetCustomer(newData));
-        navigate("/store");
+        navigate('/store');
       } else {
-        setError("root", {
+        setError('root', {
           message: response?.message,
         });
       }
     } catch (error) {
-      setError("root", {
-        message: "An unexpected error occurred. Please try again later.",
+      setError('root', {
+        message: 'An unexpected error occurred. Please try again later.',
       });
     }
   };
   const toggleLanguage = () => {
-    const newLanguage = i18n.language === "en" ? "ar" : "en";
+    const newLanguage = i18n.language === 'en' ? 'ar' : 'en';
     i18n.changeLanguage(newLanguage);
-    window.localStorage.setItem("language", JSON.stringify(newLanguage));
+    window.localStorage.setItem('language', JSON.stringify(newLanguage));
   };
   return (
     <>
       <div
         style={{
-          direction: "rtl",
-          margin: "auto",
-          marginTop: "2rem",
-          justifyContent: "center",
-          paddingRight: "2rem",
-          marginBottom: "2rem",
-          maxWidth: "1300px",
-          fontFamily:"revert-layer",
+          direction: 'rtl',
+          margin: 'auto',
+          marginTop: '2rem',
+          justifyContent: 'center',
+          paddingRight: '2rem',
+          marginBottom: '2rem',
+          maxWidth: '1300px',
+          fontFamily: 'revert-layer',
           // backgroundColor:"red"
         }}
       >
         <button
           onClick={toggleLanguage}
           style={{
-            fontSize: "19px",
-            border: "1px solid",
-            borderRadius: "5px",
-            padding: "2px 5px",
+            fontSize: '19px',
+            border: '1px solid',
+            borderRadius: '5px',
+            padding: '2px 5px',
           }}
         >
-          {i18n.language === "en" ? "العربية" : "English"}
+          {i18n.language === 'en' ? 'العربية' : 'English'}
         </button>
       </div>
 
       <div
         className="flex items-center justify-center m-auto"
-        style={{ maxWidth: "450px", height: "85%" }}
+        style={{ maxWidth: '450px', height: '85%' }}
       >
         <form
           className="form_container"
           onSubmit={handleSubmit(handleSubmitForm)}
         >
           <div className="title_container">
-            <p className="title">{t("Login to your Account")}</p>
-            <span className={`subtitle ${isArabic ? "arabic-subtitle" : ""}`}>
+            <p className="title">{t('Login to your Account')}</p>
+            <span className={`subtitle ${isArabic ? 'arabic-subtitle' : ''}`}>
               {t(
-                "Get started with our app, just create an account and enjoy the experience."
+                'Get started with our app, just create an account and enjoy the experience.'
               )}
             </span>
             {location.state?.message && (
@@ -102,7 +102,7 @@ function Login() {
           </div>
           <div className="input_container">
             <label className="input_label" htmlFor="email_field">
-              {t("Email")}
+              {t('Email')}
             </label>
             {errors.email && (
               <div className="text-red-500">{errors.email.message}</div>
@@ -130,16 +130,16 @@ function Login() {
               ></path>
             </svg>
             <input
-              {...register("email", {
-                required: t("Email Address is required"),
+              {...register('email', {
+                required: t('Email Address is required'),
                 validate: (value) => {
-                  if (!value.includes("@")) {
-                    return t("Email must include @");
+                  if (!value.includes('@')) {
+                    return t('Email must include @');
                   }
                   return true;
                 },
               })}
-              placeholder={t("name@mail.com")}
+              placeholder={t('name@mail.com')}
               title="email"
               name="email"
               type="text"
@@ -149,7 +149,7 @@ function Login() {
           </div>
           <div className="input_container">
             <label className="input_label" htmlFor="password_field">
-              {t("Password")}
+              {t('Password')}
             </label>
             {errors.password && (
               <div className="text-red-500">{errors.password.message}</div>
@@ -181,10 +181,10 @@ function Login() {
               ></path>
             </svg>
             <input
-              {...register("password", {
-                required: t("Password is required"),
+              {...register('password', {
+                required: t('Password is required'),
               })}
-              placeholder={t("Password")}
+              placeholder={t('Password')}
               title="password"
               name="password"
               type="password"
@@ -194,10 +194,10 @@ function Login() {
           </div>
           <div className="flex items-center justify-between mt-2 w-full">
             <Link
-              to={"/forgot-password"}
+              to={'/forgot-password'}
               className="text-xs text-black underline"
             >
-              {t("Forgot Password?")}
+              {t('Forgot Password?')}
             </Link>
           </div>
           {isSubmitting ? (
@@ -209,25 +209,27 @@ function Login() {
               type="submit"
               className="py-2 px-4 bg-blue-700 hover:bg-blue-900 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
             >
-              <span>{t("Sign In")}</span>
+              <span>{t('Sign In')}</span>
             </button>
           )}
           {errors.root && (
             <div className="text-red-500">{errors.root.message}</div>
           )}
-          <div className="flex items-center justify-between mt-4 w-full">
+          <div className="flex items-center ">
+            <Link to={'/login/employee'} className="text-[15px] text-gray-600">
+              {t('For Employees')}
+            </Link>
+          </div>
+          <div className="flex items-center justify-between  w-full">
             <span className="w-1/5 border-b dark:border-gray-600 md:w-1/5"></span>
             <Link
-              to={"/register"}
+              to={'/register'}
               className="text-xs text-black uppercase hover:underline"
             >
               {t("haven't an account? SginUp")}
             </Link>
             <span className="w-1/5 border-b dark:border-gray-600 md:w-1/5"></span>
           </div>
-          <p className="note">
-            {t("Terms of use")} &amp; {t("Conditions")}
-          </p>
         </form>
       </div>
     </>

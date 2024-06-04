@@ -209,8 +209,8 @@
   "No results found": "No results found",
   "Our services": "Our services",
   "Assembly service": "Assembly service",
-  "Delivery services": "Delivery services",
-  "Desgins services": "Desgins services",
+  "Delivery services": "Delivery service",
+  "Desgins services": "Desgin service",
   "Customization Service": "Customization Service",
   "Measuring Service": "Measuring Service",
   "Packing Service": "Packing Service",
@@ -243,5 +243,6 @@
   "Customer Name":"Customer Name",
   "MaterialName":"MaterialName",
   "product":"product",
-  "material":"material"
+  "material":"material",
+  "For Employees":"For Employees"
 }
