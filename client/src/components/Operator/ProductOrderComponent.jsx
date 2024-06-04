@@ -15,13 +15,27 @@ function Productorder1Component({ order1, onUpdatedState1, isNew }) {
   const [isnew, setIsNew] = useState(isNew);
   const [showWholeorder1, setShowWholeorder1] = useState(true);
   const [updatedState, setUpdatedState] = useState(order1?.state);
+  const [isExpanded, setIsExpanded] = useState({});
 
+  const truncateText = (text, length) => {
+    if (text?.length <= length) {
+      return text;
+    }
+    return text?.substring(0, length) + '...';
+  };
+  const handleToggle = (index) => {
+    setIsExpanded((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
   // console.log(isnew);
   //console.log(updatedState);
   const toggleorder1 = () => {
     setShoworder1(!showorder1);
     setIsNew(false);
   };
+
   const handleDoneButtonClick = async () => {
     onUpdatedState1('');
     try {
@@ -321,9 +335,35 @@ function Productorder1Component({ order1, onUpdatedState1, isNew }) {
                       <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                         {t('description')}:
                       </span>{' '}
-                      {language === 'en'
+                      {isExpanded[index]
+                        ? language === 'en'
+                          ? product?.product?.description
+                          : product?.product?.ARDescription
+                        : truncateText(
+                            language === 'en'
+                              ? product?.product?.description
+                              : product?.product?.ARDescription,
+                            170
+                          )}
+                      {(language === 'en'
                         ? product?.product?.description
-                        : product?.product?.ARDescription}
+                        : product?.product?.ARDescription
+                      )?.length > 170 && (
+                        <span
+                          onClick={() => handleToggle(index)}
+                          style={{ color: 'blue', cursor: 'pointer' }}
+                          onMouseOver={(e) =>
+                            (e.target.style.textDecoration = 'underline')
+                          }
+                          onMouseOut={(e) =>
+                            (e.target.style.textDecoration = 'none')
+                          }
+                        >
+                          {isExpanded[index]
+                            ? t(' show less')
+                            : t(' read more')}
+                        </span>
+                      )}
                     </Typography>
                     <Typography
                       variant="body2"
