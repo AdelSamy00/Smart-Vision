@@ -266,9 +266,39 @@ const Header = () => {
           <button
             className="btnHover lang"
             onClick={toggleLanguage}
-            style={{ fontSize: '19px', outline: 'none' }}
+            style={{
+              fontSize: '19px',
+              outline: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '.5rem',
+            }}
           >
-            {i18n.language === 'en' ? 'العربية' : 'English'}
+            {i18n.language === 'en' ? (
+              <>
+                العربية
+                <span>
+                  <img
+                    width="25"
+                    height="25"
+                    src="https://img.icons8.com/fluency/48/egypt-circular.png"
+                    alt="egypt-circular"
+                  />
+                </span>
+              </>
+            ) : (
+              <>
+                English
+                <span>
+                  <img
+                    width="25"
+                    height="25"
+                    src="https://img.icons8.com/fluency/48/usa-circular.png"
+                    alt="usa-circular"
+                  />
+                </span>
+              </>
+            )}
           </button>
         </Toolbar>
       </div>
