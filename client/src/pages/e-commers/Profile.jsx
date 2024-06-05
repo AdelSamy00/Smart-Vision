@@ -18,7 +18,7 @@ function Profile({ socket, setSocket }) {
       <section className="Profile">
         <div className="sbProfileHeader">
           <h1>
-            {t('He!')} {customer.username}
+            {t('welcome')} {customer.username}
           </h1>
           <p>
             {t('Need to change account?')}
