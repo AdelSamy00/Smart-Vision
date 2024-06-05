@@ -28,8 +28,12 @@ app.use(express.static(path.join(__dirname, 'views')));
 const PORT = process.env.PORT || 3000;
 dbConnection();
 
+const corsOptions = {
+  origin: '*',
+};
+
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json({ limit: '10mb' }));
@@ -43,7 +47,7 @@ app.use(errorMiddleware);
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONT_END_URL,
+    origin: '*',
   },
 });
 

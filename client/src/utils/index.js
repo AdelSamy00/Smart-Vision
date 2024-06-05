@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 const API_URL = import.meta.env.VITE_APP_SERVER_URL;
 const CLOUDINARY_ID = import.meta.env.VITE_APP_CLOUDINARY_ID;
 export const getCustomerInfo = async (token) => {
@@ -123,7 +122,7 @@ export function setOptionsForTranslateMaterials(materials) {
   const data = materials?.map((item) => {
     return { Text: item.material };
   });
-  
+
   const options = {
     method: 'POST',
     url: 'https://microsoft-translator-text.p.rapidapi.com/translate',
