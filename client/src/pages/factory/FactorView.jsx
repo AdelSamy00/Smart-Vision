@@ -92,7 +92,7 @@ const FactorView = () => {
               <Grid key={index} item xs={12} md={6} lg={4}>
                 <Card sx={{ maxWidth: 300 }}>
                   <CardHeader
-                    title={order.service}
+                    title={t(order.service)}
                     style={{ marginTop: '10px' }}
                   />
                   <CardContent style={{ marginTop: '-20px' }}>
@@ -133,10 +133,10 @@ const FactorView = () => {
                         variant="body2"
                         style={{ marginBottom: '5px', fontSize: '15px' }}
                       >
-                        {order.description}
+                        {i18n.language==="ar"?order.ARDescription:order.description}
                       </Typography>
                       <Typography variant="body2" style={{ fontSize: '15px' }}>
-                        {t('State')}: {order?.state}
+                        {t('State')}: {t(order?.state?.toLowerCase())}
                       </Typography>
                     </CardContent>
                   </Collapse>
