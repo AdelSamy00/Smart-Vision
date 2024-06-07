@@ -29,7 +29,7 @@ const PORT = process.env.PORT || 3000;
 dbConnection();
 
 const corsOptions = {
-  origin: '*'
+  origin: '*',
 };
 
 app.use(helmet());
@@ -47,7 +47,7 @@ app.use(errorMiddleware);
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-	  origin: "*",
+    origin: process.env.FRONT_END_URL,
   },
 });
 

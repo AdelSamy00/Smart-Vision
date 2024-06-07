@@ -182,8 +182,32 @@ function EmployeeHeader({ props }) {
               </NavLink>
             );
           })}
-          <button onClick={toggleLanguage} className="ml-auto mr-2">
-            {i18n.language === "en" ? "العربية" : "English"}
+          <button
+            className="language-toggle ml-auto mr-2"
+            style={{
+              fontSize: "19px",
+              outline: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: ".5rem",
+            }}
+            onClick={toggleLanguage}
+          >
+            <span className="text">
+              {i18n.language === "en" ? "العربية" : "English"}
+            </span>
+            <span>
+              <img
+                width="25"
+                height="25"
+                src={
+                  i18n.language === "en"
+                    ? "https://img.icons8.com/fluency/48/egypt-circular.png"
+                    : "https://img.icons8.com/fluency/48/usa-circular.png"
+                }
+                alt={i18n.language === "en" ? "Egyptian flag" : "US flag"}
+              />
+            </span>
           </button>
         </div>
         <button
@@ -228,14 +252,14 @@ function EmployeeHeader({ props }) {
           <div className="employeeHeaderOffcanvasLinks">
             {navLinks?.map((item, idx) => {
               return (
-                <NavLink key={idx} to={item.path}>
+                <NavLink key={idx} to={item.path} onClick={handleClose}>
                   {t(item.title)}
                 </NavLink>
               );
             })}
           </div>
           <button className="text-2xl font-bold" onClick={handleLogout}>
-            Logout
+            {t('Log out')}
             <LogoutIcon sx={{ fontSize: "25px", marginLeft: ".5rem" }} />
           </button>
         </Offcanvas.Body>

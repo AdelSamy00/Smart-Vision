@@ -5,6 +5,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { styled } from '@mui/material/styles';
 import { autocompleteClasses } from '@mui/material/Autocomplete';
 import CloseIcon from '@mui/icons-material/Close';
+import { t } from 'i18next';
 
 const InputWrapper = styled('div')(
   () => `
@@ -148,7 +149,7 @@ export default function InputColor({ colors, setColors }) {
       <div>
         <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
           {value.map((option, index) => (
-            <StyledTag key={index} label={option} {...getTagProps({ index })} />
+            <StyledTag key={index} label={t(option)} {...getTagProps({ index })} />
           ))}
           <input {...getInputProps()} />
         </InputWrapper>
@@ -157,7 +158,7 @@ export default function InputColor({ colors, setColors }) {
         <Listbox {...getListboxProps()}>
           {groupedOptions.map((option, index) => (
             <li key={index} {...getOptionProps({ option, index })}>
-              <span>{option}</span>
+              <span>{t(option)}</span>
               <CheckIcon fontSize="small" />
             </li>
           ))}
