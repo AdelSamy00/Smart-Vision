@@ -151,10 +151,11 @@ const ViewProductOrders = ({ socket, setSocket }) => {
             <li>
               {ordersNotification?.map((notify, idx) => {
                 let order = notify.order;
+                console.log(order);
                 return (
                   <ProductOrderComponent
                     key={idx}
-                    order={order}
+                    order1={order}
                     setUpdatedState1={setUpdatedState1}
                     isNew="true"
                   />

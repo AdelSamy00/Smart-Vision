@@ -47,7 +47,7 @@ app.use(errorMiddleware);
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONT_END_URL,
+    'Access-Control-Allow-Origin': '*',
   },
 });
 

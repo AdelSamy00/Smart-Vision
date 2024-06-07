@@ -42,7 +42,7 @@ import {
   TransactionsPage,
   InventoryTransactions,
   AllInventoryOrders,
-  AddPage
+  AddPage,
 } from './pages/inventory/index.js';
 import {
   EmployeLogin,
@@ -62,7 +62,7 @@ import {
   ViewProductOrders,
   ViewServiceOrder,
   ServiseDetailsOperator,
-  ContactUsPage
+  ContactUsPage,
 } from './pages/operator/index.js';
 
 import {
@@ -109,7 +109,7 @@ function App() {
   }, []);
   useEffect(() => {
     if (customer?.email || employee?.email) {
-      setSocket(io(import.meta.env.VITE_APP_SERVER_URL));
+      setSocket(io(import.meta.env.VITE_APP_SERVER_URL_SOCKET));
     }
   }, []);
   useEffect(() => {
@@ -136,10 +136,13 @@ function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login socket={socket} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/login/employee" element={<EmployeLogin />} />
+        <Route
+          path="/login/employee"
+          element={<EmployeLogin socket={socket} />}
+        />
         <Route path="/home" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact-us" element={<ContactUs />} />
@@ -269,10 +272,7 @@ function App() {
             path="/operator/order-details/:orderId"
             element={<ProductOrderDetails />}
           />
-         <Route
-            path="/operator/contactUs"
-            element={<ContactUsPage />}
-          />
+          <Route path="/operator/contactUs" element={<ContactUsPage />} />
         </Route>
         {/* Private actor manager Routes */}
         <Route element={<ActorLayout />}>

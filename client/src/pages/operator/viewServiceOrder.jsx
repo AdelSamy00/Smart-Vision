@@ -128,6 +128,7 @@ const ViewServiceOrders = ({ socket, setSoket }) => {
       alignItems="center"
       className="presenter-products-container"
     >
+      {console.log(notification)}
       <Toaster />
       {isLoading ? (
         <Grid item>
