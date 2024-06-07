@@ -101,33 +101,33 @@ const Header = () => {
     window.localStorage.setItem("language", JSON.stringify(newLanguage));
   };
   return (
-    <header style={{ display: "flex", direction: "ltr" }}>
+    <header style={{ display: 'flex', direction: 'ltr' }}>
       <div className="menu">
         <Menu></Menu>
-        <p>{t("Menu")}</p>
+        <p>{t('Menu')}</p>
       </div>
-      <div style={{ position: "relative" }} className="head">
+      <div style={{ position: 'relative' }} className="head">
         <Toolbar
-          style={{ display: "flex", justifyContent: "space-between" }}
+          style={{ display: 'flex', justifyContent: 'space-between' }}
           className="header-row"
         >
           <div className="header-logo">
-            <Link to={"/home"}>
-              <img src="/smartVisionLogo.png" />
+            <Link to={'/home'}>
+              <img src="https://res.cloudinary.com/dkep2voqw/image/upload/v1717758928/SmartVision_xginst.jpg " />
             </Link>
           </div>
           <div className="icons">
-            <Link to={"/profile"}>
+            <Link to={'/profile'}>
               <button
                 className="userAccount btnHover"
-                style={{ display: "flex", padding: "10px 20px 10px 8px" }}
+                style={{ display: 'flex', padding: '10px 20px 10px 8px' }}
               >
                 <Avatar sx={{ width: 35, height: 35 }} className="avatar" />
                 <p
                   style={{
-                    fontSize: "19px",
-                    paddingTop: "0.2rem",
-                    marginLeft: "0.5rem",
+                    fontSize: '19px',
+                    paddingTop: '0.2rem',
+                    marginLeft: '0.5rem',
                     // width:"210px",
                     // marginLeft:"-0.7rem"
                   }}
@@ -139,36 +139,36 @@ const Header = () => {
             </Link>
             <button
               className="btnHover favorite"
-              style={{ outline: "none", padding: "4px 12px" }}
+              style={{ outline: 'none', padding: '4px 12px' }}
               onClick={() => {
                 customer?._id
-                  ? navigate("/favourites")
+                  ? navigate('/favourites')
                   : setshowLoginMessage(true);
               }}
             >
               <FavoriteIcon
-                style={{ fontSize: "22px", marginTop: "0.8rem" }}
+                style={{ fontSize: '22px', marginTop: '0.8rem' }}
               ></FavoriteIcon>
             </button>
-            <Link to={"./bag"}>
+            <Link to={'./bag'}>
               <IconButton
                 aria-label="cart"
-                style={{ padding: "12px", marginLeft: "2px" }}
+                style={{ padding: '12px', marginLeft: '2px' }}
                 className="badge"
               >
                 <Badge
                   badgeContent={
                     <span
                       style={{
-                        fontSize: "16px",
-                        backgroundColor: "#f8f9fa",
-                        borderRadius: "50%",
-                        width: "20px",
-                        height: "20px",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        fontWeight: "bold",
+                        fontSize: '16px',
+                        backgroundColor: '#f8f9fa',
+                        borderRadius: '50%',
+                        width: '20px',
+                        height: '20px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        fontWeight: 'bold',
                       }}
                     >
                       {productsInCart}
@@ -176,9 +176,9 @@ const Header = () => {
                   }
                   color="black"
                 >
-                  {" "}
+                  {' '}
                   <ShoppingBasketIcon
-                    style={{ color: "black", fontSize: "25px" }}
+                    style={{ color: 'black', fontSize: '25px' }}
                   />
                 </Badge>
               </IconButton>
@@ -188,7 +188,7 @@ const Header = () => {
         <Toolbar className="searchinput">
           <div
             className="btnHover search"
-            style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
+            style={{ direction: i18n.language === 'ar' ? 'rtl' : 'ltr' }}
           >
             <InputAdornment position="start">
               <IconButton>
@@ -199,12 +199,12 @@ const Header = () => {
               className="searchInput"
               type="search"
               value={searchValue}
-              placeholder={t("What Are You Looking For ?")}
+              placeholder={t('What Are You Looking For ?')}
               onChange={(e) => setsearchValue(e.target.value)}
               onFocus={() => setshowSearchResults(true)}
               onBlur={() => {
                 setTimeout(() => {
-                  setsearchValue("");
+                  setsearchValue('');
                   setshowSearchResults(false);
                 }, 300);
               }}
@@ -223,7 +223,7 @@ const Header = () => {
                           <img src={item?.images[0]} />
                           <div className="ml-2 items-center flex w-10/12 flex-wrap">
                             <p className="searchInputResultsProductName">
-                              {language === "en" ? item?.name : item?.ARName}
+                              {language === 'en' ? item?.name : item?.ARName}
                             </p>
                             <p className="searchInputResultsProductCategory">
                               {t(item?.category?.toLowerCase())}
@@ -235,7 +235,7 @@ const Header = () => {
                   })
                 ) : (
                   <li className="searchInputResultsNotFound">
-                    {t("No product found")}
+                    {t('No product found')}
                   </li>
                 )}
               </ul>
@@ -245,36 +245,36 @@ const Header = () => {
         <Toolbar className="row3">
           <ul
             className="headerUl links"
-            style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
+            style={{ direction: i18n.language === 'ar' ? 'rtl' : 'ltr' }}
           >
             <li>
-              <Link to="/home">{t("Home")}</Link>
+              <Link to="/home">{t('Home')}</Link>
             </li>
             <li>
-              <Link to="/store">{t("Products")}</Link>
+              <Link to="/store">{t('Products')}</Link>
             </li>
             <li>
-              <Link to="/services">{t("Services")}</Link>
+              <Link to="/services">{t('Services')}</Link>
             </li>
             <li>
-              <Link to="/about">{t("About Us")}</Link>
+              <Link to="/about">{t('About Us')}</Link>
             </li>
             <li>
-              <Link to="/contact-us">{t("Contact Us")}</Link>
+              <Link to="/contact-us">{t('Contact Us')}</Link>
             </li>
           </ul>
           <button
             className="btnHover lang"
             onClick={toggleLanguage}
             style={{
-              fontSize: "19px",
-              outline: "none",
-              display: "flex",
-              alignItems: "center",
-              gap: ".5rem",
+              fontSize: '19px',
+              outline: 'none',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '.5rem',
             }}
           >
-            {i18n.language === "en" ? (
+            {i18n.language === 'en' ? (
               <>
                 العربية
                 <span>
