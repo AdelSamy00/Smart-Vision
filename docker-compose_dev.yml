@@ -12,7 +12,6 @@ services:
       - PGDATABASE=postgres
       - PGPASSWORD=postgres_password
       - PGPORT=5432
-      - JWT_SECRET_KEY="itasdsadsad--very1155qvf--secretZxcloOTj"
   
   client:
     build:
@@ -27,11 +26,3 @@ services:
     
     ports:
       - 8000:80
-
-PORT = 3000
-APP_URL = http://localhost:3000/api
-JWT_SECRET_KEY = itasdsadsad--very1155qvf--secretZxcloOTj
-MONGODB_URL = mongodb+srv://adelsamy984:y9OLqumV5RK1DryC@cluster0.jlff8ik.mongodb.net/smart-Vision
-AUTH_EMAIL = "testdemoforprojects@gmail.com"
-AUTH_PASSWORD = "rcen kxxr rrbl ohsy"
-FRONT_END_URL = http://localhost:5173/
